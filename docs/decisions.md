@@ -57,3 +57,5 @@
 | 14/10/2026 | Rôle `--color-header-muted` (neutral-400) pour les séparateurs décoratifs du header | Audit : une teinte de base était utilisée directement, contre le principe des rôles |
 | 14/10/2026 | Zones cliquables de 44 × 44 px minimum partout | Audit : Menu 36 px, Fermer 32 px, FR / EN 26 px sur mobile |
 | 14/10/2026 | Polices auto-hébergées dans `public/fonts/` (woff2, sous-ensemble latin, Fraunces italique seule) ; `@font-face` en phase 7 | DA §3 ; budget nul, pas de dépendance à Google Fonts, fichiers légers |
+| 14/10/2026 | Design system v0.3 : lot 1 spécifié (`BaseButton`, `TextLink`, `Tag`, `Icon`, `CopyButton`, `SkipLink`) ; liens `inline` (lime) et `standalone` (texte, lime au survol) ; icônes Lucide copiées en SVG local, logos GitHub et LinkedIn compris | Fin du design system par lots avant les maquettes, à la demande du propriétaire |
+| 14/10/2026 | La vitrine du design system est versionnée dans `docs/05-vitrine-design-system.html` et publiée depuis ce fichier | Une seule source, relisible et auditable dans le dépôt |

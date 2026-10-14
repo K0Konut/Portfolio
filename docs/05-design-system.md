@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.2 — 14/10/2026 — **statut : en cours** (tokens, inventaire et header posés ; specs des autres composants à suivre)
+Version 0.3 — 14/10/2026 — **statut : en cours** (lot 1 des composants spécifié : briques de base ; lots 2 à 5 à suivre)
+
+v0.3 : spécifications du lot 1 (`BaseButton`, `TextLink`, `Tag`, `Icon`, `CopyButton`, `SkipLink`) et tokens d'appui (`--duration-press`, `--press-scale`, `--feedback-hold`).
 
 v0.2 : corrections issues de l'audit Impeccable du 14/10/2026 (tokens pour toutes les valeurs, zones cliquables de 44 px, rôles `--color-highlight` et `--color-header-muted`, polices auto-hébergées).
 
@@ -132,6 +134,9 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--duration-reduced` | `300ms` | Fondus quand les animations sont réduites |
 | `--hover-lift` | `3px` | Bouton qui monte au survol |
 | `--hover-nudge` | `4px` | Flèche qui avance au survol |
+| `--duration-press` | `120ms` | Retour au clic (appui) |
+| `--press-scale` | `0.98` | Bouton enfoncé au clic |
+| `--feedback-hold` | `2s` | Durée d'affichage d'une confirmation (« Adresse copiée ») |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -186,12 +191,71 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Au scroll** : reste visible en permanence.
 - **Accessibilité** : `<header>` + `<nav aria-label="Navigation principale">` ; `SkipLink` en premier élément focusable ; bouton du menu avec `aria-expanded` et `aria-controls` ; menu ouvert : focus piégé, `Échap` ferme et rend le focus au bouton.
 
-### Autres composants
+### `BaseButton`
 
-À spécifier un par un (variantes, états, responsive, accessibilité, motion), dans l'ordre : `BaseButton`, `TextLink`, `Tag`, `ProjectCard` + `DeviceFrame`, `AppFooter`, puis les composants de pages.
+- **Rôle** : déclencher une action ou mener à une page importante (CV, contact, tous les projets, projet suivant).
+- **Élément** : `<a>` quand il mène quelque part (avec `download` pour le CV), `<button type="button">` quand il agit sur la page. Jamais un `<div>` cliquable.
+- **Variantes**
+  - `primary` : fond `--color-action`, texte `--color-on-action`. Une seule par écran visible : c'est l'action principale (le CV sur l'accueil).
+  - `outline` : transparent, bordure `--border-strong` et texte `--color-text`.
+- **Taille unique** : Manrope `--weight-bold`, `--text-ui`, `--leading-none` ; marges `--space-4` × `--space-5` ; hauteur ≥ `--target-min` ; rayon `--radius-pill`.
+- **Icône optionnelle, à droite** (`--icon-sm`) : `arrow-right` pour aller vers une page, `download` pour le CV, `arrow-up-right` pour un site externe. Pas d'icône décorative.
+- **États**
+  - Survol : `primary` passe en fond `--color-text` ; `outline` se remplit en `--color-text` avec texte `--color-bg`. Le bouton monte de `--hover-lift`. L'icône avance de `--hover-nudge` dans son sens (droite, bas pour `download`, diagonale pour `arrow-up-right`). Durée `--duration-fast`, courbe `--ease-out`.
+  - Clic : `scale(var(--press-scale))` en `--duration-press`.
+  - Focus : anneau `--focus-width` en `--color-focus`, décalé de `--focus-offset`.
+  - Pas d'état désactivé ni de chargement : aucune action de la V1 n'en a besoin.
+- **Sur section violette** : mêmes styles, contrastes vérifiés (lime 14,1:1, texte 14,8:1).
+- **Animations réduites** : ni montée, ni avancée de l'icône, ni enfoncement ; les changements de couleur restent.
+
+### `TextLink`
+
+- **Rôle** : lien texte. Toujours souligné, pour ne jamais se confondre avec une mise en valeur (DA §2, règle 1).
+- **Variantes**
+  - `inline` (dans un paragraphe) : texte `--color-action`, soulignement de 1 px à `0.2em` sous le texte. Survol et focus : le soulignement passe à `--underline` (2 px), sans animation, pour rester correct sur un lien qui passe à la ligne.
+  - `standalone` (liens isolés : pied de page, listes) : texte `--color-text`, soulignement de 1 px. Survol et focus : texte en `--color-action` et trait de `--underline` qui se trace de gauche à droite (`scaleX`, `--duration-fast`).
+- **Lien externe** : icône `arrow-up-right` (`--icon-sm`) après le texte, `target="_blank"`, `rel="noopener"`, et la mention « (nouvel onglet) » lisible par les lecteurs d'écran seulement.
+- **Lien visité** : même apparence.
+- **Animations réduites** : le trait apparaît sans se tracer ; le changement de couleur reste.
+
+### `Tag`
+
+- **Rôle** : étiquette d'information rose (poste visé, type de projet). Jamais cliquable en V1 (les filtres arrivent en V2).
+- **Style** : à choisir entre deux options, voir la vitrine.
+  - A, contour : bordure `--border-thin` et texte `--color-detail`, fond transparent.
+  - B, plein : fond `--color-detail`, texte `--color-on-action` (contraste 7,5:1).
+- **Commun** : Manrope `--weight-medium`, `--text-sm`, `--leading-none` ; marges `--space-2` × `--space-3` ; rayon `--radius-pill` ; en minuscules (pas de capitales).
+- **Règle** : une à deux étiquettes par carte au plus. La stack technique n'est pas en étiquettes roses (le rose reste rare) : elle s'écrit en texte discret dans `ProjectCard`.
+
+### `Icon`
+
+- **Bibliothèque** : Lucide (DA §5). Les icônes sont copiées en SVG local (licence ISC) plutôt qu'importées : on n'embarque que celles qui servent.
+- **Logos GitHub et LinkedIn** : Lucide a déprécié ses logos de marques ; on garde ses tracés actuels, dans le même style, en SVG local.
+- **Jeu de la V1** : `arrow-right`, `arrow-left`, `arrow-up-right`, `download`, `copy`, `check`, `menu`, `x`, `mail`, `github`, `linkedin`.
+- **Rendu** : `fill="none"`, `stroke="currentColor"`, trait `--icon-stroke`, extrémités et angles arrondis ; taille `--icon-sm` dans un bouton ou un lien, `--icon-md` seule.
+- **Accessibilité** : `aria-hidden="true"` par défaut. Une icône seule dans un bouton ou un lien a un nom accessible (`aria-label` sur le bouton ou le lien, pas sur le SVG).
+
+### `CopyButton`
+
+- **Rôle** : copier l'adresse mail en un clic (page Contact, pied de page).
+- **Composition** : l'adresse affichée en clair et sélectionnable, puis un bouton `outline` compact (hauteur `--target-min`) avec l'icône `copy` et le texte « Copier ».
+- **Succès** : l'icône `copy` cède la place à `check` (fondu croisé, et `check` qui grandit de 0,6 à 1 en `--duration-fast`) ; le texte devient « Adresse copiée » ; retour à l'état initial après `--feedback-hold`. Le message est annoncé aux lecteurs d'écran (`aria-live="polite"`).
+- **Échec** (presse-papiers refusé) : l'adresse est sélectionnée et le texte devient « Sélectionnée : Ctrl + C ».
+- **Animations réduites** : fondu croisé seul.
+
+### `SkipLink`
+
+- **Rôle** : « Aller au contenu », premier élément focusable de chaque page, vers `<main id="contenu">`.
+- **Repos** : hors de l'écran (mais lisible par les lecteurs d'écran).
+- **Focus** : apparaît en haut à gauche, au-dessus du header ; fond `--color-action`, texte `--color-on-action`, Manrope `--weight-bold`, rayon `--radius-pill`, hauteur ≥ `--target-min`. Il glisse depuis le haut en `--duration-fast`.
+- **Animations réduites** : apparition en fondu.
+
+### Composants restants
+
+À spécifier par lots : structure (`Section`, `PageIntro`, `AppFooter`, `ProjectCard` + `DeviceFrame`), accueil (`HeroName`, `ScrollHint`, `ProcessSteps`), À propos (`Timeline`, `SkillsMarquee`), étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
 
 ---
 
 ## 5. Vitrine
 
-Page vitrine publiée en artifact « Vitrine du design system » : tokens, header (bureau et mobile, menu ouvert), boutons. Complétée au fil des composants ; elle deviendra la route `/design-system` en développement (phase 7).
+Source : `docs/05-vitrine-design-system.html`, publiée en artifact « Vitrine du design system » à partir de ce fichier. Elle montre les tokens et chaque composant spécifié, avec ses états réels. Complétée lot par lot ; elle deviendra la route `/design-system` en développement (phase 7).
