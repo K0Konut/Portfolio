@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.3 — 14/10/2026 — **statut : en cours** (lot 1 des composants spécifié : briques de base ; lots 2 à 5 à suivre)
+Version 0.4 — 14/10/2026 — **statut : en cours** (lots 1 et 2 spécifiés : briques de base et structure ; lots 3 à 5 à suivre)
+
+v0.4 : lot 2 (`Section`, `PageIntro`, `AppFooter`, `ProjectCard`, `DeviceFrame`) ; `Tag` en contour ; tokens `--header-height`, `--reveal-distance`, `--card-hover-scale`.
 
 v0.3 : spécifications du lot 1 (`BaseButton`, `TextLink`, `Tag`, `Icon`, `CopyButton`, `SkipLink`) et tokens d'appui (`--duration-press`, `--press-scale`, `--feedback-hold`).
 
@@ -119,6 +121,8 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--underline` | 2 px · soulignement des liens |
 | `--focus-width` / `--focus-offset` | 2 px · 3 px |
 | `--target-min` | 44 px · zone cliquable minimale, sur toutes les tailles d'écran |
+| `--header-height` | 60 px · hauteur du header (zone cliquable de 44 px + marges), réservée en haut des pages |
+| Points de rupture | 768 px (tablette) · 1024 px (bureau) · constantes : CSS n'accepte pas de variables dans les media queries |
 | `--icon-sm` / `--icon-md` | 18 px · 24 px |
 | `--icon-stroke` | 2,5 · épaisseur du trait des icônes |
 
@@ -137,6 +141,8 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--duration-press` | `120ms` | Retour au clic (appui) |
 | `--press-scale` | `0.98` | Bouton enfoncé au clic |
 | `--feedback-hold` | `2s` | Durée d'affichage d'une confirmation (« Adresse copiée ») |
+| `--reveal-distance` | `24px` | Montée d'un bloc qui apparaît au scroll |
+| `--card-hover-scale` | `1.03` | Capture qui grossit au survol d'une carte |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -221,9 +227,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `Tag`
 
 - **Rôle** : étiquette d'information rose (poste visé, type de projet). Jamais cliquable en V1 (les filtres arrivent en V2).
-- **Style** : à choisir entre deux options, voir la vitrine.
-  - A, contour : bordure `--border-thin` et texte `--color-detail`, fond transparent.
-  - B, plein : fond `--color-detail`, texte `--color-on-action` (contraste 7,5:1).
+- **Style** : contour. Bordure `--border-thin` et texte `--color-detail`, fond transparent (choix du propriétaire : un fond rose plein, répété sur chaque carte, rendrait le rose omniprésent).
 - **Commun** : Manrope `--weight-medium`, `--text-sm`, `--leading-none` ; marges `--space-2` × `--space-3` ; rayon `--radius-pill` ; en minuscules (pas de capitales).
 - **Règle** : une à deux étiquettes par carte au plus. La stack technique n'est pas en étiquettes roses (le rose reste rare) : elle s'écrit en texte discret dans `ProjectCard`.
 
@@ -250,9 +254,60 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Focus** : apparaît en haut à gauche, au-dessus du header ; fond `--color-action`, texte `--color-on-action`, Manrope `--weight-bold`, rayon `--radius-pill`, hauteur ≥ `--target-min`. Il glisse depuis le haut en `--duration-fast`.
 - **Animations réduites** : apparition en fondu.
 
+### `Section`
+
+- **Rôle** : conteneur de chaque section de page. `<section>` relié à son titre (`aria-labelledby`).
+- **Mise en page** : contenu centré, largeur max `--container`, marges latérales `--gutter`, marges verticales `--space-section`.
+- **Variantes**
+  - `default` : fond `--color-bg`.
+  - `color` : fond `--color-section` (violet) sur toute la largeur. Mêmes rôles de texte, contrastes vérifiés sur violet.
+- **Rythme** : jamais deux sections `color` à la suite. Sur l'accueil : la section d'accueil et la prise de contact, qui referme la page sur le violet de l'affiche.
+- **Titre** : `h2` en Bagel `--text-h2`, aligné à gauche ; une phrase d'introduction optionnelle en `--text-lead`, avec au plus une mise en valeur.
+- **Apparition au scroll** (DA §6, cas par défaut) : chaque bloc monte de `--reveal-distance` et apparaît en `--duration-base`, décalé de `--stagger-block`, une seule fois. Le contenu est visible sans JavaScript : l'état caché n'est posé que par le script, et seulement sous la ligne de flottaison.
+- **Animations réduites** : fondu seul (`--duration-reduced`).
+
+### `PageIntro`
+
+- **Rôle** : haut des pages Projets, À propos, Contact et 404 : titre de page et une phrase.
+- **Contenu** : `h1` en Bagel `--text-h1` ; une phrase en Manrope `--text-lead`, couleur `--color-text-muted`, avec au plus une mise en valeur ; boutons optionnels (404).
+- **Mise en page** : alignée à gauche (la section d'accueil, elle, est centrée : le contraste les distingue) ; marge haute `--header-height` + `--space-8` pour passer sous le header fixe.
+- **Variante** `center` : pour la 404 seulement, titre, phrase et boutons centrés.
+- **Apparition** : à l'ouverture, le titre puis la phrase, comme une apparition au scroll (`--stagger-block`).
+
+### `AppFooter`
+
+- **Rôle** : CV, contact et liens du site sur toutes les pages (architecture §1).
+- **Fond** : `--color-bg`, séparé du contenu par un filet `--border-thin` en `--color-border`.
+- **Colonnes** (3 sur bureau, empilées sur mobile) ; titres en Manrope `--weight-bold`, `--text-sm`, `--color-text-subtle`, sans capitales :
+  - **CV** : « CV en français » et « CV en anglais », liens `standalone` avec l'icône `download` et l'attribut `download`.
+  - **Contact** : l'adresse mail avec `CopyButton`, puis LinkedIn et GitHub (liens `standalone` externes).
+  - **Ce site** : « Code du site » (externe), « Mentions légales », « Confidentialité ».
+- **Dernière ligne** : « © 2026 Costa Maskulov », en `--text-sm` et `--color-text-subtle`.
+- **Pas d'animation** : le pied de page est un repère, il reste calme.
+
+### `ProjectCard`
+
+- **Rôle** : donner envie d'ouvrir une étude de cas (accueil : 3 cartes ; Projets : toutes, de la plus récente à la plus ancienne).
+- **Contenu, dans l'ordre** : `DeviceFrame` avec la capture ; une ou deux `Tag` (type de projet) ; titre `h3` en Bagel `--text-h3` ; une phrase en `--color-text-muted` ; la stack en `--text-sm` et `--color-text-subtle`, séparée par des points médians.
+- **Lien** : un seul lien, sur le titre, étendu à toute la carte (pseudo-élément) : toute la carte est cliquable, et le lecteur d'écran n'entend qu'un lien.
+- **Style** : fond `--color-surface`, rayon `--radius-md`, marges intérieures `--space-5` ; pas d'ombre (principe « plat »).
+- **États**
+  - Survol : fond `--color-surface-hover` ; la capture grossit à `--card-hover-scale` dans son cadre (`--duration-base`, `--ease-out`).
+  - Focus : anneau `--color-focus` autour de toute la carte.
+- **Grille** : 1 colonne sur mobile, 2 à partir de 768 px, 3 à partir de 1024 px ; écart `--space-5`.
+- **Animations réduites** : la capture ne grossit pas ; le changement de fond reste.
+
+### `DeviceFrame`
+
+- **Rôle** : mettre en scène une capture (DA §5), dans les cartes et les études de cas.
+- **Variantes** : `browser` (barre avec trois points neutres et une adresse) et `phone` (corps arrondi). Un écran d'ordinateur utilise `browser`.
+- **Style** : la capture est posée sur un fond `--color-section` ; le cadre est en `--color-surface`, bordure `--border-thin` en `--color-border`, rayon `--radius-md` (navigateur) ou `--radius-lg` (téléphone). Les trois points restent en `--color-border` : pas de rouge-jaune-vert.
+- **Image** : dimensions déclarées (pas de saut de mise en page), `loading="lazy"` hors de l'écran d'ouverture. Dans une carte, `alt=""` (le titre suffit) ; dans une étude de cas, un texte qui décrit ce que montre l'écran.
+- **Sans capture** : l'écran de l'appareil devient un aplat `--color-block` avec le nom du projet en Bagel `--color-text` (5,5:1), en attendant la vraie image.
+
 ### Composants restants
 
-À spécifier par lots : structure (`Section`, `PageIntro`, `AppFooter`, `ProjectCard` + `DeviceFrame`), accueil (`HeroName`, `ScrollHint`, `ProcessSteps`), À propos (`Timeline`, `SkillsMarquee`), étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
+À spécifier par lots : accueil (`HeroName`, `ScrollHint`, `ProcessSteps`), À propos (`Timeline`, `SkillsMarquee`), étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
 
 ---
 

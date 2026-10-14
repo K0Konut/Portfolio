@@ -32,7 +32,7 @@
   --duration-press:120ms;--press-scale:.98;--feedback-hold:2s;
   /* Mise en page de la vitrine uniquement (pas des tokens du site) */
   --vitrine-stage-h:16rem;--vitrine-phone-w:22.5rem;--vitrine-phone-h:35rem;--vitrine-phone-display:3.5rem;--vitrine-phone-logo:1.125rem;
-  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:62ch;--vitrine-icon-min:7.5rem;
+  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:62ch;--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;
 }
 @media (prefers-reduced-motion:reduce){:root{--hover-lift:0px;--hover-nudge:0px;--press-scale:1}}
 html,body{background:var(--color-bg);color:var(--color-text)}
@@ -154,7 +154,6 @@ svg{stroke-width:var(--icon-stroke)}
 /* ---- Tag ---- */
 .tag{display:inline-flex;align-items:center;font:var(--weight-medium) var(--text-sm)/var(--leading-none) var(--font-body);padding:var(--space-2) var(--space-3);border-radius:var(--radius-pill);white-space:nowrap}
 .tag-a{border:var(--border-thin) solid var(--color-detail);color:var(--color-detail)}
-.tag-b{background:var(--color-detail);color:var(--color-on-action);border:var(--border-thin) solid var(--color-detail)}
 .tagrow{display:flex;flex-wrap:wrap;gap:var(--space-2)}
 .minicard{display:grid;gap:var(--space-3);justify-items:start}
 .minicard h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:0}
@@ -177,6 +176,56 @@ svg{stroke-width:var(--icon-stroke)}
 .copy.done .ic-copy{opacity:0}
 .copy.done .ic-check{opacity:1;transform:scale(1)}
 
+
+/* ---- Section ---- */
+.secdemo{display:grid;border-radius:var(--radius-md);overflow:hidden;border:var(--border-thin) solid var(--color-border)}
+.secdemo>div{padding:var(--space-7) var(--gutter);display:grid;gap:var(--space-3);background:var(--color-bg)}
+.secdemo>div.color{background:var(--color-section)}
+.secdemo h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.secdemo p{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+
+/* ---- PageIntro ---- */
+.pintro{display:grid;gap:var(--space-4);justify-items:start;padding:var(--space-7) var(--gutter);background:var(--color-bg);border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border)}
+.pintro.center{justify-items:center;text-align:center}
+.pintro h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h1);line-height:var(--leading-display);margin:0}
+.pintro p{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.pintro .row{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:center}
+
+/* ---- ProjectCard + DeviceFrame ---- */
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-5)}
+@media (min-width:768px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1024px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pcard{position:relative;display:grid;gap:var(--space-3);align-content:start;background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-5);transition:background-color var(--duration-fast) var(--ease-out)}
+.pcard:hover{background:var(--color-surface-hover)}
+.pcard:has(a:focus-visible){outline:var(--focus-width) solid var(--color-focus);outline-offset:var(--focus-offset)}
+.pcard h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:var(--space-1) 0 0}
+.pcard h3 a{color:inherit;text-decoration:none}
+.pcard h3 a:focus-visible{outline:none}
+.pcard h3 a::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.pcard .desc{margin:0;color:var(--color-text-muted)}
+.pcard .stack{margin:0;font-size:var(--text-sm);color:var(--color-text-subtle)}
+.frame{position:relative;aspect-ratio:16/10;max-width:100%;background:var(--color-section);border-radius:var(--radius-sm);overflow:hidden;display:flex;justify-content:center;align-items:flex-end;padding:var(--space-5) var(--space-5) 0}
+.dev{transform-origin:50% 100%;transition:transform var(--duration-base) var(--ease-out);background:var(--color-surface);border:var(--border-thin) solid var(--color-border);display:flex;flex-direction:column;overflow:hidden}
+.pcard:hover .dev{transform:scale(var(--card-hover-scale))}
+.dev-browser{width:100%;height:100%;border-bottom:0;border-radius:var(--radius-md) var(--radius-md) 0 0}
+.dev-browser .bar{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-2) var(--space-3);border-bottom:var(--border-thin) solid var(--color-border)}
+.dev-browser .bar i{width:var(--space-2);height:var(--space-2);border-radius:var(--radius-pill);background:var(--color-border)}
+.dev-browser .bar span{margin-left:var(--space-2);flex:1;height:var(--space-3);border-radius:var(--radius-pill);background:var(--color-surface-hover)}
+.dev-phone{width:42%;height:100%;border-bottom:0;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding-top:var(--space-3)}
+.dev .screen{flex:1;display:grid;place-items:center;padding:var(--space-3);text-align:center;font-family:var(--font-display);font-size:var(--text-h3);line-height:var(--leading-display);background:var(--color-block);color:var(--color-text)}
+
+/* ---- AppFooter ---- */
+.foot{border-top:var(--border-thin) solid var(--color-border);padding-top:var(--space-7);display:grid;gap:var(--space-7)}
+.foot .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-foot-min)),1fr));gap:var(--space-6)}
+.foot h3{margin:0 0 var(--space-2);font:var(--weight-bold) var(--text-sm)/var(--leading-snug) var(--font-body);color:var(--color-text-subtle)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid}
+.foot .copy .addr{font-size:var(--text-ui)}
+.foot small{font-size:var(--text-sm);color:var(--color-text-subtle)}
+
+/* ---- Apparition au scroll (Section) ---- */
+.js .reveal.is-pending{opacity:0;transform:translateY(var(--reveal-distance))}
+.reveal{transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i,0) * var(--stagger-block))}
+
 /* Animations réduites : plus aucun déplacement (tracé, glissement, grossissement) ; les changements de couleur et les fondus restent. */
 @media (prefers-reduced-motion:reduce){
   .hdr nav a span::after,.lang a span::after,.tl-stand span::after{transform:scaleX(1);opacity:0;transition:opacity var(--duration-fast) var(--ease-out)}
@@ -184,6 +233,9 @@ svg{stroke-width:var(--icon-stroke)}
   .skip{transform:none;opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-out)}
   .skip:focus{opacity:1;pointer-events:auto}
   .copy .ic-check,.copy.done .ic-check{transform:none}
+  .pcard:hover .dev{transform:none}
+  .js .reveal.is-pending{transform:none}
+  .reveal{transition:opacity var(--duration-reduced) var(--ease-out)}
 }
 </style>
 
@@ -206,7 +258,7 @@ svg{stroke-width:var(--icon-stroke)}
 
 <div class="page">
   <div class="intro">
-    <h1>Design system · v0.3</h1>
+    <h1>Design system · v0.4</h1>
     <p>Les briques du portfolio, construites avec les tokens de la direction artistique « Affiche de nuit ». <span class="hl">Survolez et tabulez</span> : les états sont réels. Appuyez sur Tab dès l'ouverture pour voir le lien d'évitement.</p>
   </div>
   <main id="contenu" tabindex="-1" style="display:grid;gap:var(--space-8)">
@@ -349,16 +401,13 @@ svg{stroke-width:var(--icon-stroke)}
 
   <!-- Tag -->
   <section class="plate" aria-labelledby="t-tag">
-    <header><h2 id="t-tag">Tag</h2><span>étiquette rose · deux options à choisir</span></header>
+    <header><h2 id="t-tag">Tag</h2><span>étiquette rose · contour</span></header>
     <div class="states">
-      <div class="state"><p class="cap">A · contour</p>
+      <div class="state"><p class="cap">sur une carte</p>
         <div class="minicard"><div class="tagrow"><span class="tag tag-a">site web</span><span class="tag tag-a">projet personnel</span></div><h3>Ce portfolio</h3><p>Vue.js · Vite · Docker</p></div>
       </div>
-      <div class="state"><p class="cap">B · plein</p>
-        <div class="minicard"><div class="tagrow"><span class="tag tag-b">site web</span><span class="tag tag-b">projet personnel</span></div><h3>Ce portfolio</h3><p>Vue.js · Vite · Docker</p></div>
-      </div>
-      <div class="state onColor"><p class="cap">A et B sur section violette</p>
-        <div class="tagrow"><span class="tag tag-a">développeur full-stack</span><span class="tag tag-b">développeur full-stack</span></div>
+      <div class="state onColor"><p class="cap">sur section violette</p>
+        <div class="tagrow"><span class="tag tag-a">développeur full-stack</span></div>
       </div>
     </div>
     <p class="cap">Non cliquables en V1. Une ou deux par carte au plus ; la stack reste en texte discret sous le titre.</p>
@@ -401,6 +450,81 @@ svg{stroke-width:var(--icon-stroke)}
     <header><h2 id="t-skip">SkipLink</h2><span>« Aller au contenu » · visible au focus</span></header>
     <p class="cap">Présent en haut de cette page : rechargez-la et appuyez sur Tab. Il glisse depuis le haut, en lime, au-dessus du header, et mène au contenu principal.</p>
   </section>
+
+  <!-- Section -->
+  <section class="plate" aria-labelledby="t-section">
+    <header><h2 id="t-section">Section</h2><span>default · color · apparition au scroll</span></header>
+    <div class="secdemo">
+      <div class="reveal"><h3>Ma façon de travailler</h3><p>Partir du besoin, puis construire <span class="hl">brique par brique.</span></p></div>
+      <div class="color reveal" style="--i:1"><h3>Parlons-en</h3><p>Vous cherchez un développeur full-stack ? Le CV et le mail sont juste en dessous.</p></div>
+    </div>
+    <p class="cap">Default sur le gris du site, color sur le violet de l'affiche, jamais deux sections violettes à la suite. Faites défiler : les blocs de ce lot montent et apparaissent une fois, décalés de 80 ms.</p>
+  </section>
+
+  <!-- PageIntro -->
+  <section class="plate" aria-labelledby="t-pintro">
+    <header><h2 id="t-pintro">PageIntro</h2><span>haut de page · à gauche · variante center pour la 404</span></header>
+    <div class="pintro reveal"><h3>Projets</h3><p>Ce que j'ai construit, du plus récent au plus ancien.</p></div>
+    <div class="pintro center reveal" style="--i:1"><h3>404</h3><p>Cette brique n'existe pas, ou plus.</p>
+      <div class="row"><a class="btn btn-primary" href="#t-pintro">Retour à l'accueil</a><a class="btn btn-outline" href="#t-pintro">Voir les projets <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></div>
+    </div>
+    <p class="cap">Sur le site, le titre est un h1 et la marge haute laisse passer le header fixe.</p>
+  </section>
+
+  <!-- ProjectCard + DeviceFrame -->
+  <section class="plate" aria-labelledby="t-card">
+    <header><h2 id="t-card">ProjectCard + DeviceFrame</h2><span>carte entière cliquable · capture mise en scène</span></header>
+    <div class="cards">
+      <article class="pcard reveal">
+        <div class="frame"><div class="dev dev-browser" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="screen">Stage au CNAM</div></div></div>
+        <div class="tagrow"><span class="tag tag-a">stage</span></div>
+        <h3><a href="#t-card">Stage au CNAM</a></h3>
+        <p class="desc">Stage de développement au CNAM, code privé.</p>
+        <p class="stack">stack à compléter</p>
+      </article>
+      <article class="pcard reveal" style="--i:1">
+        <div class="frame"><div class="dev dev-phone" aria-hidden="true"><div class="screen">Mangas &amp; BD</div></div></div>
+        <div class="tagrow"><span class="tag tag-a">application</span></div>
+        <h3><a href="#t-card">Lecteur de mangas et BD</a></h3>
+        <p class="desc">Une application pour lire ses mangas et ses BD.</p>
+        <p class="stack">stack à compléter</p>
+      </article>
+      <article class="pcard reveal" style="--i:2">
+        <div class="frame"><div class="dev dev-browser" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="screen">Ce portfolio</div></div></div>
+        <div class="tagrow"><span class="tag tag-a">site web</span><span class="tag tag-a">projet personnel</span></div>
+        <h3><a href="#t-card">Ce portfolio</a></h3>
+        <p class="desc">Le site que vous lisez, conçu du PRD au code.</p>
+        <p class="stack">Vue.js · Vite · Docker</p>
+      </article>
+    </div>
+    <p class="cap">Survolez une carte : le fond s'éclaircit et l'appareil grossit légèrement. Sans capture, l'écran affiche le nom du projet en Bagel sur un aplat violet. Textes provisoires tirés du PRD ; les vraies phrases et stacks viendront avec les études de cas.</p>
+  </section>
+
+  <!-- AppFooter -->
+  <section class="plate" aria-labelledby="t-footer">
+    <header><h2 id="t-footer">AppFooter</h2><span>CV · contact · ce site</span></header>
+    <footer class="foot">
+      <div class="cols">
+        <div><h3>CV</h3><ul>
+          <li><a class="tl-stand" href="#t-footer"><span>CV en français</span><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a></li>
+          <li><a class="tl-stand" href="#t-footer" hreflang="en"><span>CV en anglais</span><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a></li>
+        </ul></div>
+        <div><h3>Contact</h3>
+          <div class="copy" id="copy2"><span class="addr" id="addr2">adresse@exemple.fr</span><button type="button" id="copyBtn2"><span class="icwrap"><svg class="ico ic-copy" aria-hidden="true"><use href="#i-copy"/></svg><svg class="ico ic-check" aria-hidden="true"><use href="#i-check"/></svg></span><span id="copyLabel2">Copier</span></button><span class="sr-only" aria-live="polite" id="copyLive2"></span></div>
+          <ul>
+            <li><a class="tl-stand" href="#t-footer" target="_blank" rel="noopener"><span>LinkedIn</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+            <li><a class="tl-stand" href="https://github.com/K0Konut" target="_blank" rel="noopener"><span>GitHub</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+          </ul></div>
+        <div><h3>Ce site</h3><ul>
+          <li><a class="tl-stand" href="https://github.com/K0Konut/Portfolio" target="_blank" rel="noopener"><span>Code du site</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+          <li><a class="tl-stand" href="#t-footer"><span>Mentions légales</span></a></li>
+          <li><a class="tl-stand" href="#t-footer"><span>Confidentialité</span></a></li>
+        </ul></div>
+      </div>
+      <small>© 2026 Costa Maskulov</small>
+    </footer>
+    <p class="cap">Trois colonnes sur bureau, empilées sur mobile. Pas d'animation : le pied de page reste calme. Adresse provisoire.</p>
+  </section>
   </main>
 </div>
 
@@ -418,17 +542,27 @@ svg{stroke-width:var(--icon-stroke)}
   });
 
   // CopyButton : copie, confirmation, retour à l'état initial après --feedback-hold
-  var box=document.getElementById('copy'),btn=document.getElementById('copyBtn'),label=document.getElementById('copyLabel'),live=document.getElementById('copyLive'),addr=document.getElementById('addr'),timer;
   var hold=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--feedback-hold'))*1000||2000;
-  function settle(text,done){
-    label.textContent=text;live.textContent=text;box.classList.toggle('done',done);
-    clearTimeout(timer);timer=setTimeout(function(){label.textContent='Copier';live.textContent='';box.classList.remove('done')},hold);
+  function wireCopy(sfx){
+    var box=document.getElementById('copy'+sfx),btn=document.getElementById('copyBtn'+sfx),label=document.getElementById('copyLabel'+sfx),live=document.getElementById('copyLive'+sfx),addr=document.getElementById('addr'+sfx),timer;
+    function settle(text,done){
+      label.textContent=text;live.textContent=text;box.classList.toggle('done',done);
+      clearTimeout(timer);timer=setTimeout(function(){label.textContent='Copier';live.textContent='';box.classList.remove('done')},hold);
+    }
+    function selectAddr(){var r=document.createRange();r.selectNodeContents(addr);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    btn.addEventListener('click',function(){
+      var t=addr.textContent.trim();
+      try{navigator.clipboard.writeText(t).then(function(){settle('Adresse copiée',true)},function(){selectAddr();settle('Sélectionnée : Ctrl + C',false)})}
+      catch(e){selectAddr();settle('Sélectionnée : Ctrl + C',false)}
+    });
   }
-  function selectAddr(){var r=document.createRange();r.selectNodeContents(addr);var s=getSelection();s.removeAllRanges();s.addRange(r)}
-  btn.addEventListener('click',function(){
-    var t=addr.textContent.trim();
-    try{navigator.clipboard.writeText(t).then(function(){settle('Adresse copiée',true)},function(){selectAddr();settle('Sélectionnée : Ctrl + C',false)})}
-    catch(e){selectAddr();settle('Sélectionnée : Ctrl + C',false)}
-  });
+  wireCopy('');wireCopy('2');
+
+  // Apparition au scroll : seuls les blocs sous la ligne de flottaison sont cachés, et seulement si le script tourne
+  if('IntersectionObserver' in window){
+    document.documentElement.classList.add('js');
+    var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('is-pending');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add('is-pending');io.observe(el)}});
+  }
 })();
 </script>
