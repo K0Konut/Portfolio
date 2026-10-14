@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.5 — 14/10/2026 — **statut : en cours** (lots 1 et 2 spécifiés, six fonds de section et vague ; lots 3 à 5 à suivre)
+Version 0.6 — 14/10/2026 — **statut : en cours** (lots 1 à 3 spécifiés ; lots 4 et 5 à suivre)
+
+v0.6 : lot 3 (`HeroName` et section d'accueil, `ScrollHint`, `ProcessSteps`) ; tokens `--text-hero`, `--text-hero-stacked` et motion de l'accueil.
 
 v0.5 : six fonds de section (rôles redéfinis par fond), `Tag` renforcé (contour épais et fond teinté), `Section` réécrite, nouveau composant `SectionWave` (DA v1.2).
 
@@ -97,6 +99,8 @@ Sur les fonds clairs, l'action devient noire : un lien `inline` est noir et soul
 | `--font-accent` | `'Fraunces'` italique (`SOFT` 100, `WONK` 1) |
 | `--font-body` | `'Manrope'`, repli système |
 | `--font-mono` | `'JetBrains Mono'`, repli monospace |
+| `--text-hero` | `clamp(5.5rem, 12vw, 9.5rem)` · 88 → 152 px · nom de la section d'accueil sur une ligne (≥ 768 px), environ 90 % de la largeur |
+| `--text-hero-stacked` | `19vw` · nom sur deux lignes (< 768 px), « Maskulov » occupe environ 90 % de la largeur |
 | `--text-display` | `clamp(3.5rem, 1.5rem + 9vw, 6rem)` · 56 → 96 px |
 | `--text-h1` | `clamp(2.5rem, 1.6rem + 4vw, 4rem)` · 40 → 64 px |
 | `--text-h2` | `clamp(1.875rem, 1.4rem + 2vw, 2.5rem)` · 30 → 40 px |
@@ -167,6 +171,12 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--feedback-hold` | `2s` | Durée d'affichage d'une confirmation (« Adresse copiée ») |
 | `--reveal-distance` | `24px` | Montée d'un bloc qui apparaît au scroll |
 | `--card-hover-scale` | `1.03` | Capture qui grossit au survol d'une carte |
+| `--duration-letter` | `600ms` | Montée d'une lettre du nom |
+| `--letter-rise` | `0.4em` | Hauteur dont chaque lettre monte avant de se poser |
+| `--hero-parallax` | `0.35` | Le nom descend à 35 % de la vitesse du scroll en quittant l'écran |
+| `--stagger-brick` | `60ms` | Étapes de la méthode, posées brique par brique |
+| `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
+| `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -184,7 +194,7 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `PageIntro` | Haut de page : titre + phrase d'introduction | Projets, À propos, Contact, 404 |
 | `Section` | Conteneur de section ; six fonds (nuit, violet, vif, lime, rose, crème) | toutes |
 | `SectionWave` | Vague organique entre deux sections de fonds différents | toutes |
-| `HeroName` | Nom géant, entrée lettre par lettre, effacement au scroll | Accueil |
+| `HeroName` | Nom géant (`--text-hero`), entrée lettre par lettre, effacement au scroll | Accueil |
 | `ScrollHint` | Indicateur de scroll très discret | Accueil |
 | `BaseButton` | Bouton / lien-bouton : `primary` (lime), `outline` | toutes |
 | `TextLink` | Lien texte avec soulignement animé | toutes |
@@ -342,9 +352,44 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Image** : dimensions déclarées (pas de saut de mise en page), `loading="lazy"` hors de l'écran d'ouverture. Dans une carte, `alt=""` (le titre suffit) ; dans une étude de cas, un texte qui décrit ce que montre l'écran.
 - **Sans capture** : l'écran de l'appareil devient un aplat `--color-block` avec le nom du projet en Bagel `--color-text` (5,5:1), en attendant la vraie image.
 
+### Section d'accueil et `HeroName`
+
+- **Composition** (DA §6) : `Section` au fond `violet`, hauteur minimale `100svh`, contenu centré. Dans l'ordre : `Tag` « développeur full-stack » (le poste), le nom (`HeroName`, `h1`), la promesse, les boutons « Télécharger le CV » (`primary`, icône `download`) et « Me contacter » (`outline`), puis `ScrollHint`. En bas, une `SectionWave` vers la section suivante.
+- **Nom** : Bagel, `--leading-display`. Sur une ligne et en `--text-hero` à partir de 768 px ; sur deux lignes (« Costa », « Maskulov ») et en `--text-hero-stacked` en dessous.
+- **Promesse** : Manrope `--text-lead`, « Créatif dans l'interface, » puis « rigoureux dans la méthode. » en mise en valeur (Fraunces, `--color-highlight`).
+- **Accessibilité** : le `h1` contient le nom en clair pour les lecteurs d'écran ; les lettres découpées pour l'animation sont dans un doublon `aria-hidden`. Les boutons restent cliquables et focalisables pendant toute l'entrée (on anime l'opacité, jamais `visibility` ni `pointer-events`).
+- **Entrée à l'ouverture** (une seule timeline, environ 1,5 s, `--ease-out`) :
+  - 0 s : le header glisse depuis le haut et apparaît (`--duration-base`) ; l'étiquette apparaît.
+  - 0 → 1,1 s : chaque lettre monte de `--letter-rise` et se pose en `--duration-letter`, décalée de `--stagger-letter`.
+  - 0,4 s : la promesse monte de `--reveal-distance` et apparaît ; la mise en valeur suit 0,1 s après.
+  - 0,6 s : les boutons apparaissent. CV et contact sont lisibles avant 1 s.
+  - 1,5 s : `ScrollHint` apparaît.
+  - L'entrée démarre quand la police Bagel est prête (au plus 300 ms d'attente) pour ne pas animer une police de secours. Sans JavaScript, tout est visible d'emblée.
+- **Au scroll** (piloté par le scroll, DA §6) : pendant que la section quitte l'écran, le nom descend à `--hero-parallax` de la vitesse du scroll et s'estompe ; la promesse et les boutons s'estompent sur la première moitié. Seuls `transform` et `opacity` bougent.
+- **Animations réduites** : tout apparaît ensemble en fondu (`--duration-reduced`) ; ni montée des lettres, ni effet au scroll.
+- **Technique** : timeline et effet de scroll avec GSAP (ScrollTrigger) ; choix définitif en phase 7.
+
+### `ScrollHint`
+
+- **Rôle** : indiquer, très discrètement, que la page continue (DA §6).
+- **Forme** : un trait vertical fin (`--border-strong`, 40 px, en `--color-text-muted`) centré en bas de la section d'accueil, à `--space-6` du bas (plus la zone de sécurité de l'écran). Un petit segment `--color-highlight` le parcourt de `--hint-travel`.
+- **Mouvement** : apparaît à 1,5 s, fait deux allers (`--duration-hint` chacun), puis s'immobilise : il ne boucle jamais (WCAG 2.2.2). Disparaît en fondu dès le premier scroll et ne revient pas.
+- **Accessibilité** : décoratif (`aria-hidden="true"`).
+- **Animations réduites** : trait immobile, sans segment qui bouge.
+- **À confirmer en maquette** : s'il est superflu, on le supprime (DA §6).
+
+### `ProcessSteps`
+
+- **Rôle** : montrer la méthode d'ingénieur en 7 étapes : PRD, marque, direction artistique, architecture et UX, design system, maquettes, code. C'est une vraie séquence : liste ordonnée (`<ol>`), numérotée.
+- **Variante `compact`** (accueil, fond `vif`) : une rangée de briques (7 colonnes à partir de 1024 px, puis la grille passe à la ligne). Chaque brique : contour `--border-strong` en `--color-text`, rayon `--radius-sm`, numéro en `--text-sm` et `--color-text-subtle`, nom de l'étape en Manrope `--weight-bold`. La dernière brique, « Code », est pleine (`--color-action`, texte `--color-on-action`) : c'est le produit fini.
+- **Variante `detail`** (À propos, fond `nuit`) : une liste verticale ; pour chaque étape, le numéro en Bagel `--text-h3` et `--color-block` (grand texte décoratif, 3,05:1), le nom en Manrope `--weight-bold` `--text-lead`, et une phrase en `--color-text-muted`. Un filet vertical `--color-border` relie les numéros.
+- **Phrases de la variante `detail`** : PRD, ce qu'on construit et pourquoi · marque, comment se positionner · direction artistique, à quoi ça ressemble et comment ça bouge · architecture et UX, comment c'est organisé et parcouru · design system, avec quelles briques · maquettes, à quoi ressemblent les écrans clés · code, comment c'est construit.
+- **Apparition** : brique par brique, chacune monte de `--reveal-distance` et apparaît, décalée de `--stagger-brick` (7 × 60 ms, sous le budget de 500 ms).
+- **Animations réduites** : fondu de l'ensemble.
+
 ### Composants restants
 
-À spécifier par lots : accueil (`HeroName`, `ScrollHint`, `ProcessSteps`), À propos (`Timeline`, `SkillsMarquee`), étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
+À spécifier par lots : À propos (`Timeline`, `SkillsMarquee`), étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
 
 ---
 

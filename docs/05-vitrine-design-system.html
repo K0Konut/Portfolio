@@ -18,7 +18,7 @@
   /* Typographie */
   --font-display:'Bagel Fat One','Arial Rounded MT Bold',system-ui,sans-serif;--font-accent:'Fraunces',Georgia,serif;--font-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--font-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
   --text-display:clamp(3.5rem,1.5rem + 9vw,6rem);--text-h1:clamp(2.5rem,1.6rem + 4vw,4rem);--text-h2:clamp(1.875rem,1.4rem + 2vw,2.5rem);--text-h3:clamp(1.5rem,1.3rem + 1vw,1.75rem);--text-body:clamp(1rem,.95rem + .25vw,1.125rem);--text-sm:.875rem;
-  --text-ui:1rem;--text-lead:clamp(1.25rem,1.1rem + .6vw,1.5rem);--text-logo:clamp(1.125rem,1rem + .5vw,1.375rem);--text-menu:3.25rem;
+  --text-hero:clamp(5.5rem,12vw,9.5rem);--text-hero-stacked:19vw;--text-ui:1rem;--text-lead:clamp(1.25rem,1.1rem + .6vw,1.5rem);--text-logo:clamp(1.125rem,1rem + .5vw,1.375rem);--text-menu:3.25rem;
   --leading-none:1;--leading-display:.95;--leading-snug:1.3;--leading-body:1.6;
   --weight-regular:400;--weight-medium:500;--weight-bold:700;--tracking-label:.05em;
   /* Espacements, rayons, bordures, tailles */
@@ -30,9 +30,10 @@
   /* Motion */
   --ease-out:cubic-bezier(.22,1,.36,1);--duration-fast:250ms;--duration-base:700ms;--duration-reduced:300ms;--hover-lift:3px;--hover-nudge:4px;
   --duration-press:120ms;--press-scale:.98;--feedback-hold:2s;
+  --duration-letter:600ms;--letter-rise:.4em;--hero-parallax:.35;--stagger-brick:60ms;--hint-travel:12px;--duration-hint:1200ms;
   /* Mise en page de la vitrine uniquement (pas des tokens du site) */
   --vitrine-stage-h:16rem;--vitrine-phone-w:22.5rem;--vitrine-phone-h:35rem;--vitrine-phone-display:3.5rem;--vitrine-phone-logo:1.125rem;
-  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:62ch;--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;
+  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:62ch;--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;--vitrine-hero-h:min(100svh,48rem);--vitrine-brick-min:8.5rem;--vitrine-step-col:3.5rem;--vitrine-hint-h:40px;--vitrine-hint-seg:12px;
 }
 @media (prefers-reduced-motion:reduce){:root{--hover-lift:0px;--hover-nudge:0px;--press-scale:1}}
 html,body{background:var(--color-bg);color:var(--color-text)}
@@ -243,6 +244,42 @@ svg{stroke-width:var(--icon-stroke)}
 .js .reveal.is-pending{opacity:0;transform:translateY(var(--reveal-distance))}
 .reveal{transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i,0) * var(--stagger-block))}
 
+
+/* ---- Section d'accueil, HeroName, ScrollHint ---- */
+.herowrap{border-radius:var(--radius-md);overflow:hidden;border:var(--border-thin) solid var(--color-border)}
+.hero{position:relative;min-height:var(--vitrine-hero-h);display:grid;grid-template-rows:auto 1fr;padding-inline:var(--gutter)}
+.hero .hdr{width:100%}
+.hero-inner{display:grid;justify-items:center;align-content:center;text-align:center;gap:var(--space-5);padding-block:var(--space-8) var(--space-9)}
+.hero-name{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-hero);line-height:var(--leading-display);margin:0;white-space:nowrap}
+.hero-name .word{display:inline-block}
+.hero-name .l{display:inline-block}
+@media (max-width:767px){.hero-name{font-size:var(--text-hero-stacked)} .hero-name .word{display:block} .hero .hdr nav,.hero .hdr .lang{display:none}}
+.hero-promise{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.hero-promise .hl{display:inline-block}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:center}
+.hint{position:absolute;left:50%;bottom:calc(var(--space-6) + env(safe-area-inset-bottom,0px));width:var(--border-strong);height:var(--vitrine-hint-h);background:color-mix(in srgb,var(--color-text-muted) 45%,transparent);overflow:hidden}
+.hint i{position:absolute;left:0;top:0;width:100%;height:var(--vitrine-hint-seg);background:var(--color-highlight)}
+.replay{display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap}
+
+/* ---- ProcessSteps ---- */
+.steps-c{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-brick-min)),1fr));gap:var(--space-3);width:100%}
+@media (min-width:1024px){.steps-c{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.steps-c li{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-sm);padding:var(--space-4) var(--space-3);display:grid;gap:var(--space-2);align-content:start}
+.steps-c .n{font-size:var(--text-sm);color:var(--color-text-subtle);font-variant-numeric:tabular-nums}
+.steps-c .t{font-weight:var(--weight-bold);line-height:var(--leading-snug)}
+.steps-c li:last-child{background:var(--color-action);border-color:var(--color-action);color:var(--color-on-action)}
+.steps-c li:last-child .n{color:var(--color-on-action)}
+.steps-d{position:relative;list-style:none;margin:0;padding:0;display:grid;gap:var(--space-5)}
+.steps-d::before{content:"";position:absolute;left:calc(var(--vitrine-step-col) / 2);top:var(--space-4);bottom:var(--space-4);width:var(--border-thin);background:var(--color-border)}
+.steps-d li{position:relative;display:grid;grid-template-columns:var(--vitrine-step-col) minmax(0,1fr);gap:var(--space-4);align-items:start}
+.steps-d .n{font-family:var(--font-display);font-size:var(--text-h3);line-height:var(--leading-none);color:var(--color-block);background:var(--color-bg);text-align:center;padding-block:var(--space-1)}
+.steps-d b{display:block;font-size:var(--text-lead);line-height:var(--leading-snug)}
+.steps-d p{margin:var(--space-1) 0 0;color:var(--color-text-muted)}
+.stepbox{padding:var(--space-7) var(--gutter);display:grid;gap:var(--space-5);justify-items:start;border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border)}
+.stepbox h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.reveal-brick{transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i,0) * var(--stagger-brick))}
+.js .reveal-brick.is-pending{opacity:0;transform:translateY(var(--reveal-distance))}
+
 /* Animations réduites : plus aucun déplacement (tracé, glissement, grossissement) ; les changements de couleur et les fondus restent. */
 @media (prefers-reduced-motion:reduce){
   .hdr nav a span::after,.lang a span::after,.tl-stand span::after{transform:scaleX(1);opacity:0;transition:opacity var(--duration-fast) var(--ease-out)}
@@ -253,6 +290,8 @@ svg{stroke-width:var(--icon-stroke)}
   .pcard:hover .dev{transform:none}
   .js .reveal.is-pending{transform:none}
   .reveal{transition:opacity var(--duration-reduced) var(--ease-out)}
+  .js .reveal-brick.is-pending{transform:none}
+  .reveal-brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
 }
 </style>
 
@@ -275,7 +314,7 @@ svg{stroke-width:var(--icon-stroke)}
 
 <div class="page">
   <div class="intro">
-    <h1>Design system · v0.5</h1>
+    <h1>Design system · v0.6</h1>
     <p>Les briques du portfolio, construites avec les tokens de la direction artistique « Affiche de nuit ». <span class="hl">Survolez et tabulez</span> : les états sont réels. Appuyez sur Tab dès l'ouverture pour voir le lien d'évitement.</p>
   </div>
   <main id="contenu" tabindex="-1" style="display:grid;gap:var(--space-8)">
@@ -565,9 +604,46 @@ svg{stroke-width:var(--icon-stroke)}
     </footer>
     <p class="cap">Trois colonnes sur bureau, empilées sur mobile. Pas d'animation : le pied de page reste calme. Adresse provisoire.</p>
   </section>
+
+  <!-- Section d'accueil -->
+  <section class="plate" aria-labelledby="t-hero">
+    <header><h2 id="t-hero">Section d'accueil · HeroName · ScrollHint</h2><span>entrée en 1,5 s · effacement au scroll</span></header>
+    <div class="herowrap">
+      <div class="hero fond-violet" id="hero">
+        <div class="hdr">
+          <a class="name" href="#t-hero">Costa Maskulov</a>
+          <nav aria-label="Navigation principale (exemple)"><a href="#t-hero"><span>Projets</span></a><a href="#t-hero"><span>À propos</span></a><a href="#t-hero"><span>Contact</span></a></nav>
+          <div class="lang"><a href="#t-hero" aria-current="true" lang="fr"><span>FR</span></a><span class="sep" aria-hidden="true">/</span><a href="#t-hero" lang="en"><span>EN</span></a></div>
+        </div>
+        <div class="hero-inner">
+          <div class="hero-top"><span class="tag tag-a">développeur full-stack</span></div>
+          <div class="hero-namewrap"><p class="hero-name" role="heading" aria-level="1"><span class="sr-only">Costa Maskulov</span><span aria-hidden="true" id="heroLetters"><span class="word">Costa</span> <span class="word">Maskulov</span></span></p></div>
+          <div class="hero-rest" style="display:grid;gap:var(--space-5);justify-items:center">
+            <p class="hero-promise">Créatif dans l’interface, <span class="hl">rigoureux dans la méthode.</span></p>
+            <div class="hero-actions"><a class="btn btn-primary" data-icon="download" href="#t-hero">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-hero">Me contacter</a></div>
+          </div>
+        </div>
+        <div class="hint" aria-hidden="true"><i></i></div>
+      </div>
+      <div class="wave" data-seed="7" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <div class="fond-nuit" style="padding:var(--space-7) var(--gutter)"><p class="cap">Section suivante : faites défiler la page, la section d'accueil s'efface et le nom ralentit.</p></div>
+    </div>
+    <div class="replay"><button type="button" class="btn btn-outline" id="replay">Rejouer l'entrée</button></div>
+    <p class="cap">Lettre par lettre (600 ms chacune, 40 ms d'écart), promesse à 0,4 s, boutons à 0,6 s : CV et contact lisibles avant 1 s. Dans la vitrine, le nom est un faux titre pour garder un seul h1 sur la page.</p>
+  </section>
+
+  <!-- ProcessSteps -->
+  <section class="plate" aria-labelledby="t-steps">
+    <header><h2 id="t-steps">ProcessSteps</h2><span>compact (accueil) · detail (À propos) · brique par brique</span></header>
+    <div class="stepbox fond-vif"><h3>Ma façon de travailler</h3><ol class="steps-c"><li class="reveal-brick" style="--i:0"><span class="n">1</span><span class="t">PRD</span></li><li class="reveal-brick" style="--i:1"><span class="n">2</span><span class="t">Marque</span></li><li class="reveal-brick" style="--i:2"><span class="n">3</span><span class="t">Direction artistique</span></li><li class="reveal-brick" style="--i:3"><span class="n">4</span><span class="t">Architecture et UX</span></li><li class="reveal-brick" style="--i:4"><span class="n">5</span><span class="t">Design system</span></li><li class="reveal-brick" style="--i:5"><span class="n">6</span><span class="t">Maquettes</span></li><li class="reveal-brick" style="--i:6"><span class="n">7</span><span class="t">Code</span></li></ol><a class="btn btn-outline" href="#t-steps">Voir ma méthode <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></div>
+    <div class="stepbox fond-nuit"><h3>Façon de travailler</h3><ol class="steps-d"><li class="reveal-brick" style="--i:0"><span class="n" aria-hidden="true">1</span><div><b>PRD</b><p>Ce qu’on construit, et pourquoi.</p></div></li><li class="reveal-brick" style="--i:1"><span class="n" aria-hidden="true">2</span><div><b>Marque</b><p>Comment se positionner.</p></div></li><li class="reveal-brick" style="--i:2"><span class="n" aria-hidden="true">3</span><div><b>Direction artistique</b><p>À quoi ça ressemble, et comment ça bouge.</p></div></li><li class="reveal-brick" style="--i:3"><span class="n" aria-hidden="true">4</span><div><b>Architecture et UX</b><p>Comment c’est organisé et parcouru.</p></div></li><li class="reveal-brick" style="--i:4"><span class="n" aria-hidden="true">5</span><div><b>Design system</b><p>Avec quelles briques.</p></div></li><li class="reveal-brick" style="--i:5"><span class="n" aria-hidden="true">6</span><div><b>Maquettes</b><p>À quoi ressemblent les écrans clés.</p></div></li><li class="reveal-brick" style="--i:6"><span class="n" aria-hidden="true">7</span><div><b>Code</b><p>Comment c’est construit.</p></div></li></ol></div>
+    <p class="cap">Faites défiler : les briques se posent une à une, à 60 ms d'écart. La dernière, « Code », est pleine : c'est le produit fini.</p>
+  </section>
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 (function(){
   var open=document.getElementById('openMenu'),close=document.getElementById('closeMenu'),mm=document.getElementById('mm');
@@ -612,7 +688,49 @@ svg{stroke-width:var(--icon-stroke)}
     el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" height="'+H+'" preserveAspectRatio="none"><path d="'+d+'Z"/></svg>';
   }
   function drawWaves(){document.querySelectorAll('.wave').forEach(drawWave)}
-  drawWaves();var wt;addEventListener('resize',function(){clearTimeout(wt);wt=setTimeout(drawWaves,150)});
+  drawWaves();
+  // Apparition brique par brique (ProcessSteps)
+  if('IntersectionObserver' in window){
+    var iob=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('is-pending');iob.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px'});
+    document.querySelectorAll('.reveal-brick').forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add('is-pending');iob.observe(el)}});
+  }
+
+  // Section d'accueil : une timeline pour l'entrée, ScrollTrigger pour l'effacement
+  var hero=document.getElementById('hero');
+  if(hero&&window.gsap){
+    var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ease='power4.out'; // équivalent de cubic-bezier(.22,1,.36,1)
+    var letters=[];
+    hero.querySelectorAll('#heroLetters .word').forEach(function(w){
+      var t=w.textContent;w.textContent='';
+      t.split('').forEach(function(c){var s=document.createElement('span');s.className='l';s.textContent=c;w.appendChild(s);letters.push(s)});
+    });
+    var hdr=hero.querySelector('.hdr'),tag=hero.querySelector('.hero-top'),prom=hero.querySelector('.hero-promise'),hl=prom.querySelector('.hl'),acts=hero.querySelector('.hero-actions'),hint=hero.querySelector('.hint'),seg=hint.querySelector('i');
+    var tl=gsap.timeline({paused:true,defaults:{ease:ease}});
+    if(reduce){
+      tl.fromTo([hdr,tag,hero.querySelector('.hero-namewrap'),hero.querySelector('.hero-rest'),hint],{opacity:0},{opacity:1,duration:.3,ease:'none'});
+    }else{
+      tl.fromTo(hdr,{y:-20,opacity:0},{y:0,opacity:1,duration:.7},0)
+        .fromTo(tag,{opacity:0},{opacity:1,duration:.7},0)
+        .fromTo(letters,{y:'0.4em',opacity:0},{y:0,opacity:1,duration:.6,stagger:.04},0)
+        .fromTo(prom,{y:24,opacity:0},{y:0,opacity:1,duration:.7},.4)
+        .fromTo(hl,{opacity:0},{opacity:1,duration:.5},.5)
+        .fromTo(acts,{y:16,opacity:0},{y:0,opacity:1,duration:.5},.6)
+        .fromTo(hint,{opacity:0},{opacity:1,duration:.4},1.5)
+        .fromTo(seg,{y:-12,opacity:0},{keyframes:[{opacity:1,duration:.25},{y:28,duration:.8,ease:'sine.inOut'},{opacity:0,duration:.15}],repeat:1},1.6)
+        .set(seg,{y:0,opacity:1});
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.to(hero.querySelector('.hero-namewrap'),{y:function(){return hero.offsetHeight*.35},opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'bottom top',scrub:true}});
+      gsap.to([tag,hero.querySelector('.hero-rest')],{opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'center top',scrub:true}});
+      ScrollTrigger.create({trigger:hero,start:'top+=10 top',once:true,onEnter:function(){gsap.to(hint,{opacity:0,duration:.3})}});
+    }
+    var q=new URLSearchParams(location.search).get('t');
+    var go=function(){if(q!==null){tl.pause(parseFloat(q))}else{tl.play(0)}};
+    var font=document.fonts&&document.fonts.load?document.fonts.load('1em "Bagel Fat One"'):Promise.resolve();
+    Promise.race([font,new Promise(function(r){setTimeout(r,300)})]).then(go);
+    document.getElementById('replay').addEventListener('click',function(){gsap.set(hint,{opacity:0});tl.play(0)});
+  }
+  var wt;addEventListener('resize',function(){clearTimeout(wt);wt=setTimeout(drawWaves,150)});
 
 
   // Apparition au scroll : seuls les blocs sous la ligne de flottaison sont cachés, et seulement si le script tourne
