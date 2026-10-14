@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.7 — 14/10/2026 — **statut : en cours** (lots 1 à 4 spécifiés ; lot 5 à suivre)
+Version 0.8 — 14/10/2026 — **statut : en cours** (lots 1 à 4 spécifiés ; lot 5 à suivre)
+
+v0.8 : `SkillsMarquee` remplacé par `SkillsWall` (mur de briques) ; icônes `pause` et `play` retirées.
 
 v0.7 : lot 4 (`Timeline`, `SkillsMarquee`) ; icônes `pause` et `play` ; `ScrollHint` confirmé.
 
@@ -145,6 +147,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--space-section` | `clamp(4rem, 10vw, 8rem)` |
 | `--gutter` | `clamp(1rem, 4vw, 3rem)` |
 | `--container` | `1240px` |
+| `--measure` | `52ch` · largeur max du texte courant, environ 70 caractères en Manrope (sous les 80 recommandés) |
 | `--radius-sm` / `-md` / `-lg` / `-pill` | 8 · 16 · 28 px · 999 px |
 | `--border-thin` / `--border-strong` | 1 px · 1,5 px |
 | `--underline` | 2 px · soulignement des liens |
@@ -180,7 +183,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--stagger-brick` | `60ms` | Étapes de la méthode, posées brique par brique |
 | `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
 | `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
-| `--marquee-duration` | `40s` | Un tour complet du bandeau de compétences (vitesse constante, `linear`) |
+| `--stagger-wall` | `30ms` | Briques du mur de compétences, posées une à une (25 briques, 0,75 s) |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -208,7 +211,7 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `DeviceFrame` | Cadre navigateur / téléphone pour mettre en scène une capture | cartes, études de cas |
 | `ProcessSteps` | Les 7 étapes de la méthode | Accueil, À propos |
 | `Timeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
-| `SkillsMarquee` | Bandeau défilant de compétences, accessible | À propos |
+| `SkillsWall` | Mur de briques des compétences, posé une fois | À propos |
 | `MetaList` | Type, rôle, durée, stack d'une étude de cas | études de cas |
 | `CaseToc` | Sommaire collant (bureau uniquement) | études de cas |
 | `StatBlock` | Résultat chiffré | études de cas |
@@ -274,7 +277,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 - **Bibliothèque** : Lucide (DA §5). Les icônes sont copiées en SVG local (licence ISC) plutôt qu'importées : on n'embarque que celles qui servent.
 - **Logos GitHub et LinkedIn** : Lucide a déprécié ses logos de marques ; on garde ses tracés actuels, dans le même style, en SVG local.
-- **Jeu de la V1** : `arrow-right`, `arrow-left`, `arrow-up-right`, `download`, `copy`, `check`, `menu`, `x`, `mail`, `github`, `linkedin`, `pause`, `play`.
+- **Jeu de la V1** : `arrow-right`, `arrow-left`, `arrow-up-right`, `download`, `copy`, `check`, `menu`, `x`, `mail`, `github`, `linkedin`.
 - **Rendu** : `fill="none"`, `stroke="currentColor"`, trait `--icon-stroke`, extrémités et angles arrondis ; taille `--icon-sm` dans un bouton ou un lien, `--icon-md` seule.
 - **Accessibilité** : `aria-hidden="true"` par défaut. Une icône seule dans un bouton ou un lien a un nom accessible (`aria-label` sur le bouton ou le lien, pas sur le SVG).
 
@@ -400,14 +403,16 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Au scroll** (temps fort piloté par le scroll, DA §6) : un second fil en `--color-highlight` se trace par-dessus le premier au rythme du scroll ; quand il atteint une étape, son repère se remplit (`--duration-fast`). Pas d'épinglage : la lecture n'est jamais bloquée.
 - **Animations réduites** : fil déjà tracé, repères déjà remplis.
 
-### `SkillsMarquee`
+### `SkillsWall`
 
-- **Rôle** : faire défiler les technologies par catégorie (architecture §4, liste validée).
-- **Rendu** : une bande qui défile de droite à gauche, en continu, à vitesse constante (`--marquee-duration`). Chaque catégorie s'annonce en Fraunces italique `--color-highlight` (« front », « back », « UI / UX », « outils et déploiement », « méthode »), suivie de ses technologies en Manrope `--weight-bold` `--text-h3`, séparées par des points médians.
-- **Pause** (WCAG 2.2.2, niveau A) : un bouton visible « Mettre en pause » / « Reprendre », avec les icônes `pause` et `play`, à côté du bandeau. Le défilement s'arrête aussi au survol et quand le focus est dans le bandeau.
-- **Accessibilité** : une vraie liste (`<ul>`) par catégorie ; la copie qui sert à boucler est en `aria-hidden`. Le bouton porte `aria-pressed`.
-- **Animations réduites** : pas de défilement ; les technologies s'affichent en liste fixe, passant à la ligne.
-- **Technique** : animation CSS `translateX(-50%)` sur une piste qui contient deux copies ; seul `transform` bouge.
+- **Rôle** : montrer les technologies par catégorie (architecture §4, liste validée) comme un mur bâti brique par brique. Remplace le bandeau défilant : plus de mouvement continu, plus de bouton pause.
+- **Structure** : une rangée par catégorie. La catégorie s'annonce en Fraunces italique `--color-highlight` (« front », « back », « UI / UX », « outils et déploiement », « méthode ») ; ses technologies suivent, chacune une brique. Une liste (`<ul>`) par catégorie.
+- **Appareillage** : une rangée sur deux est décalée de `--space-6` (`--space-4` sous 768 px), comme un mur. Les rangées passent à la ligne si besoin.
+- **Brique** : fond `--neutral-50`, texte `--neutral-950` (16,8:1), Manrope `--weight-bold` `--text-ui`, marges `--space-3` × `--space-4`, rayon `--radius-sm`. Jamais de lime : il signale l'action, une brique lime se prendrait pour un bouton.
+- **Briques roses** : fond `--pink-500` (texte 7,5:1) pour les technologies qui ont servi à construire ce site, avec une légende « en rose : les briques de ce site » et un lien vers l'étude de cas du portfolio. La couleur porte une information, pas un décor.
+- **Fond conseillé** : `violet` (sur la page À propos).
+- **Pose** : quand le mur arrive à l'écran, chaque brique descend de `--reveal-distance` et se pose, dans l'ordre de lecture, décalée de `--stagger-wall`. Une seule fois, puis plus rien ne bouge. C'est le moment animé de la page À propos.
+- **Animations réduites** : fondu de l'ensemble.
 
 ### Composants restants
 

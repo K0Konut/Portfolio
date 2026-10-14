@@ -23,17 +23,17 @@
   --weight-regular:400;--weight-medium:500;--weight-bold:700;--tracking-label:.05em;
   /* Espacements, rayons, bordures, tailles */
   --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;--space-8:64px;--space-9:96px;--space-10:128px;
-  --space-section:clamp(4rem,10vw,8rem);--gutter:clamp(1rem,4vw,3rem);--container:1240px;
+  --space-section:clamp(4rem,10vw,8rem);--gutter:clamp(1rem,4vw,3rem);--container:1240px;--measure:52ch;
   --radius-sm:8px;--radius-md:16px;--radius-lg:28px;--radius-pill:999px;
   --border-thin:1px;--border-strong:1.5px;--underline:2px;--focus-width:2px;--focus-offset:3px;
   --target-min:44px;--tag-tint:14%;--icon-sm:1.125rem;--icon-md:1.5rem;--icon-stroke:2.5;
   /* Motion */
   --ease-out:cubic-bezier(.22,1,.36,1);--duration-fast:250ms;--duration-base:700ms;--duration-reduced:300ms;--hover-lift:3px;--hover-nudge:4px;
   --duration-press:120ms;--press-scale:.98;--feedback-hold:2s;
-  --duration-letter:600ms;--letter-rise:.4em;--hero-parallax:.35;--stagger-brick:60ms;--hint-travel:12px;--duration-hint:1200ms;--marquee-duration:40s;--timeline-dot:14px;
+  --duration-letter:600ms;--letter-rise:.4em;--hero-parallax:.35;--stagger-brick:60ms;--hint-travel:12px;--duration-hint:1200ms;--stagger-wall:30ms;--timeline-dot:14px;
   /* Mise en page de la vitrine uniquement (pas des tokens du site) */
   --vitrine-stage-h:16rem;--vitrine-phone-w:22.5rem;--vitrine-phone-h:35rem;--vitrine-phone-display:3.5rem;--vitrine-phone-logo:1.125rem;
-  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:62ch;--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;--vitrine-hero-h:min(100svh,48rem);--vitrine-brick-min:8.5rem;--vitrine-step-col:3.5rem;--vitrine-hint-h:40px;--vitrine-hint-seg:12px;
+  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:var(--measure);--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;--vitrine-hero-h:min(100svh,48rem);--vitrine-brick-min:8.5rem;--vitrine-step-col:3.5rem;--vitrine-hint-h:40px;--vitrine-hint-seg:12px;
 }
 @media (prefers-reduced-motion:reduce){:root{--hover-lift:0px;--hover-nudge:0px;--press-scale:1}}
 html,body{background:var(--color-bg);color:var(--color-text)}
@@ -294,21 +294,29 @@ svg{stroke-width:var(--icon-stroke)}
 .tline .where{color:var(--color-text)}
 .tline p{margin:0;color:var(--color-text-muted);max-width:var(--vitrine-measure)}
 
-/* ---- SkillsMarquee ---- */
-.mq{display:grid;gap:var(--space-4)}
-.mq-view{overflow:hidden;border-block:var(--border-thin) solid var(--color-border);padding-block:var(--space-5)}
-.mq-track{display:flex;width:max-content;animation:mq var(--marquee-duration) linear infinite}
-.mq-view:hover .mq-track,.mq-view:focus-within .mq-track,.mq.paused .mq-track{animation-play-state:paused}
-@keyframes mq{to{transform:translateX(-50%)}}
-.mq-copy{display:flex;align-items:baseline;gap:var(--space-6);padding-right:var(--space-6)}
-.mq-cat{display:flex;align-items:baseline;gap:var(--space-4);white-space:nowrap}
-.mq-cat .hl{font-size:var(--text-h3)}
-.mq-cat ul{display:flex;gap:var(--space-4);list-style:none;margin:0;padding:0}
-.mq-cat li{font-size:var(--text-h3);font-weight:var(--weight-bold);line-height:var(--leading-snug)}
-.mq-cat li+li::before{content:"·";margin-right:var(--space-4);color:var(--color-text-subtle)}
-.mq-ctrl{display:flex;gap:var(--space-3);align-items:center}
-.mq-ctrl button{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--target-min);padding:0 var(--space-4);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--color-text);background:transparent;color:var(--color-text);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body);cursor:pointer}
-.mq-ctrl .ic-play{display:none} .mq.paused .ic-play{display:block} .mq.paused .ic-pause{display:none}
+
+/* ---- SkillsWall ---- */
+.wall{display:grid;gap:var(--space-3);width:100%}
+.course{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2)}
+.course:nth-child(even){padding-left:var(--space-6)}
+@media (max-width:767px){.course:nth-child(even){padding-left:var(--space-4)}}
+.course .hl{font-size:var(--text-lead);margin-right:var(--space-2)}
+.course ul{display:flex;flex-wrap:wrap;gap:var(--space-2);list-style:none;margin:0;padding:0}
+.brick{display:inline-flex;align-items:center;padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);background:var(--neutral-50);color:var(--neutral-950);font:var(--weight-bold) var(--text-ui)/var(--leading-none) var(--font-body);transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i) * var(--stagger-wall))}
+.brick.site{background:var(--pink-500)}
+.js .wall.is-pending .brick{opacity:0;transform:translateY(calc(-1 * var(--reveal-distance)))}
+.wall-legend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);font-size:var(--text-sm);color:var(--color-text-muted)}
+.wall-legend i{width:var(--space-4);height:var(--space-4);border-radius:var(--space-1);background:var(--pink-500)}
+
+
+.apropos .pagetitle{font-family:var(--font-display);font-size:var(--text-h1);line-height:var(--leading-display);margin:0}
+.apropos .lead{font-size:var(--text-lead);line-height:var(--leading-snug)}
+.apropos .tline{padding-left:calc(var(--timeline-dot) + var(--space-5));position:relative}
+.apropos .tline::before{content:"";position:absolute;left:calc(var(--timeline-dot) / 2 - var(--border-strong) / 2);top:var(--space-2);bottom:var(--space-2);width:var(--border-strong);background:var(--color-highlight)}
+.js-tl .apropos .tline li::before,.apropos .tline li::before{background:var(--color-highlight)}
+.duo2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-duo-min)),1fr));gap:var(--space-5);width:100%}
+.duo2>div{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-md);padding:var(--space-5)}
+.duo2 b{font-size:var(--text-lead)}
 
 /* Animations réduites : plus aucun déplacement (tracé, glissement, grossissement) ; les changements de couleur et les fondus restent. */
 @media (prefers-reduced-motion:reduce){
@@ -321,12 +329,8 @@ svg{stroke-width:var(--icon-stroke)}
   .js .reveal.is-pending{transform:none}
   .reveal{transition:opacity var(--duration-reduced) var(--ease-out)}
   .js .reveal-brick.is-pending{transform:none}
-  .mq-track{animation:none;width:auto}
-  .mq-copy{flex-wrap:wrap;row-gap:var(--space-3)}
-  .mq-copy[aria-hidden="true"]{display:none}
-  .mq-cat{white-space:normal;flex-wrap:wrap}
-  .mq-cat ul{flex-wrap:wrap}
-  .mq-ctrl{display:none}
+  .js .wall.is-pending .brick{transform:none}
+  .brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
   .reveal-brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
 }
 </style>
@@ -346,13 +350,11 @@ svg{stroke-width:var(--icon-stroke)}
   <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
   <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
   <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
-  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
-  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3 20 12 6 21Z"/></symbol>
 </svg>
 
 <div class="page">
   <div class="intro">
-    <h1>Design system · v0.7</h1>
+    <h1>Design system · v0.8</h1>
     <p>Les briques du portfolio, construites avec les tokens de la direction artistique « Affiche de nuit ». <span class="hl">Survolez et tabulez</span> : les états sont réels. Appuyez sur Tab dès l'ouverture pour voir le lien d'évitement.</p>
   </div>
   <main id="contenu" tabindex="-1" style="display:grid;gap:var(--space-8)">
@@ -522,10 +524,8 @@ svg{stroke-width:var(--icon-stroke)}
       <figure><svg class="ico md" aria-hidden="true"><use href="#i-mail"/></svg><figcaption>mail</figcaption></figure>
       <figure><svg class="ico md" aria-hidden="true"><use href="#i-github"/></svg><figcaption>github</figcaption></figure>
       <figure><svg class="ico md" aria-hidden="true"><use href="#i-linkedin"/></svg><figcaption>linkedin</figcaption></figure>
-      <figure><svg class="ico md" aria-hidden="true"><use href="#i-pause"/></svg><figcaption>pause</figcaption></figure>
-      <figure><svg class="ico md" aria-hidden="true"><use href="#i-play"/></svg><figcaption>play</figcaption></figure>
     </div>
-    <p class="cap">Les treize icônes de la V1, copiées en SVG local. Décoratives par défaut ; seule dans un bouton, c'est le bouton qui porte le nom accessible.</p>
+    <p class="cap">Les onze icônes de la V1, copiées en SVG local. Décoratives par défaut ; seule dans un bouton, c'est le bouton qui porte le nom accessible.</p>
   </section>
 
   <!-- CopyButton -->
@@ -687,17 +687,33 @@ svg{stroke-width:var(--icon-stroke)}
     <p class="cap">Faites défiler : le fil lime se trace et chaque repère se remplit quand il l'atteint. Dates, lieux et textes à compléter : rien n'est inventé.</p>
   </section>
 
-  <!-- SkillsMarquee -->
-  <section class="plate" aria-labelledby="t-marquee">
-    <header><h2 id="t-marquee">SkillsMarquee</h2><span>défilement continu · bouton pause visible</span></header>
-    <div class="stepbox fond-violet" style="justify-items:stretch">
-      <h3>Compétences</h3>
-      <div class="mq" id="mq">
-        <div class="mq-view"><div class="mq-track"><div class="mq-copy"><div class="mq-cat"><span class="hl">front</span><ul><li>Vue.js</li><li>Nuxt</li><li>TypeScript</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>Vite</li></ul></div><div class="mq-cat"><span class="hl">back</span><ul><li>Node.js</li><li>Express</li><li>Python</li><li>API REST</li><li>MongoDB</li><li>SQL</li></ul></div><div class="mq-cat"><span class="hl">UI / UX</span><ul><li>Figma</li><li>responsive</li><li>accessibilité</li></ul></div><div class="mq-cat"><span class="hl">outils et déploiement</span><ul><li>Git</li><li>GitHub</li><li>npm</li><li>Docker</li><li>Linux</li><li>Proxmox</li><li>Nginx Proxy Manager</li></ul></div><div class="mq-cat"><span class="hl">méthode</span><ul><li>sprints</li><li>daily</li></ul></div></div><div class="mq-copy" aria-hidden="true"><div class="mq-cat"><span class="hl">front</span><ul><li>Vue.js</li><li>Nuxt</li><li>TypeScript</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>Vite</li></ul></div><div class="mq-cat"><span class="hl">back</span><ul><li>Node.js</li><li>Express</li><li>Python</li><li>API REST</li><li>MongoDB</li><li>SQL</li></ul></div><div class="mq-cat"><span class="hl">UI / UX</span><ul><li>Figma</li><li>responsive</li><li>accessibilité</li></ul></div><div class="mq-cat"><span class="hl">outils et déploiement</span><ul><li>Git</li><li>GitHub</li><li>npm</li><li>Docker</li><li>Linux</li><li>Proxmox</li><li>Nginx Proxy Manager</li></ul></div><div class="mq-cat"><span class="hl">méthode</span><ul><li>sprints</li><li>daily</li></ul></div></div></div></div>
-        <div class="mq-ctrl"><button type="button" id="mqBtn" aria-pressed="false" aria-controls="mq"><svg class="ico ic-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="ico ic-play" aria-hidden="true"><use href="#i-play"/></svg><span id="mqLabel">Mettre en pause</span></button></div>
-      </div>
+
+  <!-- SkillsWall -->
+  <section class="plate" aria-labelledby="t-wall">
+    <header><h2 id="t-wall">SkillsWall</h2><span>mur de briques · posé une fois</span></header>
+    <div class="stepbox fond-violet" style="justify-items:stretch"><h3>Compétences</h3><div class="wall" id="wall1"><div class="course"><span class="hl">front</span><ul aria-label="front"><li class="brick site" style="--i:0">Vue.js</li><li class="brick" style="--i:1">Nuxt</li><li class="brick site" style="--i:2">TypeScript</li><li class="brick" style="--i:3">JavaScript</li><li class="brick site" style="--i:4">HTML</li><li class="brick site" style="--i:5">CSS</li><li class="brick site" style="--i:6">Vite</li></ul></div><div class="course"><span class="hl">back</span><ul aria-label="back"><li class="brick" style="--i:7">Node.js</li><li class="brick" style="--i:8">Express</li><li class="brick" style="--i:9">Python</li><li class="brick" style="--i:10">API REST</li><li class="brick" style="--i:11">MongoDB</li><li class="brick" style="--i:12">SQL</li></ul></div><div class="course"><span class="hl">UI / UX</span><ul aria-label="UI / UX"><li class="brick" style="--i:13">Figma</li><li class="brick site" style="--i:14">responsive</li><li class="brick site" style="--i:15">accessibilité</li></ul></div><div class="course"><span class="hl">outils et déploiement</span><ul aria-label="outils et déploiement"><li class="brick site" style="--i:16">Git</li><li class="brick site" style="--i:17">GitHub</li><li class="brick site" style="--i:18">npm</li><li class="brick site" style="--i:19">Docker</li><li class="brick" style="--i:20">Linux</li><li class="brick site" style="--i:21">Proxmox</li><li class="brick site" style="--i:22">Nginx Proxy Manager</li></ul></div><div class="course"><span class="hl">méthode</span><ul aria-label="méthode"><li class="brick" style="--i:23">sprints</li><li class="brick" style="--i:24">daily</li></ul></div></div><p class="wall-legend"><i aria-hidden="true"></i>En rose : les briques de ce site. <a class="tl-stand" href="#t-wall"><span>Voir comment il est construit</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p></div>
+    <p class="cap">Une rangée par catégorie, une sur deux décalée. En rose, les technologies qui ont servi à construire ce site (d'après le PRD et le dépôt) : la couleur porte une information. Jamais de lime, réservé à l'action.</p>
+  </section>
+
+  <!-- Mise en situation -->
+  <section class="plate" aria-labelledby="t-apropos">
+    <header><h2 id="t-apropos">Mise en situation · À propos</h2><span>vrais composants · rythme des fonds · vagues</span></header>
+    <div class="rythme apropos">
+      <section class="fond-nuit"><p class="pagetitle">À propos</p><p class="lead">Étudiant ingénieur à l’ESIEA, je construis des projets <span class="hl">brique par brique.</span></p></section>
+      <div class="wave" data-seed="41" style="--prev:var(--neutral-950);--next:var(--neutral-50)" aria-hidden="true"></div>
+      <section class="fond-creme"><h3>Mon histoire</h3><p>Tout a commencé au lycée, en STI2D, spécialité SIN : c’est là que j’ai découvert que j’aimais construire des choses avec du code. J’ai poursuivi en école d’ingénieur, à l’ESIEA, et chaque projet logiciel m’a confirmé que c’était ce que je voulais faire : partir d’une idée et la voir devenir un produit, <span class="hl">brique par brique.</span></p></section>
+      <div class="wave" data-seed="42" style="--prev:var(--neutral-50);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Mon parcours</h3><ol class="tline"><li><span class="tag tag-a">école</span><time>dates à compléter</time><b>Lycée · bac STI2D, spécialité SIN</b><span class="where">lieu à compléter</span><p>Le déclic : construire des choses avec du code.</p></li><li><span class="tag tag-a">école</span><time>dates à compléter</time><b>ESIEA · cycle ingénieur</b><span class="where">Paris · génie logiciel</span><p>Chaque projet logiciel confirme le choix.</p></li><li><span class="tag tag-a">stage</span><time>dates à compléter</time><b>Stage · CNAM</b><span class="where">rôle à compléter</span><p>Une ou deux lignes à rédiger.</p></li></ol></section>
+      <div class="wave" data-seed="43" style="--prev:var(--neutral-950);--next:var(--violet-700)" aria-hidden="true"></div>
+      <section class="fond-violet" style="justify-items:stretch"><h3>Compétences</h3><div class="wall" id="wall2"><div class="course"><span class="hl">front</span><ul aria-label="front"><li class="brick site" style="--i:0">Vue.js</li><li class="brick" style="--i:1">Nuxt</li><li class="brick site" style="--i:2">TypeScript</li><li class="brick" style="--i:3">JavaScript</li><li class="brick site" style="--i:4">HTML</li><li class="brick site" style="--i:5">CSS</li><li class="brick site" style="--i:6">Vite</li></ul></div><div class="course"><span class="hl">back</span><ul aria-label="back"><li class="brick" style="--i:7">Node.js</li><li class="brick" style="--i:8">Express</li><li class="brick" style="--i:9">Python</li><li class="brick" style="--i:10">API REST</li><li class="brick" style="--i:11">MongoDB</li><li class="brick" style="--i:12">SQL</li></ul></div><div class="course"><span class="hl">UI / UX</span><ul aria-label="UI / UX"><li class="brick" style="--i:13">Figma</li><li class="brick site" style="--i:14">responsive</li><li class="brick site" style="--i:15">accessibilité</li></ul></div><div class="course"><span class="hl">outils et déploiement</span><ul aria-label="outils et déploiement"><li class="brick site" style="--i:16">Git</li><li class="brick site" style="--i:17">GitHub</li><li class="brick site" style="--i:18">npm</li><li class="brick site" style="--i:19">Docker</li><li class="brick" style="--i:20">Linux</li><li class="brick site" style="--i:21">Proxmox</li><li class="brick site" style="--i:22">Nginx Proxy Manager</li></ul></div><div class="course"><span class="hl">méthode</span><ul aria-label="méthode"><li class="brick" style="--i:23">sprints</li><li class="brick" style="--i:24">daily</li></ul></div></div><p class="wall-legend"><i aria-hidden="true"></i>En rose : les briques de ce site. <a class="tl-stand" href="#t-wall"><span>Voir comment il est construit</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p></section>
+      <div class="wave" data-seed="44" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Façon de travailler</h3><ol class="steps-d"><li><span class="n" aria-hidden="true">1</span><div><b>PRD</b><p>Ce qu’on construit, et pourquoi.</p></div></li><li><span class="n" aria-hidden="true">2</span><div><b>Marque</b><p>Comment se positionner.</p></div></li><li><span class="n" aria-hidden="true">3</span><div><b>Direction artistique</b><p>À quoi ça ressemble, et comment ça bouge.</p></div></li><li><span class="n" aria-hidden="true">4</span><div><b>Architecture et UX</b><p>Comment c’est organisé et parcouru.</p></div></li><li><span class="n" aria-hidden="true">5</span><div><b>Design system</b><p>Avec quelles briques.</p></div></li><li><span class="n" aria-hidden="true">6</span><div><b>Maquettes</b><p>À quoi ressemblent les écrans clés.</p></div></li><li><span class="n" aria-hidden="true">7</span><div><b>Code</b><p>Comment c’est construit.</p></div></li></ol></section>
+      <div class="wave" data-seed="45" style="--prev:var(--neutral-950);--next:var(--neutral-50)" aria-hidden="true"></div>
+      <section class="fond-creme"><h3>En équipe</h3><div class="duo2"><div><b>Sprints</b><p>Des cycles courts, un objectif clair à chaque fois.</p></div><div><b>Daily</b><p>Un point quotidien pour suivre l’avancement et garder le contact humain.</p></div></div></section>
+      <div class="wave" data-seed="46" style="--prev:var(--neutral-50);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><p class="cap">Pied de page</p></section>
     </div>
-    <p class="cap">S'arrête aussi au survol et au focus. Avec « réduire les animations », le bandeau devient une liste fixe et le bouton disparaît.</p>
+    <p class="cap">Brouillon de « Mon histoire » repris de l'architecture ; textes « En équipe » à retoucher ; parcours à compléter. Une seule section animée au scroll ici : le mur. La frise garde son fil (temps fort prévu par la DA).</p>
   </section>
   </main>
 </div>
@@ -791,10 +807,12 @@ svg{stroke-width:var(--icon-stroke)}
     document.getElementById('replay').addEventListener('click',function(){gsap.set(hint,{opacity:0});tl.play(0)});
   }
 
-  // SkillsMarquee : bouton pause (WCAG 2.2.2)
-  var mq=document.getElementById('mq'),mqBtn=document.getElementById('mqBtn'),mqLabel=document.getElementById('mqLabel');
-  mqBtn.addEventListener('click',function(){var p=mq.classList.toggle('paused');mqBtn.setAttribute('aria-pressed',p);mqLabel.textContent=p?'Reprendre':'Mettre en pause'});
 
+  // SkillsWall : les briques se posent une fois en arrivant à l'écran
+  if('IntersectionObserver' in window){
+    var iow=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var w=e.target;setTimeout(function(){w.classList.remove('is-pending')},30);iow.unobserve(w)}})},{threshold:.25});
+    document.querySelectorAll('.wall').forEach(function(w){if(w.getBoundingClientRect().top>innerHeight*.75){w.classList.add('is-pending');iow.observe(w)}});
+  }
   // Timeline : fil tracé au scroll, repères remplis quand le fil les atteint
   var tlbox=document.getElementById('tlbox');
   if(tlbox&&window.gsap&&window.ScrollTrigger&&!matchMedia('(prefers-reduced-motion: reduce)').matches){

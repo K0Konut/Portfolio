@@ -66,3 +66,6 @@
 | 14/10/2026 | Design system v0.6 : lot 3 (section d'accueil et `HeroName`, `ScrollHint`, `ProcessSteps`) ; poste affiché en étiquette au-dessus du nom ; indicateur de scroll limité à deux allers (jamais de boucle) ; méthode en briques, la dernière pleine | Suite du design system ; WCAG 2.2.2 pour l'indicateur |
 | 14/10/2026 | Lot 3 validé : poste en étiquette au-dessus du nom, `ScrollHint` conservé, brique « Code » pleine | Validation du propriétaire |
 | 14/10/2026 | Design system v0.7 : lot 4 ; frise du plus ancien au plus récent, fil lime tracé au scroll sans épinglage ; bandeau de compétences avec bouton pause visible | Suite du design system ; WCAG 2.2.2 (niveau A) impose une pause pour un défilement automatique de plus de 5 s, l'arrêt au survol ne suffit pas |
+| 14/10/2026 | Frise du parcours validée | Validation du propriétaire |
+| 14/10/2026 | Bandeau défilant de compétences remplacé par un mur de briques (`SkillsWall`), posé une fois, une rangée par catégorie ; briques crème, et roses pour les technologies de ce site ; jamais de lime | Le propriétaire trouve le bandeau « vu et revu » ; Impeccable le signale comme motif trop vu ; un seul moment animé par page ; le rose porte une information |
+| 14/10/2026 | Token `--measure` (52ch) pour la largeur du texte courant | Audit Impeccable : 62ch donnait environ 87 caractères par ligne en Manrope |

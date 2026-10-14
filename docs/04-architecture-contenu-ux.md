@@ -106,7 +106,7 @@ Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plu
 | 1 | En-tête | Titre, accroche personnelle |
 | 2 | Mon histoire | Le déclic au lycée (bac STI2D, spécialité SIN), puis l'école d'ingénieur (ESIEA) ; les projets software qui ont confirmé le choix |
 | 3 | Timeline | Parcours scolaire et professionnel : lycée, école, stages, jobs étudiants (dates, lieu, rôle, une ou deux lignes ; lien vers l'étude de cas si elle existe) |
-| 4 | Compétences | **Bandeau défilant** des technologies, par catégorie (liste ci-dessous) |
+| 4 | Compétences | **Mur de briques** des technologies, une rangée par catégorie (liste ci-dessous) ; remplace le bandeau défilant le 14/10/2026 |
 | 5 | Façon de travailler | La méthode d'ingénieur, étape par étape : PRD → territoire de marque → direction artistique → architecture et UX → design system → maquettes → code |
 | 6 | En équipe | Pilotage en sprints, réunions quotidiennes (daily) pour suivre l'avancement et garder le contact humain |
 
@@ -122,7 +122,7 @@ Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plu
 | Méthode | Sprints, daily |
 
   Liste validée par le propriétaire le 14/10/2026. Node.js est classé en back (environnement serveur). Règle : n'afficher que ce que le propriétaire peut défendre en entretien.
-- **Bandeau de compétences et accessibilité** : le défilement s'arrête au survol, au focus et avec `prefers-reduced-motion` (la liste devient alors statique) ; les technologies sont aussi présentes sous forme de liste lisible par les lecteurs d'écran.
+- **Mur de compétences et accessibilité** : immobile une fois posé (pas de défilement, donc pas de pause à prévoir) ; une vraie liste par catégorie pour les lecteurs d'écran ; en rose, les technologies qui ont servi à construire ce site.
 - La section « Ma façon de travailler » de l'accueil en est un résumé, avec un lien vers cette page.
 
 **Brouillon de « Mon histoire »** (à retoucher) :
