@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.6 — 14/10/2026 — **statut : en cours** (lots 1 à 3 spécifiés ; lots 4 et 5 à suivre)
+Version 0.7 — 14/10/2026 — **statut : en cours** (lots 1 à 4 spécifiés ; lot 5 à suivre)
+
+v0.7 : lot 4 (`Timeline`, `SkillsMarquee`) ; icônes `pause` et `play` ; `ScrollHint` confirmé.
 
 v0.6 : lot 3 (`HeroName` et section d'accueil, `ScrollHint`, `ProcessSteps`) ; tokens `--text-hero`, `--text-hero-stacked` et motion de l'accueil.
 
@@ -152,6 +154,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--header-height` | 60 px · hauteur du header (zone cliquable de 44 px + marges), réservée en haut des pages |
 | Points de rupture | 768 px (tablette) · 1024 px (bureau) · constantes : CSS n'accepte pas de variables dans les media queries |
 | `--icon-sm` / `--icon-md` | 18 px · 24 px |
+| `--timeline-dot` | 14 px · repère d'une étape de la frise |
 | `--icon-stroke` | 2,5 · épaisseur du trait des icônes |
 
 ### Motion
@@ -177,6 +180,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--stagger-brick` | `60ms` | Étapes de la méthode, posées brique par brique |
 | `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
 | `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
+| `--marquee-duration` | `40s` | Un tour complet du bandeau de compétences (vitesse constante, `linear`) |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -270,7 +274,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 - **Bibliothèque** : Lucide (DA §5). Les icônes sont copiées en SVG local (licence ISC) plutôt qu'importées : on n'embarque que celles qui servent.
 - **Logos GitHub et LinkedIn** : Lucide a déprécié ses logos de marques ; on garde ses tracés actuels, dans le même style, en SVG local.
-- **Jeu de la V1** : `arrow-right`, `arrow-left`, `arrow-up-right`, `download`, `copy`, `check`, `menu`, `x`, `mail`, `github`, `linkedin`.
+- **Jeu de la V1** : `arrow-right`, `arrow-left`, `arrow-up-right`, `download`, `copy`, `check`, `menu`, `x`, `mail`, `github`, `linkedin`, `pause`, `play`.
 - **Rendu** : `fill="none"`, `stroke="currentColor"`, trait `--icon-stroke`, extrémités et angles arrondis ; taille `--icon-sm` dans un bouton ou un lien, `--icon-md` seule.
 - **Accessibilité** : `aria-hidden="true"` par défaut. Une icône seule dans un bouton ou un lien a un nom accessible (`aria-label` sur le bouton ou le lien, pas sur le SVG).
 
@@ -376,7 +380,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Mouvement** : apparaît à 1,5 s, fait deux allers (`--duration-hint` chacun), puis s'immobilise : il ne boucle jamais (WCAG 2.2.2). Disparaît en fondu dès le premier scroll et ne revient pas.
 - **Accessibilité** : décoratif (`aria-hidden="true"`).
 - **Animations réduites** : trait immobile, sans segment qui bouge.
-- **À confirmer en maquette** : s'il est superflu, on le supprime (DA §6).
+- **Statut** : conservé (validé par le propriétaire le 14/10/2026).
 
 ### `ProcessSteps`
 
@@ -387,9 +391,27 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Apparition** : brique par brique, chacune monte de `--reveal-distance` et apparaît, décalée de `--stagger-brick` (7 × 60 ms, sous le budget de 500 ms).
 - **Animations réduites** : fondu de l'ensemble.
 
+### `Timeline` et `TimelineItem`
+
+- **Rôle** : le parcours scolaire et professionnel sur la page À propos (lycée, école, stages, jobs étudiants).
+- **Ordre** : du plus ancien au plus récent, comme un récit (la page Projets, elle, va du plus récent au plus ancien).
+- **Structure** : une liste ordonnée (`<ol>`). Un fil vertical à gauche (`--border-strong`, `--color-border`) et, pour chaque étape, un repère rond de `--timeline-dot`.
+- **Contenu d'une étape** : une `Tag` (école, stage ou job étudiant) ; les dates en `--text-sm` et `--color-text-subtle` (`<time>`) ; le titre en Manrope `--weight-bold` `--text-lead` ; le lieu et le rôle ; une ou deux lignes en `--color-text-muted` ; si une étude de cas existe, un `TextLink` `standalone` vers elle.
+- **Au scroll** (temps fort piloté par le scroll, DA §6) : un second fil en `--color-highlight` se trace par-dessus le premier au rythme du scroll ; quand il atteint une étape, son repère se remplit (`--duration-fast`). Pas d'épinglage : la lecture n'est jamais bloquée.
+- **Animations réduites** : fil déjà tracé, repères déjà remplis.
+
+### `SkillsMarquee`
+
+- **Rôle** : faire défiler les technologies par catégorie (architecture §4, liste validée).
+- **Rendu** : une bande qui défile de droite à gauche, en continu, à vitesse constante (`--marquee-duration`). Chaque catégorie s'annonce en Fraunces italique `--color-highlight` (« front », « back », « UI / UX », « outils et déploiement », « méthode »), suivie de ses technologies en Manrope `--weight-bold` `--text-h3`, séparées par des points médians.
+- **Pause** (WCAG 2.2.2, niveau A) : un bouton visible « Mettre en pause » / « Reprendre », avec les icônes `pause` et `play`, à côté du bandeau. Le défilement s'arrête aussi au survol et quand le focus est dans le bandeau.
+- **Accessibilité** : une vraie liste (`<ul>`) par catégorie ; la copie qui sert à boucler est en `aria-hidden`. Le bouton porte `aria-pressed`.
+- **Animations réduites** : pas de défilement ; les technologies s'affichent en liste fixe, passant à la ligne.
+- **Technique** : animation CSS `translateX(-50%)` sur une piste qui contient deux copies ; seul `transform` bouge.
+
 ### Composants restants
 
-À spécifier par lots : À propos (`Timeline`, `SkillsMarquee`), étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
+À spécifier : étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
 
 ---
 
