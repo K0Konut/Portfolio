@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.1 — 14/10/2026 — **statut : en cours** (tokens, inventaire et header posés ; specs des autres composants à suivre)
+Version 0.2 — 14/10/2026 — **statut : en cours** (tokens, inventaire et header posés ; specs des autres composants à suivre)
+
+v0.2 : corrections issues de l'audit Impeccable du 14/10/2026 (tokens pour toutes les valeurs, zones cliquables de 44 px, rôles `--color-highlight` et `--color-header-muted`, polices auto-hébergées).
 
 S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'architecture v1.0 (wireframes). Les composants listés ici viennent des wireframes : pas de catalogue générique.
 
@@ -45,6 +47,7 @@ S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'archite
 | `--color-text-muted` | neutral-100 | Texte secondaire | 14,5:1 sur fond |
 | `--color-text-subtle` | neutral-400 | Métadonnées, légendes | 7,1:1 sur fond · 6,2:1 sur violet |
 | `--color-action` | lime-500 | Boutons principaux, liens, mots clés | 16:1 sur fond · 14,1:1 sur violet |
+| `--color-highlight` | lime-500 | Mise en valeur ponctuelle : quelques mots en Fraunces italique, jamais soulignés | 16:1 sur fond · 14,1:1 sur violet |
 | `--color-on-action` | neutral-950 | Texte sur lime | 16:1 |
 | `--color-detail` | pink-500 | Étiquettes, petits marqueurs | 7,5:1 sur fond · 6,8:1 sur surface |
 | `--color-block` | violet-500 | Contours, formes, grands titres décoratifs | jamais en texte courant |
@@ -52,9 +55,12 @@ S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'archite
 | `--color-header-bg` | neutral-50 | Fond du header | — |
 | `--color-header-text` | neutral-950 | Texte du header | 16,8:1 |
 | `--color-header-accent` | violet-500 | Lien actif et focus dans le header | 5,5:1 |
+| `--color-header-muted` | neutral-400 | Séparateurs décoratifs du header (« / » entre FR et EN), masqués aux lecteurs d'écran ; jamais en texte | 2,4:1 (décoratif) |
 | `--color-focus` | lime-500 | Anneau de focus sur fond sombre | — |
 
 **Attention** : le lime est inutilisable sur le header clair (1,1:1). Dans le header, l'accent et le focus passent en violet-500.
+
+`--color-action` et `--color-highlight` pointent vers la même teinte, mais restent deux rôles : on pourra changer la couleur des mises en valeur sans toucher aux boutons. Un lien est toujours souligné, une mise en valeur jamais (DA §2, règle 1).
 
 ### Typographie
 
@@ -70,10 +76,33 @@ S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'archite
 | `--text-h3` | `clamp(1.5rem, 1.3rem + 1vw, 1.75rem)` · 24 → 28 px |
 | `--text-body` | `clamp(1rem, 0.95rem + 0.25vw, 1.125rem)` · 16 → 18 px |
 | `--text-sm` | `0.875rem` · 14 px |
+| `--text-ui` | `1rem` · 16 px · navigation, boutons, sélecteur de langue |
+| `--text-lead` | `clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem)` · 20 → 24 px · promesse, accroches |
+| `--text-logo` | `clamp(1.125rem, 1rem + 0.5vw, 1.375rem)` · 18 → 22 px · nom dans le header |
+| `--text-menu` | `3.25rem` · 52 px · liens du menu mobile |
+| `--leading-none` | `1` · boutons, logo |
 | `--leading-display` | `0.95` |
+| `--leading-snug` | `1.3` · petits libellés, légendes |
 | `--leading-body` | `1.6` |
+| `--weight-regular` / `-medium` / `-bold` | `400` · `500` · `700` |
+| `--tracking-label` | `0.05em` · libellés en capitales |
 
-Règle ajoutée : les titres de cartes de projet (`--text-h3`) sont en Bagel. Bagel reste interdit pour le texte courant, les boutons et la navigation.
+Règle ajoutée : les titres de cartes de projet (`--text-h3`) sont en Bagel. Bagel reste interdit pour le texte courant, les boutons et la navigation de l'en-tête ; seule exception, les liens du menu mobile (`--text-menu`, DA §3).
+
+Règle ajoutée : aucune taille hors échelle. Tout texte passe par un token `--text-*`, et rien ne descend sous `--text-sm` (14 px).
+
+### Polices
+
+Auto-hébergées, aucune dépendance à Google Fonts en production. Fichiers `woff2`, sous-ensemble latin, rangés dans `public/fonts/` avec leurs licences (SIL Open Font License).
+
+| Fichier | Contenu |
+|---|---|
+| `bagel-fat-one-latin.woff2` | Bagel Fat One, graisse unique |
+| `fraunces-italic-latin.woff2` | Fraunces italique seule, `SOFT` 100 et `WONK` 1 figés, graisse 400, taille optique variable |
+| `manrope-latin.woff2` | Manrope variable, graisses 400 à 700 |
+| `jetbrains-mono-latin.woff2` | JetBrains Mono variable, graisses 400 à 500 |
+
+Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois la stack choisie.
 
 ### Espacements, rayons, mise en page
 
@@ -84,6 +113,12 @@ Règle ajoutée : les titres de cartes de projet (`--text-h3`) sont en Bagel. Ba
 | `--gutter` | `clamp(1rem, 4vw, 3rem)` |
 | `--container` | `1240px` |
 | `--radius-sm` / `-md` / `-lg` / `-pill` | 8 · 16 · 28 px · 999 px |
+| `--border-thin` / `--border-strong` | 1 px · 1,5 px |
+| `--underline` | 2 px · soulignement des liens |
+| `--focus-width` / `--focus-offset` | 2 px · 3 px |
+| `--target-min` | 44 px · zone cliquable minimale, sur toutes les tailles d'écran |
+| `--icon-sm` / `--icon-md` | 18 px · 24 px |
+| `--icon-stroke` | 2,5 · épaisseur du trait des icônes |
 
 ### Motion
 
@@ -94,8 +129,11 @@ Règle ajoutée : les titres de cartes de projet (`--text-h3`) sont en Bagel. Ba
 | `--duration-base` | `700ms` | Apparitions |
 | `--stagger-letter` | `40ms` | Nom lettre par lettre |
 | `--stagger-block` | `80ms` | Blocs successifs |
+| `--duration-reduced` | `300ms` | Fondus quand les animations sont réduites |
+| `--hover-lift` | `3px` | Bouton qui monte au survol |
+| `--hover-nudge` | `4px` | Flèche qui avance au survol |
 
-Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (~300 ms).
+Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
 ---
 
@@ -136,13 +174,14 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 Repris du header existant du propriétaire, adapté à la DA.
 
 - **Forme** : barre claire (`--color-header-bg`), fixée en haut et centrée, largeur max `--container`, coins inférieurs arrondis (`--radius-lg`). Elle « pend » du haut de l'écran, au-dessus de tout le contenu.
-- **Contenu** : à gauche, le nom en Bagel (logo provisoire, lien vers l'accueil) ; à droite, Projets · À propos · Contact (Manrope 500) et `LangSwitch`.
+- **Contenu** : à gauche, le nom en Bagel (`--text-logo`, logo provisoire, lien vers l'accueil) ; à droite, Projets · À propos · Contact (Manrope 500, `--text-ui`) et `LangSwitch`. Le « / » entre FR et EN est en `--color-header-muted`, avec `aria-hidden="true"`.
+- **Zones cliquables** : 44 × 44 px minimum (`--target-min`) pour chaque lien, FR, EN, le bouton « Menu » et le bouton « Fermer », sur bureau comme sur mobile. Le texte garde sa taille ; c'est la zone autour qui grandit.
 - **États des liens**
   - Repos : `--color-header-text`.
   - Survol : soulignement violet-500 qui se trace de gauche à droite (`--duration-fast`).
   - Page active : soulignement violet-500 permanent, `aria-current="page"`.
   - Focus : anneau violet-500 de 2 px.
-- **Mobile (< 768 px)** : nom + bouton « Menu » (icône). Le menu s'ouvre en plein écran, sur fond `--color-section` (violet), avec les liens en Bagel très grands : c'est l'occasion de retrouver l'affiche de la section d'accueil.
+- **Mobile (< 768 px)** : nom + bouton « Menu » (icône). Le menu s'ouvre en plein écran, sur fond `--color-section` (violet), avec les liens en Bagel très grands (`--text-menu`) : c'est l'occasion de retrouver l'affiche de la section d'accueil. C'est la seule exception à la règle « pas de Bagel dans la navigation » (DA §3), validée par le propriétaire.
 - **Apparition** : en même temps que le nom de la section d'accueil (fondu + léger glissement depuis le haut, `--duration-base`).
 - **Au scroll** : reste visible en permanence.
 - **Accessibilité** : `<header>` + `<nav aria-label="Navigation principale">` ; `SkipLink` en premier élément focusable ; bouton du menu avec `aria-expanded` et `aria-controls` ; menu ouvert : focus piégé, `Échap` ferme et rend le focus au bouton.
