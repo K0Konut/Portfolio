@@ -1,6 +1,6 @@
 # Direction artistique — Portfolio personnel
 
-Version 1.0 — 14/10/2026 — **statut : validé** (logo et terminal mis de côté ; section d'accueil à confirmer en maquettes)
+Version 1.1 — 14/10/2026 — **statut : validé** (logo et terminal mis de côté ; section d'accueil à confirmer en maquettes)
 
 S'appuie sur le territoire de marque v0.2 : identité forte et reconnaissable, base sérieuse et structurée, quelques prises de risque bien placées, jamais ludique pour le plaisir. Promesse : « Créatif dans l'interface, rigoureux dans la méthode. »
 
@@ -44,7 +44,7 @@ Le fond de page n'est plus le violet profond : le site est gris sombre, rythmé 
 | **Fond** | neutral/950 | Fond de page par défaut | — |
 | **Sections de couleur** | à préciser (candidats : violet/700, violet/500) | Sections pleines qui rythment les pages | — |
 | **Surface** | gris un peu plus clair que le fond, à définir en design system | Cartes et blocs posés sur le fond | — |
-| **Action** | lime/500 | Uniquement l'action : boutons principaux, liens, mots clés. Texte sur lime : neutral/950 | 16:1 |
+| **Action et mise en valeur** | lime/500 | L'action (boutons principaux, liens, mots clés) et la mise en valeur ponctuelle (quelques mots en Fraunces italique). Texte sur lime : neutral/950 | 16:1 |
 | **Détail** | pink/500 | Touche rare : étiquettes, petits marqueurs | 7,5:1 |
 | **Bloc / trait** | violet/500 | Contours, formes, grands titres décoratifs | 3:1 (jamais en texte courant) |
 | **Texte** | neutral/50 | Texte principal | 16,8:1 |
@@ -55,7 +55,7 @@ Contrastes sur les sections violet/700 (pour mémoire) : lime 14,1:1, rose 6,6:1
 
 ### Règles
 
-1. **Le lime est réservé à l'action.** S'il apparaît partout, il ne guide plus l'œil vers le CV et le contact.
+1. **Le lime sert à l'action et à la mise en valeur.** Action : boutons principaux, liens, mots clés. Mise en valeur : quelques mots en Fraunces italique, une touche par section au plus. Pour ne pas confondre les deux, un lien est toujours souligné, une mise en valeur jamais. S'il apparaît partout, il ne guide plus l'œil vers le CV et le contact.
 2. **Le rose reste rare** : c'est la prise de risque, pas une couleur de fond.
 3. **Pas de texte violet/500 ni neutral/700** sur fond sombre : contraste insuffisant (WCAG AA exige 4,5:1 pour le texte courant, 3:1 pour le grand texte et les éléments graphiques).
 4. Texte clair posé sur un bloc violet/500 : autorisé (neutral/50 à 5,5:1).
@@ -83,7 +83,7 @@ Le contraste entre une grotesque ronde et grasse (Bagel) et une italique à empa
 
 ### Règles d'usage
 
-1. **Bagel uniquement pour les grands titres** : nom, titres de pages, titres de sections. Jamais pour le texte courant, les boutons, la navigation ni les formulaires (Manrope).
+1. **Bagel uniquement pour les grands titres** : nom, titres de pages, titres de sections. Jamais pour le texte courant, les boutons, la navigation de l'en-tête ni les formulaires (Manrope). Exception : les liens du menu mobile plein écran, en Bagel très grand, qui rappellent l'affiche de la section d'accueil (design system §4).
 2. **Une seule graisse pour Bagel** : la hiérarchie des titres se fait par la taille.
 3. **Fraunces reste rare** : quelques mots ou une phrase par section, jamais une information essentielle (le visiteur doit pouvoir s'en passer).
 4. **Le texte courant est toujours en Manrope**, à 16 px minimum.
@@ -106,6 +106,7 @@ Tailles fluides (`clamp()`) entre mobile et desktop. Interlignage : ~0,95 pour B
 
 - **Accents et majuscules accentuées** dans Bagel (À, É) : à tester en maquette.
 - **Poids des fichiers** : Fraunces est une police variable lourde. Ne charger que l'italique et le sous-ensemble latin ; `font-display: swap` partout.
+- **Emplacement** : les fichiers `woff2` sont rangés dans `public/fonts/`, avec leurs licences (détail dans le design system §2).
 
 ## 4. Logo
 
