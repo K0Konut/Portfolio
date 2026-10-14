@@ -122,7 +122,7 @@ Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plu
 | Méthode | Sprints, daily |
 
   Liste validée par le propriétaire le 14/10/2026. Node.js est classé en back (environnement serveur). Règle : n'afficher que ce que le propriétaire peut défendre en entretien.
-- **Mur de compétences et accessibilité** : immobile une fois posé (pas de défilement, donc pas de pause à prévoir) ; une vraie liste par catégorie pour les lecteurs d'écran ; en rose, les technologies qui ont servi à construire ce site.
+- **Mur de compétences et accessibilité** : immobile une fois posé (pas de défilement, donc pas de pause à prévoir) ; une vraie liste par catégorie pour les lecteurs d'écran ; en violet clair, les technologies qui ont servi à construire ce site.
 - La section « Ma façon de travailler » de l'accueil en est un résumé, avec un lien vers cette page.
 
 **Brouillon de « Mon histoire »** (à retoucher) :

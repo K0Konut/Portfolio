@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.9 — 14/10/2026 — **statut : à valider** (lots 1 à 5 spécifiés : tous les composants de l'inventaire)
+Version 1.0 — 14/10/2026 — **statut : validé** (tous les composants de l'inventaire sont spécifiés et montrés dans la vitrine)
+
+v1.0 : design system validé par le propriétaire ; briques « de ce site » du `SkillsWall` en violet clair au lieu du rose.
 
 v0.9 : lot 5 (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`) et composition de l'étude de cas ; tokens `--toc-width`, `--stat-bar`, `--duration-bar`.
 
@@ -216,7 +218,7 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `DeviceFrame` | Cadre navigateur / téléphone pour mettre en scène une capture | cartes, études de cas |
 | `ProcessSteps` | Les 7 étapes de la méthode | Accueil, À propos |
 | `Timeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
-| `SkillsWall` | Mur de briques des compétences, posé une fois | À propos |
+| `SkillsWall` | Mur de briques des compétences, posé une fois ; briques du site en violet clair | À propos |
 | `MetaList` | Type, rôle, durée, stack d'une étude de cas | études de cas |
 | `CaseToc` | Sommaire collant (bureau uniquement) | études de cas |
 | `StatBlock` | Résultat chiffré | études de cas |
@@ -414,7 +416,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Structure** : une rangée par catégorie. La catégorie s'annonce en Fraunces italique `--color-highlight` (« front », « back », « UI / UX », « outils et déploiement », « méthode ») ; ses technologies suivent, chacune une brique. Une liste (`<ul>`) par catégorie.
 - **Appareillage** : une rangée sur deux est décalée de `--space-6` (`--space-4` sous 768 px), comme un mur. Les rangées passent à la ligne si besoin.
 - **Brique** : fond `--neutral-50`, texte `--neutral-950` (16,8:1), Manrope `--weight-bold` `--text-ui`, marges `--space-3` × `--space-4`, rayon `--radius-sm`. Jamais de lime : il signale l'action, une brique lime se prendrait pour un bouton.
-- **Briques roses** : fond `--pink-500` (texte 7,5:1) pour les technologies qui ont servi à construire ce site, avec une légende « en rose : les briques de ce site » et un lien vers l'étude de cas du portfolio. La couleur porte une information, pas un décor.
+- **Briques violet clair** : fond `--violet-500`, texte `--neutral-50` (5,5:1), pour les technologies qui ont servi à construire ce site, avec une légende « en violet : les briques de ce site » et un lien vers l'étude de cas du portfolio. La couleur porte une information, pas un décor. (Rose au départ, remplacé pour ne pas abuser du rose et donner plus de place au violet clair.)
 - **Fond conseillé** : `violet` (sur la page À propos).
 - **Pose** : quand le mur arrive à l'écran, chaque brique descend de `--reveal-distance` et se pose, dans l'ordre de lecture, décalée de `--stagger-wall`. Une seule fois, puis plus rien ne bouge. C'est le moment animé de la page À propos.
 - **Animations réduites** : fondu de l'ensemble.
