@@ -1,0 +1,53 @@
+# Journal des décisions
+
+| Date | Décision | Raison |
+|---|---|---|
+| 13/10/2026 | Nouveau projet, distinct du portfolio Vue.js existant | Repartir d'une identité propre |
+| 13/10/2026 | Pas d'échéance ferme, la qualité passe avant la vitesse | Choix du propriétaire |
+| 13/10/2026 | Formulaire de contact, filtres de projets, easter eggs et terminal interactif reportés en V2 | Concentrer la V1 sur l'identité, les études de cas et la conversion (CV, contact) |
+| 13/10/2026 | Site bilingue FR/EN dès la V1 | Cibles grands groupes et agences, possiblement internationales |
+| 13/10/2026 | Contenu en fichiers, sans CMS | Budget nul, simplicité, reproductibilité |
+| 13/10/2026 | Contact V1 : lien mail, LinkedIn et GitHub | Le mail est le canal préféré de nombreux RH ; le formulaire arrive en V2 |
+| 13/10/2026 | Disponibilité non affichée pour l'instant (stage de fin d'études de 6 mois dès début février) | À revoir plus tard |
+| 13/10/2026 | Stage au CNAM présenté sans lien vers le code | Code privé ; captures et process autorisés |
+| 13/10/2026 | Auto-hébergement : Proxmox, Docker, Nginx Proxy Manager | Serveur et domaine déjà en place, budget nul |
+| 13/10/2026 | Terminal = habillage visuel de la section d'accueil, pas une fonctionnalité interactive en V1 | Précision du propriétaire ; forme décidée en DA |
+| 13/10/2026 | Risque de disponibilité du serveur domestique jugé faible | Serveur toujours allumé, relance rapide en cas d'arrêt |
+| 13/10/2026 | PRD v0.2 validé | Passage à la phase 2 (territoire de marque) |
+| 14/10/2026 | Références de sites abandonnées : le territoire de marque se construit à partir des réponses du propriétaire | Aucun site existant ne lui correspond ; ne pas bloquer le projet |
+| 14/10/2026 | Cap de l'identité : forte et reconnaissable, pas ludique | Précision du propriétaire |
+| 14/10/2026 | Territoire de marque v0.1 rédigé | Phase 2 |
+| 14/10/2026 | Promesse retenue : « Créatif dans l'interface, rigoureux dans la méthode. » | Courte, elle dit les deux faces du profil |
+| 14/10/2026 | Liste des mots à éviter validée, évolutive | Cohérente avec le ton ; pourra être enrichie |
+| 14/10/2026 | Champ lexical de la construction retenu ; territoire de marque v0.2 validé | Passage à la phase 3 (direction artistique) |
+| 14/10/2026 | Palette du propriétaire retenue, variante B : fond violet/700, lime pour l'action, rose en détail, violet/500 en blocs, neutral/950 en surface | Plus de personnalité ; fond sombre avec touches de couleur |
+| 14/10/2026 | Couleurs organisées par rôles : les teintes peuvent changer, la logique reste | Le propriétaire veut pouvoir ajuster les couleurs plus tard |
+| 14/10/2026 | Typographie : Bagel Fat One (titres), Fraunces italique (mise en valeur), Manrope (texte), JetBrains Mono (terminal) | Choix du propriétaire ; Bagel limitée aux grands titres et Fraunces rare pour ne pas basculer dans le ludique |
+| 14/10/2026 | Logo reporté ; le nom en Bagel sert de logo provisoire | Le propriétaire veut d'abord réfléchir à ce qu'il veut |
+| 14/10/2026 | Motion : ambition haute, sensation fluide ; accueil, scroll, survol et clic animés ; pas de transitions de pages ni de réaction au curseur | Réponses du propriétaire (questions en entonnoir) |
+| 14/10/2026 | Scroll selon la situation : apparitions simples par défaut, pilotage par le scroll pour les temps forts, défilement horizontal pour la liste des projets | Règle proposée et validée |
+| 14/10/2026 | Section d'accueil immersive : choix reporté à une page de test animée ; objet 3D candidat V2 | Hésitation du propriétaire ; les aperçus dans la conversation rendent mal le mouvement |
+| 14/10/2026 | Section d'accueil et place du terminal : décision reportée à la phase 6 (maquettes) ; la typo géante au scroll reste une préférence provisoire | Les prototypes isolés ne permettent pas de se faire une idée ; le propriétaire préfère revenir en arrière |
+| 14/10/2026 | Couleurs et typographie validées (les teintes pourront évoluer) | Validation du propriétaire |
+| 14/10/2026 | Page d'accueil : 3 projets seulement ; les autres sur une page Projets dédiée ; pas de défilement horizontal | Ne pas surcharger la section |
+| 14/10/2026 | Terminal mis de côté (écart avec le PRD, qui l'envisageait dans l'accueil) | Ne pas bloquer le projet dessus |
+| 14/10/2026 | Section d'accueil : définie par questions en entonnoir plutôt que par prototypes | Choix du propriétaire |
+| 14/10/2026 | Fond de page : gris sombre (neutral/950) au lieu du violet profond, avec des sections de couleur | Précision du propriétaire ; les rôles de couleur ne changent pas |
+| 14/10/2026 | Section d'accueil : marquer les esprits ; nom géant et promesse forte, contenu minimal, plein écran, composition centrée, effet à l'arrivée | Réponses du propriétaire (entonnoir, séries 1 et 2) |
+| 14/10/2026 | Section d'accueil : section violette ; nom lettre par lettre (~1,5 s, boutons utilisables avant 1 s) ; s'efface au scroll | Réponses du propriétaire (entonnoir, série 3) |
+| 14/10/2026 | En-tête existant du propriétaire conservé : fixé en haut, apparaît avec le nom ; indicateur de scroll très discret ou supprimé | Le propriétaire a déjà un en-tête qui lui plaît |
+| 14/10/2026 | Imagerie : captures mises en scène dans des cadres d'appareils ; aucune photo du propriétaire ; icônes au contour épais et arrondi, d'après la référence fournie (bibliothèque Lucide ou Tabler à choisir en design system) | Réponses du propriétaire |
+| 14/10/2026 | Direction artistique v1.0 validée, nommée « Affiche de nuit » | Validation du propriétaire ; passage à la phase 4 (architecture de contenu et UX) |
+| 14/10/2026 | Contact : dans le pied de page et sur une page Contact dédiée | Choix du propriétaire |
+| 14/10/2026 | Parcours fusionné dans la page À propos (timeline + compétences + façon de travailler) | Choix du propriétaire (remplace la page Parcours à part) |
+| 14/10/2026 | Accueil : section d'accueil, 3 projets, qui je suis, façon de travailler, prise de contact | Structure fournie par le propriétaire |
+| 14/10/2026 | 3 projets de l'accueil : « sélection du moment » choisie à la main (pas de tirage aléatoire) | Garder les projets les plus pertinents en avant |
+| 14/10/2026 | URLs préfixées par langue : /fr/… et /en/… | Choix du propriétaire |
+| 14/10/2026 | Pas de bouton CV dans l'en-tête : CV dans la section d'accueil et dans le pied de page (donc sur toutes les pages) | Choix du propriétaire ; l'en-tête existant reste tel quel |
+| 14/10/2026 | Filtrage des projets et formulaire de contact maintenus en V2 | Conformité au PRD |
+| 14/10/2026 | Projets triés par date de sortie (plus récent d'abord) | Choix du propriétaire |
+| 14/10/2026 | Technologies du bandeau validées (dont ajouts : Nuxt, TypeScript, Express, API REST, SQL, Linux, Vite, Git, Docker, Proxmox, Nginx Proxy Manager) | Validation du propriétaire |
+| 14/10/2026 | À propos : histoire (STI2D SIN, puis ESIEA), timeline, bandeau défilant de compétences, façon de travailler (le workflow PRD → code), travail en équipe (sprints, daily) ; centres d'intérêt non affichés | Réponses du propriétaire |
+| 14/10/2026 | Wireframes et architecture de contenu v1.0 validés (avec sommaire collant dans les études de cas) | Validation du propriétaire ; passage à la phase 5 (design system) |
+| 14/10/2026 | Header : celui de la première capture du propriétaire (barre claire aux coins inférieurs arrondis, nom à gauche, liens et FR / EN à droite), adapté avec Bagel et Manrope ; accent et focus en violet-500 (le lime est illisible sur fond clair) | Confirmé par le propriétaire |
+| 14/10/2026 | Ajout de trois gris (neutral-400, neutral-850, neutral-900) pour les métadonnées et les surfaces | Le fond devient gris sombre : il faut des surfaces distinctes et un texte discret lisible |

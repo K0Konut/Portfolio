@@ -1,0 +1,234 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Wireframes du portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Wireframes basse fidélité : onglets par page, cadre qui bascule bureau / mobile, blocs gris annotés. Aucune décision visuelle : niveaux de gris et police système uniquement. */
+:root{
+  --bg:#ECEBE8; --frame:#FFFFFF; --block:#DAD8D3; --block-2:#C6C3BC; --ink:#2A2926; --ink-2:#5E5C57; --line:#B9B6AE; --note:#2B5FB8; --note-bg:#E3ECFA;
+  --f:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --mono:ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17171A;--frame:#202024;--block:#34343A;--block-2:#45454C;--ink:#ECEBE8;--ink-2:#A9A8A3;--line:#55555C;--note:#8DB4F5;--note-bg:#1F2B42;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17171A;--frame:#202024;--block:#34343A;--block-2:#45454C;--ink:#ECEBE8;--ink-2:#A9A8A3;--line:#55555C;--note:#8DB4F5;--note-bg:#1F2B42;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+*{box-sizing:border-box}
+.top{max-width:1180px;margin:0 auto 18px;display:grid;gap:12px}
+.top h1{margin:0;font-size:20px;font-weight:600}
+.top p{margin:0;color:var(--ink-2);font-size:14px;max-width:70ch}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+button{font:500 13px/1 var(--f);color:var(--ink);background:var(--frame);border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--ink);color:var(--frame);border-color:var(--ink)}
+button:focus-visible{outline:2px solid var(--note);outline-offset:2px}
+.sep{flex:1}
+.frame{max-width:1180px;margin:0 auto;background:var(--frame);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:max-width .3s ease}
+.frame.mobile{max-width:390px}
+@media (prefers-reduced-motion:reduce){.frame{transition:none}}
+/* éléments de wireframe */
+.hd,.ft{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.ft{border-top:1px solid var(--line);border-bottom:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:start}
+.logo{font-weight:700}
+.nav{display:flex;gap:14px;margin-left:auto;flex-wrap:wrap;color:var(--ink-2);font-size:14px}
+.sec{position:relative;padding:28px 18px;border-bottom:1px dashed var(--line);display:grid;gap:14px}
+.sec.tall{min-height:420px;align-content:center;justify-items:center;text-align:center}
+.lbl{display:inline-flex;gap:6px;align-items:center;font:600 11px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--note);background:var(--note-bg);border-radius:4px;padding:5px 7px;justify-self:start}
+.tall .lbl{position:absolute;top:14px;left:18px}
+.note{font-size:13px;color:var(--note);margin:0;max-width:60ch}
+.b{background:var(--block);border-radius:6px;min-height:14px}
+.t1{height:72px;width:min(90%,720px);background:var(--block-2)}
+.t2{height:30px;width:min(70%,420px)}
+.t3{height:18px;width:min(60%,520px)}
+.txt{height:12px}
+.w90{width:90%}.w75{width:75%}.w60{width:60%}.w40{width:40%}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{height:40px;width:150px;border-radius:999px;background:var(--block-2);display:grid;place-items:center;font-size:12px;color:var(--ink)}
+.btn.o{background:transparent;border:1.5px solid var(--block-2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;min-width:0}
+.img{aspect-ratio:16/10;max-width:100%;background:var(--block);border-radius:6px;display:grid;place-items:center;font-size:12px;color:var(--ink-2)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:8px}
+.step{border:1px solid var(--line);border-radius:8px;padding:10px;font-size:12px;color:var(--ink-2);text-align:center}
+.marq{display:flex;gap:8px;overflow:hidden;white-space:nowrap}
+.marq span{border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--ink-2);flex:none}
+.tl{display:grid;gap:12px;border-left:2px solid var(--block-2);padding-left:16px}
+.tl div{display:grid;gap:6px}
+.tl small{font:12px var(--mono);color:var(--ink-2)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:18px}
+.toc{display:grid;gap:6px;align-content:start;font-size:12px;color:var(--ink-2);border-left:2px solid var(--block-2);padding-left:10px}
+.blocks{display:grid;gap:16px}
+.blocks div{display:grid;gap:8px}
+.blocks strong{font-size:13px}
+.ftc{display:grid;gap:6px;font-size:13px;color:var(--ink-2)}
+.ftc strong{color:var(--ink);font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em}
+.mobile .two{grid-template-columns:minmax(0,1fr)}
+.mobile .nav{display:none}
+.mobile .burger{display:inline-block}
+.burger{display:none;margin-left:auto;font-size:13px;color:var(--ink-2)}
+.mobile .t1{height:54px}
+.mobile .sec.tall{min-height:520px}
+@media (max-width:700px){.two{grid-template-columns:minmax(0,1fr)}.nav{display:none}.burger{display:inline-block}}
+</style>
+
+<div class="top">
+  <h1>Wireframes du portfolio · v0.1</h1>
+  <p>Organisation des pages uniquement : pas de couleurs, pas de typo, pas d'animation. Les étiquettes bleues renvoient aux sections du document d'architecture.</p>
+  <div class="ctrl">
+    <div class="tabs" role="group" aria-label="Page affichée">
+      <button type="button" data-p="home" aria-pressed="true">Accueil</button>
+      <button type="button" data-p="projects" aria-pressed="false">Projets</button>
+      <button type="button" data-p="case" aria-pressed="false">Étude de cas</button>
+      <button type="button" data-p="about" aria-pressed="false">À propos</button>
+      <button type="button" data-p="contact" aria-pressed="false">Contact</button>
+      <button type="button" data-p="404" aria-pressed="false">404</button>
+    </div>
+    <span class="sep"></span>
+    <div class="tabs" role="group" aria-label="Largeur">
+      <button type="button" id="wDesk" aria-pressed="true">Bureau</button>
+      <button type="button" id="wMob" aria-pressed="false">Mobile</button>
+    </div>
+  </div>
+</div>
+
+<div class="frame" id="frame">
+  <header class="hd"><span class="lbl">En-tête · fixe</span><span class="logo">Costa Maskulov</span><nav class="nav"><span>Projets</span><span>À propos</span><span>Contact</span><span>FR / EN</span></nav><span class="burger">☰ Menu</span></header>
+
+  <!-- ACCUEIL -->
+  <main data-page="home">
+    <section class="sec tall"><span class="lbl">1 · Section d'accueil · plein écran · violette</span>
+      <div class="b t1"></div><div class="b t2"></div>
+      <div class="row" style="justify-content:center"><span class="btn">Télécharger le CV</span><span class="btn o">Me contacter</span></div>
+      <p class="note">Nom géant centré, lettre par lettre à l'ouverture ; la section s'efface au scroll. Indicateur de scroll très discret en bas, ou rien.</p>
+    </section>
+    <section class="sec"><span class="lbl">2 · Sélection du moment · 3 projets</span>
+      <div class="b t2"></div>
+      <div class="grid3">
+        <div class="card"><div class="img">capture mise en scène</div><div class="b txt w75"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture mise en scène</div><div class="b txt w75"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture mise en scène</div><div class="b txt w75"></div><div class="b txt w60"></div></div>
+      </div>
+      <div class="row"><span class="btn o">Tous les projets →</span></div>
+    </section>
+    <section class="sec"><span class="lbl">3 · Qui je suis</span>
+      <div class="b t2"></div><div class="b txt w90"></div><div class="b txt w75"></div><div class="b txt w60"></div>
+      <div class="row"><span class="btn o">En savoir plus →</span></div>
+    </section>
+    <section class="sec"><span class="lbl">4 · Ma façon de travailler</span>
+      <div class="b t2"></div>
+      <div class="steps"><span class="step">PRD</span><span class="step">Marque</span><span class="step">Direction artistique</span><span class="step">Architecture et UX</span><span class="step">Design system</span><span class="step">Maquettes</span><span class="step">Code</span></div>
+      <div class="row"><span class="btn o">Voir ma méthode →</span></div>
+    </section>
+    <section class="sec"><span class="lbl">5 · Prise de contact</span>
+      <div class="b t2"></div><div class="b txt w60"></div>
+      <div class="row"><span class="btn">Me contacter</span><span class="b txt" style="width:180px;height:16px"></span></div>
+      <p class="note">Bouton vers la page Contact + adresse mail affichée.</p>
+    </section>
+  </main>
+
+  <!-- PROJETS -->
+  <main data-page="projects" hidden>
+    <section class="sec"><span class="lbl">1 · En-tête</span><div class="b t1" style="width:min(50%,380px)"></div><div class="b txt w60"></div></section>
+    <section class="sec"><span class="lbl">2 · Liste · par date de sortie, du plus récent</span>
+      <div class="grid3">
+        <div class="card"><div class="img">capture</div><div class="b txt w75"></div><div class="b txt w40"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture</div><div class="b txt w75"></div><div class="b txt w40"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture</div><div class="b txt w75"></div><div class="b txt w40"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture</div><div class="b txt w75"></div><div class="b txt w40"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture</div><div class="b txt w75"></div><div class="b txt w40"></div><div class="b txt w60"></div></div>
+        <div class="card"><div class="img">capture</div><div class="b txt w75"></div><div class="b txt w40"></div><div class="b txt w60"></div></div>
+      </div>
+      <p class="note">Carte : capture, titre, type, stack, une phrase. Filtres : V2.</p>
+    </section>
+  </main>
+
+  <!-- ÉTUDE DE CAS -->
+  <main data-page="case" hidden>
+    <section class="sec"><span class="lbl">1 · En-tête</span>
+      <div class="b t1" style="width:min(70%,560px)"></div>
+      <div class="row"><span class="b txt" style="width:90px;height:22px"></span><span class="b txt" style="width:90px;height:22px"></span><span class="b txt" style="width:90px;height:22px"></span><span class="b txt" style="width:90px;height:22px"></span></div>
+      <div class="row"><span class="btn o">Code</span><span class="btn o">Démo</span></div>
+      <div class="img" style="max-width:760px">capture principale mise en scène</div>
+      <p class="note">Méta : type, rôle, durée, stack. Pas de lien « Code » pour le stage au CNAM.</p>
+    </section>
+    <section class="sec"><span class="lbl">2 → 8 · Corps de l'étude</span>
+      <div class="two">
+        <nav class="toc" aria-label="Sommaire"><span>Contexte</span><span>Besoin</span><span>Contraintes</span><span>Méthode</span><span>Choix techniques</span><span>Résultats</span><span>Enseignements</span></nav>
+        <div class="blocks">
+          <div><strong>Contexte</strong><span class="b txt w90"></span><span class="b txt w75"></span></div>
+          <div><strong>Besoin</strong><span class="b txt w90"></span><span class="b txt w60"></span></div>
+          <div><strong>Contraintes</strong><span class="b txt w75"></span><span class="b txt w60"></span></div>
+          <div><strong>Méthode</strong><span class="b txt w90"></span><span class="b txt w75"></span><div class="img" style="max-width:520px">schéma ou capture</div></div>
+          <div><strong>Choix techniques</strong><span class="b txt w90"></span><span class="b txt w75"></span></div>
+          <div><strong>Résultats</strong><div class="row"><span class="b" style="width:120px;height:56px"></span><span class="b" style="width:120px;height:56px"></span><span class="b" style="width:120px;height:56px"></span></div></div>
+          <div><strong>Enseignements</strong><span class="b txt w90"></span><span class="b txt w60"></span></div>
+        </div>
+      </div>
+      <p class="note">Proposition : sommaire collant à gauche sur bureau pour se repérer dans une étude longue (masqué sur mobile). 1 ou 2 blocs animés au scroll, pas plus.</p>
+    </section>
+    <section class="sec"><span class="lbl">9 · Liens et suite</span>
+      <div class="row"><span class="btn o">← Tous les projets</span><span class="sep"></span><span class="btn">Projet suivant →</span></div>
+    </section>
+  </main>
+
+  <!-- À PROPOS -->
+  <main data-page="about" hidden>
+    <section class="sec"><span class="lbl">1 · En-tête</span><div class="b t1" style="width:min(50%,380px)"></div><div class="b txt w60"></div></section>
+    <section class="sec"><span class="lbl">2 · Mon histoire</span><div class="b txt w90"></div><div class="b txt w90"></div><div class="b txt w75"></div></section>
+    <section class="sec"><span class="lbl">3 · Timeline</span>
+      <div class="tl">
+        <div><small>Lycée · STI2D SIN</small><span class="b txt w60"></span></div>
+        <div><small>ESIEA · cycle ingénieur</small><span class="b txt w60"></span></div>
+        <div><small>Job étudiant</small><span class="b txt w40"></span></div>
+        <div><small>Stage · CNAM</small><span class="b txt w60"></span><span style="font-size:12px;color:var(--ink-2)">→ lien vers l'étude de cas</span></div>
+      </div>
+    </section>
+    <section class="sec"><span class="lbl">4 · Compétences · bandeau défilant</span>
+      <div class="marq" aria-hidden="true"><span>Vue.js</span><span>Nuxt</span><span>TypeScript</span><span>JavaScript</span><span>HTML</span><span>CSS</span><span>Vite</span><span>Node.js</span><span>Express</span><span>Python</span><span>API REST</span><span>MongoDB</span><span>SQL</span><span>Figma</span><span>Docker</span><span>Git</span></div>
+      <p class="note">S'arrête au survol et pour « réduire les animations ». Liste lisible par les lecteurs d'écran.</p>
+    </section>
+    <section class="sec"><span class="lbl">5 · Façon de travailler</span>
+      <div class="steps"><span class="step">PRD</span><span class="step">Marque</span><span class="step">Direction artistique</span><span class="step">Architecture et UX</span><span class="step">Design system</span><span class="step">Maquettes</span><span class="step">Code</span></div>
+      <div class="b txt w75"></div>
+    </section>
+    <section class="sec"><span class="lbl">6 · En équipe</span>
+      <div class="row"><span class="b" style="width:200px;height:70px"></span><span class="b" style="width:200px;height:70px"></span></div>
+      <p class="note">Sprints · daily : deux blocs courts.</p>
+    </section>
+  </main>
+
+  <!-- CONTACT -->
+  <main data-page="contact" hidden>
+    <section class="sec"><span class="lbl">1 · En-tête</span><div class="b t1" style="width:min(50%,380px)"></div><div class="b txt w60"></div></section>
+    <section class="sec"><span class="lbl">2 · Liens</span>
+      <div class="row"><span class="b txt" style="width:220px;height:20px"></span><span class="btn o" style="width:100px">Copier</span></div>
+      <div class="row"><span class="btn o">LinkedIn</span><span class="btn o">GitHub</span></div>
+      <p class="note">Mail affiché en clair avec bouton « copier ». Formulaire : V2.</p>
+    </section>
+  </main>
+
+  <!-- 404 -->
+  <main data-page="404" hidden>
+    <section class="sec tall"><span class="lbl">404</span><div class="b t1" style="width:min(40%,260px)"></div><div class="b t3"></div>
+      <div class="row" style="justify-content:center"><span class="btn">Accueil</span><span class="btn o">Projets</span></div>
+    </section>
+  </main>
+
+  <footer class="ft">
+    <div class="ftc"><span class="lbl">Pied de page</span></div>
+    <div class="ftc"><strong>CV</strong><span>Télécharger (FR)</span><span>Download (EN)</span></div>
+    <div class="ftc"><strong>Contact</strong><span>Mail</span><span>LinkedIn</span><span>GitHub</span></div>
+    <div class="ftc"><strong>Site</strong><span>Code du site</span><span>Mentions légales</span><span>Confidentialité</span></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var tabs=document.querySelectorAll('[data-p]'),pages=document.querySelectorAll('[data-page]'),frame=document.getElementById('frame'),wD=document.getElementById('wDesk'),wM=document.getElementById('wMob');
+  function show(p){pages.forEach(function(m){m.hidden=m.dataset.page!==p});tabs.forEach(function(t){t.setAttribute('aria-pressed',t.dataset.p===p)});try{localStorage.setItem('wf-page',p)}catch(e){}}
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.p)})});
+  function width(m){frame.classList.toggle('mobile',m);wD.setAttribute('aria-pressed',!m);wM.setAttribute('aria-pressed',m)}
+  wD.addEventListener('click',function(){width(false)});wM.addEventListener('click',function(){width(true)});
+  var h=location.hash.slice(1),s=null;try{s=localStorage.getItem('wf-page')}catch(e){}
+  show(['home','projects','case','about','contact','404'].indexOf(h)>-1?h:(s||'home'));
+})();
+</script>
+
+</body></html>
