@@ -1,6 +1,22 @@
 # Design system — Portfolio personnel
 
-Version 0.2 — 14/10/2026 — **statut : en cours** (tokens, inventaire et header posés ; specs des autres composants à suivre)
+Version 1.0 — 14/10/2026 — **statut : validé** (tous les composants de l'inventaire sont spécifiés et montrés dans la vitrine)
+
+v1.0 : design system validé par le propriétaire ; briques « de ce site » du `SkillsWall` en violet clair au lieu du rose.
+
+v0.9 : lot 5 (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`) et composition de l'étude de cas ; tokens `--toc-width`, `--stat-bar`, `--duration-bar`.
+
+v0.8 : `SkillsMarquee` remplacé par `SkillsWall` (mur de briques) ; icônes `pause` et `play` retirées.
+
+v0.7 : lot 4 (`Timeline`, `SkillsMarquee`) ; icônes `pause` et `play` ; `ScrollHint` confirmé.
+
+v0.6 : lot 3 (`HeroName` et section d'accueil, `ScrollHint`, `ProcessSteps`) ; tokens `--text-hero`, `--text-hero-stacked` et motion de l'accueil.
+
+v0.5 : six fonds de section (rôles redéfinis par fond), `Tag` renforcé (contour épais et fond teinté), `Section` réécrite, nouveau composant `SectionWave` (DA v1.2).
+
+v0.4 : lot 2 (`Section`, `PageIntro`, `AppFooter`, `ProjectCard`, `DeviceFrame`) ; `Tag` en contour ; tokens `--header-height`, `--reveal-distance`, `--card-hover-scale`.
+
+v0.3 : spécifications du lot 1 (`BaseButton`, `TextLink`, `Tag`, `Icon`, `CopyButton`, `SkipLink`) et tokens d'appui (`--duration-press`, `--press-scale`, `--feedback-hold`).
 
 v0.2 : corrections issues de l'audit Impeccable du 14/10/2026 (tokens pour toutes les valeurs, zones cliquables de 44 px, rôles `--color-highlight` et `--color-header-muted`, polices auto-hébergées).
 
@@ -60,6 +76,27 @@ S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'archite
 
 **Attention** : le lime est inutilisable sur le header clair (1,1:1). Dans le header, l'accent et le focus passent en violet-500.
 
+### Fonds de section
+
+Chaque `Section` porte un fond (DA v1.2, « Fonds de section »). Le fond **redéfinit les rôles** pour tout ce qu'il contient : les composants n'utilisent que les rôles, ils s'adaptent donc sans variante. En CSS : une classe `fond-<nom>` sur la section, qui réaffecte les variables de rôle.
+
+| Rôle | Nuit | Violet | Violet vif | Lime | Rose | Crème |
+|---|---|---|---|---|---|---|
+| fond de la section | neutral-950 | violet-700 | violet-500 | lime-500 | pink-500 | neutral-50 |
+| `--color-text` | neutral-50 | neutral-50 | neutral-50 | neutral-950 | neutral-950 | neutral-950 |
+| `--color-text-muted` | neutral-100 | neutral-100 | neutral-50 | neutral-950 | neutral-950 | neutral-950 |
+| `--color-text-subtle` | neutral-400 | neutral-100 | neutral-50 | neutral-700 | neutral-950 | neutral-700 |
+| `--tag-tint` | 14 % | 14 % | 0 | 0 | 0 | 0 |
+| `--color-action` | lime-500 | lime-500 | lime-500 | neutral-950 | neutral-950 | neutral-950 |
+| `--color-on-action` | neutral-950 | neutral-950 | neutral-950 | lime-500 | pink-500 | lime-500 |
+| `--color-highlight` | lime-500 | lime-500 | lime-500 | violet-500 | violet-700 | violet-500 |
+| `--color-detail` | pink-500 | pink-500 | neutral-50 | violet-500 | violet-700 | violet-500 |
+| `--color-focus` | lime-500 | lime-500 | lime-500 | neutral-950 | neutral-950 | neutral-950 |
+
+Contrastes les plus faibles, tous conformes AA : texte sur violet vif 5,5:1 (sections courtes seulement), violet-500 sur lime 5,2:1, neutral-700 sur lime 7,9:1 et sur crème 8,2:1. Sur rose, le texte discret reste en neutral-950 (neutral-700 n'y fait que 3,7:1). Sur violet, il passe en neutral-100 : du gris sur une couleur paraît terne. Le fond teinté des étiquettes n'existe que sur les fonds sombres : sur les autres, il ferait passer leur texte sous 4,5:1.
+
+Sur les fonds clairs, l'action devient noire : un lien `inline` est noir et souligné, le bouton `primary` est noir avec un texte lime (ou rose sur fond rose).
+
 `--color-action` et `--color-highlight` pointent vers la même teinte, mais restent deux rôles : on pourra changer la couleur des mises en valeur sans toucher aux boutons. Un lien est toujours souligné, une mise en valeur jamais (DA §2, règle 1).
 
 ### Typographie
@@ -70,6 +107,8 @@ S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'archite
 | `--font-accent` | `'Fraunces'` italique (`SOFT` 100, `WONK` 1) |
 | `--font-body` | `'Manrope'`, repli système |
 | `--font-mono` | `'JetBrains Mono'`, repli monospace |
+| `--text-hero` | `clamp(5.5rem, 12vw, 9.5rem)` · 88 → 152 px · nom de la section d'accueil sur une ligne (≥ 768 px), environ 90 % de la largeur |
+| `--text-hero-stacked` | `19vw` · nom sur deux lignes (< 768 px), « Maskulov » occupe environ 90 % de la largeur |
 | `--text-display` | `clamp(3.5rem, 1.5rem + 9vw, 6rem)` · 56 → 96 px |
 | `--text-h1` | `clamp(2.5rem, 1.6rem + 4vw, 4rem)` · 40 → 64 px |
 | `--text-h2` | `clamp(1.875rem, 1.4rem + 2vw, 2.5rem)` · 30 → 40 px |
@@ -112,12 +151,19 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--space-section` | `clamp(4rem, 10vw, 8rem)` |
 | `--gutter` | `clamp(1rem, 4vw, 3rem)` |
 | `--container` | `1240px` |
+| `--toc-width` | `13rem` · colonne du sommaire collant des études de cas |
+| `--stat-bar` | `12px` · épaisseur des barres avant / après de `StatBlock` |
+| `--measure` | `52ch` · largeur max du texte courant, environ 70 caractères en Manrope (sous les 80 recommandés) |
 | `--radius-sm` / `-md` / `-lg` / `-pill` | 8 · 16 · 28 px · 999 px |
 | `--border-thin` / `--border-strong` | 1 px · 1,5 px |
 | `--underline` | 2 px · soulignement des liens |
 | `--focus-width` / `--focus-offset` | 2 px · 3 px |
 | `--target-min` | 44 px · zone cliquable minimale, sur toutes les tailles d'écran |
+| `--tag-tint` | 14 % · opacité du fond teinté des étiquettes |
+| `--header-height` | 60 px · hauteur du header (zone cliquable de 44 px + marges), réservée en haut des pages |
+| Points de rupture | 768 px (tablette) · 1024 px (bureau) · constantes : CSS n'accepte pas de variables dans les media queries |
 | `--icon-sm` / `--icon-md` | 18 px · 24 px |
+| `--timeline-dot` | 14 px · repère d'une étape de la frise |
 | `--icon-stroke` | 2,5 · épaisseur du trait des icônes |
 
 ### Motion
@@ -132,6 +178,19 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--duration-reduced` | `300ms` | Fondus quand les animations sont réduites |
 | `--hover-lift` | `3px` | Bouton qui monte au survol |
 | `--hover-nudge` | `4px` | Flèche qui avance au survol |
+| `--duration-press` | `120ms` | Retour au clic (appui) |
+| `--press-scale` | `0.98` | Bouton enfoncé au clic |
+| `--feedback-hold` | `2s` | Durée d'affichage d'une confirmation (« Adresse copiée ») |
+| `--reveal-distance` | `24px` | Montée d'un bloc qui apparaît au scroll |
+| `--card-hover-scale` | `1.03` | Capture qui grossit au survol d'une carte |
+| `--duration-letter` | `600ms` | Montée d'une lettre du nom |
+| `--letter-rise` | `0.4em` | Hauteur dont chaque lettre monte avant de se poser |
+| `--hero-parallax` | `0.35` | Le nom descend à 35 % de la vitesse du scroll en quittant l'écran |
+| `--stagger-brick` | `60ms` | Étapes de la méthode, posées brique par brique |
+| `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
+| `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
+| `--duration-bar` | `900ms` | Barres de `StatBlock` qui se remplissent |
+| `--stagger-wall` | `30ms` | Briques du mur de compétences, posées une à une (25 briques, 0,75 s) |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -147,8 +206,9 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `AppFooter` | CV FR / EN, mail, LinkedIn, GitHub, légal, code du site | toutes |
 | `SkipLink` | « Aller au contenu », visible au focus | toutes |
 | `PageIntro` | Haut de page : titre + phrase d'introduction | Projets, À propos, Contact, 404 |
-| `Section` | Conteneur de section ; variantes `default` et `color` (violette) | toutes |
-| `HeroName` | Nom géant, entrée lettre par lettre, effacement au scroll | Accueil |
+| `Section` | Conteneur de section ; six fonds (nuit, violet, vif, lime, rose, crème) | toutes |
+| `SectionWave` | Vague organique entre deux sections de fonds différents | toutes |
+| `HeroName` | Nom géant (`--text-hero`), entrée lettre par lettre, effacement au scroll | Accueil |
 | `ScrollHint` | Indicateur de scroll très discret | Accueil |
 | `BaseButton` | Bouton / lien-bouton : `primary` (lime), `outline` | toutes |
 | `TextLink` | Lien texte avec soulignement animé | toutes |
@@ -158,7 +218,7 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `DeviceFrame` | Cadre navigateur / téléphone pour mettre en scène une capture | cartes, études de cas |
 | `ProcessSteps` | Les 7 étapes de la méthode | Accueil, À propos |
 | `Timeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
-| `SkillsMarquee` | Bandeau défilant de compétences, accessible | À propos |
+| `SkillsWall` | Mur de briques des compétences, posé une fois ; briques du site en violet clair | À propos |
 | `MetaList` | Type, rôle, durée, stack d'une étude de cas | études de cas |
 | `CaseToc` | Sommaire collant (bureau uniquement) | études de cas |
 | `StatBlock` | Résultat chiffré | études de cas |
@@ -186,12 +246,222 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Au scroll** : reste visible en permanence.
 - **Accessibilité** : `<header>` + `<nav aria-label="Navigation principale">` ; `SkipLink` en premier élément focusable ; bouton du menu avec `aria-expanded` et `aria-controls` ; menu ouvert : focus piégé, `Échap` ferme et rend le focus au bouton.
 
-### Autres composants
+### `BaseButton`
 
-À spécifier un par un (variantes, états, responsive, accessibilité, motion), dans l'ordre : `BaseButton`, `TextLink`, `Tag`, `ProjectCard` + `DeviceFrame`, `AppFooter`, puis les composants de pages.
+- **Rôle** : déclencher une action ou mener à une page importante (CV, contact, tous les projets, projet suivant).
+- **Élément** : `<a>` quand il mène quelque part (avec `download` pour le CV), `<button type="button">` quand il agit sur la page. Jamais un `<div>` cliquable.
+- **Variantes**
+  - `primary` : fond `--color-action`, texte `--color-on-action`. Une seule par écran visible : c'est l'action principale (le CV sur l'accueil).
+  - `outline` : transparent, bordure `--border-strong` et texte `--color-text`.
+- **Taille unique** : Manrope `--weight-bold`, `--text-ui`, `--leading-none` ; marges `--space-4` × `--space-5` ; hauteur ≥ `--target-min` ; rayon `--radius-pill`.
+- **Icône optionnelle, à droite** (`--icon-sm`) : `arrow-right` pour aller vers une page, `download` pour le CV, `arrow-up-right` pour un site externe. Pas d'icône décorative.
+- **États**
+  - Survol : `primary` passe en fond `--color-text` ; `outline` se remplit en `--color-text` avec texte `--color-bg`. Le bouton monte de `--hover-lift`. L'icône avance de `--hover-nudge` dans son sens (droite, bas pour `download`, diagonale pour `arrow-up-right`). Durée `--duration-fast`, courbe `--ease-out`.
+  - Clic : `scale(var(--press-scale))` en `--duration-press`.
+  - Focus : anneau `--focus-width` en `--color-focus`, décalé de `--focus-offset`.
+  - Pas d'état désactivé ni de chargement : aucune action de la V1 n'en a besoin.
+- **Sur section violette** : mêmes styles, contrastes vérifiés (lime 14,1:1, texte 14,8:1).
+- **Animations réduites** : ni montée, ni avancée de l'icône, ni enfoncement ; les changements de couleur restent.
+
+### `TextLink`
+
+- **Rôle** : lien texte. Toujours souligné, pour ne jamais se confondre avec une mise en valeur (DA §2, règle 1).
+- **Variantes**
+  - `inline` (dans un paragraphe) : texte `--color-action`, soulignement de 1 px à `0.2em` sous le texte. Survol et focus : le soulignement passe à `--underline` (2 px), sans animation, pour rester correct sur un lien qui passe à la ligne.
+  - `standalone` (liens isolés : pied de page, listes) : texte `--color-text`, soulignement de 1 px. Survol et focus : texte en `--color-action` et trait de `--underline` qui se trace de gauche à droite (`scaleX`, `--duration-fast`).
+- **Lien externe** : icône `arrow-up-right` (`--icon-sm`) après le texte, `target="_blank"`, `rel="noopener"`, et la mention « (nouvel onglet) » lisible par les lecteurs d'écran seulement.
+- **Lien visité** : même apparence.
+- **Animations réduites** : le trait apparaît sans se tracer ; le changement de couleur reste.
+
+### `Tag`
+
+- **Rôle** : étiquette d'information rose (poste visé, type de projet). Jamais cliquable en V1 (les filtres arrivent en V2).
+- **Style** : contour épais. Bordure `--border-strong` et texte `--color-detail`, fond teinté de la même couleur à `--tag-tint` (`color-mix`), sur les fonds sombres seulement. Le contour fin se perdait sur le violet ; un fond plein, répété sur chaque carte, rendrait la couleur omniprésente.
+- **Commun** : Manrope `--weight-medium`, `--text-sm`, `--leading-none` ; marges `--space-2` × `--space-3` ; rayon `--radius-pill` ; en minuscules (pas de capitales).
+- **Règle** : une à deux étiquettes par carte au plus. La stack technique n'est pas en étiquettes roses (le rose reste rare) : elle s'écrit en texte discret dans `ProjectCard`.
+
+### `Icon`
+
+- **Bibliothèque** : Lucide (DA §5). Les icônes sont copiées en SVG local (licence ISC) plutôt qu'importées : on n'embarque que celles qui servent.
+- **Logos GitHub et LinkedIn** : Lucide a déprécié ses logos de marques ; on garde ses tracés actuels, dans le même style, en SVG local.
+- **Jeu de la V1** : `arrow-right`, `arrow-left`, `arrow-up-right`, `download`, `copy`, `check`, `menu`, `x`, `mail`, `github`, `linkedin`.
+- **Rendu** : `fill="none"`, `stroke="currentColor"`, trait `--icon-stroke`, extrémités et angles arrondis ; taille `--icon-sm` dans un bouton ou un lien, `--icon-md` seule.
+- **Accessibilité** : `aria-hidden="true"` par défaut. Une icône seule dans un bouton ou un lien a un nom accessible (`aria-label` sur le bouton ou le lien, pas sur le SVG).
+
+### `CopyButton`
+
+- **Rôle** : copier l'adresse mail en un clic (page Contact, pied de page).
+- **Composition** : l'adresse affichée en clair et sélectionnable, puis un bouton `outline` compact (hauteur `--target-min`) avec l'icône `copy` et le texte « Copier ».
+- **Succès** : l'icône `copy` cède la place à `check` (fondu croisé, et `check` qui grandit de 0,6 à 1 en `--duration-fast`) ; le texte devient « Adresse copiée » ; retour à l'état initial après `--feedback-hold`. Le message est annoncé aux lecteurs d'écran (`aria-live="polite"`).
+- **Échec** (presse-papiers refusé) : l'adresse est sélectionnée et le texte devient « Sélectionnée : Ctrl + C ».
+- **Animations réduites** : fondu croisé seul.
+
+### `SkipLink`
+
+- **Rôle** : « Aller au contenu », premier élément focusable de chaque page, vers `<main id="contenu">`.
+- **Repos** : hors de l'écran (mais lisible par les lecteurs d'écran).
+- **Focus** : apparaît en haut à gauche, au-dessus du header ; fond `--color-action`, texte `--color-on-action`, Manrope `--weight-bold`, rayon `--radius-pill`, hauteur ≥ `--target-min`. Il glisse depuis le haut en `--duration-fast`.
+- **Animations réduites** : apparition en fondu.
+
+### `Section`
+
+- **Rôle** : conteneur de chaque section de page. `<section>` relié à son titre (`aria-labelledby`).
+- **Mise en page** : contenu centré, largeur max `--container`, marges latérales `--gutter`, marges verticales `--space-section`.
+- **Fond** : une propriété parmi `nuit` (par défaut), `violet`, `vif`, `lime`, `rose`, `creme`, qui réaffecte les rôles (voir « Fonds de section »).
+- **Règles** (DA v1.2) : deux sections qui se suivent n'ont jamais le même fond ; une seule section `lime` ou `rose` par page ; `vif` pour les sections courtes ; les lectures longues restent sur `nuit`.
+- **Rythme de l'accueil** : `violet` (section d'accueil) → `nuit` (projets) → `creme` (qui je suis) → `vif` (ma façon de travailler) → `lime` (prise de contact) → `nuit` (pied de page).
+- **Frontière** : chaque changement de fond est marqué par une `SectionWave` en bas de la section.
+- **Titre** : `h2` en Bagel `--text-h2`, aligné à gauche ; une phrase d'introduction optionnelle en `--text-lead`, avec au plus une mise en valeur.
+- **Apparition au scroll** (DA §6, cas par défaut) : chaque bloc monte de `--reveal-distance` et apparaît en `--duration-base`, décalé de `--stagger-block`, une seule fois. Le contenu est visible sans JavaScript : l'état caché n'est posé que par le script, et seulement sous la ligne de flottaison.
+- **Animations réduites** : fondu seul (`--duration-reduced`).
+
+### `SectionWave`
+
+- **Rôle** : casser la frontière droite entre deux sections de fonds différents (DA v1.2, « Ruptures entre sections »).
+- **Rendu** : un SVG décoratif (`aria-hidden="true"`) placé entre les deux sections. Son fond est celui de la section suivante ; la vague, de la couleur de la section précédente, en descend.
+- **Forme** : un bord lissé, somme de trois ondulations dont la longueur, l'amplitude et la phase sont tirées au sort :
+  - longueur d'onde 300 à 560 px, amplitude 60 à 100 % ;
+  - longueur d'onde 130 à 220 px, amplitude 22 à 40 % ;
+  - longueur d'onde 60 à 90 px, amplitude 4 à 9 %.
+- **Amplitude de base** : 12 à 21 px, réduite jusqu'à 60 % sur les écrans étroits ; hauteur du SVG d'environ 3,2 fois l'amplitude.
+- **Tirage** : une graine par frontière (son rang dans la page). Même graine, même vague : le dessin est stable d'une visite à l'autre et différent d'une frontière à l'autre. Il est recalculé à la largeur réelle de l'écran (pas de déformation) ; un rendu de référence à 1440 px est servi avant le calcul, pour éviter tout saut de mise en page.
+- **Pas d'animation** : la vague est immobile.
+
+### `PageIntro`
+
+- **Rôle** : haut des pages Projets, À propos, Contact et 404 : titre de page et une phrase.
+- **Contenu** : `h1` en Bagel `--text-h1` ; une phrase en Manrope `--text-lead`, couleur `--color-text-muted`, avec au plus une mise en valeur ; boutons optionnels (404).
+- **Mise en page** : alignée à gauche (la section d'accueil, elle, est centrée : le contraste les distingue) ; marge haute `--header-height` + `--space-8` pour passer sous le header fixe.
+- **Variante** `center` : pour la 404 seulement, titre, phrase et boutons centrés.
+- **Apparition** : à l'ouverture, le titre puis la phrase, comme une apparition au scroll (`--stagger-block`).
+
+### `AppFooter`
+
+- **Rôle** : CV, contact et liens du site sur toutes les pages (architecture §1).
+- **Fond** : `--color-bg`, séparé du contenu par un filet `--border-thin` en `--color-border`.
+- **Colonnes** (3 sur bureau, empilées sur mobile) ; titres en Manrope `--weight-bold`, `--text-sm`, `--color-text-subtle`, sans capitales :
+  - **CV** : « CV en français » et « CV en anglais », liens `standalone` avec l'icône `download` et l'attribut `download`.
+  - **Contact** : l'adresse mail avec `CopyButton`, puis LinkedIn et GitHub (liens `standalone` externes).
+  - **Ce site** : « Code du site » (externe), « Mentions légales », « Confidentialité ».
+- **Dernière ligne** : « © 2026 Costa Maskulov », en `--text-sm` et `--color-text-subtle`.
+- **Pas d'animation** : le pied de page est un repère, il reste calme.
+
+### `ProjectCard`
+
+- **Rôle** : donner envie d'ouvrir une étude de cas (accueil : 3 cartes ; Projets : toutes, de la plus récente à la plus ancienne).
+- **Contenu, dans l'ordre** : `DeviceFrame` avec la capture ; une ou deux `Tag` (type de projet) ; titre `h3` en Bagel `--text-h3` ; une phrase en `--color-text-muted` ; la stack en `--text-sm` et `--color-text-subtle`, séparée par des points médians.
+- **Lien** : un seul lien, sur le titre, étendu à toute la carte (pseudo-élément) : toute la carte est cliquable, et le lecteur d'écran n'entend qu'un lien.
+- **Style** : fond `--color-surface`, rayon `--radius-md`, marges intérieures `--space-5` ; pas d'ombre (principe « plat »).
+- **États**
+  - Survol : fond `--color-surface-hover` ; la capture grossit à `--card-hover-scale` dans son cadre (`--duration-base`, `--ease-out`).
+  - Focus : anneau `--color-focus` autour de toute la carte.
+- **Grille** : 1 colonne sur mobile, 2 à partir de 768 px, 3 à partir de 1024 px ; écart `--space-5`.
+- **Animations réduites** : la capture ne grossit pas ; le changement de fond reste.
+
+### `DeviceFrame`
+
+- **Rôle** : mettre en scène une capture (DA §5), dans les cartes et les études de cas.
+- **Variantes** : `browser` (barre avec trois points neutres et une adresse) et `phone` (corps arrondi). Un écran d'ordinateur utilise `browser`.
+- **Style** : la capture est posée sur un fond `--color-section` ; le cadre est en `--color-surface`, bordure `--border-thin` en `--color-border`, rayon `--radius-md` (navigateur) ou `--radius-lg` (téléphone). Les trois points restent en `--color-border` : pas de rouge-jaune-vert.
+- **Image** : dimensions déclarées (pas de saut de mise en page), `loading="lazy"` hors de l'écran d'ouverture. Dans une carte, `alt=""` (le titre suffit) ; dans une étude de cas, un texte qui décrit ce que montre l'écran.
+- **Sans capture** : l'écran de l'appareil devient un aplat `--color-block` avec le nom du projet en Bagel `--color-text` (5,5:1), en attendant la vraie image.
+
+### Section d'accueil et `HeroName`
+
+- **Composition** (DA §6) : `Section` au fond `violet`, hauteur minimale `100svh`, contenu centré. Dans l'ordre : `Tag` « développeur full-stack » (le poste), le nom (`HeroName`, `h1`), la promesse, les boutons « Télécharger le CV » (`primary`, icône `download`) et « Me contacter » (`outline`), puis `ScrollHint`. En bas, une `SectionWave` vers la section suivante.
+- **Nom** : Bagel, `--leading-display`. Sur une ligne et en `--text-hero` à partir de 768 px ; sur deux lignes (« Costa », « Maskulov ») et en `--text-hero-stacked` en dessous.
+- **Promesse** : Manrope `--text-lead`, « Créatif dans l'interface, » puis « rigoureux dans la méthode. » en mise en valeur (Fraunces, `--color-highlight`).
+- **Accessibilité** : le `h1` contient le nom en clair pour les lecteurs d'écran ; les lettres découpées pour l'animation sont dans un doublon `aria-hidden`. Les boutons restent cliquables et focalisables pendant toute l'entrée (on anime l'opacité, jamais `visibility` ni `pointer-events`).
+- **Entrée à l'ouverture** (une seule timeline, environ 1,5 s, `--ease-out`) :
+  - 0 s : le header glisse depuis le haut et apparaît (`--duration-base`) ; l'étiquette apparaît.
+  - 0 → 1,1 s : chaque lettre monte de `--letter-rise` et se pose en `--duration-letter`, décalée de `--stagger-letter`.
+  - 0,4 s : la promesse monte de `--reveal-distance` et apparaît ; la mise en valeur suit 0,1 s après.
+  - 0,6 s : les boutons apparaissent. CV et contact sont lisibles avant 1 s.
+  - 1,5 s : `ScrollHint` apparaît.
+  - L'entrée démarre quand la police Bagel est prête (au plus 300 ms d'attente) pour ne pas animer une police de secours. Sans JavaScript, tout est visible d'emblée.
+- **Au scroll** (piloté par le scroll, DA §6) : pendant que la section quitte l'écran, le nom descend à `--hero-parallax` de la vitesse du scroll et s'estompe ; la promesse et les boutons s'estompent sur la première moitié. Seuls `transform` et `opacity` bougent.
+- **Animations réduites** : tout apparaît ensemble en fondu (`--duration-reduced`) ; ni montée des lettres, ni effet au scroll.
+- **Technique** : timeline et effet de scroll avec GSAP (ScrollTrigger) ; choix définitif en phase 7.
+
+### `ScrollHint`
+
+- **Rôle** : indiquer, très discrètement, que la page continue (DA §6).
+- **Forme** : un trait vertical fin (`--border-strong`, 40 px, en `--color-text-muted`) centré en bas de la section d'accueil, à `--space-6` du bas (plus la zone de sécurité de l'écran). Un petit segment `--color-highlight` le parcourt de `--hint-travel`.
+- **Mouvement** : apparaît à 1,5 s, fait deux allers (`--duration-hint` chacun), puis s'immobilise : il ne boucle jamais (WCAG 2.2.2). Disparaît en fondu dès le premier scroll et ne revient pas.
+- **Accessibilité** : décoratif (`aria-hidden="true"`).
+- **Animations réduites** : trait immobile, sans segment qui bouge.
+- **Statut** : conservé (validé par le propriétaire le 14/10/2026).
+
+### `ProcessSteps`
+
+- **Rôle** : montrer la méthode d'ingénieur en 7 étapes : PRD, marque, direction artistique, architecture et UX, design system, maquettes, code. C'est une vraie séquence : liste ordonnée (`<ol>`), numérotée.
+- **Variante `compact`** (accueil, fond `vif`) : une rangée de briques (7 colonnes à partir de 1024 px, puis la grille passe à la ligne). Chaque brique : contour `--border-strong` en `--color-text`, rayon `--radius-sm`, numéro en `--text-sm` et `--color-text-subtle`, nom de l'étape en Manrope `--weight-bold`. La dernière brique, « Code », est pleine (`--color-action`, texte `--color-on-action`) : c'est le produit fini.
+- **Variante `detail`** (À propos, fond `nuit`) : une liste verticale ; pour chaque étape, le numéro en Bagel `--text-h3` et `--color-block` (grand texte décoratif, 3,05:1), le nom en Manrope `--weight-bold` `--text-lead`, et une phrase en `--color-text-muted`. Un filet vertical `--color-border` relie les numéros.
+- **Phrases de la variante `detail`** : PRD, ce qu'on construit et pourquoi · marque, comment se positionner · direction artistique, à quoi ça ressemble et comment ça bouge · architecture et UX, comment c'est organisé et parcouru · design system, avec quelles briques · maquettes, à quoi ressemblent les écrans clés · code, comment c'est construit.
+- **Apparition** : brique par brique, chacune monte de `--reveal-distance` et apparaît, décalée de `--stagger-brick` (7 × 60 ms, sous le budget de 500 ms).
+- **Animations réduites** : fondu de l'ensemble.
+
+### `Timeline` et `TimelineItem`
+
+- **Rôle** : le parcours scolaire et professionnel sur la page À propos (lycée, école, stages, jobs étudiants).
+- **Ordre** : du plus ancien au plus récent, comme un récit (la page Projets, elle, va du plus récent au plus ancien).
+- **Structure** : une liste ordonnée (`<ol>`). Un fil vertical à gauche (`--border-strong`, `--color-border`) et, pour chaque étape, un repère rond de `--timeline-dot`.
+- **Contenu d'une étape** : une `Tag` (école, stage ou job étudiant) ; les dates en `--text-sm` et `--color-text-subtle` (`<time>`) ; le titre en Manrope `--weight-bold` `--text-lead` ; le lieu et le rôle ; une ou deux lignes en `--color-text-muted` ; si une étude de cas existe, un `TextLink` `standalone` vers elle.
+- **Au scroll** (temps fort piloté par le scroll, DA §6) : un second fil en `--color-highlight` se trace par-dessus le premier au rythme du scroll ; quand il atteint une étape, son repère se remplit (`--duration-fast`). Pas d'épinglage : la lecture n'est jamais bloquée.
+- **Animations réduites** : fil déjà tracé, repères déjà remplis.
+
+### `SkillsWall`
+
+- **Rôle** : montrer les technologies par catégorie (architecture §4, liste validée) comme un mur bâti brique par brique. Remplace le bandeau défilant : plus de mouvement continu, plus de bouton pause.
+- **Structure** : une rangée par catégorie. La catégorie s'annonce en Fraunces italique `--color-highlight` (« front », « back », « UI / UX », « outils et déploiement », « méthode ») ; ses technologies suivent, chacune une brique. Une liste (`<ul>`) par catégorie.
+- **Appareillage** : une rangée sur deux est décalée de `--space-6` (`--space-4` sous 768 px), comme un mur. Les rangées passent à la ligne si besoin.
+- **Brique** : fond `--neutral-50`, texte `--neutral-950` (16,8:1), Manrope `--weight-bold` `--text-ui`, marges `--space-3` × `--space-4`, rayon `--radius-sm`. Jamais de lime : il signale l'action, une brique lime se prendrait pour un bouton.
+- **Briques violet clair** : fond `--violet-500`, texte `--neutral-50` (5,5:1), pour les technologies qui ont servi à construire ce site, avec une légende « en violet : les briques de ce site » et un lien vers l'étude de cas du portfolio. La couleur porte une information, pas un décor. (Rose au départ, remplacé pour ne pas abuser du rose et donner plus de place au violet clair.)
+- **Fond conseillé** : `violet` (sur la page À propos).
+- **Pose** : quand le mur arrive à l'écran, chaque brique descend de `--reveal-distance` et se pose, dans l'ordre de lecture, décalée de `--stagger-wall`. Une seule fois, puis plus rien ne bouge. C'est le moment animé de la page À propos.
+- **Animations réduites** : fondu de l'ensemble.
+
+### Étude de cas : composition
+
+- **Rythme des fonds** : en-tête `violet` (rappel de l'affiche) → corps `nuit` (lecture longue, DA v1.2) → `CaseNav` en `rose` (la section vive de la page, qui invite au projet suivant). Une `SectionWave` à chaque changement.
+- **En-tête** : `Tag` (type de projet) ; titre `h1` en Bagel `--text-h1` ; une phrase en `--text-lead` ; `MetaList` ; liens « Code » (`outline`, icône `github`) et « Démo » (`outline`, icône `arrow-up-right`) ; capture principale dans un `DeviceFrame` large.
+- **Corps** : sur bureau (≥ 1024 px), deux colonnes : `CaseToc` à gauche (`--toc-width`), les blocs à droite. Sur mobile, une colonne et pas de sommaire. Chaque bloc (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) a un `h2` en Bagel `--text-h2`, un `id`, et `scroll-margin-top` égal à `--header-height` + `--space-5` pour ne pas passer sous le header fixe. Texte limité à `--measure`.
+- **Temps forts** (DA §6, 1 ou 2 par étude) : les barres de `StatBlock` ; au plus un autre bloc animé au scroll.
+
+### `MetaList`
+
+- **Rôle** : les métadonnées d'un projet, d'un coup d'œil.
+- **Structure** : une liste de définitions (`<dl>`) : type, rôle, durée, équipe, stack. Libellé en `--text-sm` et `--color-text-subtle`, valeur en Manrope `--weight-bold`.
+- **Mise en page** : une grille de 2 colonnes sur mobile, jusqu'à 5 sur bureau ; filets `--border-thin` en `--color-border` entre les cellules.
+- **Code privé** (stage au CNAM) : pas de bouton « Code » désactivé ; à la place, la mention « Code privé » dans la liste, avec la raison en une phrase.
+
+### `CaseToc`
+
+- **Rôle** : sommaire collant de l'étude de cas, sur bureau seulement (architecture §6).
+- **Structure** : `<nav aria-label="Sommaire">` puis une liste ordonnée de liens vers les blocs. Collant (`position: sticky`) à `--header-height` + `--space-5` du haut.
+- **États** : lien en `--color-text-subtle` ; survol en `--color-text` ; bloc en cours de lecture en `--color-text`, `--weight-bold`, avec un trait `--underline` en `--color-highlight` à gauche, et `aria-current="location"`. Le bloc en cours est suivi par un `IntersectionObserver`.
+- **Zones cliquables** : chaque lien fait au moins `--target-min` de haut.
+- **Défilement** : le clic mène au bloc ; défilement doux seulement sans `prefers-reduced-motion`.
+
+### `StatBlock`
+
+- **Rôle** : un résultat chiffré, prouvé (ton de voix : « un fait, un chiffre plutôt qu'un adjectif »).
+- **Contenu** : la valeur en Bagel `--text-h1` (grand chiffre décoratif) ; un libellé en `--text-sm` et `--color-text-muted` ; si la valeur compare un avant et un après, deux barres de `--stat-bar` d'épaisseur, proportionnelles aux valeurs : « avant » en `--color-border`, « après » en `--color-highlight`, chacune avec sa valeur en clair.
+- **Mise en page** : 1 à 3 par ligne ; pas de carte autour (le chiffre suffit).
+- **Animation** : les barres se remplissent une fois (`scaleX`, `--duration-bar`, `--ease-out`) à l'arrivée à l'écran, l'« après » 150 ms après l'« avant ». Pas de compteur qui défile : motif trop vu, et un chiffre qui change est illisible.
+- **Accessibilité** : les valeurs sont du texte ; les barres sont décoratives (`aria-hidden`).
+- **Animations réduites** : barres déjà remplies.
+
+### `CaseNav`
+
+- **Rôle** : la fin d'une étude de cas : passer au projet suivant ou revenir à la liste.
+- **Contenu** : un grand lien « Projet suivant » (libellé en `--text-sm`, titre du projet en Bagel `--text-h2`, icône `arrow-right` en `--icon-md`) ; à côté, un `TextLink` `standalone` « Tous les projets » avec `arrow-left`.
+- **Ordre** : le projet suivant dans la liste (du plus récent au plus ancien) ; après le dernier, retour au premier.
+- **Survol** : la flèche avance de `--hover-nudge` et le titre se souligne (`--underline`).
+- **Fond** : `rose` (la section vive de la page).
 
 ---
 
 ## 5. Vitrine
 
-Page vitrine publiée en artifact « Vitrine du design system » : tokens, header (bureau et mobile, menu ouvert), boutons. Complétée au fil des composants ; elle deviendra la route `/design-system` en développement (phase 7).
+Source : `docs/05-vitrine-design-system.html`, publiée en artifact « Vitrine du design system » à partir de ce fichier. Elle montre les tokens et chaque composant spécifié, avec ses états réels. Complétée lot par lot ; elle deviendra la route `/design-system` en développement (phase 7).
