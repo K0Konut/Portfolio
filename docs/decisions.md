@@ -61,3 +61,4 @@
 | 14/10/2026 | La vitrine du design system est versionnée dans `docs/05-vitrine-design-system.html` et publiée depuis ce fichier | Une seule source, relisible et auditable dans le dépôt |
 | 14/10/2026 | `Tag` en contour (bordure et texte roses, fond transparent) | Choix du propriétaire ; un fond rose plein répété sur chaque carte rendrait le rose omniprésent |
 | 14/10/2026 | Design system v0.4 : lot 2 spécifié (`Section`, `PageIntro`, `AppFooter`, `ProjectCard`, `DeviceFrame`) ; sur l'accueil, sections violettes = accueil et prise de contact ; carte entière cliquable via un seul lien | Suite du design system par lots |
+| 14/10/2026 | Design system v0.5 : chaque fond de section réaffecte les rôles de couleur (aucune variante de composant) ; `Tag` en contour épais avec fond teinté à 14 % ; composant `SectionWave` (vague organique à graine) | Mise en œuvre de la DA v1.2 ; le contour fin des étiquettes se voyait mal sur le violet |

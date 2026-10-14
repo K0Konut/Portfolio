@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.4 — 14/10/2026 — **statut : en cours** (lots 1 et 2 spécifiés : briques de base et structure ; lots 3 à 5 à suivre)
+Version 0.5 — 14/10/2026 — **statut : en cours** (lots 1 et 2 spécifiés, six fonds de section et vague ; lots 3 à 5 à suivre)
+
+v0.5 : six fonds de section (rôles redéfinis par fond), `Tag` renforcé (contour épais et fond teinté), `Section` réécrite, nouveau composant `SectionWave` (DA v1.2).
 
 v0.4 : lot 2 (`Section`, `PageIntro`, `AppFooter`, `ProjectCard`, `DeviceFrame`) ; `Tag` en contour ; tokens `--header-height`, `--reveal-distance`, `--card-hover-scale`.
 
@@ -64,6 +66,27 @@ S'appuie sur la direction artistique v1.0 « Affiche de nuit » et sur l'archite
 
 **Attention** : le lime est inutilisable sur le header clair (1,1:1). Dans le header, l'accent et le focus passent en violet-500.
 
+### Fonds de section
+
+Chaque `Section` porte un fond (DA v1.2, « Fonds de section »). Le fond **redéfinit les rôles** pour tout ce qu'il contient : les composants n'utilisent que les rôles, ils s'adaptent donc sans variante. En CSS : une classe `fond-<nom>` sur la section, qui réaffecte les variables de rôle.
+
+| Rôle | Nuit | Violet | Violet vif | Lime | Rose | Crème |
+|---|---|---|---|---|---|---|
+| fond de la section | neutral-950 | violet-700 | violet-500 | lime-500 | pink-500 | neutral-50 |
+| `--color-text` | neutral-50 | neutral-50 | neutral-50 | neutral-950 | neutral-950 | neutral-950 |
+| `--color-text-muted` | neutral-100 | neutral-100 | neutral-50 | neutral-950 | neutral-950 | neutral-950 |
+| `--color-text-subtle` | neutral-400 | neutral-100 | neutral-50 | neutral-700 | neutral-950 | neutral-700 |
+| `--tag-tint` | 14 % | 14 % | 0 | 0 | 0 | 0 |
+| `--color-action` | lime-500 | lime-500 | lime-500 | neutral-950 | neutral-950 | neutral-950 |
+| `--color-on-action` | neutral-950 | neutral-950 | neutral-950 | lime-500 | pink-500 | lime-500 |
+| `--color-highlight` | lime-500 | lime-500 | lime-500 | violet-500 | violet-700 | violet-500 |
+| `--color-detail` | pink-500 | pink-500 | neutral-50 | violet-500 | violet-700 | violet-500 |
+| `--color-focus` | lime-500 | lime-500 | lime-500 | neutral-950 | neutral-950 | neutral-950 |
+
+Contrastes les plus faibles, tous conformes AA : texte sur violet vif 5,5:1 (sections courtes seulement), violet-500 sur lime 5,2:1, neutral-700 sur lime 7,9:1 et sur crème 8,2:1. Sur rose, le texte discret reste en neutral-950 (neutral-700 n'y fait que 3,7:1). Sur violet, il passe en neutral-100 : du gris sur une couleur paraît terne. Le fond teinté des étiquettes n'existe que sur les fonds sombres : sur les autres, il ferait passer leur texte sous 4,5:1.
+
+Sur les fonds clairs, l'action devient noire : un lien `inline` est noir et souligné, le bouton `primary` est noir avec un texte lime (ou rose sur fond rose).
+
 `--color-action` et `--color-highlight` pointent vers la même teinte, mais restent deux rôles : on pourra changer la couleur des mises en valeur sans toucher aux boutons. Un lien est toujours souligné, une mise en valeur jamais (DA §2, règle 1).
 
 ### Typographie
@@ -121,6 +144,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--underline` | 2 px · soulignement des liens |
 | `--focus-width` / `--focus-offset` | 2 px · 3 px |
 | `--target-min` | 44 px · zone cliquable minimale, sur toutes les tailles d'écran |
+| `--tag-tint` | 14 % · opacité du fond teinté des étiquettes |
 | `--header-height` | 60 px · hauteur du header (zone cliquable de 44 px + marges), réservée en haut des pages |
 | Points de rupture | 768 px (tablette) · 1024 px (bureau) · constantes : CSS n'accepte pas de variables dans les media queries |
 | `--icon-sm` / `--icon-md` | 18 px · 24 px |
@@ -158,7 +182,8 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `AppFooter` | CV FR / EN, mail, LinkedIn, GitHub, légal, code du site | toutes |
 | `SkipLink` | « Aller au contenu », visible au focus | toutes |
 | `PageIntro` | Haut de page : titre + phrase d'introduction | Projets, À propos, Contact, 404 |
-| `Section` | Conteneur de section ; variantes `default` et `color` (violette) | toutes |
+| `Section` | Conteneur de section ; six fonds (nuit, violet, vif, lime, rose, crème) | toutes |
+| `SectionWave` | Vague organique entre deux sections de fonds différents | toutes |
 | `HeroName` | Nom géant, entrée lettre par lettre, effacement au scroll | Accueil |
 | `ScrollHint` | Indicateur de scroll très discret | Accueil |
 | `BaseButton` | Bouton / lien-bouton : `primary` (lime), `outline` | toutes |
@@ -227,7 +252,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `Tag`
 
 - **Rôle** : étiquette d'information rose (poste visé, type de projet). Jamais cliquable en V1 (les filtres arrivent en V2).
-- **Style** : contour. Bordure `--border-thin` et texte `--color-detail`, fond transparent (choix du propriétaire : un fond rose plein, répété sur chaque carte, rendrait le rose omniprésent).
+- **Style** : contour épais. Bordure `--border-strong` et texte `--color-detail`, fond teinté de la même couleur à `--tag-tint` (`color-mix`), sur les fonds sombres seulement. Le contour fin se perdait sur le violet ; un fond plein, répété sur chaque carte, rendrait la couleur omniprésente.
 - **Commun** : Manrope `--weight-medium`, `--text-sm`, `--leading-none` ; marges `--space-2` × `--space-3` ; rayon `--radius-pill` ; en minuscules (pas de capitales).
 - **Règle** : une à deux étiquettes par carte au plus. La stack technique n'est pas en étiquettes roses (le rose reste rare) : elle s'écrit en texte discret dans `ProjectCard`.
 
@@ -258,13 +283,25 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 - **Rôle** : conteneur de chaque section de page. `<section>` relié à son titre (`aria-labelledby`).
 - **Mise en page** : contenu centré, largeur max `--container`, marges latérales `--gutter`, marges verticales `--space-section`.
-- **Variantes**
-  - `default` : fond `--color-bg`.
-  - `color` : fond `--color-section` (violet) sur toute la largeur. Mêmes rôles de texte, contrastes vérifiés sur violet.
-- **Rythme** : jamais deux sections `color` à la suite. Sur l'accueil : la section d'accueil et la prise de contact, qui referme la page sur le violet de l'affiche.
+- **Fond** : une propriété parmi `nuit` (par défaut), `violet`, `vif`, `lime`, `rose`, `creme`, qui réaffecte les rôles (voir « Fonds de section »).
+- **Règles** (DA v1.2) : deux sections qui se suivent n'ont jamais le même fond ; une seule section `lime` ou `rose` par page ; `vif` pour les sections courtes ; les lectures longues restent sur `nuit`.
+- **Rythme de l'accueil** : `violet` (section d'accueil) → `nuit` (projets) → `creme` (qui je suis) → `vif` (ma façon de travailler) → `lime` (prise de contact) → `nuit` (pied de page).
+- **Frontière** : chaque changement de fond est marqué par une `SectionWave` en bas de la section.
 - **Titre** : `h2` en Bagel `--text-h2`, aligné à gauche ; une phrase d'introduction optionnelle en `--text-lead`, avec au plus une mise en valeur.
 - **Apparition au scroll** (DA §6, cas par défaut) : chaque bloc monte de `--reveal-distance` et apparaît en `--duration-base`, décalé de `--stagger-block`, une seule fois. Le contenu est visible sans JavaScript : l'état caché n'est posé que par le script, et seulement sous la ligne de flottaison.
 - **Animations réduites** : fondu seul (`--duration-reduced`).
+
+### `SectionWave`
+
+- **Rôle** : casser la frontière droite entre deux sections de fonds différents (DA v1.2, « Ruptures entre sections »).
+- **Rendu** : un SVG décoratif (`aria-hidden="true"`) placé entre les deux sections. Son fond est celui de la section suivante ; la vague, de la couleur de la section précédente, en descend.
+- **Forme** : un bord lissé, somme de trois ondulations dont la longueur, l'amplitude et la phase sont tirées au sort :
+  - longueur d'onde 300 à 560 px, amplitude 60 à 100 % ;
+  - longueur d'onde 130 à 220 px, amplitude 22 à 40 % ;
+  - longueur d'onde 60 à 90 px, amplitude 4 à 9 %.
+- **Amplitude de base** : 12 à 21 px, réduite jusqu'à 60 % sur les écrans étroits ; hauteur du SVG d'environ 3,2 fois l'amplitude.
+- **Tirage** : une graine par frontière (son rang dans la page). Même graine, même vague : le dessin est stable d'une visite à l'autre et différent d'une frontière à l'autre. Il est recalculé à la largeur réelle de l'écran (pas de déformation) ; un rendu de référence à 1440 px est servi avant le calcul, pour éviter tout saut de mise en page.
+- **Pas d'animation** : la vague est immobile.
 
 ### `PageIntro`
 

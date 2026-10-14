@@ -26,7 +26,7 @@
   --space-section:clamp(4rem,10vw,8rem);--gutter:clamp(1rem,4vw,3rem);--container:1240px;
   --radius-sm:8px;--radius-md:16px;--radius-lg:28px;--radius-pill:999px;
   --border-thin:1px;--border-strong:1.5px;--underline:2px;--focus-width:2px;--focus-offset:3px;
-  --target-min:44px;--icon-sm:1.125rem;--icon-md:1.5rem;--icon-stroke:2.5;
+  --target-min:44px;--tag-tint:14%;--icon-sm:1.125rem;--icon-md:1.5rem;--icon-stroke:2.5;
   /* Motion */
   --ease-out:cubic-bezier(.22,1,.36,1);--duration-fast:250ms;--duration-base:700ms;--duration-reduced:300ms;--hover-lift:3px;--hover-nudge:4px;
   --duration-press:120ms;--press-scale:.98;--feedback-hold:2s;
@@ -153,7 +153,7 @@ svg{stroke-width:var(--icon-stroke)}
 
 /* ---- Tag ---- */
 .tag{display:inline-flex;align-items:center;font:var(--weight-medium) var(--text-sm)/var(--leading-none) var(--font-body);padding:var(--space-2) var(--space-3);border-radius:var(--radius-pill);white-space:nowrap}
-.tag-a{border:var(--border-thin) solid var(--color-detail);color:var(--color-detail)}
+.tag-a{border:var(--border-strong) solid var(--color-detail);color:var(--color-detail);background:color-mix(in srgb,var(--color-detail) var(--tag-tint),transparent)}
 .tagrow{display:flex;flex-wrap:wrap;gap:var(--space-2)}
 .minicard{display:grid;gap:var(--space-3);justify-items:start}
 .minicard h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:0}
@@ -177,12 +177,29 @@ svg{stroke-width:var(--icon-stroke)}
 .copy.done .ic-check{opacity:1;transform:scale(1)}
 
 
+
+/* ---- Fonds de section : chaque fond réaffecte les rôles ---- */
+.fond-nuit,.fond-violet{--color-text:var(--neutral-50);--color-text-muted:var(--neutral-100);--color-text-subtle:var(--neutral-400);--tag-tint:14%;--color-action:var(--lime-500);--color-on-action:var(--neutral-950);--color-highlight:var(--lime-500);--color-detail:var(--pink-500);--color-focus:var(--lime-500)}
+.fond-nuit{--color-bg:var(--neutral-950)} .fond-violet{--color-bg:var(--violet-700);--color-text-subtle:var(--neutral-100)}
+.fond-vif{--tag-tint:0%;--color-bg:var(--violet-500);--color-text:var(--neutral-50);--color-text-muted:var(--neutral-50);--color-text-subtle:var(--neutral-50);--color-action:var(--lime-500);--color-on-action:var(--neutral-950);--color-highlight:var(--lime-500);--color-detail:var(--neutral-50);--color-focus:var(--lime-500)}
+.fond-lime{--tag-tint:0%;--color-bg:var(--lime-500);--color-text:var(--neutral-950);--color-text-muted:var(--neutral-950);--color-text-subtle:var(--neutral-700);--color-action:var(--neutral-950);--color-on-action:var(--lime-500);--color-highlight:var(--violet-500);--color-detail:var(--violet-500);--color-focus:var(--neutral-950)}
+.fond-rose{--tag-tint:0%;--color-bg:var(--pink-500);--color-text:var(--neutral-950);--color-text-muted:var(--neutral-950);--color-text-subtle:var(--neutral-950);--color-action:var(--neutral-950);--color-on-action:var(--pink-500);--color-highlight:var(--violet-700);--color-detail:var(--violet-700);--color-focus:var(--neutral-950)}
+.fond-creme{--tag-tint:0%;--color-bg:var(--neutral-50);--color-text:var(--neutral-950);--color-text-muted:var(--neutral-950);--color-text-subtle:var(--neutral-700);--color-action:var(--neutral-950);--color-on-action:var(--lime-500);--color-highlight:var(--violet-500);--color-detail:var(--violet-500);--color-focus:var(--neutral-950)}
+[class*="fond-"]{background:var(--color-bg);color:var(--color-text)}
+.fonds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-duo-min)),1fr));gap:var(--space-4)}
+.fonds>div{border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border);padding:var(--space-5);display:grid;gap:var(--space-4);justify-items:start}
+.fonds h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:0}
+.fonds p{margin:0;color:var(--color-text-muted)}
+.fonds .meta{font:var(--weight-regular) var(--text-sm)/var(--leading-snug) var(--font-mono);color:var(--color-text-subtle)}
+.fonds .row,.rythme .row{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+.rythme{border-radius:var(--radius-md);overflow:hidden;border:var(--border-thin) solid var(--color-border)}
+.rythme section{padding:var(--space-7) var(--gutter);display:grid;gap:var(--space-3);justify-items:start}
+.rythme h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.rythme p{margin:0;color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.wave{line-height:0;background:var(--next);color:var(--prev)}
+.wave svg{display:block;width:100%;fill:currentColor}
+
 /* ---- Section ---- */
-.secdemo{display:grid;border-radius:var(--radius-md);overflow:hidden;border:var(--border-thin) solid var(--color-border)}
-.secdemo>div{padding:var(--space-7) var(--gutter);display:grid;gap:var(--space-3);background:var(--color-bg)}
-.secdemo>div.color{background:var(--color-section)}
-.secdemo h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
-.secdemo p{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--vitrine-measure)}
 
 /* ---- PageIntro ---- */
 .pintro{display:grid;gap:var(--space-4);justify-items:start;padding:var(--space-7) var(--gutter);background:var(--color-bg);border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border)}
@@ -258,7 +275,7 @@ svg{stroke-width:var(--icon-stroke)}
 
 <div class="page">
   <div class="intro">
-    <h1>Design system · v0.4</h1>
+    <h1>Design system · v0.5</h1>
     <p>Les briques du portfolio, construites avec les tokens de la direction artistique « Affiche de nuit ». <span class="hl">Survolez et tabulez</span> : les états sont réels. Appuyez sur Tab dès l'ouverture pour voir le lien d'évitement.</p>
   </div>
   <main id="contenu" tabindex="-1" style="display:grid;gap:var(--space-8)">
@@ -453,12 +470,35 @@ svg{stroke-width:var(--icon-stroke)}
 
   <!-- Section -->
   <section class="plate" aria-labelledby="t-section">
-    <header><h2 id="t-section">Section</h2><span>default · color · apparition au scroll</span></header>
-    <div class="secdemo">
-      <div class="reveal"><h3>Ma façon de travailler</h3><p>Partir du besoin, puis construire <span class="hl">brique par brique.</span></p></div>
-      <div class="color reveal" style="--i:1"><h3>Parlons-en</h3><p>Vous cherchez un développeur full-stack ? Le CV et le mail sont juste en dessous.</p></div>
+    <header><h2 id="t-section">Section</h2><span>six fonds · rôles réaffectés · apparition au scroll</span></header>
+    <div class="fonds">
+      <div class="fond-nuit"><p class="meta">nuit · fond du site</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 16,8:1 · étiquette 7,5:1</p></div>
+      <div class="fond-violet"><p class="meta">violet · l’affiche</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 14,8:1 · étiquette 6,6:1</p></div>
+      <div class="fond-vif"><p class="meta">violet vif · sections courtes</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 5,5:1 · étiquette 5,5:1</p></div>
+      <div class="fond-lime"><p class="meta">lime · section vive</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 16:1 · étiquette 5,2:1</p></div>
+      <div class="fond-rose"><p class="meta">rose · section vive</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 7,5:1 · étiquette 6,6:1</p></div>
+      <div class="fond-creme"><p class="meta">crème · respiration</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 16,8:1 · étiquette 5,5:1</p></div>
     </div>
-    <p class="cap">Default sur le gris du site, color sur le violet de l'affiche, jamais deux sections violettes à la suite. Faites défiler : les blocs de ce lot montent et apparaissent une fois, décalés de 80 ms.</p>
+    <p class="cap">Mêmes composants partout : c'est le fond qui réaffecte les rôles. Sur les fonds clairs, l'action passe en noir. Tabulez pour voir le focus adapté à chaque fond.</p>
+  </section>
+
+  <!-- SectionWave -->
+  <section class="plate" aria-labelledby="t-wave">
+    <header><h2 id="t-wave">SectionWave</h2><span>rythme de l'accueil · une vague par frontière</span></header>
+    <div class="rythme">
+      <section class="fond-violet"><h3>Costa Maskulov</h3><p>Créatif dans l’interface, <span class="hl">rigoureux dans la méthode.</span></p><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-wave">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-wave">Me contacter</a></div></section>
+      <div class="wave" data-seed="1" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Projets</h3><p>La sélection du moment.</p><div class="row"><span class="tag tag-a">stage</span><span class="tag tag-a">application</span><span class="tag tag-a">site web</span></div></section>
+      <div class="wave" data-seed="2" style="--prev:var(--neutral-950);--next:var(--neutral-50)" aria-hidden="true"></div>
+      <section class="fond-creme"><h3>Qui je suis</h3><p>Quelques lignes pour faire sentir la personne, avec une <span class="hl">touche</span>.</p><a class="btn btn-outline" href="#t-wave">En savoir plus</a></section>
+      <div class="wave" data-seed="3" style="--prev:var(--neutral-50);--next:var(--violet-500)" aria-hidden="true"></div>
+      <section class="fond-vif"><h3>Ma façon de travailler</h3><p>PRD, marque, DA, UX, design system, maquettes, code.</p></section>
+      <div class="wave" data-seed="4" style="--prev:var(--violet-500);--next:var(--lime-500)" aria-hidden="true"></div>
+      <section class="fond-lime"><h3>Parlons-en</h3><p>Vous cherchez un développeur full-stack ? <a class="tl-inline" href="#t-wave">Écrivez-moi</a>.</p><a class="btn btn-primary" href="#t-wave">Me contacter</a></section>
+      <div class="wave" data-seed="5" style="--prev:var(--lime-500);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Pied de page</h3><p>CV · contact · ce site</p></section>
+    </div>
+    <p class="cap">Chaque frontière a sa graine : vague stable d'une visite à l'autre, différente d'une frontière à l'autre, recalculée à la largeur de l'écran. Immobile.</p>
   </section>
 
   <!-- PageIntro -->
@@ -557,6 +597,23 @@ svg{stroke-width:var(--icon-stroke)}
     });
   }
   wireCopy('');wireCopy('2');
+
+  // SectionWave : bord organique à graine (trois ondulations superposées), recalculé à la largeur réelle
+  function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  function drawWave(el){
+    var W=Math.max(1,Math.round(el.getBoundingClientRect().width)),r=rng(+el.dataset.seed),s=Math.min(1,Math.max(.6,W/1000));
+    var amp=(12+r()*9)*s,y0=amp*1.6+6,H=Math.ceil(3.2*amp+14);
+    var oc=[[300+r()*260,.6+r()*.4],[130+r()*90,.22+r()*.18],[60+r()*30,.04+r()*.05]].map(function(o){return{wl:o[0],a:amp*o[1],ph:r()*6.283}});
+    var pts=[],step=Math.max(8,W/120);
+    for(var x=0;x<=W+.1;x+=step){var y=y0;oc.forEach(function(o){y+=o.a*Math.sin(6.283*x/o.wl+o.ph)});pts.push([x,y])}
+    var p=pts.reverse(),d='M0,0H'+W+'V'+p[0][1].toFixed(1);
+    for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;
+      d+='C'+(b[0]+(c[0]-a[0])/6).toFixed(1)+','+(b[1]+(c[1]-a[1])/6).toFixed(1)+' '+(c[0]-(e[0]-b[0])/6).toFixed(1)+','+(c[1]-(e[1]-b[1])/6).toFixed(1)+' '+c[0].toFixed(1)+','+c[1].toFixed(1)}
+    el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" height="'+H+'" preserveAspectRatio="none"><path d="'+d+'Z"/></svg>';
+  }
+  function drawWaves(){document.querySelectorAll('.wave').forEach(drawWave)}
+  drawWaves();var wt;addEventListener('resize',function(){clearTimeout(wt);wt=setTimeout(drawWaves,150)});
+
 
   // Apparition au scroll : seuls les blocs sous la ligne de flottaison sont cachés, et seulement si le script tourne
   if('IntersectionObserver' in window){
