@@ -69,3 +69,4 @@
 | 14/10/2026 | Frise du parcours validée | Validation du propriétaire |
 | 14/10/2026 | Bandeau défilant de compétences remplacé par un mur de briques (`SkillsWall`), posé une fois, une rangée par catégorie ; briques crème, et roses pour les technologies de ce site ; jamais de lime | Le propriétaire trouve le bandeau « vu et revu » ; Impeccable le signale comme motif trop vu ; un seul moment animé par page ; le rose porte une information |
 | 14/10/2026 | Token `--measure` (52ch) pour la largeur du texte courant | Audit Impeccable : 62ch donnait environ 87 caractères par ligne en Manrope |
+| 14/10/2026 | Design system v0.9 : lot 5 (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`) ; étude de cas en violet → nuit → rose ; résultats en barres avant / après plutôt qu'en compteur ; code privé indiqué dans la `MetaList`, jamais par un bouton désactivé | Fin du design system ; preuves visibles plutôt qu'effets |

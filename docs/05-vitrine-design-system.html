@@ -23,17 +23,17 @@
   --weight-regular:400;--weight-medium:500;--weight-bold:700;--tracking-label:.05em;
   /* Espacements, rayons, bordures, tailles */
   --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;--space-8:64px;--space-9:96px;--space-10:128px;
-  --space-section:clamp(4rem,10vw,8rem);--gutter:clamp(1rem,4vw,3rem);--container:1240px;--measure:52ch;
+  --space-section:clamp(4rem,10vw,8rem);--gutter:clamp(1rem,4vw,3rem);--container:1240px;--measure:52ch;--header-height:60px;--toc-width:13rem;--stat-bar:12px;
   --radius-sm:8px;--radius-md:16px;--radius-lg:28px;--radius-pill:999px;
   --border-thin:1px;--border-strong:1.5px;--underline:2px;--focus-width:2px;--focus-offset:3px;
   --target-min:44px;--tag-tint:14%;--icon-sm:1.125rem;--icon-md:1.5rem;--icon-stroke:2.5;
   /* Motion */
   --ease-out:cubic-bezier(.22,1,.36,1);--duration-fast:250ms;--duration-base:700ms;--duration-reduced:300ms;--hover-lift:3px;--hover-nudge:4px;
   --duration-press:120ms;--press-scale:.98;--feedback-hold:2s;
-  --duration-letter:600ms;--letter-rise:.4em;--hero-parallax:.35;--stagger-brick:60ms;--hint-travel:12px;--duration-hint:1200ms;--stagger-wall:30ms;--timeline-dot:14px;
+  --duration-letter:600ms;--letter-rise:.4em;--hero-parallax:.35;--stagger-brick:60ms;--hint-travel:12px;--duration-hint:1200ms;--stagger-wall:30ms;--duration-bar:900ms;--timeline-dot:14px;
   /* Mise en page de la vitrine uniquement (pas des tokens du site) */
   --vitrine-stage-h:16rem;--vitrine-phone-w:22.5rem;--vitrine-phone-h:35rem;--vitrine-phone-display:3.5rem;--vitrine-phone-logo:1.125rem;
-  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:var(--measure);--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;--vitrine-hero-h:min(100svh,48rem);--vitrine-brick-min:8.5rem;--vitrine-step-col:3.5rem;--vitrine-hint-h:40px;--vitrine-hint-seg:12px;
+  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:var(--measure);--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;--vitrine-hero-h:min(100svh,48rem);--vitrine-brick-min:8.5rem;--vitrine-step-col:3.5rem;--vitrine-meta-min:9rem;--vitrine-stat-min:16rem;--vitrine-hint-h:40px;--vitrine-hint-seg:12px;
 }
 @media (prefers-reduced-motion:reduce){:root{--hover-lift:0px;--hover-nudge:0px;--press-scale:1}}
 html,body{background:var(--color-bg);color:var(--color-text)}
@@ -266,7 +266,9 @@ svg{stroke-width:var(--icon-stroke)}
 @media (min-width:1024px){.steps-c{grid-template-columns:repeat(7,minmax(0,1fr))}}
 .steps-c li{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-sm);padding:var(--space-4) var(--space-3);display:grid;gap:var(--space-2);align-content:start}
 .steps-c .n{font-size:var(--text-sm);color:var(--color-text-subtle);font-variant-numeric:tabular-nums}
-.steps-c .t{font-weight:var(--weight-bold);line-height:var(--leading-snug)}
+.steps-c .t{font-weight:var(--weight-bold);line-height:var(--leading-snug);overflow-wrap:anywhere;hyphens:auto}
+.blocks .steps-c{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:768px){.blocks .steps-c{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .steps-c li:last-child{background:var(--color-action);border-color:var(--color-action);color:var(--color-on-action)}
 .steps-c li:last-child .n{color:var(--color-on-action)}
 .steps-d{position:relative;list-style:none;margin:0;padding:0;display:grid;gap:var(--space-5)}
@@ -318,6 +320,47 @@ svg{stroke-width:var(--icon-stroke)}
 .duo2>div{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-md);padding:var(--space-5)}
 .duo2 b{font-size:var(--text-lead)}
 
+
+/* ---- Étude de cas : MetaList, CaseToc, StatBlock, CaseNav ---- */
+.case section{padding:var(--space-7) var(--gutter);justify-items:stretch}
+.case-head{display:grid;gap:var(--space-5);justify-items:start}
+.case-title{font-family:var(--font-display);font-size:var(--text-h1);line-height:var(--leading-display);margin:0}
+.case-lead{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--measure)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-meta-min)),1fr));margin:0;width:100%;border-block:var(--border-thin) solid color-mix(in srgb,var(--color-text) 25%,transparent)}
+.meta>div{padding:var(--space-3) var(--space-4) var(--space-3) 0}
+.meta dt{font-size:var(--text-sm);color:var(--color-text-subtle)}
+.meta dd{margin:0;font-weight:var(--weight-bold)}
+.case-head .frame{width:100%;aspect-ratio:16/8}
+.case-body{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-7)}
+@media (min-width:1024px){.case-body{grid-template-columns:var(--toc-width) minmax(0,1fr)}}
+.toc{display:none}
+@media (min-width:1024px){.toc{display:block;position:sticky;top:calc(var(--header-height) + var(--space-5));align-self:start}}
+.toc ol{list-style:none;margin:0;padding:0;display:grid}
+.toc a{display:flex;align-items:center;min-height:var(--target-min);padding-left:var(--space-4);border-left:var(--underline) solid var(--color-border);color:var(--color-text-subtle);text-decoration:none;transition:color var(--duration-fast) var(--ease-out),border-color var(--duration-fast) var(--ease-out)}
+.toc a:hover{color:var(--color-text)}
+.toc a[aria-current="location"]{color:var(--color-text);font-weight:var(--weight-bold);border-left-color:var(--color-highlight)}
+.blocks{display:grid;gap:var(--space-8);min-width:0}
+.blocks>div{display:grid;gap:var(--space-4);scroll-margin-top:calc(var(--header-height) + var(--space-5))}
+.blocks h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.blocks p,.blocks li{color:var(--color-text-muted);max-width:var(--measure);margin:0}
+.blocks ul{margin:0;padding-left:var(--space-5);display:grid;gap:var(--space-2)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-stat-min)),1fr));gap:var(--space-6)}
+.stat{display:grid;gap:var(--space-2);align-content:start}
+.stat .v{font-family:var(--font-display);font-size:var(--text-h1);line-height:var(--leading-display)}
+.stat .l{font-size:var(--text-sm);color:var(--color-text-muted)}
+.bars{display:grid;gap:var(--space-2);margin-top:var(--space-2)}
+.bars>div{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:var(--space-3);align-items:center;font-size:var(--text-sm);color:var(--color-text-subtle)}
+.sbar{height:var(--stat-bar);width:calc(var(--w) * 1%);border-radius:var(--radius-pill);background:var(--color-border);transform-origin:left;transition:transform var(--duration-bar) var(--ease-out)}
+.sbar.after{background:var(--color-highlight);transition-delay:150ms}
+.js .stat.is-pending .sbar{transform:scaleX(0)}
+.casenav{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:var(--space-5)}
+.next{display:grid;gap:var(--space-2);color:var(--color-text);text-decoration:none}
+.next small{font-size:var(--text-sm)}
+.next span{display:inline-flex;align-items:center;gap:var(--space-3);font-family:var(--font-display);font-size:var(--text-h2);line-height:var(--leading-display)}
+.next .ico{width:var(--icon-md);height:var(--icon-md);transition:transform var(--duration-fast) var(--ease-out)}
+.next:hover span{text-decoration:underline;text-decoration-thickness:var(--underline);text-underline-offset:.15em}
+.next:hover .ico{transform:translateX(var(--hover-nudge))}
+
 /* Animations réduites : plus aucun déplacement (tracé, glissement, grossissement) ; les changements de couleur et les fondus restent. */
 @media (prefers-reduced-motion:reduce){
   .hdr nav a span::after,.lang a span::after,.tl-stand span::after{transform:scaleX(1);opacity:0;transition:opacity var(--duration-fast) var(--ease-out)}
@@ -330,6 +373,8 @@ svg{stroke-width:var(--icon-stroke)}
   .reveal{transition:opacity var(--duration-reduced) var(--ease-out)}
   .js .reveal-brick.is-pending{transform:none}
   .js .wall.is-pending .brick{transform:none}
+  .js .stat.is-pending .sbar{transform:none}
+  .next:hover .ico{transform:none}
   .brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
   .reveal-brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
 }
@@ -354,7 +399,7 @@ svg{stroke-width:var(--icon-stroke)}
 
 <div class="page">
   <div class="intro">
-    <h1>Design system · v0.8</h1>
+    <h1>Design system · v0.9</h1>
     <p>Les briques du portfolio, construites avec les tokens de la direction artistique « Affiche de nuit ». <span class="hl">Survolez et tabulez</span> : les états sont réels. Appuyez sur Tab dès l'ouverture pour voir le lien d'évitement.</p>
   </div>
   <main id="contenu" tabindex="-1" style="display:grid;gap:var(--space-8)">
@@ -715,6 +760,54 @@ svg{stroke-width:var(--icon-stroke)}
     </div>
     <p class="cap">Brouillon de « Mon histoire » repris de l'architecture ; textes « En équipe » à retoucher ; parcours à compléter. Une seule section animée au scroll ici : le mur. La frise garde son fil (temps fort prévu par la DA).</p>
   </section>
+
+  <!-- Lot 5 : étude de cas en situation -->
+  <section class="plate" aria-labelledby="t-case">
+    <header><h2 id="t-case">Mise en situation · Étude de cas</h2><span>MetaList · CaseToc · StatBlock · CaseNav</span></header>
+    <div class="rythme case">
+      <section class="fond-violet"><div class="case-head">
+        <div class="tagrow"><span class="tag tag-a">site web</span><span class="tag tag-a">projet personnel</span></div>
+        <p class="case-title">Ce portfolio</p>
+        <p class="case-lead">Un portfolio conçu comme un produit de marque, du PRD au code, et documenté à chaque étape.</p>
+        <dl class="meta">
+          <div><dt>Type</dt><dd>Site web personnel</dd></div>
+          <div><dt>Rôle</dt><dd>Conception, design, code</dd></div>
+          <div><dt>Durée</dt><dd>En cours, depuis octobre 2026</dd></div>
+          <div><dt>Équipe</dt><dd>Seul</dd></div>
+          <div><dt>Stack</dt><dd>Vue.js · Vite · TypeScript · Docker</dd></div>
+        </dl>
+        <div class="row" style="display:flex;gap:var(--space-3);flex-wrap:wrap"><a class="btn btn-outline" data-icon="external" href="https://github.com/K0Konut/Portfolio" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-github"/></svg>Code <svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></div>
+        <div class="frame"><div class="dev dev-browser" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="screen">Ce portfolio</div></div></div>
+      </div></section>
+      <div class="wave" data-seed="51" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><div class="case-body">
+        <nav class="toc" aria-label="Sommaire"><ol><li><a href="#c-contexte">Contexte</a></li><li><a href="#c-besoin">Besoin</a></li><li><a href="#c-contraintes">Contraintes</a></li><li><a href="#c-methode">Méthode</a></li><li><a href="#c-choix">Choix techniques</a></li><li><a href="#c-resultats">Résultats</a></li><li><a href="#c-enseignements">Enseignements</a></li></ol></nav>
+        <div class="blocks">
+          <div id="c-contexte"><h3>Contexte</h3><p>Étudiant ingénieur à l’ESIEA, je cherche un stage de fin d’études, puis un premier CDI, en développement full-stack. Un CV, LinkedIn et GitHub listent des compétences, mais ne montrent ni la méthode ni la personnalité.</p></div>
+          <div id="c-besoin"><h3>Besoin</h3><p>Rendre visibles, dans un même support, la rigueur d’un ingénieur, la créativité d’un développeur web et la personne derrière.</p></div>
+          <div id="c-contraintes"><h3>Contraintes</h3><ul><li>Budget de 0 € : aucun service payant.</li><li>Auto-hébergé sur mon serveur : Proxmox, Docker, Nginx Proxy Manager.</li><li>Accessibilité WCAG 2.2 niveau AA, Lighthouse ≥ 95 sur les quatre axes.</li><li>Bilingue français et anglais.</li></ul></div>
+          <div id="c-methode"><h3>Méthode</h3><p>Sept étapes, chacune validée avant la suivante, chacune sur sa branche Git et sa pull request.</p><ol class="steps-c"><li><span class="n">1</span><span class="t">PRD</span></li><li><span class="n">2</span><span class="t">Marque</span></li><li><span class="n">3</span><span class="t">Direction artistique</span></li><li><span class="n">4</span><span class="t">Architecture et UX</span></li><li><span class="n">5</span><span class="t">Design system</span></li><li><span class="n">6</span><span class="t">Maquettes</span></li><li><span class="n">7</span><span class="t">Code</span></li></ol></div>
+          <div id="c-choix"><h3>Choix techniques</h3><ul><li>Couleurs organisées par rôles : chaque fond de section réaffecte les rôles, les composants ne changent jamais.</li><li>Polices auto-hébergées, réduites au sous-ensemble latin.</li><li>Une vague tirée au sort pour chaque frontière de section, stable d’une visite à l’autre.</li><li>Nuxt en génération statique, ou Vue et Vite avec pré-rendu : choix en phase 7.</li></ul></div>
+          <div id="c-resultats"><h3>Résultats</h3>
+            <div class="stats">
+              <div class="stat"><span class="v">19/20</span><span class="l">au premier audit Impeccable, après corrections</span><div class="bars" aria-hidden="true"><div>avant 15<span class="sbar" style="--w:75"></span></div><div>après 19<span class="sbar after" style="--w:95"></span></div></div></div>
+              <div class="stat"><span class="v">117 Ko</span><span class="l">pour les quatre polices, auto-hébergées</span></div>
+              <div class="stat"><span class="v">22/22</span><span class="l">contrastes vérifiés, tous conformes AA</span></div>
+            </div>
+          </div>
+          <div id="c-enseignements"><h3>Enseignements</h3><ul><li>Le bandeau défilant de compétences, c’était du vu et revu : je l’ai remplacé par un mur de briques, posé une fois.</li><li>Le contour fin des étiquettes disparaissait sur le violet : contour épais et fond teinté.</li><li>Des frontières droites trop franches, puis des vagues trop régulières : chaque frontière a maintenant sa propre vague.</li></ul></div>
+        </div>
+      </div></section>
+      <div class="wave" data-seed="52" style="--prev:var(--neutral-950);--next:var(--pink-500)" aria-hidden="true"></div>
+      <section class="fond-rose"><div class="casenav">
+        <a class="next" href="#t-case"><small>Projet suivant</small><span>Stage au CNAM <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></span></a>
+        <a class="tl-stand" href="#t-case"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Tous les projets</span></a>
+      </div></section>
+      <div class="wave" data-seed="53" style="--prev:var(--pink-500);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><p class="cap">Pied de page</p></section>
+    </div>
+    <p class="cap">Contenu réel, tiré des documents du projet : contexte et contraintes du PRD, choix et enseignements de nos décisions, résultats vérifiés en séance. Faites défiler : le sommaire suit la lecture et les barres se remplissent une fois.</p>
+  </section>
   </main>
 </div>
 
@@ -812,6 +905,19 @@ svg{stroke-width:var(--icon-stroke)}
   if('IntersectionObserver' in window){
     var iow=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var w=e.target;setTimeout(function(){w.classList.remove('is-pending')},30);iow.unobserve(w)}})},{threshold:.25});
     document.querySelectorAll('.wall').forEach(function(w){if(w.getBoundingClientRect().top>innerHeight*.75){w.classList.add('is-pending');iow.observe(w)}});
+  }
+
+  // CaseToc : suit le bloc en cours de lecture
+  var tocLinks=document.querySelectorAll('.toc a');
+  if(tocLinks.length&&'IntersectionObserver' in window){
+    var byId={};tocLinks.forEach(function(a){byId[a.getAttribute('href').slice(1)]=a});
+    var iot=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){tocLinks.forEach(function(a){a.removeAttribute('aria-current')});byId[e.target.id].setAttribute('aria-current','location')}})},{rootMargin:'-30% 0px -60% 0px'});
+    Object.keys(byId).forEach(function(id){var el=document.getElementById(id);if(el)iot.observe(el)});
+  }
+  // StatBlock : barres remplies une fois
+  if('IntersectionObserver' in window){
+    var ios=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var s=e.target;setTimeout(function(){s.classList.remove('is-pending')},30);ios.unobserve(s)}})},{threshold:.5});
+    document.querySelectorAll('.stat').forEach(function(s){if(s.querySelector('.bars')&&s.getBoundingClientRect().top>innerHeight*.7){s.classList.add('is-pending');ios.observe(s)}});
   }
   // Timeline : fil tracé au scroll, repères remplis quand le fil les atteint
   var tlbox=document.getElementById('tlbox');

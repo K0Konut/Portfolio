@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 0.8 — 14/10/2026 — **statut : en cours** (lots 1 à 4 spécifiés ; lot 5 à suivre)
+Version 0.9 — 14/10/2026 — **statut : à valider** (lots 1 à 5 spécifiés : tous les composants de l'inventaire)
+
+v0.9 : lot 5 (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`) et composition de l'étude de cas ; tokens `--toc-width`, `--stat-bar`, `--duration-bar`.
 
 v0.8 : `SkillsMarquee` remplacé par `SkillsWall` (mur de briques) ; icônes `pause` et `play` retirées.
 
@@ -147,6 +149,8 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--space-section` | `clamp(4rem, 10vw, 8rem)` |
 | `--gutter` | `clamp(1rem, 4vw, 3rem)` |
 | `--container` | `1240px` |
+| `--toc-width` | `13rem` · colonne du sommaire collant des études de cas |
+| `--stat-bar` | `12px` · épaisseur des barres avant / après de `StatBlock` |
 | `--measure` | `52ch` · largeur max du texte courant, environ 70 caractères en Manrope (sous les 80 recommandés) |
 | `--radius-sm` / `-md` / `-lg` / `-pill` | 8 · 16 · 28 px · 999 px |
 | `--border-thin` / `--border-strong` | 1 px · 1,5 px |
@@ -183,6 +187,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--stagger-brick` | `60ms` | Étapes de la méthode, posées brique par brique |
 | `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
 | `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
+| `--duration-bar` | `900ms` | Barres de `StatBlock` qui se remplissent |
 | `--stagger-wall` | `30ms` | Briques du mur de compétences, posées une à une (25 briques, 0,75 s) |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
@@ -414,9 +419,44 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Pose** : quand le mur arrive à l'écran, chaque brique descend de `--reveal-distance` et se pose, dans l'ordre de lecture, décalée de `--stagger-wall`. Une seule fois, puis plus rien ne bouge. C'est le moment animé de la page À propos.
 - **Animations réduites** : fondu de l'ensemble.
 
-### Composants restants
+### Étude de cas : composition
 
-À spécifier : étude de cas (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`).
+- **Rythme des fonds** : en-tête `violet` (rappel de l'affiche) → corps `nuit` (lecture longue, DA v1.2) → `CaseNav` en `rose` (la section vive de la page, qui invite au projet suivant). Une `SectionWave` à chaque changement.
+- **En-tête** : `Tag` (type de projet) ; titre `h1` en Bagel `--text-h1` ; une phrase en `--text-lead` ; `MetaList` ; liens « Code » (`outline`, icône `github`) et « Démo » (`outline`, icône `arrow-up-right`) ; capture principale dans un `DeviceFrame` large.
+- **Corps** : sur bureau (≥ 1024 px), deux colonnes : `CaseToc` à gauche (`--toc-width`), les blocs à droite. Sur mobile, une colonne et pas de sommaire. Chaque bloc (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) a un `h2` en Bagel `--text-h2`, un `id`, et `scroll-margin-top` égal à `--header-height` + `--space-5` pour ne pas passer sous le header fixe. Texte limité à `--measure`.
+- **Temps forts** (DA §6, 1 ou 2 par étude) : les barres de `StatBlock` ; au plus un autre bloc animé au scroll.
+
+### `MetaList`
+
+- **Rôle** : les métadonnées d'un projet, d'un coup d'œil.
+- **Structure** : une liste de définitions (`<dl>`) : type, rôle, durée, équipe, stack. Libellé en `--text-sm` et `--color-text-subtle`, valeur en Manrope `--weight-bold`.
+- **Mise en page** : une grille de 2 colonnes sur mobile, jusqu'à 5 sur bureau ; filets `--border-thin` en `--color-border` entre les cellules.
+- **Code privé** (stage au CNAM) : pas de bouton « Code » désactivé ; à la place, la mention « Code privé » dans la liste, avec la raison en une phrase.
+
+### `CaseToc`
+
+- **Rôle** : sommaire collant de l'étude de cas, sur bureau seulement (architecture §6).
+- **Structure** : `<nav aria-label="Sommaire">` puis une liste ordonnée de liens vers les blocs. Collant (`position: sticky`) à `--header-height` + `--space-5` du haut.
+- **États** : lien en `--color-text-subtle` ; survol en `--color-text` ; bloc en cours de lecture en `--color-text`, `--weight-bold`, avec un trait `--underline` en `--color-highlight` à gauche, et `aria-current="location"`. Le bloc en cours est suivi par un `IntersectionObserver`.
+- **Zones cliquables** : chaque lien fait au moins `--target-min` de haut.
+- **Défilement** : le clic mène au bloc ; défilement doux seulement sans `prefers-reduced-motion`.
+
+### `StatBlock`
+
+- **Rôle** : un résultat chiffré, prouvé (ton de voix : « un fait, un chiffre plutôt qu'un adjectif »).
+- **Contenu** : la valeur en Bagel `--text-h1` (grand chiffre décoratif) ; un libellé en `--text-sm` et `--color-text-muted` ; si la valeur compare un avant et un après, deux barres de `--stat-bar` d'épaisseur, proportionnelles aux valeurs : « avant » en `--color-border`, « après » en `--color-highlight`, chacune avec sa valeur en clair.
+- **Mise en page** : 1 à 3 par ligne ; pas de carte autour (le chiffre suffit).
+- **Animation** : les barres se remplissent une fois (`scaleX`, `--duration-bar`, `--ease-out`) à l'arrivée à l'écran, l'« après » 150 ms après l'« avant ». Pas de compteur qui défile : motif trop vu, et un chiffre qui change est illisible.
+- **Accessibilité** : les valeurs sont du texte ; les barres sont décoratives (`aria-hidden`).
+- **Animations réduites** : barres déjà remplies.
+
+### `CaseNav`
+
+- **Rôle** : la fin d'une étude de cas : passer au projet suivant ou revenir à la liste.
+- **Contenu** : un grand lien « Projet suivant » (libellé en `--text-sm`, titre du projet en Bagel `--text-h2`, icône `arrow-right` en `--icon-md`) ; à côté, un `TextLink` `standalone` « Tous les projets » avec `arrow-left`.
+- **Ordre** : le projet suivant dans la liste (du plus récent au plus ancien) ; après le dernier, retour au premier.
+- **Survol** : la flèche avance de `--hover-nudge` et le titre se souligne (`--underline`).
+- **Fond** : `rose` (la section vive de la page).
 
 ---
 
