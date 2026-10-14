@@ -104,7 +104,7 @@ Tailles fluides (`clamp()`) entre mobile et desktop. Interlignage : ~0,95 pour B
 
 ### Points techniques à vérifier
 
-- **Accents et majuscules accentuées** dans Bagel (À, É) : à tester en maquette.
+- **Accents et majuscules accentuées** dans Bagel (À, É) : vérifié le 14/10/2026 avec les fichiers auto-hébergés ; À, É, ç et Œ sont présents.
 - **Poids des fichiers** : Fraunces est une police variable lourde. Ne charger que l'italique et le sous-ensemble latin ; `font-display: swap` partout.
 - **Emplacement** : les fichiers `woff2` sont rangés dans `public/fonts/`, avec leurs licences (détail dans le design system §2).
 
