@@ -57,3 +57,6 @@
 | 14/10/2026 | Rôle `--color-header-muted` (neutral-400) pour les séparateurs décoratifs du header | Audit : une teinte de base était utilisée directement, contre le principe des rôles |
 | 14/10/2026 | Zones cliquables de 44 × 44 px minimum partout | Audit : Menu 36 px, Fermer 32 px, FR / EN 26 px sur mobile |
 | 14/10/2026 | Polices auto-hébergées dans `public/fonts/` (woff2, sous-ensemble latin, Fraunces italique seule) ; `@font-face` en phase 7 | DA §3 ; budget nul, pas de dépendance à Google Fonts, fichiers légers |
+| 14/10/2026 | Six fonds de section (nuit, violet, violet vif, lime, rose, crème), avec rôles adaptés à chacun ; une seule section vive (lime ou rose) par page ; deux sections consécutives jamais sur le même fond (DA v1.2) | Le propriétaire veut utiliser le rose, le lime et le crème, pas seulement des sections violet sombre ; remplace la règle « le rose reste rare » |
+| 14/10/2026 | Ruptures entre sections : vague organique tirée au sort pour chaque frontière, immobile | Le propriétaire trouve les frontières droites trop franches, et la vaguelette régulière comme la coulure trop mécaniques |
+| 14/10/2026 | Rythme de l'accueil : violet → nuit → crème → violet vif → lime → nuit | Choix du propriétaire, « Ma façon de travailler » en violet vif |
