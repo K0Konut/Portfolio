@@ -76,3 +76,4 @@
 | 14/10/2026 | Briques « de ce site » du mur de compétences en violet clair au lieu du rose | Choix du propriétaire : éviter d'abuser du rose et utiliser davantage le violet clair |
 | 14/10/2026 | Design system v1.0 validé | Validation du propriétaire ; passage à la phase 6 (maquettes) |
 | 20/10/2026 | Skill Impeccable retiré du projet | Choix du propriétaire après un second essai de son flux de création |
+| 20/10/2026 | Section d'accueil : plus d'étiquette « développeur full-stack » au-dessus du nom ; sous le nom, deux lignes : « Étudiant ingénieur à l'ESIEA », puis « Je cherche un stage de fin d'études full-stack », et la promesse ensuite | Choix du propriétaire en maquette (version B) : la RH comprend tout de suite le statut et le poste visé. Spécification du design system (§ section d'accueil) à mettre à jour |

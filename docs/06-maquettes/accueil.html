@@ -116,16 +116,14 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 .hero-name{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-hero);line-height:var(--leading-display);margin:0;white-space:nowrap}
 .hero-name .word,.hero-name .l{display:inline-block}
 @media (max-width:767px){.hero-name{font-size:var(--text-hero-stacked)}.hero-name .word{display:block}}
-.hero-who{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);font-weight:var(--weight-medium);max-width:62ch;text-wrap:balance}
-.nb{white-space:nowrap}
+.hero-who{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);font-weight:var(--weight-medium);text-wrap:balance}
+.hero-who span{display:block}
 .hero-promise{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--measure);text-wrap:balance}
 .hero-promise .hl{display:inline-block}
 .hero-rest{display:grid;gap:var(--space-5);justify-items:center}
 .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:center}
 .hint{position:absolute;left:50%;bottom:calc(var(--space-6) + env(safe-area-inset-bottom,0px));width:var(--border-strong);height:var(--hint-h);background:color-mix(in srgb,var(--color-text-muted) 45%,transparent);overflow:hidden}
 .hint i{position:absolute;left:0;top:0;width:100%;height:var(--hint-seg);background:var(--color-highlight)}
-/* Comparaison A / B de la maquette */
-[data-hero="a"] .only-b,[data-hero="b"] .only-a{display:none}
 
 /* ProjectCard + DeviceFrame */
 .cards{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-5)}
@@ -196,13 +194,6 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 .reveal-brick{transition-delay:calc(var(--i,0) * var(--stagger-brick))}
 .js .reveal.is-pending,.js .reveal-brick.is-pending{opacity:0;transform:translateY(var(--reveal-distance))}
 
-/* Contrôle de la maquette (ne fait pas partie du site) */
-.mock{position:fixed;z-index:40;right:var(--space-4);bottom:var(--space-4);display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2);background:var(--neutral-50);color:var(--neutral-950);border:var(--border-strong) solid var(--neutral-950);border-radius:var(--radius-pill);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body)}
-.mock>span{padding:0 var(--space-2)}
-.mock button{min-height:var(--target-min);padding:0 var(--space-4);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--neutral-950);background:transparent;color:inherit;font:inherit;cursor:pointer}
-.mock button[aria-pressed="true"]{background:var(--neutral-950);color:var(--neutral-50)}
-.mock button:focus-visible{outline-color:var(--violet-500)}
-@media (max-width:767px){.mock{right:var(--space-2);bottom:var(--space-2)}.mock>span,.mock .long{display:none}}
 
 @media (prefers-reduced-motion:reduce){
   .hdr nav a span::after,.lang a span::after,.tl-stand span::after{transform:scaleX(1);opacity:0;transition:opacity var(--duration-fast) var(--ease-out)}
@@ -216,7 +207,7 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 }
 </style>
 </head>
-<body data-hero="b">
+<body>
 <a class="skip" href="#contenu">Aller au contenu</a>
 
 <!-- Icônes Lucide (licence ISC), copiées en SVG local -->
@@ -249,10 +240,9 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   <!-- 1. Section d'accueil -->
   <section class="hero fond-violet" id="hero" aria-labelledby="nom">
     <div class="hero-inner">
-      <div class="hero-top only-a"><span class="tag">développeur full-stack</span></div>
       <div class="hero-namewrap"><h1 class="hero-name" id="nom"><span class="sr-only">Costa Maskulov</span><span aria-hidden="true" id="heroLetters"><span class="word">Costa</span> <span class="word">Maskulov</span></span></h1></div>
       <div class="hero-rest">
-        <p class="hero-who only-b"><span class="nb">Étudiant ingénieur à l'ESIEA</span> · je cherche un stage de fin d'études full-stack</p>
+        <p class="hero-who"><span>Étudiant ingénieur à l'ESIEA</span><span>Je cherche un stage de fin d'études full-stack</span></p>
         <p class="hero-promise">Créatif dans l’interface, <span class="hl">rigoureux dans la méthode.</span></p>
         <div class="hero-actions">
           <a class="btn btn-primary" data-icon="download" href="#" download>Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a>
@@ -363,13 +353,6 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   </div>
 </footer>
 
-<!-- Contrôle de la maquette : compare les deux versions de la section d'accueil -->
-<div class="mock" role="group" aria-label="Maquette : version de la section d'accueil">
-  <span>Accueil</span>
-  <button type="button" data-v="a" aria-pressed="false">A<span class="long"> · étiquette</span></button>
-  <button type="button" data-v="b" aria-pressed="true">B<span class="long"> · ligne sous le nom</span></button>
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
@@ -377,12 +360,6 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   var q=new URLSearchParams(location.search);
   var reduce=q.get('reduce')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches;
   var still=q.get('still')==='1'; // captures : pas d'entrée ni d'apparitions
-
-  // Maquette : version A ou B de la section d'accueil
-  var mock=document.querySelectorAll('.mock button');
-  function setHero(v){document.body.dataset.hero=v;mock.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===v))})}
-  if(q.get('hero')==='a'||q.get('hero')==='b')setHero(q.get('hero'));
-  mock.forEach(function(b){b.addEventListener('click',function(){setHero(b.dataset.v);if(tl)tl.play(0)})});
 
   // Menu mobile : focus piégé, Échap ferme
   var open=document.getElementById('openMenu'),close=document.getElementById('closeMenu'),mm=document.getElementById('mm');
@@ -433,13 +410,12 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   if(window.gsap&&!still){
     var letters=[];
     hero.querySelectorAll('#heroLetters .word').forEach(function(w){var t=w.textContent;w.textContent='';t.split('').forEach(function(c){var s=document.createElement('span');s.className='l';s.textContent=c;w.appendChild(s);letters.push(s)})});
-    var hdr=document.querySelector('.hdr'),top=hero.querySelector('.hero-top'),rest=hero.querySelector('.hero-rest'),hl=rest.querySelector('.hl'),acts=hero.querySelector('.hero-actions'),hint=hero.querySelector('.hint'),seg=hint.querySelector('i');
+    var hdr=document.querySelector('.hdr'),rest=hero.querySelector('.hero-rest'),hl=rest.querySelector('.hl'),acts=hero.querySelector('.hero-actions'),hint=hero.querySelector('.hint'),seg=hint.querySelector('i');
     tl=gsap.timeline({paused:true,defaults:{ease:'power4.out'}});
     if(reduce){
-      tl.fromTo([hdr,top,hero.querySelector('.hero-namewrap'),rest,hint],{opacity:0},{opacity:1,duration:.3,ease:'none'});
+      tl.fromTo([hdr,hero.querySelector('.hero-namewrap'),rest,hint],{opacity:0},{opacity:1,duration:.3,ease:'none'});
     }else{
       tl.fromTo(hdr,{y:-20,opacity:0},{y:0,opacity:1,duration:.7},0)
-        .fromTo(top,{opacity:0},{opacity:1,duration:.7},0)
         .fromTo(letters,{y:'0.4em',opacity:0},{y:0,opacity:1,duration:.6,stagger:.04},0)
         .fromTo(rest.querySelectorAll('.hero-who,.hero-promise'),{y:24,opacity:0},{y:0,opacity:1,duration:.7,stagger:.08},.4)
         .fromTo(hl,{opacity:0},{opacity:1,duration:.5},.5)
@@ -449,7 +425,7 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
         .set(seg,{y:0,opacity:1});
       gsap.registerPlugin(ScrollTrigger);
       gsap.to(hero.querySelector('.hero-namewrap'),{y:function(){return hero.offsetHeight*.35},opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'bottom top',scrub:true}});
-      gsap.to([top,rest],{opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'center top',scrub:true}});
+      gsap.to(rest,{opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'center top',scrub:true}});
       ScrollTrigger.create({trigger:hero,start:'top+=10 top',once:true,onEnter:function(){gsap.to(hint,{opacity:0,duration:.3})}});
     }
     var t=q.get('t');
