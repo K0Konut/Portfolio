@@ -75,3 +75,4 @@
 | 14/10/2026 | Design system v0.9 : lot 5 (`MetaList`, `CaseToc`, `StatBlock`, `CaseNav`) ; étude de cas en violet → nuit → rose ; résultats en barres avant / après plutôt qu'en compteur ; code privé indiqué dans la `MetaList`, jamais par un bouton désactivé | Fin du design system ; preuves visibles plutôt qu'effets |
 | 14/10/2026 | Briques « de ce site » du mur de compétences en violet clair au lieu du rose | Choix du propriétaire : éviter d'abuser du rose et utiliser davantage le violet clair |
 | 14/10/2026 | Design system v1.0 validé | Validation du propriétaire ; passage à la phase 6 (maquettes) |
+| 20/10/2026 | Skill Impeccable retiré du projet | Choix du propriétaire après un second essai de son flux de création |
