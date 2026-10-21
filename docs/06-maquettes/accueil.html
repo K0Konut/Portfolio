@@ -130,13 +130,6 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 .topo canvas{display:block;width:100%;height:100%}
 .hero-inner{position:relative;z-index:1}
 .hint{z-index:1}
-/* Contrôle de la maquette (ne fait pas partie du site) */
-.mock{position:fixed;z-index:40;right:var(--space-4);bottom:var(--space-4);display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2);background:var(--neutral-50);color:var(--neutral-950);border:var(--border-strong) solid var(--neutral-950);border-radius:var(--radius-pill);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body)}
-.mock>span{padding:0 var(--space-2)}
-.mock button{min-height:var(--target-min);padding:0 var(--space-4);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--neutral-950);background:transparent;color:inherit;font:inherit;cursor:pointer}
-.mock button[aria-pressed="true"]{background:var(--neutral-950);color:var(--neutral-50)}
-.mock button:focus-visible{outline-color:var(--violet-500)}
-@media (max-width:767px){.mock{right:var(--space-2);bottom:var(--space-2);flex-wrap:wrap;border-radius:var(--radius-md)}.mock>span{display:none}.mock button{padding:0 var(--space-3)}}
 
 /* ProjectCard + DeviceFrame */
 .cards{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-5)}
@@ -367,15 +360,6 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   </div>
 </footer>
 
-<!-- Contrôle de la maquette : compare les couleurs du fond topographique -->
-<div class="mock" role="group" aria-label="Maquette : fond de la section d'accueil">
-  <span>Fond</span>
-  <button type="button" data-topo="off" aria-pressed="false">Aucun</button>
-  <button type="button" data-topo="violet" aria-pressed="true">Violet</button>
-  <button type="button" data-topo="creme" aria-pressed="false">Crème</button>
-  <button type="button" data-topo="da" aria-pressed="false">Couleurs DA</button>
-</div>
-
 <script>
 /* Fond topographique : adaptation du composant « Topography » (ogl) en WebGL 2 natif.
    Pas de suivi du curseur. Lignes estompées derrière le texte. Image fixe en mouvement réduit.
@@ -384,11 +368,8 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   var box=document.getElementById('topo');if(!box)return;
   var q=new URLSearchParams(location.search);
   var reduce=q.get('reduce')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var PRESETS={
-    violet:{low:'#4b3cff',mid:'#6f63ff',high:'#ff6bd6',opacity:.55},
-    creme:{low:'#e8e1d4',mid:'#f5f1e8',high:'#f5f1e8',opacity:.22},
-    da:{low:'#4b3cff',mid:'#ff6bd6',high:'#c7ff00',opacity:.5}
-  };
+  // Teinte retenue : violet électrique qui tire vers le rose sur les hauteurs
+  var TOPO={low:'#4b3cff',mid:'#6f63ff',high:'#ff6bd6',opacity:.55};
   var canvas=document.createElement('canvas'),gl=canvas.getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false});
   if(!gl)return; // sans WebGL 2 : simple fond violet
   box.appendChild(canvas);
@@ -418,7 +399,7 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 
   var MORPH=3,SPEED=.25,MSPEED=.05,IDX=[[1,-2,3,-4],[9,-8,7,-6],[5,2,5,-5],[-1,-3,8,9]];
   gl.uniform1f(U.uMorphAmount,MORPH);gl.uniform1f(U.uBands,1.4);gl.uniform1f(U.uThickness,.014);gl.uniform1f(U.uGlow,.4);gl.uniform1f(U.uContrast,3);gl.uniform1f(U.uFade,1);
-  function setPreset(name){var p=PRESETS[name];gl.uniform3fv(U.uLow,rgb(p.low));gl.uniform3fv(U.uMid,rgb(p.mid));gl.uniform3fv(U.uHigh,rgb(p.high));gl.uniform1f(U.uOpacity,p.opacity);draw(last)}
+  gl.uniform3fv(U.uLow,rgb(TOPO.low));gl.uniform3fv(U.uMid,rgb(TOPO.mid));gl.uniform3fv(U.uHigh,rgb(TOPO.high));gl.uniform1f(U.uOpacity,TOPO.opacity);
   function size(){var r=box.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));gl.viewport(0,0,canvas.width,canvas.height);gl.uniform2f(U.iResolution,canvas.width,canvas.height);draw(last)}
   var last=12; // instant de référence (secondes) pour l'image fixe
   function draw(time){
@@ -435,13 +416,7 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   document.addEventListener('visibilitychange',function(){document.hidden?stop():start()});
   matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',function(e){reduce=e.matches;reduce?stop():start()});
 
-  var current=q.get('topo')||'violet';
-  var btns=document.querySelectorAll('[data-topo]');
-  function apply(name){current=name;btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.topo===name))});
-    if(name==='off'){box.classList.remove('on');stop();return}
-    setPreset(name);box.classList.add('on');start()}
-  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.topo)})});
-  size();apply(current);
+  size();box.classList.add('on');start();
 })();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
