@@ -284,10 +284,10 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 /* Écran provisoire, en attendant la capture : neutre, pour ne pas ajouter de violet */
 .dev .screen span{display:grid;place-items:center;width:100%;height:100%;padding:var(--space-3);background:var(--neutral-850);color:var(--neutral-400)}
 
-/* Fond de capture : crème, lime ou rose, jamais violet (la charte et les captures le sont souvent).
-   La teinte suit la place de la tuile dans la grille, pour que deux tuiles voisines n'aient jamais la même. */
-.bento>:nth-child(5n+1){--stage:var(--neutral-50)}
-.bento>:nth-child(5n+2),.bento>:nth-child(5n+5){--stage:var(--lime-500)}
+/* Fond de capture : lime, violet foncé ou rose. La teinte suit la place de la tuile dans la grille,
+   pour que deux tuiles voisines n'aient jamais la même ; la grande tuile est en lime. */
+.bento>:nth-child(5n+1){--stage:var(--lime-500)}
+.bento>:nth-child(5n+2),.bento>:nth-child(5n+5){--stage:var(--violet-700)}
 .bento>:nth-child(5n+3),.bento>:nth-child(5n+4){--stage:var(--pink-500)}
 
 /* Page Projets */
