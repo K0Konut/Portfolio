@@ -211,11 +211,20 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 .ring-num{fill:var(--color-text);font:var(--weight-regular) 18px/1 var(--font-display);text-anchor:middle;dominant-baseline:central}
 .ring-num.last{fill:var(--color-on-action)}
 
-/* Prise de contact */
-.contact{display:grid;gap:var(--space-5);justify-items:start}
+/* Prise de contact : texte à gauche, carte « affiche collée » à droite (bureau) ; carte droite sur mobile et tablette */
+.contact{display:grid;gap:var(--space-7);align-items:center}
+@media (min-width:1024px){.contact{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:var(--space-8)}}
+.ct-intro{display:grid;gap:var(--space-5);justify-items:start}
 .contact h2{font-size:clamp(3rem,1.5rem + 7vw,6rem)}
-.contact p{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);max-width:var(--measure)}
-.contact .row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-4)}
+.contact .ct-intro p{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);max-width:var(--measure)}
+.ct-card{display:grid;gap:var(--space-6);border-radius:var(--radius-md);padding:clamp(var(--space-5),4vw,var(--space-7));transition:transform var(--duration-fast) var(--ease-out)}
+@media (min-width:1024px){
+  .ct-card{transform:rotate(-2deg)}
+  .ct-card:hover,.ct-card:focus-within{transform:translateY(calc(-1 * var(--card-lift))) rotate(0deg)}
+}
+@media (prefers-reduced-motion:reduce){.ct-card,.ct-card:hover,.ct-card:focus-within{transform:none}}
+.ct-label{margin:0 0 var(--space-2);font-size:var(--text-sm);font-weight:var(--weight-bold);color:var(--color-text-subtle)}
+.ct-links{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-5)}
 .copy{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3)}
 .copy .addr{font-size:var(--text-lead);font-weight:var(--weight-medium);user-select:all;overflow-wrap:anywhere}
 .copy button{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--target-min);padding:0 var(--space-4);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--color-text);background:transparent;color:var(--color-text);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-out),color var(--duration-fast) var(--ease-out)}
@@ -384,11 +393,20 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   <!-- 5. Prise de contact -->
   <section class="section fond-lime" id="contact" aria-labelledby="t-contact">
     <div class="inner contact">
-      <h2 id="t-contact" class="reveal">Parlons-en</h2>
-      <p class="reveal" style="--i:1">Vous cherchez un développeur full-stack pour un stage de fin d'études ? Écrivez-moi.</p>
-      <div class="row reveal" style="--i:2">
-        <a class="btn btn-primary" href="#">Me contacter <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-        <div class="copy" id="copy"><span class="addr" id="addr">adresse@exemple.fr</span><button type="button" id="copyBtn"><span class="icwrap"><svg class="ico ic-copy" aria-hidden="true"><use href="#i-copy"/></svg><svg class="ico ic-check" aria-hidden="true"><use href="#i-check"/></svg></span><span id="copyLabel">Copier</span></button><span class="sr-only" aria-live="polite" id="copyLive"></span></div>
+      <div class="ct-intro reveal">
+        <h2 id="t-contact">Parlons-en</h2>
+        <p>Vous cherchez un développeur full-stack pour un stage de fin d’études&#8239;? Écrivez-moi.</p>
+      </div>
+      <div class="ct-card fond-nuit reveal" style="--i:1">
+        <div>
+          <p class="ct-label">Mon adresse</p>
+          <div class="copy" id="copy"><span class="addr" id="addr">costa.maskulov<wbr>@exemple.fr</span><button type="button" id="copyBtn"><span class="icwrap"><svg class="ico ic-copy" aria-hidden="true"><use href="#i-copy"/></svg><svg class="ico ic-check" aria-hidden="true"><use href="#i-check"/></svg></span><span id="copyLabel">Copier</span></button><span class="sr-only" aria-live="polite" id="copyLive"></span></div>
+        </div>
+        <div class="ct-links">
+          <a class="btn btn-primary" data-icon="download" href="#" download>Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a>
+          <a class="tl-stand" href="#" target="_blank" rel="noopener"><span>LinkedIn</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a>
+          <a class="tl-stand" href="https://github.com/K0Konut" target="_blank" rel="noopener"><span>GitHub</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a>
+        </div>
       </div>
     </div>
   </section>
