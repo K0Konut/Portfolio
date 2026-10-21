@@ -124,6 +124,19 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:center}
 .hint{position:absolute;left:50%;bottom:calc(var(--space-6) + env(safe-area-inset-bottom,0px));width:var(--border-strong);height:var(--hint-h);background:color-mix(in srgb,var(--color-text-muted) 45%,transparent);overflow:hidden}
 .hint i{position:absolute;left:0;top:0;width:100%;height:var(--hint-seg);background:var(--color-highlight)}
+/* Fond topographique : courbes de niveau en WebGL, décoratives, derrière le contenu */
+.topo{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease-out)}
+.topo.on{opacity:1}
+.topo canvas{display:block;width:100%;height:100%}
+.hero-inner{position:relative;z-index:1}
+.hint{z-index:1}
+/* Contrôle de la maquette (ne fait pas partie du site) */
+.mock{position:fixed;z-index:40;right:var(--space-4);bottom:var(--space-4);display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2);background:var(--neutral-50);color:var(--neutral-950);border:var(--border-strong) solid var(--neutral-950);border-radius:var(--radius-pill);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body)}
+.mock>span{padding:0 var(--space-2)}
+.mock button{min-height:var(--target-min);padding:0 var(--space-4);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--neutral-950);background:transparent;color:inherit;font:inherit;cursor:pointer}
+.mock button[aria-pressed="true"]{background:var(--neutral-950);color:var(--neutral-50)}
+.mock button:focus-visible{outline-color:var(--violet-500)}
+@media (max-width:767px){.mock{right:var(--space-2);bottom:var(--space-2);flex-wrap:wrap;border-radius:var(--radius-md)}.mock>span{display:none}.mock button{padding:0 var(--space-3)}}
 
 /* ProjectCard + DeviceFrame */
 .cards{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-5)}
@@ -239,6 +252,7 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 
   <!-- 1. Section d'accueil -->
   <section class="hero fond-violet" id="hero" aria-labelledby="nom">
+    <div class="topo" id="topo" aria-hidden="true"></div>
     <div class="hero-inner">
       <div class="hero-namewrap"><h1 class="hero-name" id="nom"><span class="sr-only">Costa Maskulov</span><span aria-hidden="true" id="heroLetters"><span class="word">Costa</span> <span class="word">Maskulov</span></span></h1></div>
       <div class="hero-rest">
@@ -353,6 +367,83 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   </div>
 </footer>
 
+<!-- Contrôle de la maquette : compare les couleurs du fond topographique -->
+<div class="mock" role="group" aria-label="Maquette : fond de la section d'accueil">
+  <span>Fond</span>
+  <button type="button" data-topo="off" aria-pressed="false">Aucun</button>
+  <button type="button" data-topo="violet" aria-pressed="true">Violet</button>
+  <button type="button" data-topo="creme" aria-pressed="false">Crème</button>
+  <button type="button" data-topo="da" aria-pressed="false">Couleurs DA</button>
+</div>
+
+<script>
+/* Fond topographique : adaptation du composant « Topography » (ogl) en WebGL 2 natif.
+   Pas de suivi du curseur. Lignes estompées derrière le texte. Image fixe en mouvement réduit.
+   Boucle en pause quand la section d'accueil sort de l'écran ou que l'onglet est caché. */
+(function(){
+  var box=document.getElementById('topo');if(!box)return;
+  var q=new URLSearchParams(location.search);
+  var reduce=q.get('reduce')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PRESETS={
+    violet:{low:'#4b3cff',mid:'#6f63ff',high:'#ff6bd6',opacity:.55},
+    creme:{low:'#e8e1d4',mid:'#f5f1e8',high:'#f5f1e8',opacity:.22},
+    da:{low:'#4b3cff',mid:'#ff6bd6',high:'#c7ff00',opacity:.5}
+  };
+  var canvas=document.createElement('canvas'),gl=canvas.getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false});
+  if(!gl)return; // sans WebGL 2 : simple fond violet
+  box.appendChild(canvas);
+
+  var vs='#version 300 es\nin vec2 position;void main(){gl_Position=vec4(position,0.,1.);}';
+  var fs=['#version 300 es','precision highp float;',
+  'uniform vec2 iResolution;uniform float uMorphAmount,uBands,uThickness,uGlow,uContrast,uOpacity,uFade;',
+  'uniform vec3 uLow,uMid,uHigh;uniform vec4 uCtrlA,uCtrlB,uCtrlC,uCtrlD;out vec4 fragColor;',
+  'float bez(float t,vec4 c){float w=6.2831853*t;return .5*(c.x*sin(w)+c.y*cos(w)+c.z*sin(2.*w)+c.w*cos(2.*w));}',
+  'float field(vec2 uv){vec2 a=vec2(bez(uv.x,uCtrlA),bez(uv.x,uCtrlB));vec2 b=vec2(bez(uv.y,uCtrlC),bez(uv.y,uCtrlD));return distance(a,b);}',
+  'vec3 elev(float e){vec3 c=mix(uLow,uMid,smoothstep(0.,.5,e));return mix(c,uHigh,smoothstep(.5,1.,e));}',
+  'void main(){vec2 uv=gl_FragCoord.xy/iResolution.xy;float fv=field(uv);float f=fv*uBands;float fr=fract(f);float ld=min(fr,1.-fr);',
+  'float aa=fwidth(f)+.0001;float mask=1.-smoothstep(uThickness-aa,uThickness+aa,ld);',
+  'float glow=(1.-smoothstep(uThickness,uThickness+uGlow*.5+aa,ld))*step(.0001,uGlow);',
+  'float e=clamp(fv/(uMorphAmount*2.5+.001),0.,1.);vec3 col=elev(e);',
+  'float cov=pow(clamp(mask+glow*.55,0.,1.),max(uContrast,.001));',
+  /* estompe les lignes au centre, derrière le nom et la promesse */
+  'vec2 d=(uv-vec2(.5,.52))*vec2(iResolution.x/iResolution.y,1.);float center=mix(1.,smoothstep(.12,.62,length(d*vec2(.55,1.1))),uFade);',
+  'float a=cov*uOpacity*center;fragColor=vec4(col*a,a);}'].join('\n');
+  function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o}
+  var pg=gl.createProgram();gl.attachShader(pg,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pg,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pg);gl.useProgram(pg);
+  var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pg,'position');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.clearColor(0,0,0,0);
+  var U={};['iResolution','uMorphAmount','uBands','uThickness','uGlow','uContrast','uOpacity','uFade','uLow','uMid','uHigh','uCtrlA','uCtrlB','uCtrlC','uCtrlD'].forEach(function(n){U[n]=gl.getUniformLocation(pg,n)});
+  function rgb(h){var m=/^#?(..)(..)(..)$/.exec(h);return[parseInt(m[1],16)/255,parseInt(m[2],16)/255,parseInt(m[3],16)/255]}
+
+  var MORPH=3,SPEED=.25,MSPEED=.05,IDX=[[1,-2,3,-4],[9,-8,7,-6],[5,2,5,-5],[-1,-3,8,9]];
+  gl.uniform1f(U.uMorphAmount,MORPH);gl.uniform1f(U.uBands,1.4);gl.uniform1f(U.uThickness,.014);gl.uniform1f(U.uGlow,.4);gl.uniform1f(U.uContrast,3);gl.uniform1f(U.uFade,1);
+  function setPreset(name){var p=PRESETS[name];gl.uniform3fv(U.uLow,rgb(p.low));gl.uniform3fv(U.uMid,rgb(p.mid));gl.uniform3fv(U.uHigh,rgb(p.high));gl.uniform1f(U.uOpacity,p.opacity);draw(last)}
+  function size(){var r=box.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));gl.viewport(0,0,canvas.width,canvas.height);gl.uniform2f(U.iResolution,canvas.width,canvas.height);draw(last)}
+  var last=12; // instant de référence (secondes) pour l'image fixe
+  function draw(time){
+    var c=[U.uCtrlA,U.uCtrlB,U.uCtrlC,U.uCtrlD];
+    for(var g=0;g<4;g++){var v=[];for(var j=0;j<4;j++){var i=IDX[g][j];v.push(MORPH*Math.sin(time*SPEED*Math.sin(i*MSPEED)+i))}gl.uniform4fv(c[g],v)}
+    gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+  var raf=0,visible=true,t0=performance.now()-last*1000;
+  function loop(t){last=(t-t0)/1000;draw(last);raf=requestAnimationFrame(loop)}
+  function start(){if(!reduce&&visible&&!document.hidden&&!raf)raf=requestAnimationFrame(function(t){t0=t-last*1000;loop(t)})}
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=0}}
+  new ResizeObserver(size).observe(box);
+  new IntersectionObserver(function(es){visible=es[0].isIntersecting;visible?start():stop()}).observe(box);
+  document.addEventListener('visibilitychange',function(){document.hidden?stop():start()});
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',function(e){reduce=e.matches;reduce?stop():start()});
+
+  var current=q.get('topo')||'violet';
+  var btns=document.querySelectorAll('[data-topo]');
+  function apply(name){current=name;btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.topo===name))});
+    if(name==='off'){box.classList.remove('on');stop();return}
+    setPreset(name);box.classList.add('on');start()}
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.topo)})});
+  size();apply(current);
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
