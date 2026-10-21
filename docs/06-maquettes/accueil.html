@@ -175,14 +175,41 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 .about p{margin:0;font-size:var(--text-lead);line-height:var(--leading-body);max-width:var(--measure)}
 .about .more{margin-top:var(--space-5)}
 
-/* ProcessSteps compact */
-.steps-c{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--brick-min)),1fr));gap:var(--space-3)}
-@media (min-width:1024px){.steps-c{grid-template-columns:repeat(7,minmax(0,1fr))}}
-.steps-c li{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-sm);padding:var(--space-4) var(--space-3);display:grid;gap:var(--space-2);align-content:start}
-.steps-c .n{font-size:var(--text-sm);color:var(--color-text-subtle);font-variant-numeric:tabular-nums}
-.steps-c .t{font-weight:var(--weight-bold);line-height:var(--leading-snug);overflow-wrap:anywhere;hyphens:auto}
-.steps-c li:last-child{background:var(--color-action);border-color:var(--color-action);color:var(--color-on-action)}
-.steps-c li:last-child .n{color:var(--color-on-action)}
+/* Ma façon de travailler : un cycle de six étapes. Frise verticale en boucle sur mobile et tablette, cercle sur bureau */
+.steps{list-style:none;margin:0;padding:0}
+.steps .n{font-size:var(--text-sm);font-weight:var(--weight-bold);line-height:var(--leading-none);color:var(--color-text-subtle);font-variant-numeric:tabular-nums}
+.steps b{display:block;font-size:var(--text-lead);line-height:var(--leading-snug)}
+.steps p{margin:var(--space-1) 0 0;color:var(--color-text-muted);max-width:32ch}
+.st-frise{position:relative;display:grid;gap:var(--space-6);padding-left:var(--space-7)}
+.st-frise::before{content:"";position:absolute;left:7px;top:8px;bottom:calc(-1 * (var(--space-6) + 10px));width:var(--border-strong);background:var(--color-text)}
+.st-frise li{position:relative;z-index:1;display:grid;gap:var(--space-1);align-content:start}
+.st-frise li::before{content:"";position:absolute;left:calc(-1 * var(--space-7));top:2px;width:16px;height:16px;border-radius:var(--radius-pill);border:var(--border-strong) solid var(--color-text);background:var(--color-bg)}
+.st-frise li:last-child::before{background:var(--color-action);border-color:var(--color-action)}
+/* La ligne repart de la mise en ligne, par la gauche, vers le besoin */
+.boucle{position:relative;padding-left:var(--space-5)}
+.boucle::after{content:"";position:absolute;left:4px;width:27px;top:10px;bottom:10px;border:var(--border-strong) solid var(--color-text);border-right:0;border-radius:var(--radius-sm) 0 0 var(--radius-sm)}
+.boucle li:first-child::after{content:"";position:absolute;left:calc(-1 * var(--space-7) - 7px);top:5px;border-left:7px solid var(--color-text);border-block:5px solid transparent}
+.ret{margin:var(--space-6) 0 0 var(--space-7);font-size:var(--text-sm);font-weight:var(--weight-bold);line-height:20px}
+.cercle svg{display:none}
+@media (min-width:1024px){
+  .cercle{--D:400px;--r:calc(var(--D) * .425);height:var(--D);padding:0}
+  .cercle::after,.cercle .st-frise::before,.cercle li::before,.cercle li:first-child::after{display:none}
+  .cercle svg{display:block;position:absolute;left:50%;top:0;width:var(--D);height:var(--D);transform:translateX(-50%);overflow:visible}
+  .cercle .st-frise{position:static;display:block;padding:0}
+  .cercle li{position:absolute;top:calc(50% + var(--dy) * var(--r));transform:translateY(-50%);width:calc(50% - var(--D) / 2 - var(--space-6))}
+  .cercle li.droite{left:calc(50% + var(--D) / 2 + var(--space-5) - var(--sh) * var(--r))}
+  .cercle li.gauche{right:calc(50% + var(--D) / 2 + var(--space-5) - var(--sh) * var(--r));text-align:right}
+  .cercle li.gauche p{margin-left:auto}
+  .cercle .n{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .cercle .ret{position:absolute;top:50%;left:50%;max-width:14ch;margin:0;transform:translate(-50%,-50%);text-align:center;font-size:var(--text-body);line-height:var(--leading-snug)}
+}
+.ring-line{fill:none;stroke:var(--color-text);stroke-width:1.5}
+.ring-line.retour{stroke-dasharray:5 6}
+.ring-arrow{fill:var(--color-text)}
+.ring-dot{fill:var(--color-bg);stroke:var(--color-text);stroke-width:1.5}
+.ring-dot.last{fill:var(--color-action);stroke:var(--color-action)}
+.ring-num{fill:var(--color-text);font:var(--weight-regular) 18px/1 var(--font-display);text-anchor:middle;dominant-baseline:central}
+.ring-num.last{fill:var(--color-on-action)}
 
 /* Prise de contact */
 .contact{display:grid;gap:var(--space-5);justify-items:start}
@@ -321,16 +348,34 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
   <!-- 4. Ma façon de travailler -->
   <section class="section fond-vif" id="methode" aria-labelledby="t-methode">
     <div class="inner">
-      <div class="sec-head reveal"><h2 id="t-methode">Ma façon de travailler</h2><p>Chaque projet passe par les mêmes étapes, du besoin jusqu'au code.</p></div>
-      <ol class="steps-c">
-        <li class="reveal-brick" style="--i:0"><span class="n">1</span><span class="t">PRD</span></li>
-        <li class="reveal-brick" style="--i:1"><span class="n">2</span><span class="t">Marque</span></li>
-        <li class="reveal-brick" style="--i:2"><span class="n">3</span><span class="t">Direction artistique</span></li>
-        <li class="reveal-brick" style="--i:3"><span class="n">4</span><span class="t">Architecture et UX</span></li>
-        <li class="reveal-brick" style="--i:4"><span class="n">5</span><span class="t">Design system</span></li>
-        <li class="reveal-brick" style="--i:5"><span class="n">6</span><span class="t">Maquettes</span></li>
-        <li class="reveal-brick" style="--i:6"><span class="n">7</span><span class="t">Code</span></li>
-      </ol>
+      <div class="sec-head reveal"><h2 id="t-methode">Ma façon de travailler</h2><p>Chaque projet passe par les mêmes étapes, du besoin jusqu’à la mise en ligne.</p></div>
+      <div class="boucle cercle">
+        <!-- Anneau : étape k à 30° + 60°·k dans le sens horaire depuis le haut ; le retour de 6 vers 1 est en pointillés -->
+        <svg viewBox="0 0 400 400" aria-hidden="true">
+          <defs><marker id="ring-tip" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="ring-arrow" d="M0 0L10 5L0 10z"/></marker></defs>
+          <path class="ring-line" marker-end="url(#ring-tip)" d="M309.3 69.8A170 170 0 0 1 367.4 170.5"/>
+          <path class="ring-line" marker-end="url(#ring-tip)" d="M367.4 229.5A170 170 0 0 1 309.3 330.2"/>
+          <path class="ring-line" marker-end="url(#ring-tip)" d="M258.1 359.7A170 170 0 0 1 141.9 359.7"/>
+          <path class="ring-line" marker-end="url(#ring-tip)" d="M90.7 330.2A170 170 0 0 1 32.6 229.5"/>
+          <path class="ring-line" marker-end="url(#ring-tip)" d="M32.6 170.5A170 170 0 0 1 90.7 69.8"/>
+          <path class="ring-line retour" marker-end="url(#ring-tip)" d="M141.9 40.3A170 170 0 0 1 258.1 40.3"/>
+          <circle class="ring-dot" cx="285.0" cy="52.8" r="18"/><text class="ring-num" x="285.0" y="52.8">1</text>
+          <circle class="ring-dot" cx="370.0" cy="200.0" r="18"/><text class="ring-num" x="370.0" y="200.0">2</text>
+          <circle class="ring-dot" cx="285.0" cy="347.2" r="18"/><text class="ring-num" x="285.0" y="347.2">3</text>
+          <circle class="ring-dot" cx="115.0" cy="347.2" r="18"/><text class="ring-num" x="115.0" y="347.2">4</text>
+          <circle class="ring-dot" cx="30.0" cy="200.0" r="18"/><text class="ring-num" x="30.0" y="200.0">5</text>
+          <circle class="ring-dot last" cx="115.0" cy="52.8" r="18"/><text class="ring-num last" x="115.0" y="52.8">6</text>
+        </svg>
+        <ol class="steps st-frise">
+          <li class="droite" style="--dy:-0.866;--sh:0.4"><span class="n">1</span><div><b>Besoin</b><p>Comprendre le problème et les utilisateurs avant de choisir une techno.</p></div></li>
+          <li class="droite" style="--dy:0;--sh:0"><span class="n">2</span><div><b>Conception</b><p>Marque, interface et parcours, validés avant la première ligne de code.</p></div></li>
+          <li class="droite" style="--dy:0.866;--sh:0.4"><span class="n">3</span><div><b>Architecture</b><p>Choisir la stack, modéliser les données, définir l’API.</p></div></li>
+          <li class="gauche" style="--dy:0.866;--sh:0.4"><span class="n">4</span><div><b>Développement</b><p>Front et back, par petites étapes, versionnées sur Git.</p></div></li>
+          <li class="gauche" style="--dy:0;--sh:0"><span class="n">5</span><div><b>Tests</b><p>Tests automatisés, accessibilité et performance mesurées.</p></div></li>
+          <li class="gauche" style="--dy:-0.866;--sh:0.4"><span class="n">6</span><div><b>Déploiement</b><p>En ligne dans des conteneurs Docker, sur mon propre serveur.</p></div></li>
+        </ol>
+        <p class="ret">Les retours relancent un tour.</p>
+      </div>
       <div class="sec-foot reveal"><a class="btn btn-outline" href="#">Voir ma méthode <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></div>
     </div>
   </section>
