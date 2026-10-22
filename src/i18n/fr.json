@@ -1,15 +1,38 @@
 {
   "pages": {
-    "accueil": { "title": "Costa Maskulov · Développeur full-stack" },
-    "projets": { "title": "Projets · Costa Maskulov" },
-    "etude-de-cas": { "title": "Étude de cas · Costa Maskulov" },
-    "a-propos": { "title": "À propos · Costa Maskulov" },
-    "contact": { "title": "Contact · Costa Maskulov" },
-    "mentions-legales": { "title": "Mentions légales · Costa Maskulov" },
-    "confidentialite": { "title": "Confidentialité · Costa Maskulov" },
-    "404": { "title": "Page introuvable · Costa Maskulov" }
+    "accueil": {
+      "title": "Costa Maskulov · Développeur full-stack"
+    },
+    "projets": {
+      "title": "Projets · Costa Maskulov"
+    },
+    "etude-de-cas": {
+      "title": "Étude de cas · Costa Maskulov"
+    },
+    "a-propos": {
+      "title": "À propos · Costa Maskulov"
+    },
+    "contact": {
+      "title": "Contact · Costa Maskulov"
+    },
+    "mentions-legales": {
+      "title": "Mentions légales · Costa Maskulov"
+    },
+    "confidentialite": {
+      "title": "Confidentialité · Costa Maskulov"
+    },
+    "404": {
+      "title": "Page introuvable · Costa Maskulov"
+    }
   },
   "placeholder": {
     "text": "Page en construction."
+  },
+  "ui": {
+    "skip": "Aller au contenu",
+    "newTab": "(nouvel onglet)",
+    "copy": "Copier",
+    "copied": "Adresse copiée",
+    "selected": "Sélectionnée : Ctrl + C"
   }
 }
