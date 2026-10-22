@@ -55,7 +55,7 @@ const { to } = useLocale()
 }
 .text {
   background: linear-gradient(currentColor, currentColor) left bottom / 0 var(--underline) no-repeat;
-  transition: background-size var(--duration-fast) var(--ease-out);
+  transition: background-size var(--duration-move) var(--ease-out);
 }
 .title .icon {
   transition: transform var(--duration-fast) var(--ease-out);

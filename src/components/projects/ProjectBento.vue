@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { reducedMotion } from '../../composables/motion'
 import type { ProjectSummary } from '../../content/types'
 import ProjectCard from './ProjectCard.vue'
@@ -26,8 +26,9 @@ function paint() {
   frame = 0
   if (!pointer) return
   const { x: px, y: py } = pointer
-  for (const tile of tiles()) {
-    const r = tile.getBoundingClientRect()
+  // Toutes les lectures avant les écritures : une seule mise en page par image
+  const rects = tiles().map((tile) => [tile, tile.getBoundingClientRect()] as const)
+  for (const [tile, r] of rects) {
     const x = px - r.left
     const y = py - r.top
     const distance = Math.hypot(
@@ -66,15 +67,11 @@ function onLeave() {
   }
 }
 
-onMounted(() => {
-  grid.value?.addEventListener('pointermove', onMove, { passive: true })
-  grid.value?.addEventListener('pointerleave', onLeave)
-})
 onBeforeUnmount(() => cancelAnimationFrame(frame))
 </script>
 
 <template>
-  <ul ref="grid" class="bento">
+  <ul ref="grid" class="bento" @pointermove="onMove" @pointerleave="onLeave">
     <li v-for="(project, i) in projects" :key="project.slug" v-reveal="i % 3">
       <ProjectCard class="tile" :project="project" />
     </li>
@@ -162,8 +159,8 @@ li:nth-child(5n + 4) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   li:first-child {
-    grid-column: 1 / 3;
-    grid-row: 1 / 3;
+    grid-column: span 2;
+    grid-row: span 2;
   }
   li:first-child .tile {
     grid-template-rows: minmax(22rem, 1fr) auto;
@@ -174,21 +171,8 @@ li:nth-child(5n + 4) {
   li:first-child :deep(h3) {
     font-size: var(--text-h2);
   }
-  li:nth-child(2) {
-    grid-column: 3;
-    grid-row: 1;
-  }
-  li:nth-child(3) {
-    grid-column: 3;
-    grid-row: 2;
-  }
-  li:nth-child(4) {
-    grid-column: 1;
-    grid-row: 3;
-  }
   li:nth-child(5) {
-    grid-column: 2 / 4;
-    grid-row: 3;
+    grid-column: span 2;
   }
   /* Tuile large : capture à gauche, texte à droite */
   li:nth-child(5) .tile {

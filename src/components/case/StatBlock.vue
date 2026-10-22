@@ -72,7 +72,7 @@ const bars = computed(() => {
 }
 .bar.after i {
   background: var(--color-highlight);
-  transition-delay: 150ms;
+  transition-delay: var(--stagger-bar);
 }
 .stat.is-pending .bar i {
   transform: scaleX(0);

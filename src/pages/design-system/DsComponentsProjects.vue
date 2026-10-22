@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import capture from '../../assets/projets/ce-portfolio.png'
 import CaseNav from '../../components/case/CaseNav.vue'
 import CaseToc from '../../components/case/CaseToc.vue'
 import MetaList from '../../components/case/MetaList.vue'
@@ -7,55 +6,11 @@ import StatBlock from '../../components/case/StatBlock.vue'
 import ProjectBento from '../../components/projects/ProjectBento.vue'
 import PageSection from '../../components/sections/PageSection.vue'
 import SectionWave from '../../components/sections/SectionWave.vue'
-import type { ProjectMeta, ProjectSummary, Stat } from '../../content/types'
+import type { ProjectMeta, Stat } from '../../content/types'
+import { PROJETS } from './projets'
 
 // Contenu d'exemple de la maquette (le vrai contenu arrive avec le chargeur de contenu)
 const TODO = ['stack à compléter']
-const PROJECTS: ProjectSummary[] = [
-  {
-    slug: 'ce-portfolio',
-    title: 'Ce portfolio',
-    tags: ['projet perso'],
-    description:
-      'Ce site, de la méthode au code : PRD, direction artistique, design system, maquettes, puis intégration en Vue.',
-    stack: ['Vue 3', 'TypeScript', 'Vite', 'Docker'],
-    capture: { device: 'browser', src: capture },
-  },
-  {
-    slug: 'stage-cnam',
-    title: 'Stage au CNAM',
-    tags: ['stage'],
-    description:
-      'Mon stage de développement au CNAM. Le code est privé : l’étude de cas montre le process et les écrans.',
-    stack: TODO,
-    capture: { device: 'browser' },
-  },
-  {
-    slug: 'mobilites-douces',
-    title: 'Sécurité routière et mobilités douces',
-    tags: ['projet d’école'],
-    description:
-      'Un projet de sécurité routière pour les vélos, les trottinettes et les autres mobilités douces.',
-    stack: TODO,
-    capture: { device: 'phone', label: 'Mobilités douces' },
-  },
-  {
-    slug: 'chrono',
-    title: 'Chrono caisses à savon',
-    tags: ['projet d’école', 'embarqué'],
-    description: 'Le chronométrage embarqué d’une course de caisses à savon, conçu en projet PST.',
-    stack: TODO,
-    capture: { device: 'browser' },
-  },
-  {
-    slug: 'mangas',
-    title: 'Lecteur de mangas et BD',
-    tags: ['application'],
-    description: 'Une application pour lire ses mangas et ses BD.',
-    stack: TODO,
-    capture: { device: 'phone', label: 'Mangas & BD' },
-  },
-]
 const META: ProjectMeta = {
   type: 'Projet perso',
   role: 'Conception, design et développement',
@@ -94,7 +49,7 @@ const BLOCKS = [
       <template #intro
         >La page Projets : du plus récent au plus ancien, le premier en grand.</template
       >
-      <ProjectBento :projects="PROJECTS" />
+      <ProjectBento :projects="PROJETS" />
     </PageSection>
     <SectionWave :seed="2" from="nuit" to="violet" />
     <PageSection fond="violet" title="MetaList">
