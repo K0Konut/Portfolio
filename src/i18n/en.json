@@ -11,5 +11,12 @@
   },
   "placeholder": {
     "text": "Page under construction."
+  },
+  "ui": {
+    "skip": "Skip to content",
+    "newTab": "(new tab)",
+    "copy": "Copy",
+    "copied": "Address copied",
+    "selected": "Selected: Ctrl + C"
   }
 }

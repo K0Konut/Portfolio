@@ -2,6 +2,7 @@
 import { useHead } from '@unhead/vue'
 import DsBackgrounds from './design-system/DsBackgrounds.vue'
 import DsColors from './design-system/DsColors.vue'
+import DsComponentsBase from './design-system/DsComponentsBase.vue'
 import DsMotion from './design-system/DsMotion.vue'
 import DsSpacing from './design-system/DsSpacing.vue'
 import DsTypography from './design-system/DsTypography.vue'
@@ -11,7 +12,7 @@ useHead({ title: 'Design system · Costa Maskulov', meta: [{ name: 'robots', con
 </script>
 
 <template>
-  <main id="contenu" class="ds">
+  <main id="contenu" class="ds" tabindex="-1">
     <header class="ds-head">
       <h1>Design system</h1>
       <p>
@@ -25,6 +26,7 @@ useHead({ title: 'Design system · Costa Maskulov', meta: [{ name: 'robots', con
     <DsTypography />
     <DsSpacing />
     <DsMotion />
+    <DsComponentsBase />
   </main>
 </template>
 

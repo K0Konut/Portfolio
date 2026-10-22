@@ -10,7 +10,7 @@ const page = computed(() => route.meta.page ?? '404')
 </script>
 
 <template>
-  <main id="contenu">
+  <main id="contenu" tabindex="-1">
     <h1>{{ t(`pages.${page}.title`) }}</h1>
     <p v-if="route.params.slug">{{ route.params.slug }}</p>
     <p>{{ t('placeholder.text') }}</p>
