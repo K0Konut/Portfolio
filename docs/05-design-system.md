@@ -373,7 +373,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Grille** (bureau, 3 colonnes, 5 tuiles) : le projet le plus récent en grand (2 × 2), deux tuiles à droite, puis une tuile simple et une tuile large (capture à gauche, texte à droite). Deux colonnes à partir de 768 px (la première tuile sur toute la largeur), une sur mobile. Au-delà de cinq projets, prévoir la place de la sixième tuile.
 - **Tuile** : comme une `ProjectCard` (même contenu, même lien étendu, fond `--color-surface`, rayon `--radius-md`, droite).
 - **Lueur au pointeur** : à la souris seulement, le bord et l'intérieur des tuiles proches du pointeur s'allument (dégradé radial rose puis violet vif sur le bord, halo violet vif à 30 % à l'intérieur), d'autant plus que le pointeur est près (rayon 320 px). La tuile survolée s'incline de 3° au plus vers le pointeur. Seuls `opacity`, des variables CSS et `transform` changent, une fois par image.
-- **Fond de capture** (DA §5) : lime, violet foncé (violet-700) ou rose selon la place de la tuile, pour que deux voisines n'aient jamais la même teinte ; la grande tuile en lime. Jamais de violet vif. Si une quatrième teinte devient nécessaire : crème ou fond sombre.
+- **Fond de capture** (DA §5) : lime, violet foncé (violet-700), rose ou gris (neutral-700) selon la place de la tuile, pour que deux voisines n'aient jamais la même teinte, sur mobile, tablette et bureau ; la grande tuile en lime, les tuiles 2 à 5 jamais en lime (elles la touchent sur bureau). Jamais de violet vif.
 - **Animations réduites** : pas d'inclinaison ; la lueur (changement de couleur) reste.
 
 ### `DeviceFrame`

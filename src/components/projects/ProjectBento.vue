@@ -93,18 +93,24 @@ li {
   display: grid;
 }
 
-/* Fond de capture (DA §5) : la teinte suit la place de la tuile, deux voisines n'ont jamais la même ;
-   la grande tuile est en lime, jamais de violet vif */
-li:nth-child(5n + 1) {
-  --stage: var(--lime-500);
-}
-li:nth-child(5n + 2),
-li:nth-child(5n + 5) {
+/* Fond de capture (DA §5) : la teinte suit la place de la tuile, deux voisines n'ont jamais la même,
+   sur mobile (1 colonne), tablette (2) et bureau (3). Cycle de quatre teintes à partir de la 6e ;
+   la grande tuile en lime, et les tuiles 2 à 5, qui la touchent sur bureau, jamais en lime. Jamais de violet vif. */
+li:nth-child(4n + 1) {
   --stage: var(--violet-700);
 }
-li:nth-child(5n + 3),
-li:nth-child(5n + 4) {
+li:nth-child(4n + 2),
+li:first-child {
+  --stage: var(--lime-500);
+}
+li:nth-child(4n + 3) {
   --stage: var(--pink-500);
+}
+li:nth-child(4n + 4) {
+  --stage: var(--neutral-700);
+}
+li:nth-child(2) {
+  --stage: var(--violet-700);
 }
 
 /* Tuile : droite ; la lueur (deux pseudo-éléments sous le contenu) et l'inclinaison suivent le pointeur */
