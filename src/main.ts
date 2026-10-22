@@ -3,6 +3,7 @@ import './styles/tokens.css'
 import './styles/base.css'
 import App from './App.vue'
 import { PROJECT_SLUGS } from './content/projects'
+import { vReveal } from './directives/reveal'
 import { createAppI18n } from './i18n'
 import { buildRoutes, localeFromPath, prerenderPaths } from './router/routes'
 
@@ -26,6 +27,7 @@ export const createApp = ViteSSG(
   ({ app, router }) => {
     const i18n = createAppI18n()
     app.use(i18n)
+    app.directive('reveal', vReveal)
     router.beforeEach((to) => {
       i18n.global.locale.value = to.meta.locale ?? localeFromPath(to.path)
     })

@@ -16,7 +16,7 @@ for (const { path, lang, title } of pages) {
     const html = await res.text()
     expect(html).toContain(`<html lang="${lang}"`)
     expect(html).toContain(`<title>${title}</title>`)
-    expect(html).toContain(`<h1>${title}</h1>`)
+    expect(html).toMatch(new RegExp(`<h1[^>]*>${title}</h1>`))
     expect(html).toMatch(/hreflang="x-default"/)
   })
 }
@@ -35,4 +35,24 @@ test("l'accueil n'a pas d'erreur d'accessibilité détectable", async ({ page })
   await page.goto('/fr/')
   const { violations } = await new AxeBuilder({ page }).analyze()
   expect(violations).toEqual([])
+})
+
+test("l'en-tête et le pied de page sont dans le HTML, avec le lien vers l'autre langue", async ({
+  request,
+}) => {
+  const html = await (await request.get('/fr/a-propos/')).text()
+  expect(html).toContain('aria-label="Navigation principale"')
+  expect(html).toContain('href="/en/about"')
+  expect(html).toContain('<footer')
+})
+
+test('le menu mobile se ferme avec Échap et rend le focus au bouton', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/fr/')
+  await page.getByRole('button', { name: 'Menu' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Fermer' })).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Menu' })).toBeFocused()
 })

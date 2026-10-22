@@ -18,5 +18,29 @@
     "copy": "Copier",
     "copied": "Adresse copiée",
     "selected": "Sélectionnée : Ctrl + C"
+  },
+  "nav": {
+    "label": "Navigation principale",
+    "projets": "Projets",
+    "a-propos": "À propos",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Fermer",
+    "language": "Langue"
+  },
+  "footer": {
+    "cv": "CV",
+    "cvFr": "CV en français",
+    "cvEn": "CV en anglais",
+    "contact": "Contact",
+    "site": "Ce site",
+    "code": "Code du site",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité"
+  },
+  "contact": {
+    "title": "Parlons-en",
+    "address": "Mon adresse",
+    "cv": "Télécharger le CV"
   }
 }
