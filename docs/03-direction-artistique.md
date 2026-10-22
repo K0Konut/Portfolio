@@ -1,6 +1,8 @@
 # Direction artistique — Portfolio personnel
 
-Version 1.2 — 14/10/2026 — **statut : validé** (logo et terminal mis de côté ; section d'accueil à confirmer en maquettes)
+Version 1.3 — 22/10/2026 — **statut : validé** (logo et terminal mis de côté ; section d'accueil confirmée en maquettes)
+
+v1.3 : choix validés en maquette (phase 6) : section d'accueil avec statut sous le nom et fond topographique ; motif des affiches collées ; fonds et formats de capture ; rythme des fonds de chaque page ; règles du mouvement complétées (lueur du bento, interaction de la 404).
 
 S'appuie sur le territoire de marque v0.2 : identité forte et reconnaissable, base sérieuse et structurée, quelques prises de risque bien placées, jamais ludique pour le plaisir. Promesse : « Créatif dans l'interface, rigoureux dans la méthode. »
 
@@ -67,6 +69,8 @@ Six fonds possibles. Sur chacun, les rôles changent de teinte pour rester lisib
 | **Crème** | neutral/50 | neutral/950 (16,8:1) | noir, texte lime | violet/500 (5,5:1) | violet/500 | Respiration claire |
 
 **Rythme de l'accueil** : violet (section d'accueil) → nuit (projets) → crème (qui je suis) → violet vif (ma façon de travailler) → lime (prise de contact) → nuit (pied de page).
+
+**Rythme des autres pages** (validé en maquette) : Projets violet → nuit → lime (« Parlons-en ») ; étude de cas violet → nuit → rose (projet suivant) ; À propos violet → crème → nuit → violet → nuit → lime ; Contact et 404 violet. Chaque page finit sur une section d'une autre couleur que le pied de page.
 
 **Ruptures entre sections** : jamais une frontière droite. Entre deux fonds différents, la section du dessus se termine par une **vague organique** : trois ondulations de longueurs et d'amplitudes différentes, superposées, tirées au sort pour chaque frontière. Le dessin est stable d'une visite à l'autre, différent d'une frontière à l'autre, et recalculé à la largeur de l'écran. La vague est immobile (pas d'animation). Pistes explorées et non retenues : vaguelette régulière, coulure de peinture, briques.
 
@@ -135,6 +139,10 @@ Pistes explorées le 14/10/2026, sans choix : bloc lime, « Signature » (C en B
 ## 5. Imagerie et iconographie
 
 - **Captures de projets : mises en scène.** Chaque capture est posée dans un cadre d'appareil (navigateur, écran ou téléphone selon le projet) sur un fond de la palette. Pour le stage au CNAM, captures autorisées, code privé.
+  - **Formats** : une seule capture par projet, 1440 × 900 px (ordinateur) ou 390 × 844 px (téléphone). Le cadre garde ses proportions et monte du bas de sa zone ; seule la zone de fond prend la forme de la carte ou de la tuile. Rien n'est jamais déformé.
+  - **Fonds de capture** : lime, violet foncé (violet/700) ou rose ; jamais le violet vif, qui se confond avec les captures et la charte. Dans une grille, la teinte suit la place de la carte, pour que deux voisines n'aient jamais la même. Si une quatrième teinte devient nécessaire : crème ou fond sombre, plutôt qu'une nouvelle couleur.
+- **Motif « affiches collées »** : des cartes légèrement inclinées (de -2° à 2°) et décalées, comme des affiches collées sur un mur, qui se redressent au survol. C'est la signature de l'Affiche de nuit dans les pages : projets de l'accueil, carte « Parlons-en », compétences de la page À propos. Toujours droites sur mobile. La carte de visite de la page Contact, elle, reste droite.
+- **Motif « brique »** : écho à la promesse « brique par brique » (mise en valeur de « Mon histoire », page 404 où l'on replace la brique manquante).
 - **Photo du propriétaire : aucune.** La personnalité passe par le texte, le ton et le design, y compris sur la page À propos.
 - **Icônes : contour épais et arrondi**, d'après la référence fournie par le propriétaire (icône GitHub au trait). Caractéristiques : trait seul, sans remplissage ; épaisseur régulière et généreuse ; extrémités et angles arrondis. Ce style répond à la rondeur de Bagel.
   - Bibliothèques gratuites dans ce style : Lucide (référence la plus proche) ou Tabler Icons, toutes deux avec un paquet Vue.
@@ -150,13 +158,15 @@ Pistes explorées le 14/10/2026, sans choix : bloc lime, « Signature » (C en B
 - **Sensation : fluide.** Des mouvements doux, glissés, qui ralentissent en arrivant.
 - **Zones animées** : section d'accueil, apparition au scroll, survol et clic.
 - **Pas d'animation** : transitions entre les pages, réaction au curseur (pas de curseur personnalisé, pas de boutons magnétiques, pas d'éléments qui suivent la souris).
+- **Exceptions validées en maquette** : sur la page Projets, la lueur du bento suit le pointeur (la lumière bouge, les tuiles ne s'inclinent que de 3° au plus) ; sur la 404, on glisse la brique manquante dans le mur (interaction voulue, avec une alternative au clavier).
 
 ### Règle du scroll (selon la situation)
 
 | Situation | Type d'animation |
 |---|---|
 | Par défaut (sections, blocs de texte) | Apparition simple : le bloc glisse et apparaît en entrant dans l'écran, puis ne bouge plus |
-| Section d'accueil, parcours, temps forts des études de cas | Pilotée par le scroll : parallaxe, sections fixées le temps d'une animation |
+| Section d'accueil, parcours, temps forts des études de cas | Pilotée par le scroll : parallaxe, fil de la frise du parcours qui se trace, barres de résultats qui se remplissent |
+| Compétences (À propos) | Les cartes se posent une à une à l'arrivée à l'écran, puis ne bougent plus |
 | Projets sur la page d'accueil | 3 projets seulement, avec une apparition simple ; pas de défilement horizontal. Les autres projets sont sur une page dédiée |
 
 ### Durées et courbes de référence
@@ -173,11 +183,12 @@ Valeurs indicatives, à ajuster en maquette.
 
 **Intention** : marquer les esprits. Le nom est la star, la promesse le relais.
 
-**Contenu (minimal)** : nom, poste, promesse, deux boutons (CV, contact). Rien d'autre.
+**Contenu (minimal)** : nom ; sous le nom, deux lignes, « Étudiant ingénieur à l'ESIEA » puis « Je cherche un stage de fin d'études full-stack » (la RH comprend tout de suite le statut et le poste visé) ; promesse ; deux boutons (CV, contact). Plus d'étiquette « développeur full-stack » au-dessus du nom.
 
 **Mise en page**
 - Plein écran.
 - Section de couleur violette (violet/700), qui tranche avec le gris sombre du reste du site.
+- **Fond topographique animé** : des courbes de niveau qui ondulent lentement (WebGL), du violet vif vers le rose, estompées derrière le nom et la promesse ; pas de réaction au curseur ; image fixe en mouvement réduit ; pause hors de l'écran. Choisi en maquette parmi violet, crème et couleurs de la DA.
 - Composition centrée.
 - Nom géant en Bagel, sur presque toute la largeur ; promesse forte juste en dessous (Manrope + Fraunces italique) ; boutons sous la promesse.
 
@@ -186,7 +197,7 @@ Valeurs indicatives, à ajuster en maquette.
 | Moment | Ce qui se passe |
 |---|---|
 | 0 → ~1,1 s | Le nom apparaît **lettre par lettre**, en décalé : chaque lettre monte légèrement et se pose, de façon fluide (~600 ms par lettre, ~40 ms d'écart) |
-| ~0,4 s | La promesse glisse et apparaît, la partie en Fraunces juste après |
+| ~0,4 s | Les deux lignes de statut puis la promesse glissent et apparaissent, la partie en Fraunces juste après |
 | ~0,6 s | Les boutons apparaissent : CV et contact sont utilisables en moins d'une seconde |
 | ~1,5 s | Dernières lettres posées, entrée terminée |
 
