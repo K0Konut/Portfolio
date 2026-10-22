@@ -42,5 +42,41 @@
     "title": "Parlons-en",
     "address": "Mon adresse",
     "cv": "Télécharger le CV"
+  },
+  "hero": {
+    "status": "Étudiant ingénieur à l'ESIEA",
+    "goal": "Je cherche un stage de fin d'études full-stack",
+    "promise": "Créatif dans l’interface,",
+    "promiseHighlight": "rigoureux dans la méthode.",
+    "contact": "Me contacter"
+  },
+  "method": {
+    "loop": "Les retours relancent un tour.",
+    "steps": [
+      {
+        "title": "Besoin",
+        "text": "Comprendre le problème et les utilisateurs avant de choisir une techno."
+      },
+      {
+        "title": "Conception",
+        "text": "Marque, interface et parcours, validés avant la première ligne de code."
+      },
+      {
+        "title": "Architecture",
+        "text": "Choisir la stack, modéliser les données, définir l’API."
+      },
+      {
+        "title": "Développement",
+        "text": "Front et back, par petites étapes, versionnées sur Git."
+      },
+      {
+        "title": "Tests",
+        "text": "Tests automatisés, accessibilité et performance mesurées."
+      },
+      {
+        "title": "Déploiement",
+        "text": "En ligne dans des conteneurs Docker, sur mon propre serveur."
+      }
+    ]
   }
 }

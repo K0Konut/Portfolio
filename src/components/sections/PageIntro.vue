@@ -13,7 +13,7 @@ const titleId = useId()
   <!-- Haut des pages Projets, À propos, Contact et 404 ; variante centrée pour la 404 seulement -->
   <section :class="['intro', `fond-${fond}`, { center }]" :aria-labelledby="titleId">
     <div class="container inner">
-      <h1 :id="titleId" v-reveal>{{ title }}</h1>
+      <h1 :id="titleId" v-reveal class="display">{{ title }}</h1>
       <p v-if="$slots.default" v-reveal="1" class="lead"><slot /></p>
       <div v-if="$slots.actions" v-reveal="2" class="actions"><slot name="actions" /></div>
     </div>
@@ -34,11 +34,7 @@ const titleId = useId()
   text-align: center;
 }
 h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
   font-size: var(--text-h1);
-  line-height: var(--leading-display);
 }
 .actions {
   display: flex;
