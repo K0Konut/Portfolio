@@ -5,26 +5,31 @@ import BaseTag from '../ui/BaseTag.vue'
 import DeviceFrame from './DeviceFrame.vue'
 
 /* Carte de projet (design system § ProjectCard) : un seul lien, sur le titre, étendu à toute la carte.
-   Au survol ou au focus, la carte se soulève, se redresse et s'éclaircit ; pas d'ombre (design plat). */
+   Au survol ou au focus, elle s'éclaircit ; pas d'ombre (design plat). Le conteneur fixe sa disposition :
+   affiche collée (ProjectPosters) ou tuile du bento (ProjectBento). */
 defineProps<{ project: ProjectSummary }>()
 const { to } = useLocale()
 </script>
 
 <template>
-  <article class="card poster">
+  <article class="card">
     <DeviceFrame
       :device="project.capture.device"
       :src="project.capture.src"
       :label="project.capture.label ?? project.title"
     />
-    <div class="tags">
-      <BaseTag v-for="tag in project.tags" :key="tag">{{ tag }}</BaseTag>
+    <div class="body">
+      <div class="tags">
+        <BaseTag v-for="tag in project.tags" :key="tag">{{ tag }}</BaseTag>
+      </div>
+      <h3 class="display">
+        <RouterLink :to="to('etude-de-cas', { slug: project.slug })">{{
+          project.title
+        }}</RouterLink>
+      </h3>
+      <p class="desc">{{ project.description }}</p>
+      <p class="stack">{{ project.stack.join(' · ') }}</p>
     </div>
-    <h3 class="display">
-      <RouterLink :to="to('etude-de-cas', { slug: project.slug })">{{ project.title }}</RouterLink>
-    </h3>
-    <p class="desc">{{ project.description }}</p>
-    <p class="stack">{{ project.stack.join(' · ') }}</p>
   </article>
 </template>
 
@@ -32,7 +37,7 @@ const { to } = useLocale()
 .card {
   position: relative;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
   align-content: start;
   padding: var(--space-5);
   border-radius: var(--radius-md);
@@ -45,13 +50,14 @@ const { to } = useLocale()
 .card:focus-within {
   background: var(--color-surface-hover);
 }
-.card:active {
-  transform: translateY(calc(-1 * var(--card-lift) / 2)) rotate(0deg);
-  transition-duration: var(--duration-press);
-}
 .card:has(a:focus-visible) {
   outline: var(--focus-width) solid var(--color-focus);
   outline-offset: var(--focus-offset);
+}
+.body {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
 }
 .tags {
   display: flex;
