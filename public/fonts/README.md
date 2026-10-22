@@ -13,4 +13,4 @@ Polices auto-hébergées du portfolio (DA §3, design system §2). Toutes sous l
 
 **Couverture** : `U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD` : tout le français (À, É, ç, Œ, guillemets « », €).
 
-Les `@font-face` (avec `font-display: swap` et cette `unicode-range`) seront écrits en phase 7, une fois la stack choisie.
+Les `@font-face` (avec `font-display: swap` et cette `unicode-range`) sont dans `src/styles/tokens.css` ; Manrope et Bagel Fat One sont préchargées dans `index.html`. JetBrains Mono n'est pas chargée : elle ne servait qu'au terminal, mis de côté (DA §7).

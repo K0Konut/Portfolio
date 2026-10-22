@@ -30,7 +30,7 @@ describe('table des pages', () => {
 })
 
 describe('équivalents de langue (routeur)', () => {
-  const router = createRouter({ history: createMemoryHistory(), routes: buildRoutes(false) })
+  const router = createRouter({ history: createMemoryHistory(), routes: buildRoutes() })
   const href = (page: Parameters<typeof routeName>[0], locale: 'fr' | 'en', params = {}) =>
     router.resolve({ name: routeName(page, locale), params }).href
 
@@ -72,14 +72,5 @@ describe('pré-rendu', () => {
   it('ne pré-rend ni la racine, ni la vitrine des composants, ni de chemin à paramètre', () => {
     expect(paths).not.toContain('/')
     expect(paths.some((p) => p.includes('design-system') || p.includes(':'))).toBe(false)
-  })
-})
-
-describe('routes', () => {
-  const names = (dev: boolean) => buildRoutes(dev).map((r) => r.name)
-
-  it('ajoute la vitrine des composants en développement seulement', () => {
-    expect(names(true)).toContain('design-system')
-    expect(names(false)).not.toContain('design-system')
   })
 })

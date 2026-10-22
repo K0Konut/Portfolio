@@ -63,7 +63,7 @@ export function localeFromPath(path: string): Locale {
 
 const placeholder = () => import('../pages/PlaceholderPage.vue')
 
-export function buildRoutes(dev: boolean): RouteRecordRaw[] {
+export function buildRoutes(): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = PAGES.flatMap((page) =>
     LOCALES.map((locale) => ({
       path: page.paths[locale],
@@ -74,10 +74,6 @@ export function buildRoutes(dev: boolean): RouteRecordRaw[] {
   )
   // En production, Nginx redirige « / » selon la langue du navigateur ; ici, le développement et le repli
   routes.push({ path: '/', redirect: `/${DEFAULT_LOCALE}` })
-  if (dev) {
-    // Vitrine des composants : en développement seulement, jamais pré-rendue ni publiée (architecture technique §5)
-    routes.push({ path: '/design-system', name: 'design-system', component: placeholder })
-  }
   routes.push({
     path: '/:pathMatch(.*)*',
     name: 'introuvable',

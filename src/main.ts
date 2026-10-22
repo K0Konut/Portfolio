@@ -1,13 +1,26 @@
 import { ViteSSG } from 'vite-ssg'
+import './styles/tokens.css'
+import './styles/base.css'
 import App from './App.vue'
 import { PROJECT_SLUGS } from './content/projects'
 import { createAppI18n } from './i18n'
 import { buildRoutes, localeFromPath, prerenderPaths } from './router/routes'
 
+const routes = buildRoutes()
+// Vitrine des composants : en développement seulement. La condition est remplacée par « false » au build,
+// et Vite retire alors la page et son code du site publié (architecture technique §5).
+if (import.meta.env.DEV) {
+  routes.push({
+    path: '/design-system',
+    name: 'design-system',
+    component: () => import('./pages/DesignSystemPage.vue'),
+  })
+}
+
 export const createApp = ViteSSG(
   App,
   {
-    routes: buildRoutes(import.meta.env.DEV),
+    routes,
     scrollBehavior: (to, _from, saved) => saved ?? (to.hash ? { el: to.hash } : { top: 0 }),
   },
   ({ app, router }) => {
