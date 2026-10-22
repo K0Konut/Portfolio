@@ -383,6 +383,10 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
     el.addEventListener('pointermove',function(e){if(!start)return;var x=start.x+e.clientX-start.px,y=start.y+e.clientY-start.py;pos(x,y);opts.near(Math.hypot(x-opts.target().x,y-opts.target().y)<opts.radius)});
     el.addEventListener('pointerup',function(e){if(!start)return;var moved=Math.hypot(e.clientX-start.px,e.clientY-start.py)>4;var x=start.x+e.clientX-start.px,y=start.y+e.clientY-start.py;start=null;el.classList.remove('dragging');opts.near(false);
       if(Math.hypot(x-opts.target().x,y-opts.target().y)<opts.radius)snap();else if(moved){var r=opts.rest();pos(r.x,r.y)}else snap()});
+    // Glisser interrompu par le navigateur (défilement tactile, perte de capture) : la brique revient à sa place
+    function cancel(){if(!start)return;start=null;el.classList.remove('dragging');opts.near(false);var r=opts.rest();pos(r.x,r.y)}
+    el.addEventListener('pointercancel',cancel);
+    el.addEventListener('lostpointercapture',cancel);
     el.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&!done){e.preventDefault();snap()}});
     var r=opts.rest();pos(r.x,r.y);
     addEventListener('resize',function(){if(done){var t=opts.target();pos(t.x,t.y)}else{var r=opts.rest();pos(r.x,r.y)}});
