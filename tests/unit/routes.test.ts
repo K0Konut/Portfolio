@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
+import { createMemoryHistory, createRouter } from 'vue-router'
 import {
   buildRoutes,
   LOCALES,
   localeFromPath,
-  localizedPath,
   PAGES,
   prerenderPaths,
+  routeName,
 } from '../../src/router/routes'
 
 describe('table des pages', () => {
@@ -28,20 +29,18 @@ describe('table des pages', () => {
   })
 })
 
-describe('localizedPath', () => {
+describe('équivalents de langue (routeur)', () => {
+  const router = createRouter({ history: createMemoryHistory(), routes: buildRoutes(false) })
+  const href = (page: Parameters<typeof routeName>[0], locale: 'fr' | 'en', params = {}) =>
+    router.resolve({ name: routeName(page, locale), params }).href
+
   it("mène à la page équivalente dans l'autre langue", () => {
-    expect(localizedPath('a-propos', 'fr')).toBe('/fr/a-propos')
-    expect(localizedPath('a-propos', 'en')).toBe('/en/about')
+    expect(href('a-propos', 'fr')).toBe('/fr/a-propos')
+    expect(href('a-propos', 'en')).toBe('/en/about')
   })
 
-  it('remplace le slug des études de cas', () => {
-    expect(localizedPath('etude-de-cas', 'en', { slug: 'ce-portfolio' })).toBe(
-      '/en/projects/ce-portfolio',
-    )
-  })
-
-  it('refuse un paramètre manquant', () => {
-    expect(() => localizedPath('etude-de-cas', 'fr')).toThrow('slug')
+  it('garde le slug des études de cas', () => {
+    expect(href('etude-de-cas', 'en', { slug: 'ce-portfolio' })).toBe('/en/projects/ce-portfolio')
   })
 })
 
@@ -64,6 +63,10 @@ describe('pré-rendu', () => {
     expect(paths).toContain('/en/projects/ce-portfolio')
     const withParams = PAGES.filter((p) => p.paths.fr.includes(':')).length
     expect(paths).toHaveLength((PAGES.length - withParams + 2 * withParams) * LOCALES.length)
+  })
+
+  it('ne pré-rend pas une page à paramètres sans paramètres fournis', () => {
+    expect(prerenderPaths({})).not.toContain('/fr/projets/:slug')
   })
 
   it('ne pré-rend ni la racine, ni la vitrine des composants, ni de chemin à paramètre', () => {

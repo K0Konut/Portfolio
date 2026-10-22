@@ -47,17 +47,7 @@ export function routeName(page: PageName, locale: Locale): string {
   return `${page}-${locale}`
 }
 
-/** Chemin d'une page dans une langue, paramètres remplacés (`:slug`). */
-export function localizedPath(
-  page: PageName,
-  locale: Locale,
-  params: Record<string, string> = {},
-): string {
-  const def = PAGES.find((p) => p.name === page)
-  if (!def) throw new Error(`Page inconnue : ${page}`)
-  return fillParams(def.paths[locale], params, page)
-}
-
+/** Chemin avec ses paramètres remplacés (`:slug`) ; erreur si l'un manque. */
 function fillParams(path: string, params: Record<string, string>, page: string): string {
   return path.replace(/:(\w+)/g, (_, key: string) => {
     const value = params[key]
