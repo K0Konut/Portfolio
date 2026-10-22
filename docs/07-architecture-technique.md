@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 0.1 — 22/10/2026 — **statut : à valider**
+Version 1.0 — 22/10/2026 — **statut : validé**
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1, déploiement par GitHub Actions et image Docker.
 
@@ -165,16 +165,23 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 
 ## 11. Ordre de construction
 
-Une branche et une PR vers `dev` par étape (git-workflow) :
+Trois temps, validés par le propriétaire : le socle, puis les composants, puis les pages qui les assemblent. Chaque composant est construit et vérifié une seule fois, puis réutilisé partout. Une branche et une PR vers `dev` par étape (git-workflow).
 
-1. `chore/dev/socle` : dépendances, TypeScript strict, ESLint, Prettier, Vitest, Playwright, intégration continue des PR ; squelette vite-ssg avec une page FR, une EN et une route dynamique pré-rendues (lève le premier risque).
-2. `feat/dev/tokens_et_mise_en_page` : `tokens.css`, `base.css`, en-tête, menu mobile, pied de page, `Section`, `SectionWave`, composants de base.
-3. `feat/dev/contenu` : chargeur de contenu, types, vérification, sitemap.
-4. `feat/dev/accueil`
-5. `feat/dev/projets_et_etudes_de_cas`
-6. `feat/dev/a_propos`
-7. `feat/dev/contact_404_pages_legales`
-8. `feat/dev/anglais` : traductions et contenu EN.
-9. `chore/dev/docker_et_deploiement` : image, Nginx, publication sur GitHub Container Registry, `docker-compose.yml` du serveur.
+**1. Le socle**
+- `chore/dev/socle` : dépendances, TypeScript strict, ESLint, Prettier, Vitest, Playwright, intégration continue des PR ; squelette vite-ssg avec une page FR, une EN et une route dynamique pré-rendues (lève le premier risque, §10) ; table de routes.
+
+**2. Les composants**, par lots, chacun montré avec ses états sur la page `/design-system` (en développement seulement, jamais publiée), qui remplace la vitrine HTML du design system :
+- `feat/dev/tokens_et_base` : `tokens.css`, `base.css`, fonds de section, polices, page `/design-system`.
+- `feat/dev/composants_base` : `BaseButton`, `TextLink`, `Tag`, `Icon`, `CopyButton`, `SkipLink`.
+- `feat/dev/composants_mise_en_page` : `AppHeader`, `MobileMenu`, `LangSwitch`, `AppFooter`, `Section`, `SectionWave`, `PageIntro`, `ContactCard`.
+- `feat/dev/composants_accueil` : `HeroName`, `TopoBackground`, `ScrollHint`, `ProcessSteps`, `ProjectCard`, `DeviceFrame`.
+- `feat/dev/composants_projets` : `ProjectBento`, `MetaList`, `CaseToc`, `StatBlock`, `CaseNav`.
+- `feat/dev/composants_a_propos_contact_404` : `Timeline`, `SkillCards`, `BusinessCard`, `BrickRepair`.
+
+**3. Les pages**, qui appellent les composants et le contenu :
+- `feat/dev/contenu` : chargeur de contenu, types, vérification, sitemap.
+- `feat/dev/pages` : accueil, Projets, étude de cas, À propos, Contact, 404, pages légales, en français (une branche par page si le volume l'exige).
+- `feat/dev/anglais` : traductions et contenu EN.
+- `chore/dev/docker_et_deploiement` : image, Nginx, publication sur GitHub Container Registry, `docker-compose.yml` du serveur.
 
 Puis la release : PR `dev` → `main`, à la demande du propriétaire, et la mise en ligne.
