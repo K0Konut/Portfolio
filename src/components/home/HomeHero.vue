@@ -28,11 +28,19 @@ const libraries = import.meta.env.SSR
   : Promise.all([import('gsap'), reduce ? undefined : import('gsap/ScrollTrigger')])
 
 let ctx: { revert(): void } | undefined
+let gone = false
 
 onMounted(async () => {
   const el = root.value
   if (!el || !libraries) return
-  const [{ gsap }, trigger] = await libraries
+  // Sans GSAP (réseau coupé), le contenu s'affiche tel quel
+  const loaded = await libraries.catch(() => undefined)
+  if (gone) return
+  if (!loaded) {
+    pending.value = false
+    return
+  }
+  const [{ gsap }, trigger] = loaded
   const ScrollTrigger = trigger?.ScrollTrigger
   if (ScrollTrigger) gsap.registerPlugin(ScrollTrigger)
 
@@ -131,13 +139,17 @@ onMounted(async () => {
       document.fonts.load('1em "Bagel Fat One"'),
       new Promise((resolve) => setTimeout(resolve, 300)),
     ]).then(() => {
+      if (gone) return
       pending.value = false
       tl.play(0)
       document.fonts.ready.then(() => ScrollTrigger?.refresh())
     })
   }, el)
 })
-onBeforeUnmount(() => ctx?.revert())
+onBeforeUnmount(() => {
+  gone = true
+  ctx?.revert()
+})
 
 /** Courbe de Bézier cubique (x1, y1, x2, y2) évaluée en p, comme cubic-bezier() en CSS */
 function cubicBezier(x1: number, y1: number, x2: number, y2: number, p: number) {
