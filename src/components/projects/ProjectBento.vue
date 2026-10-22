@@ -26,8 +26,11 @@ function paint() {
   frame = 0
   if (!pointer) return
   const { x: px, y: py } = pointer
-  // Toutes les lectures avant les écritures : une seule mise en page par image
-  const rects = tiles().map((tile) => [tile, tile.getBoundingClientRect()] as const)
+  // Toutes les lectures avant les écritures : une seule mise en page par image. On mesure le <li>, qui ne
+  // s'incline pas : mesurer la tuile inclinée ferait clignoter l'inclinaison au bord.
+  const rects = tiles().map(
+    (tile) => [tile, (tile.parentElement ?? tile).getBoundingClientRect()] as const,
+  )
   for (const [tile, r] of rects) {
     const x = px - r.left
     const y = py - r.top

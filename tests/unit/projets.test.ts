@@ -46,14 +46,16 @@ describe('MetaList', () => {
 })
 
 describe('StatBlock', () => {
-  it('dessine des barres proportionnelles, décoratives', async () => {
+  it('dessine des barres proportionnelles, décoratives, et garde les valeurs en texte', async () => {
     const stat = { value: '6', label: 'fonds', compare: { before: 1, after: 6 } }
     const w = mount(StatBlock, { props: { stat }, global: await options() })
     const bars = w.findAll('.bar i')
     expect(bars.map((bar) => Number(bar.attributes('style')?.match(/--w: ([\d.]+)/)?.[1]))).toEqual(
       [1 / 6, 1],
     )
-    expect(w.find('.bars').attributes('aria-hidden')).toBe('true')
+    expect(bars.every((bar) => bar.attributes('aria-hidden') === 'true')).toBe(true)
+    expect(w.find('.bars').attributes('aria-hidden')).toBeUndefined()
+    expect(w.find('.bars').text()).toBe('avant1après6')
   })
 
   it('sans comparaison, n’affiche que le chiffre et son libellé', async () => {

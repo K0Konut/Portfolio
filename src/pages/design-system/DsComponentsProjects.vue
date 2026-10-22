@@ -7,10 +7,9 @@ import ProjectBento from '../../components/projects/ProjectBento.vue'
 import PageSection from '../../components/sections/PageSection.vue'
 import SectionWave from '../../components/sections/SectionWave.vue'
 import type { ProjectMeta, Stat } from '../../content/types'
-import { PROJETS } from './projets'
+import { PROJETS, TODO } from './projets'
 
 // Contenu d'exemple de la maquette (le vrai contenu arrive avec le chargeur de contenu)
-const TODO = ['stack à compléter']
 const META: ProjectMeta = {
   type: 'Projet perso',
   role: 'Conception, design et développement',

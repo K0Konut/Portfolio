@@ -1,7 +1,7 @@
 import capture from '../../assets/projets/ce-portfolio.png'
 import type { ProjectSummary } from '../../content/types'
 
-const TODO = ['stack à compléter']
+export const TODO = ['stack à compléter']
 
 /** Projets d'exemple pour la vitrine, du plus récent au plus ancien (le vrai contenu arrive avec le chargeur de contenu) */
 export const PROJETS: ProjectSummary[] = [

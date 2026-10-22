@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 /* Sommaire collant de l'étude de cas, sur bureau (design system § CaseToc). Le bloc en cours de lecture
@@ -10,18 +10,24 @@ const { t } = useI18n()
 const current = ref(props.items[0]?.id)
 let observer: IntersectionObserver | undefined
 
-onMounted(() => {
+function observe() {
+  observer?.disconnect()
   const blocks = props.items.flatMap(({ id }) => document.getElementById(id) ?? [])
   observer = new IntersectionObserver(
     () => {
-      const line = innerHeight / 3
+      // La même ligne que la marge de l'observateur (-67 %) : 33 % de la hauteur
+      const line = innerHeight * 0.33
       const passed = blocks.filter((block) => block.getBoundingClientRect().top <= line)
       current.value = passed.pop()?.id ?? props.items[0]?.id
     },
     { rootMargin: '0px 0px -67% 0px' },
   )
   for (const block of blocks) observer.observe(block)
-})
+}
+
+onMounted(observe)
+// D'une étude de cas à la suivante, le routeur garde la page : on observe les nouveaux blocs
+watch(() => props.items, observe, { flush: 'post' })
 onBeforeUnmount(() => observer?.disconnect())
 </script>
 
