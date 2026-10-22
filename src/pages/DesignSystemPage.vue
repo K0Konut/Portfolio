@@ -3,6 +3,7 @@ import { useHead } from '@unhead/vue'
 import DsBackgrounds from './design-system/DsBackgrounds.vue'
 import DsColors from './design-system/DsColors.vue'
 import DsComponentsBase from './design-system/DsComponentsBase.vue'
+import DsComponentsHome from './design-system/DsComponentsHome.vue'
 import DsComponentsLayout from './design-system/DsComponentsLayout.vue'
 import DsMotion from './design-system/DsMotion.vue'
 import DsSpacing from './design-system/DsSpacing.vue'
@@ -31,6 +32,7 @@ useHead({ title: 'Design system · Costa Maskulov', meta: [{ name: 'robots', con
       <DsComponentsBase />
     </div>
     <DsComponentsLayout />
+    <DsComponentsHome />
   </main>
 </template>
 

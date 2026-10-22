@@ -42,5 +42,41 @@
     "title": "Let’s talk",
     "address": "My email",
     "cv": "Download my résumé"
+  },
+  "hero": {
+    "status": "Engineering student at ESIEA",
+    "goal": "Looking for a full-stack end-of-studies internship",
+    "promise": "Creative in the interface,",
+    "promiseHighlight": "rigorous in the method.",
+    "contact": "Contact me"
+  },
+  "method": {
+    "loop": "Feedback starts a new round.",
+    "steps": [
+      {
+        "title": "Need",
+        "text": "Understand the problem and the users before choosing a technology."
+      },
+      {
+        "title": "Design",
+        "text": "Brand, interface and journeys, approved before the first line of code."
+      },
+      {
+        "title": "Architecture",
+        "text": "Choose the stack, model the data, define the API."
+      },
+      {
+        "title": "Development",
+        "text": "Front and back, in small steps, versioned with Git."
+      },
+      {
+        "title": "Testing",
+        "text": "Automated tests, measured accessibility and performance."
+      },
+      {
+        "title": "Deployment",
+        "text": "Online in Docker containers, on my own server."
+      }
+    ]
   }
 }
