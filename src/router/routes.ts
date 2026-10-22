@@ -4,25 +4,15 @@ export const LOCALES = ['fr', 'en'] as const
 export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = 'fr'
 
-export type PageName =
-  | 'accueil'
-  | 'projets'
-  | 'etude-de-cas'
-  | 'a-propos'
-  | 'contact'
-  | 'mentions-legales'
-  | 'confidentialite'
-  | '404'
-
 interface PageDef {
-  name: PageName
+  name: string
   paths: Record<Locale, string>
   noindex?: boolean
 }
 
 /* La table des pages : chaque page une fois, avec son chemin dans chaque langue (architecture technique §3).
    Le routeur, le sélecteur de langue, les balises hreflang et le sitemap en dérivent tous. */
-export const PAGES: readonly PageDef[] = [
+export const PAGES = [
   { name: 'accueil', paths: { fr: '/fr', en: '/en' } },
   { name: 'projets', paths: { fr: '/fr/projets', en: '/en/projects' } },
   { name: 'etude-de-cas', paths: { fr: '/fr/projets/:slug', en: '/en/projects/:slug' } },
@@ -39,13 +29,17 @@ export const PAGES: readonly PageDef[] = [
     noindex: true,
   },
   { name: '404', paths: { fr: '/fr/404', en: '/en/404' }, noindex: true },
-]
+] as const satisfies readonly PageDef[]
+
+export type PageName = (typeof PAGES)[number]['name']
 
 declare module 'vue-router' {
   interface RouteMeta {
     page?: PageName
     locale?: Locale
     noindex?: boolean
+    /** La page existe dans les autres langues (canonical et hreflang) ; faux pour une adresse inconnue. */
+    alternates?: boolean
   }
 }
 
@@ -61,7 +55,11 @@ export function localizedPath(
 ): string {
   const def = PAGES.find((p) => p.name === page)
   if (!def) throw new Error(`Page inconnue : ${page}`)
-  return def.paths[locale].replace(/:(\w+)/g, (_, key: string) => {
+  return fillParams(def.paths[locale], params, page)
+}
+
+function fillParams(path: string, params: Record<string, string>, page: string): string {
+  return path.replace(/:(\w+)/g, (_, key: string) => {
     const value = params[key]
     if (value === undefined) throw new Error(`Paramètre manquant « ${key} » pour ${page}`)
     return encodeURIComponent(value)
@@ -81,7 +79,7 @@ export function buildRoutes(dev: boolean): RouteRecordRaw[] {
       path: page.paths[locale],
       name: routeName(page.name, locale),
       component: placeholder,
-      meta: { page: page.name, locale, noindex: page.noindex ?? false },
+      meta: { page: page.name, locale, noindex: 'noindex' in page, alternates: true },
     })),
   )
   // En production, Nginx redirige « / » selon la langue du navigateur ; ici, le développement et le repli
@@ -99,13 +97,16 @@ export function buildRoutes(dev: boolean): RouteRecordRaw[] {
   return routes
 }
 
-/** Chemins à pré-rendre : toutes les pages des deux langues, une page par projet. */
-export function prerenderPaths(projectSlugs: readonly string[]): string[] {
+/** Chemins à pré-rendre : chaque page dans chaque langue ; une page à paramètres (`:slug`)
+    est déclinée pour chaque jeu de paramètres fourni. Jamais « / » ni /design-system. */
+export function prerenderPaths(
+  params: Partial<Record<PageName, readonly Record<string, string>[]>>,
+): string[] {
   return PAGES.flatMap((page) =>
-    LOCALES.flatMap((locale) =>
-      page.name === 'etude-de-cas'
-        ? projectSlugs.map((slug) => localizedPath(page.name, locale, { slug }))
-        : [page.paths[locale]],
-    ),
+    LOCALES.flatMap((locale) => {
+      const path: string = page.paths[locale]
+      if (!path.includes(':')) return [path]
+      return (params[page.name] ?? []).map((p) => fillParams(path, p, page.name))
+    }),
   )
 }

@@ -23,7 +23,7 @@ describe('table des pages', () => {
   })
 
   it('marque les pages légales et la 404 en noindex', () => {
-    const noindex = PAGES.filter((p) => p.noindex).map((p) => p.name)
+    const noindex = PAGES.filter((p) => 'noindex' in p).map((p) => p.name)
     expect(noindex.sort()).toEqual(['404', 'confidentialite', 'mentions-legales'])
   })
 })
@@ -55,14 +55,15 @@ describe('localeFromPath', () => {
 })
 
 describe('pré-rendu', () => {
-  const paths = prerenderPaths(['ce-portfolio', 'chrono'])
+  const paths = prerenderPaths({ 'etude-de-cas': [{ slug: 'ce-portfolio' }, { slug: 'chrono' }] })
 
   it('pré-rend chaque page dans les deux langues et une page par projet', () => {
     expect(paths).toContain('/fr')
     expect(paths).toContain('/en/legal-notice')
     expect(paths).toContain('/fr/projets/chrono')
     expect(paths).toContain('/en/projects/ce-portfolio')
-    expect(paths).toHaveLength((PAGES.length - 1) * LOCALES.length + 2 * LOCALES.length)
+    const withParams = PAGES.filter((p) => p.paths.fr.includes(':')).length
+    expect(paths).toHaveLength((PAGES.length - withParams + 2 * withParams) * LOCALES.length)
   })
 
   it('ne pré-rend ni la racine, ni la vitrine des composants, ni de chemin à paramètre', () => {

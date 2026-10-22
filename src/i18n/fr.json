@@ -1,7 +1,4 @@
 {
-  "site": {
-    "name": "Costa Maskulov"
-  },
   "pages": {
     "accueil": { "title": "Costa Maskulov · Développeur full-stack" },
     "projets": { "title": "Projets · Costa Maskulov" },

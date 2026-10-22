@@ -19,7 +19,7 @@ export const createApp = ViteSSG(
   },
 )
 
-/** Pages pré-rendues : les deux langues de chaque page, une page par projet ; jamais « / » ni /design-system. */
+/** Pages pré-rendues : les deux langues de chaque page, une page par projet. */
 export function includedRoutes() {
-  return prerenderPaths(PROJECT_SLUGS)
+  return prerenderPaths({ 'etude-de-cas': PROJECT_SLUGS.map((slug) => ({ slug })) })
 }
