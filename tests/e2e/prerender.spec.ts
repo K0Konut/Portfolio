@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 
 // Le HTML brut, sans JavaScript : ce que lit un moteur de recherche (architecture technique §5)
 const pages = [
@@ -26,8 +26,9 @@ test('les pages légales sont en noindex', async ({ request }) => {
   expect(html).toContain('name="robots" content="noindex"')
 })
 
-test("la vitrine des composants n'est pas dans le build", () => {
+test("la vitrine des composants n'est pas dans le build, ni sa page ni son code", () => {
   expect(existsSync('dist/design-system')).toBe(false)
+  expect(readdirSync('dist/assets').filter((f) => /design-?system/i.test(f))).toEqual([])
 })
 
 test("l'accueil n'a pas d'erreur d'accessibilité détectable", async ({ page }) => {
