@@ -67,6 +67,42 @@ svg {
   line-height: 1;
 }
 
+/* Conteneur de page : largeur max et marges latérales (sections, en-tête de page, pied de page) */
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+}
+
+/* Paragraphe d'introduction d'une section ou d'une page */
+.lead {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: var(--text-lead);
+  line-height: var(--leading-snug);
+  color: var(--color-text-muted);
+}
+
+/* Lien de l'en-tête (navigation, langues) : un trait se trace au survol, il reste sur l'élément en cours */
+.trace {
+  position: relative;
+}
+.trace::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * var(--space-1));
+  height: var(--underline);
+  background: var(--trace-color, var(--color-action));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-move) var(--ease-out);
+}
+:hover > .trace::after,
+[aria-current] > .trace::after {
+  transform: scaleX(1);
+}
+
 /* Fonds de section : chaque fond réaffecte les rôles ; les composants n'utilisent que les rôles */
 .fond-nuit,
 .fond-violet {
@@ -143,4 +179,22 @@ svg {
 .fond-creme {
   background: var(--color-bg);
   color: var(--color-text);
+}
+
+/* Apparition au scroll (directive v-reveal) */
+.reveal {
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * var(--stagger-block));
+}
+.reveal.is-pending {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition-duration: var(--duration-reduced);
+    transition-delay: 0ms;
+  }
 }

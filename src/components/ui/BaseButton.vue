@@ -5,7 +5,14 @@ import BaseIcon from './BaseIcon.vue'
 type ButtonIcon = 'arrow-right' | 'download' | 'arrow-up-right'
 
 const props = withDefaults(
-  defineProps<LinkProps & { variant?: 'primary' | 'outline'; icon?: ButtonIcon }>(),
+  defineProps<
+    LinkProps & {
+      variant?: 'primary' | 'outline'
+      icon?: ButtonIcon
+      /** Bouton compact (copier, menu, fermer) : même style, plus petit */
+      compact?: boolean
+    }
+  >(),
   { variant: 'outline', to: undefined, href: undefined, download: false, icon: undefined },
 )
 
@@ -14,7 +21,11 @@ const { tag, attrs, newTab } = useLink(props)
 </script>
 
 <template>
-  <component :is="tag" :class="['btn', `btn-${variant}`, icon && `btn-${icon}`]" v-bind="attrs">
+  <component
+    :is="tag"
+    :class="['btn', `btn-${variant}`, icon && `btn-${icon}`, { compact }]"
+    v-bind="attrs"
+  >
     <slot />
     <BaseIcon v-if="icon" :name="icon" />
     <span v-if="newTab" class="sr-only"> {{ newTab }}</span>
@@ -37,6 +48,11 @@ const { tag, attrs, newTab } = useLink(props)
     transform var(--duration-fast) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
+}
+.compact {
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  font-size: var(--text-sm);
 }
 .btn .icon {
   transition: transform var(--duration-fast) var(--ease-out);

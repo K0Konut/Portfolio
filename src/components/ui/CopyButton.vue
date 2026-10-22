@@ -4,7 +4,11 @@ import { useI18n } from 'vue-i18n'
 import BaseButton from './BaseButton.vue'
 import BaseIcon from './BaseIcon.vue'
 
-const props = defineProps<{ value: string }>()
+const props = defineProps<{
+  value: string
+  /** Adresse en taille de texte courant (pied de page) */
+  small?: boolean
+}>()
 const { t } = useI18n()
 
 const status = ref<'idle' | 'copied' | 'selected'>('idle')
@@ -50,8 +54,8 @@ const labels = { idle: 'ui.copy', copied: 'ui.copied', selected: 'ui.selected' }
 
 <template>
   <div :class="['copy', { done: status === 'copied' }]">
-    <span ref="address" class="address">{{ value }}</span>
-    <BaseButton class="compact" @click="copy">
+    <span ref="address" :class="['address', { small }]">{{ value }}</span>
+    <BaseButton compact @click="copy">
       <span class="swap">
         <BaseIcon name="copy" class="ic-copy" />
         <BaseIcon name="check" class="ic-check" />
@@ -75,11 +79,8 @@ const labels = { idle: 'ui.copy', copied: 'ui.copied', selected: 'ui.selected' }
   user-select: all;
   overflow-wrap: anywhere;
 }
-/* Un bouton outline compact (design system § CopyButton) */
-.compact {
-  gap: var(--space-2);
-  padding: 0 var(--space-4);
-  font-size: var(--text-sm);
+.address.small {
+  font-size: var(--text-ui);
 }
 /* Fondu croisé de l'icône : « check » grandit depuis --pop-scale ; fondu seul en mouvement réduit */
 .swap {

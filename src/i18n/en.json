@@ -18,5 +18,29 @@
     "copy": "Copy",
     "copied": "Address copied",
     "selected": "Selected: Ctrl + C"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "projets": "Projects",
+    "a-propos": "About",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language"
+  },
+  "footer": {
+    "cv": "Résumé",
+    "cvFr": "Résumé in French",
+    "cvEn": "Résumé in English",
+    "contact": "Contact",
+    "site": "This site",
+    "code": "Site source code",
+    "legal": "Legal notice",
+    "privacy": "Privacy"
+  },
+  "contact": {
+    "title": "Let’s talk",
+    "address": "My email",
+    "cv": "Download my résumé"
   }
 }

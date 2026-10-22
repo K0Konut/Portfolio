@@ -1,8 +1,9 @@
 import { useHead } from '@unhead/vue'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { DEFAULT_LOCALE, LOCALES, routeName, type Locale } from '../router/routes'
+import { useRoute } from 'vue-router'
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '../router/routes'
+import { useLocale } from './useLocale'
 
 const SITE_URL = (import.meta.env.VITE_SITE_URL ?? '').replace(/\/$/, '')
 
@@ -10,12 +11,11 @@ const SITE_URL = (import.meta.env.VITE_SITE_URL ?? '').replace(/\/$/, '')
     La langue vient de l'i18n, réglée par le routeur avant chaque page. */
 export function useSeo() {
   const route = useRoute()
-  const router = useRouter()
-  const { t, locale } = useI18n()
+  const { t } = useI18n()
+  const { locale, alternate } = useLocale()
 
   const page = computed(() => route.meta.page ?? '404')
-  const url = (l: Locale) =>
-    SITE_URL + router.resolve({ name: routeName(page.value, l), params: route.params }).href
+  const url = (l: Locale) => SITE_URL + alternate(l)
 
   useHead({
     htmlAttrs: { lang: locale },
@@ -23,7 +23,7 @@ export function useSeo() {
     link: computed(() =>
       route.meta.alternates
         ? [
-            { rel: 'canonical', href: url(locale.value as Locale) },
+            { rel: 'canonical', href: url(locale.value) },
             ...LOCALES.map((l) => ({ rel: 'alternate', hreflang: l, href: url(l) })),
             { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LOCALE) },
           ]
