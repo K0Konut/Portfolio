@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { useSeo } from './composables/useSeo'
+
+useSeo()
 </script>
 
 <template>
-  <HelloWorld />
+  <RouterView />
 </template>
