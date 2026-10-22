@@ -1,6 +1,8 @@
 # Design system — Portfolio personnel
 
-Version 1.0 — 14/10/2026 — **statut : validé** (tous les composants de l'inventaire sont spécifiés et montrés dans la vitrine)
+Version 1.1 — 22/10/2026 — **statut : validé** (mis à jour après les maquettes de la phase 6 ; les nouveaux composants sont montrés dans `docs/06-maquettes/` en attendant la vitrine Vue)
+
+v1.1 : report des choix validés en maquette (phase 6, `decisions.md` du 20 au 22/10/2026) : section d'accueil sans étiquette et avec fond topographique ; `ProjectCard` qui se soulève (`--card-lift` remplace `--card-hover-scale`) et disposition « affiches collées » ; `DeviceFrame` à proportions fixes et fonds de capture ; `ProcessSteps` en cycle de six étapes ; `Timeline` centrée alternée ; `MetaList` en fiche ; `SkillsWall` remplacé par `SkillCards` ; nouveaux composants `TopoBackground`, `ProjectBento`, `ContactCard`, `BusinessCard` et `BrickRepair`.
 
 v1.0 : design system validé par le propriétaire ; briques « de ce site » du `SkillsWall` en violet clair au lieu du rose.
 
@@ -182,7 +184,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--press-scale` | `0.98` | Bouton enfoncé au clic |
 | `--feedback-hold` | `2s` | Durée d'affichage d'une confirmation (« Adresse copiée ») |
 | `--reveal-distance` | `24px` | Montée d'un bloc qui apparaît au scroll |
-| `--card-hover-scale` | `1.03` | Capture qui grossit au survol d'une carte |
+| `--card-lift` | `8px` | Carte qui se soulève au survol ou au focus |
 | `--duration-letter` | `600ms` | Montée d'une lettre du nom |
 | `--letter-rise` | `0.4em` | Hauteur dont chaque lettre monte avant de se poser |
 | `--hero-parallax` | `0.35` | Le nom descend à 35 % de la vitesse du scroll en quittant l'écran |
@@ -190,7 +192,6 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
 | `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
 | `--duration-bar` | `900ms` | Barres de `StatBlock` qui se remplissent |
-| `--stagger-wall` | `30ms` | Briques du mur de compétences, posées une à une (25 briques, 0,75 s) |
 
 Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 et seules les opacités restent (`--duration-reduced`).
 
@@ -209,20 +210,25 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `Section` | Conteneur de section ; six fonds (nuit, violet, vif, lime, rose, crème) | toutes |
 | `SectionWave` | Vague organique entre deux sections de fonds différents | toutes |
 | `HeroName` | Nom géant (`--text-hero`), entrée lettre par lettre, effacement au scroll | Accueil |
+| `TopoBackground` | Courbes de niveau animées (WebGL) derrière la section d'accueil | Accueil |
 | `ScrollHint` | Indicateur de scroll très discret | Accueil |
 | `BaseButton` | Bouton / lien-bouton : `primary` (lime), `outline` | toutes |
 | `TextLink` | Lien texte avec soulignement animé | toutes |
-| `CopyButton` | Copie le mail, confirme « Adresse copiée » | Contact, pied de page |
+| `CopyButton` | Copie le mail, confirme « Adresse copiée » | Accueil, Projets, À propos, Contact |
+| `ContactCard` | Section « Parlons-en » : carte sombre inclinée (adresse, CV, LinkedIn, GitHub) | Accueil, Projets, À propos |
+| `BusinessCard` | Carte de visite crème de la page Contact | Contact |
 | `Tag` | Étiquette rose (poste, type de projet) | Accueil, Projets, études de cas |
-| `ProjectCard` | Capture, titre, type, stack, phrase | Accueil, Projets |
+| `ProjectCard` | Capture, titre, type, stack, phrase | Accueil |
+| `ProjectBento` | Grille bento des projets, lueur au pointeur | Projets |
 | `DeviceFrame` | Cadre navigateur / téléphone pour mettre en scène une capture | cartes, études de cas |
-| `ProcessSteps` | Les 7 étapes de la méthode | Accueil, À propos |
+| `ProcessSteps` | Les 6 étapes de la méthode, en cycle | Accueil, À propos |
 | `Timeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
-| `SkillsWall` | Mur de briques des compétences, posé une fois ; briques du site en violet clair | À propos |
+| `SkillCards` | Compétences en affiches collées, une carte par catégorie ; pastille violette pour les technos du site | À propos |
 | `MetaList` | Type, rôle, durée, stack d'une étude de cas | études de cas |
 | `CaseToc` | Sommaire collant (bureau uniquement) | études de cas |
 | `StatBlock` | Résultat chiffré | études de cas |
 | `CaseNav` | Retour à la liste / projet suivant | études de cas |
+| `BrickRepair` | 404 : la brique tombée à replacer dans le mur, qui ramène à l'accueil | 404 |
 | `Icon` | Icône au contour épais et arrondi (Lucide ou Tabler) | partout |
 
 ---
@@ -310,6 +316,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Fond** : une propriété parmi `nuit` (par défaut), `violet`, `vif`, `lime`, `rose`, `creme`, qui réaffecte les rôles (voir « Fonds de section »).
 - **Règles** (DA v1.2) : deux sections qui se suivent n'ont jamais le même fond ; une seule section `lime` ou `rose` par page ; `vif` pour les sections courtes ; les lectures longues restent sur `nuit`.
 - **Rythme de l'accueil** : `violet` (section d'accueil) → `nuit` (projets) → `creme` (qui je suis) → `vif` (ma façon de travailler) → `lime` (prise de contact) → `nuit` (pied de page).
+- **Rythme des autres pages** (maquettes, phase 6) : Projets `violet` → `nuit` → `lime` (« Parlons-en ») ; étude de cas `violet` → `nuit` → `rose` (`CaseNav`) ; À propos `violet` → `creme` → `nuit` → `violet` → `nuit` → `lime` ; Contact et 404 `violet`. Le pied de page (`nuit`) suit toujours une section d'une autre couleur.
 - **Frontière** : chaque changement de fond est marqué par une `SectionWave` en bas de la section.
 - **Titre** : `h2` en Bagel `--text-h2`, aligné à gauche ; une phrase d'introduction optionnelle en `--text-lead`, avec au plus une mise en valeur.
 - **Apparition au scroll** (DA §6, cas par défaut) : chaque bloc monte de `--reveal-distance` et apparaît en `--duration-base`, décalé de `--stagger-block`, une seule fois. Le contenu est visible sans JavaScript : l'état caché n'est posé que par le script, et seulement sous la ligne de flottaison.
@@ -348,40 +355,60 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 ### `ProjectCard`
 
-- **Rôle** : donner envie d'ouvrir une étude de cas (accueil : 3 cartes ; Projets : toutes, de la plus récente à la plus ancienne).
+- **Rôle** : donner envie d'ouvrir une étude de cas, sur l'accueil (la sélection du moment, 3 cartes). La page Projets utilise `ProjectBento`.
 - **Contenu, dans l'ordre** : `DeviceFrame` avec la capture ; une ou deux `Tag` (type de projet) ; titre `h3` en Bagel `--text-h3` ; une phrase en `--color-text-muted` ; la stack en `--text-sm` et `--color-text-subtle`, séparée par des points médians.
 - **Lien** : un seul lien, sur le titre, étendu à toute la carte (pseudo-élément) : toute la carte est cliquable, et le lecteur d'écran n'entend qu'un lien.
 - **Style** : fond `--color-surface`, rayon `--radius-md`, marges intérieures `--space-5` ; pas d'ombre (principe « plat »).
+- **Disposition « affiches collées »** (accueil, à partir de 1024 px, 3 colonnes) : les cartes sont décalées en hauteur (`--space-5`, `--space-8`, 0) et inclinées de -2°, 1,5° et -1°. Sur mobile et tablette, elles sont droites.
 - **États**
-  - Survol : fond `--color-surface-hover` ; la capture grossit à `--card-hover-scale` dans son cadre (`--duration-base`, `--ease-out`).
+  - Survol et focus : la carte entière se soulève de `--card-lift`, se redresse et son fond passe en `--color-surface-hover` (`--duration-fast`, `--ease-out`). La capture ne grossit pas.
   - Focus : anneau `--color-focus` autour de toute la carte.
-- **Grille** : 1 colonne sur mobile, 2 à partir de 768 px, 3 à partir de 1024 px ; écart `--space-5`.
-- **Animations réduites** : la capture ne grossit pas ; le changement de fond reste.
+- **Grille** : 1 colonne sur mobile, 2 à partir de 768 px, 3 à partir de 1024 px ; écart `--space-5`. Le lien « Tous les projets » est aligné à droite, sous la grille.
+- **Animations réduites** : pas de soulèvement ; le changement de fond reste.
+
+### `ProjectBento`
+
+- **Rôle** : la liste complète sur la page Projets, du plus récent au plus ancien.
+- **Grille** (bureau, 3 colonnes, 5 tuiles) : le projet le plus récent en grand (2 × 2), deux tuiles à droite, puis une tuile simple et une tuile large (capture à gauche, texte à droite). Deux colonnes à partir de 768 px (la première tuile sur toute la largeur), une sur mobile. Au-delà de cinq projets, prévoir la place de la sixième tuile.
+- **Tuile** : comme une `ProjectCard` (même contenu, même lien étendu, fond `--color-surface`, rayon `--radius-md`, droite).
+- **Lueur au pointeur** : à la souris seulement, le bord et l'intérieur des tuiles proches du pointeur s'allument (dégradé radial rose puis violet vif sur le bord, halo violet vif à 30 % à l'intérieur), d'autant plus que le pointeur est près (rayon 320 px). La tuile survolée s'incline de 3° au plus vers le pointeur. Seuls `opacity`, des variables CSS et `transform` changent, une fois par image.
+- **Fond de capture** (DA §5) : lime, violet foncé (violet-700) ou rose selon la place de la tuile, pour que deux voisines n'aient jamais la même teinte ; la grande tuile en lime. Jamais de violet vif. Si une quatrième teinte devient nécessaire : crème ou fond sombre.
+- **Animations réduites** : pas d'inclinaison ; la lueur (changement de couleur) reste.
 
 ### `DeviceFrame`
 
 - **Rôle** : mettre en scène une capture (DA §5), dans les cartes et les études de cas.
 - **Variantes** : `browser` (barre avec trois points neutres et une adresse) et `phone` (corps arrondi). Un écran d'ordinateur utilise `browser`.
-- **Style** : la capture est posée sur un fond `--color-section` ; le cadre est en `--color-surface`, bordure `--border-thin` en `--color-border`, rayon `--radius-md` (navigateur) ou `--radius-lg` (téléphone). Les trois points restent en `--color-border` : pas de rouge-jaune-vert.
+- **Formats de capture** : une seule image par projet, **1440 × 900** px pour `browser` (16:10), **390 × 844** px pour `phone`. L'image remplit l'écran de l'appareil (`object-fit: cover`, calée en haut) : elle n'est jamais déformée.
+- **Proportions fixes** : la zone de fond (`--color-section`, ou la teinte de fond de capture) prend la forme de la tuile ou de la carte ; l'appareil garde ses proportions et « monte » du bas de la zone, coupé d'au plus 15 % (`browser`) ou 25 % (`phone`). Dans une zone plus haute que l'appareil, le fond reste au-dessus. En CSS : zone en `container-type: size`, largeur de l'appareil calculée en unités `cqw` et `cqh`.
+- **Style** : le cadre est en `--color-surface`, bordure `--border-thin` en `--color-border`, rayon `--radius-md` (navigateur) ou `--radius-lg` (téléphone). Les trois points restent en `--color-border` : pas de rouge-jaune-vert.
 - **Image** : dimensions déclarées (pas de saut de mise en page), `loading="lazy"` hors de l'écran d'ouverture. Dans une carte, `alt=""` (le titre suffit) ; dans une étude de cas, un texte qui décrit ce que montre l'écran.
-- **Sans capture** : l'écran de l'appareil devient un aplat `--color-block` avec le nom du projet en Bagel `--color-text` (5,5:1), en attendant la vraie image.
+- **Sans capture** : l'écran de l'appareil devient un aplat neutre (`--neutral-850`) avec le nom du projet en Bagel `--neutral-400`, en attendant la vraie image (pas de violet, pour ne pas faire violet sur violet).
 
 ### Section d'accueil et `HeroName`
 
-- **Composition** (DA §6) : `Section` au fond `violet`, hauteur minimale `100svh`, contenu centré. Dans l'ordre : `Tag` « développeur full-stack » (le poste), le nom (`HeroName`, `h1`), la promesse, les boutons « Télécharger le CV » (`primary`, icône `download`) et « Me contacter » (`outline`), puis `ScrollHint`. En bas, une `SectionWave` vers la section suivante.
+- **Composition** (DA §6) : `Section` au fond `violet` avec `TopoBackground` derrière, hauteur minimale `100svh`, contenu centré. Dans l'ordre : le nom (`HeroName`, `h1`) ; deux lignes en Manrope `--text-lead` `--weight-medium`, « Étudiant ingénieur à l'ESIEA » puis « Je cherche un stage de fin d'études full-stack » ; la promesse ; les boutons « Télécharger le CV » (`primary`, icône `download`) et « Me contacter » (`outline`) ; puis `ScrollHint`. Plus d'étiquette au-dessus du nom. En bas, une `SectionWave` vers la section suivante.
 - **Nom** : Bagel, `--leading-display`. Sur une ligne et en `--text-hero` à partir de 768 px ; sur deux lignes (« Costa », « Maskulov ») et en `--text-hero-stacked` en dessous.
 - **Promesse** : Manrope `--text-lead`, « Créatif dans l'interface, » puis « rigoureux dans la méthode. » en mise en valeur (Fraunces, `--color-highlight`).
 - **Accessibilité** : le `h1` contient le nom en clair pour les lecteurs d'écran ; les lettres découpées pour l'animation sont dans un doublon `aria-hidden`. Les boutons restent cliquables et focalisables pendant toute l'entrée (on anime l'opacité, jamais `visibility` ni `pointer-events`).
 - **Entrée à l'ouverture** (une seule timeline, environ 1,5 s, `--ease-out`) :
-  - 0 s : le header glisse depuis le haut et apparaît (`--duration-base`) ; l'étiquette apparaît.
+  - 0 s : le header glisse depuis le haut et apparaît (`--duration-base`).
   - 0 → 1,1 s : chaque lettre monte de `--letter-rise` et se pose en `--duration-letter`, décalée de `--stagger-letter`.
-  - 0,4 s : la promesse monte de `--reveal-distance` et apparaît ; la mise en valeur suit 0,1 s après.
+  - 0,4 s : les deux lignes de statut puis la promesse montent de `--reveal-distance` et apparaissent ; la mise en valeur suit 0,1 s après.
   - 0,6 s : les boutons apparaissent. CV et contact sont lisibles avant 1 s.
   - 1,5 s : `ScrollHint` apparaît.
   - L'entrée démarre quand la police Bagel est prête (au plus 300 ms d'attente) pour ne pas animer une police de secours. Sans JavaScript, tout est visible d'emblée.
 - **Au scroll** (piloté par le scroll, DA §6) : pendant que la section quitte l'écran, le nom descend à `--hero-parallax` de la vitesse du scroll et s'estompe ; la promesse et les boutons s'estompent sur la première moitié. Seuls `transform` et `opacity` bougent.
 - **Animations réduites** : tout apparaît ensemble en fondu (`--duration-reduced`) ; ni montée des lettres, ni effet au scroll.
 - **Technique** : timeline et effet de scroll avec GSAP (ScrollTrigger) ; choix définitif en phase 7.
+
+### `TopoBackground`
+
+- **Rôle** : le fond de la section d'accueil, des courbes de niveau qui ondulent lentement (DA §6). Adaptation du composant « Topography » (ogl) en WebGL 2 natif, sans bibliothèque.
+- **Teinte** : du violet vif vers le rose, sur le fond violet ; les lignes s'estompent au centre, derrière le nom et la promesse.
+- **Comportement** : apparaît en fondu ; ne réagit pas au curseur ; se met en pause hors de l'écran et quand l'onglet est caché.
+- **Accessibilité** : décoratif (`aria-hidden="true"`).
+- **Animations réduites** : image fixe. Sans WebGL : le fond violet seul.
 
 ### `ScrollHint`
 
@@ -394,32 +421,35 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 ### `ProcessSteps`
 
-- **Rôle** : montrer la méthode d'ingénieur en 7 étapes : PRD, marque, direction artistique, architecture et UX, design system, maquettes, code. C'est une vraie séquence : liste ordonnée (`<ol>`), numérotée.
-- **Variante `compact`** (accueil, fond `vif`) : une rangée de briques (7 colonnes à partir de 1024 px, puis la grille passe à la ligne). Chaque brique : contour `--border-strong` en `--color-text`, rayon `--radius-sm`, numéro en `--text-sm` et `--color-text-subtle`, nom de l'étape en Manrope `--weight-bold`. La dernière brique, « Code », est pleine (`--color-action`, texte `--color-on-action`) : c'est le produit fini.
-- **Variante `detail`** (À propos, fond `nuit`) : une liste verticale ; pour chaque étape, le numéro en Bagel `--text-h3` et `--color-block` (grand texte décoratif, 3,05:1), le nom en Manrope `--weight-bold` `--text-lead`, et une phrase en `--color-text-muted`. Un filet vertical `--color-border` relie les numéros.
-- **Phrases de la variante `detail`** : PRD, ce qu'on construit et pourquoi · marque, comment se positionner · direction artistique, à quoi ça ressemble et comment ça bouge · architecture et UX, comment c'est organisé et parcouru · design system, avec quelles briques · maquettes, à quoi ressemblent les écrans clés · code, comment c'est construit.
-- **Apparition** : brique par brique, chacune monte de `--reveal-distance` et apparaît, décalée de `--stagger-brick` (7 × 60 ms, sous le budget de 500 ms).
+- **Rôle** : montrer la méthode d'ingénieur, formulée côté technique, en 6 étapes : besoin, conception, architecture, développement, tests, déploiement. C'est un cycle : les retours de chaque mise en ligne relancent un tour. Liste ordonnée (`<ol>`), numérotée.
+- **Phrases** : besoin, comprendre le problème et les utilisateurs avant de choisir une techno · conception, marque, interface et parcours, validés avant la première ligne de code · architecture, choisir la stack, modéliser les données, définir l'API · développement, front et back, par petites étapes, versionnées sur Git · tests, tests automatisés, accessibilité et performance mesurées · déploiement, en ligne dans des conteneurs Docker, sur mon propre serveur.
+- **Variante `cycle`** (accueil, fond `vif`)
+  - Bureau (≥ 1024 px) : un anneau (SVG, `aria-hidden`) de 400 px, les 6 étapes numérotées dessus, de 30° en 30° + 60° dans le sens horaire depuis le haut ; des arcs fléchés de l'une à l'autre ; l'arc de 6 vers 1 en pointillés (le retour). Les textes à droite (1 à 3) et à gauche (4 à 6), alignés vers l'anneau. Au centre : « Les retours relancent un tour. » La dernière étape a un repère plein `--color-action`.
+  - Mobile et tablette : une frise verticale (repères ronds reliés par un fil), puis une ligne qui remonte par la gauche jusqu'à la première étape, avec la même phrase en bas.
+- **Variante `detail`** (À propos, fond `nuit`) : une liste verticale ; pour chaque étape, le numéro en Bagel `--text-h3` et `--color-block` (grand texte décoratif, 3,05:1), le nom en Manrope `--weight-bold` `--text-lead`, et la phrase en `--color-text-muted`. Un filet vertical `--color-border` relie les numéros. Sous la liste : « Puis les retours de chaque mise en ligne relancent un tour. » À droite sur bureau, un encadré « En équipe » (sprints, daily), collant pendant la lecture.
+- **Apparition** : étape par étape, chacune monte de `--reveal-distance` et apparaît, décalée de `--stagger-brick`.
 - **Animations réduites** : fondu de l'ensemble.
 
 ### `Timeline` et `TimelineItem`
 
 - **Rôle** : le parcours scolaire et professionnel sur la page À propos (lycée, école, stages, jobs étudiants).
 - **Ordre** : du plus ancien au plus récent, comme un récit (la page Projets, elle, va du plus récent au plus ancien).
-- **Structure** : une liste ordonnée (`<ol>`). Un fil vertical à gauche (`--border-strong`, `--color-border`) et, pour chaque étape, un repère rond de `--timeline-dot`.
+- **Structure** : une liste ordonnée (`<ol>`), avec pour chaque étape un repère rond de `--timeline-dot` sur un fil (`--border-strong`, `--color-border`).
+- **Disposition** : sur bureau (≥ 1024 px), frise **centrée alternée** : le fil au milieu, une étape à gauche (texte aligné à droite), la suivante à droite, chacune sur une demi-largeur moins `--space-7`. Sur mobile et tablette, le fil passe à gauche et toutes les étapes sont à droite.
 - **Contenu d'une étape** : une `Tag` (école, stage ou job étudiant) ; les dates en `--text-sm` et `--color-text-subtle` (`<time>`) ; le titre en Manrope `--weight-bold` `--text-lead` ; le lieu et le rôle ; une ou deux lignes en `--color-text-muted` ; si une étude de cas existe, un `TextLink` `standalone` vers elle.
 - **Au scroll** (temps fort piloté par le scroll, DA §6) : un second fil en `--color-highlight` se trace par-dessus le premier au rythme du scroll ; quand il atteint une étape, son repère se remplit (`--duration-fast`). Pas d'épinglage : la lecture n'est jamais bloquée.
 - **Animations réduites** : fil déjà tracé, repères déjà remplis.
 
-### `SkillsWall`
+### `SkillCards`
 
-- **Rôle** : montrer les technologies par catégorie (architecture §4, liste validée) comme un mur bâti brique par brique. Remplace le bandeau défilant : plus de mouvement continu, plus de bouton pause.
-- **Structure** : une rangée par catégorie. La catégorie s'annonce en Fraunces italique `--color-highlight` (« front », « back », « UI / UX », « outils et déploiement », « méthode ») ; ses technologies suivent, chacune une brique. Une liste (`<ul>`) par catégorie.
-- **Appareillage** : une rangée sur deux est décalée de `--space-6` (`--space-4` sous 768 px), comme un mur. Les rangées passent à la ligne si besoin.
-- **Brique** : fond `--neutral-50`, texte `--neutral-950` (16,8:1), Manrope `--weight-bold` `--text-ui`, marges `--space-3` × `--space-4`, rayon `--radius-sm`. Jamais de lime : il signale l'action, une brique lime se prendrait pour un bouton.
-- **Briques violet clair** : fond `--violet-500`, texte `--neutral-50` (5,5:1), pour les technologies qui ont servi à construire ce site, avec une légende « en violet : les briques de ce site » et un lien vers l'étude de cas du portfolio. La couleur porte une information, pas un décor. (Rose au départ, remplacé pour ne pas abuser du rose et donner plus de place au violet clair.)
-- **Fond conseillé** : `violet` (sur la page À propos).
-- **Pose** : quand le mur arrive à l'écran, chaque brique descend de `--reveal-distance` et se pose, dans l'ordre de lecture, décalée de `--stagger-wall`. Une seule fois, puis plus rien ne bouge. C'est le moment animé de la page À propos.
-- **Animations réduites** : fondu de l'ensemble.
+- **Rôle** : montrer les technologies par catégorie (architecture §4, liste validée). Remplace le mur de briques (`SkillsWall`) le 22/10/2026.
+- **Structure** : une carte (`article`) par catégorie : « front », « back », « UI / UX », « outils et déploiement », « méthode ». La catégorie en Fraunces italique `--color-highlight` (`h3`), puis une liste (`<ul>`) des technologies en Manrope `--weight-bold`.
+- **Carte** : fond `nuit` (rôles du fond nuit), rayon `--radius-md`, marges `--space-5`.
+- **Disposition « affiches collées »** (bureau, 5 colonnes) : cartes inclinées de -2°, 1,5°, -1°, 2° et -1,5°, une sur deux décalée vers le bas de `--space-7`. Deux colonnes à partir de 768 px, une sur mobile ; droites hors bureau.
+- **Technos de ce site** : une pastille ronde violet vif cernée de `--neutral-50` devant leur nom (les autres : pastille `--neutral-700`), avec une légende « Pastille violette : les technos de ce site » et un lien vers l'étude de cas du portfolio. La couleur porte une information, pas un décor.
+- **Fond conseillé** : `violet` (page À propos).
+- **Pose** : quand les cartes arrivent à l'écran, elles montent de `--reveal-distance` et se posent une à une, décalées de `--stagger-block`. C'est le moment animé de la page À propos. Au survol, la carte se soulève de `--card-lift` et se redresse.
+- **Animations réduites** : fondu de l'ensemble, pas de soulèvement.
 
 ### Étude de cas : composition
 
@@ -431,8 +461,8 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `MetaList`
 
 - **Rôle** : les métadonnées d'un projet, d'un coup d'œil.
-- **Structure** : une liste de définitions (`<dl>`) : type, rôle, durée, équipe, stack. Libellé en `--text-sm` et `--color-text-subtle`, valeur en Manrope `--weight-bold`.
-- **Mise en page** : une grille de 2 colonnes sur mobile, jusqu'à 5 sur bureau ; filets `--border-thin` en `--color-border` entre les cellules.
+- **Structure** : une liste de définitions (`<dl>`) : type, rôle, durée, équipe, stack.
+- **Mise en page en fiche** : une information par ligne, libellé à gauche (6rem, `--text-sm`, `--color-text-subtle`), valeur à droite en Manrope `--weight-bold` ; un filet `--border-thin` en `--color-border` sous chaque ligne. Sur bureau, la fiche est à droite du titre de l'étude de cas (colonnes 7/5) ; sur mobile, sous le titre.
 - **Code privé** (stage au CNAM) : pas de bouton « Code » désactivé ; à la place, la mention « Code privé » dans la liste, avec la raison en une phrase.
 
 ### `CaseToc`
@@ -462,6 +492,27 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 ---
 
+### `ContactCard` (section « Parlons-en »)
+
+- **Rôle** : la prise de contact en fin de page (accueil, Projets, À propos), sur fond `lime`, la section vive de la page.
+- **Composition** : à gauche, « Parlons-en » en Bagel (`h2`) et une phrase adaptée à la page ; à droite sur bureau, une carte sombre (fond `nuit`, rayon `--radius-md`) : « Mon adresse », l'adresse avec `CopyButton`, puis « Télécharger le CV » (`primary`), LinkedIn et GitHub (liens `standalone` externes).
+- **Carte** : inclinée de -2° sur bureau ; au survol ou quand un de ses éléments a le focus, elle se soulève de `--card-lift` et se redresse. Droite sur mobile et tablette.
+- **Animations réduites** : carte droite, sans soulèvement.
+
+### `BusinessCard` (page Contact)
+
+- **Rôle** : la page Contact entière tient sur une carte de visite.
+- **Composition** : section `violet` plein écran ; au-dessus, « Contact » (`h1`, Bagel `--text-h1`) et une phrase, centrés ; puis une carte fond `creme`, rayon `--radius-md`, au format carte de visite (1,75:1, jusqu'à 40rem de large) : le nom en Bagel, « Étudiant ingénieur · stage de fin d'études full-stack », l'adresse avec `CopyButton`, « Le CV » (`primary`), LinkedIn et GitHub.
+- **Carte** : droite et immobile, sans effet au survol (seuls ses liens et boutons réagissent). Sur mobile, elle prend la hauteur de son contenu.
+
+### `BrickRepair` (page 404)
+
+- **Rôle** : rendre la 404 utile et dans le ton : « Il manque une brique. » La brique replacée ramène à l'accueil.
+- **Composition** : section `violet` plein écran, centrée (`PageIntro` variante `center`) ; un petit mur crème de trois rangées appareillées, avec un trou en pointillés `--color-highlight` ; sous le mur, la brique tombée (inclinée de -14°) ; puis le titre en Bagel `--text-h1`, une phrase qui invite à replacer la brique, une ligne d'état (`aria-live`) et les boutons « Retour à l'accueil » (`primary`) et « Voir les projets » (`outline`).
+- **Interaction** : glisser la brique (souris ou doigt, Pointer Events, `touch-action: none`) ; elle se redresse en partie pendant le glisser, et le trou s'allume quand elle en approche (rayon 40 px). Relâchée près du trou, elle s'y loge, passe en lime, la ligne d'état annonce « Le mur est complet. Retour à l'accueil… », puis la page mène à l'accueil (0,9 s). Relâchée ailleurs, ou si le navigateur interrompt le glisser, elle revient à sa place.
+- **Clavier** : la brique est un `button` (« Replacer la brique et revenir à l'accueil ») ; Entrée ou Espace la met en place.
+- **Animations réduites** : pas de mouvement, mise en place immédiate, redirection après 0,3 s.
+
 ## 5. Vitrine
 
-Source : `docs/05-vitrine-design-system.html`, publiée en artifact « Vitrine du design system » à partir de ce fichier. Elle montre les tokens et chaque composant spécifié, avec ses états réels. Complétée lot par lot ; elle deviendra la route `/design-system` en développement (phase 7).
+Source : `docs/05-vitrine-design-system.html`, publiée en artifact « Vitrine du design system » à partir de ce fichier. Elle montre les tokens et les composants de la v1.0, avec leurs états réels. Les composants ajoutés ou modifiés en v1.1 sont montrés dans les maquettes (`docs/06-maquettes/`) ; la vitrine sera reconstruite comme route `/design-system` en développement (phase 7), avec tous les composants à jour.
