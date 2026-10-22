@@ -321,6 +321,17 @@ body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--l
 @media (min-width:1024px){.method{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start}.method .team{position:sticky;top:calc(var(--header-height) + var(--space-6))}}
 
 @media (prefers-reduced-motion:reduce){.skpost:hover{transform:rotate(var(--r))}.skpost.reveal-brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}}
+/* Frise centrée alternée (bureau) : le fil au milieu, une étape à gauche, une à droite ; fil à gauche sur mobile et tablette */
+@media (min-width:1024px){
+  .tline-wrap{max-width:none}
+  .tline-wrap::before,.tline-wrap .fill{left:calc(50% - var(--border-strong) / 2)}
+  .tline{padding:0}
+  .tline li{width:calc(50% - var(--space-7))}
+  .tline li:nth-child(odd){justify-self:start;justify-items:end;text-align:right}
+  .tline li:nth-child(even){justify-self:end}
+  .tline li:nth-child(odd)::before{left:auto;right:calc(-1 * (var(--space-7) + var(--timeline-dot) / 2))}
+  .tline li:nth-child(even)::before{left:calc(-1 * (var(--space-7) + var(--timeline-dot) / 2))}
+}
 </style>
 </head>
 <body>
