@@ -15,7 +15,10 @@ function random(seed: number) {
 /** Largeur de référence, servie dans le HTML pré-rendu avant la mesure de l'écran */
 export const REFERENCE_WIDTH = 1440
 
-export function wavePath(seed: number, width: number): { d: string; height: number } {
+export function wavePath(
+  seed: number,
+  width: number,
+): { d: string; width: number; height: number } {
   const W = Math.max(1, Math.round(width))
   const r = random(seed)
   // Amplitude de 12 à 21 px, réduite jusqu'à 60 % sur les écrans étroits
@@ -47,5 +50,5 @@ export function wavePath(seed: number, width: number): { d: string; height: numb
     const e = points[i + 2] ?? c
     d += `C${f(b[0] + (c[0] - a[0]) / 6)},${f(b[1] + (c[1] - a[1]) / 6)} ${f(c[0] - (e[0] - b[0]) / 6)},${f(c[1] - (e[1] - b[1]) / 6)} ${f(c[0])},${f(c[1])}`
   }
-  return { d: `${d}Z`, height }
+  return { d: `${d}Z`, width: W, height }
 }

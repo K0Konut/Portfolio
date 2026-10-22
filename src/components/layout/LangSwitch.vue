@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { LOCALES, routeName, type Locale } from '../../router/routes'
+import { useRouter } from 'vue-router'
+import { useLocale } from '../../composables/useLocale'
+import { LOCALES, routeName } from '../../router/routes'
 
 // Mène à la page équivalente dans l'autre langue (architecture §2) ; depuis une adresse inconnue, à l'accueil
 defineProps<{ variant: 'header' | 'menu' }>()
-const route = useRoute()
 const router = useRouter()
-const { t, locale } = useI18n()
+const { t } = useI18n()
+const { locale, alternate } = useLocale()
 
 const links = computed(() =>
-  LOCALES.map((l: Locale) => ({
+  LOCALES.map((l) => ({
     locale: l,
-    href: router.resolve(
-      route.meta.alternates && route.meta.page
-        ? { name: routeName(route.meta.page, l), params: route.params }
-        : { name: routeName('accueil', l) },
-    ).href,
+    href: alternate(l) ?? router.resolve({ name: routeName('accueil', l) }).href,
     current: l === locale.value,
   })),
 )
@@ -33,7 +30,7 @@ const links = computed(() =>
         :hreflang="link.locale"
         :aria-current="link.current ? 'true' : undefined"
       >
-        <span>{{ link.locale.toUpperCase() }}</span>
+        <span :class="{ trace: variant === 'header' }">{{ link.locale.toUpperCase() }}</span>
       </RouterLink>
     </template>
   </div>
@@ -56,25 +53,6 @@ a {
   color: var(--color-header-text);
   font-weight: var(--weight-medium);
   font-size: var(--text-ui);
-}
-.lang-header span {
-  position: relative;
-}
-.lang-header a span::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(-1 * var(--space-1));
-  height: var(--underline);
-  background: var(--color-header-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--duration-move) var(--ease-out);
-}
-.lang-header a:hover span::after,
-.lang-header a[aria-current] span::after {
-  transform: scaleX(1);
 }
 .lang-header .sep {
   color: var(--color-header-muted);

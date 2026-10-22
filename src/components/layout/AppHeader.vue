@@ -1,51 +1,44 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import { routeName, type Locale } from '../../router/routes'
+import { useLocale } from '../../composables/useLocale'
+import { SITE } from '../../content/site'
+import BaseButton from '../ui/BaseButton.vue'
 import BaseIcon from '../ui/BaseIcon.vue'
 import LangSwitch from './LangSwitch.vue'
 import MobileMenu from './MobileMenu.vue'
-import { isCurrentSection, NAV_PAGES } from './navigation'
+import { useNavLinks } from './navigation'
 
 // En-tête fixe qui « pend » au-dessus du contenu (design system § AppHeader)
-const route = useRoute()
-const { t, locale } = useI18n()
+const { t } = useI18n()
+const { to } = useLocale()
+const links = useNavLinks()
 const menuOpen = ref(false)
-const menuButton = ref<HTMLButtonElement>()
-
-// Menu refermé : le focus revient au bouton qui l'a ouvert
-watch(menuOpen, (isOpen, wasOpen) => {
-  if (!isOpen && wasOpen) menuButton.value?.focus()
-})
 </script>
 
 <template>
   <header class="site-header">
     <div class="bar">
-      <RouterLink class="name" :to="{ name: routeName('accueil', locale as Locale) }"
-        >Costa Maskulov</RouterLink
-      >
+      <RouterLink class="name" :to="to('accueil')">{{ SITE.name }}</RouterLink>
       <nav :aria-label="t('nav.label')">
         <RouterLink
-          v-for="page in NAV_PAGES"
-          :key="page"
-          :to="{ name: routeName(page, locale as Locale) }"
-          :aria-current="isCurrentSection(page, route.meta.page) ? 'page' : undefined"
-          ><span>{{ t(`nav.${page}`) }}</span></RouterLink
+          v-for="link in links"
+          :key="link.page"
+          :to="link.to"
+          :aria-current="link.current ? 'page' : undefined"
+          ><span class="trace">{{ link.label }}</span></RouterLink
         >
       </nav>
       <LangSwitch variant="header" class="langs" />
-      <button
-        ref="menuButton"
-        type="button"
+      <BaseButton
+        compact
         class="menu-button"
         :aria-expanded="menuOpen"
         aria-controls="menu-mobile"
         @click="menuOpen = true"
       >
         <BaseIcon name="menu" />{{ t('nav.menu') }}
-      </button>
+      </BaseButton>
     </div>
     <MobileMenu v-model="menuOpen" />
   </header>
@@ -61,7 +54,12 @@ watch(menuOpen, (isOpen, wasOpen) => {
   padding-inline: var(--gutter);
   pointer-events: none;
 }
+/* Barre claire : les rôles de couleur prennent ceux de l'en-tête (boutons, focus, trait) */
 .bar {
+  --color-text: var(--color-header-text);
+  --color-bg: var(--color-header-bg);
+  --color-focus: var(--color-header-accent);
+  --trace-color: var(--color-header-accent);
   pointer-events: auto;
   max-width: var(--container);
   margin: 0 auto;
@@ -73,7 +71,6 @@ watch(menuOpen, (isOpen, wasOpen) => {
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   background: var(--color-header-bg);
   color: var(--color-header-text);
-  --color-focus: var(--color-header-accent);
 }
 .name {
   display: inline-flex;
@@ -103,39 +100,9 @@ nav a {
   font-weight: var(--weight-medium);
   font-size: var(--text-ui);
 }
-nav span {
-  position: relative;
-}
-/* Survol : un trait violet se trace ; page en cours : trait permanent */
-nav span::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(-1 * var(--space-1));
-  height: var(--underline);
-  background: var(--color-header-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--duration-move) var(--ease-out);
-}
-nav a:hover span::after,
-nav a[aria-current] span::after {
-  transform: scaleX(1);
-}
 .menu-button {
   display: none;
   margin-left: auto;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--target-min);
-  padding: 0 var(--space-4);
-  border: var(--border-strong) solid var(--color-header-text);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--color-header-text);
-  font: var(--weight-bold) var(--text-sm) / var(--leading-none) var(--font-body);
-  cursor: pointer;
 }
 @media (max-width: 767px) {
   nav,

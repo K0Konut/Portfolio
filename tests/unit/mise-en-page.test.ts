@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import LangSwitch from '../../src/components/layout/LangSwitch.vue'
 import MobileMenu from '../../src/components/layout/MobileMenu.vue'
-import { isCurrentSection } from '../../src/components/layout/navigation'
 import { wavePath } from '../../src/components/sections/wave'
 import { createAppI18n } from '../../src/i18n'
 import { buildRoutes } from '../../src/router/routes'
@@ -52,16 +51,17 @@ describe('LangSwitch', () => {
 })
 
 describe('navigation', () => {
-  it('garde « Projets » actif sur une étude de cas', () => {
-    expect(isCurrentSection('projets', 'etude-de-cas')).toBe(true)
-    expect(isCurrentSection('contact', 'etude-de-cas')).toBe(false)
+  it('range une étude de cas dans la rubrique « Projets »', () => {
+    const meta = (name: string) => buildRoutes().find((r) => r.name === name)?.meta
+    expect(meta('etude-de-cas-fr')?.section).toBe('projets')
+    expect(meta('contact-en')?.section).toBe('contact')
   })
 })
 
 describe('MobileMenu', () => {
-  it('se ferme avec Échap', async () => {
+  it('se ferme quand la fenêtre de dialogue se ferme (Échap, bouton « Fermer »)', async () => {
     const w = mount(MobileMenu, { props: { modelValue: true }, global: await setup('/fr') })
-    await w.find('[role="dialog"]').trigger('keydown', { key: 'Escape' })
+    await w.find('dialog').trigger('close')
     expect(w.emitted('update:modelValue')?.[0]).toEqual([false])
   })
 })

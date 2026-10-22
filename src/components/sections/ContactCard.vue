@@ -1,25 +1,26 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { useId } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useLocale } from '../../composables/useLocale'
 import { SITE } from '../../content/site'
-import type { Locale } from '../../router/routes'
 import BaseButton from '../ui/BaseButton.vue'
 import CopyButton from '../ui/CopyButton.vue'
 import TextLink from '../ui/TextLink.vue'
+import PageSection from './PageSection.vue'
 
 // Section « Parlons-en » (design system § ContactCard) : la section vive de la page, en lime
 defineProps<{ intro: string }>()
-const { t, locale } = useI18n()
-const cv = computed(() => SITE.cv[locale.value as Locale])
+const { t } = useI18n()
+const { locale } = useLocale()
 const titleId = useId()
 </script>
 
 <template>
-  <section class="section fond-lime" :aria-labelledby="titleId">
-    <div class="inner contact">
+  <PageSection fond="lime" :labelledby="titleId">
+    <div class="contact">
       <div v-reveal class="intro">
         <h2 :id="titleId">{{ t('contact.title') }}</h2>
-        <p>{{ intro }}</p>
+        <p class="lead">{{ intro }}</p>
       </div>
       <div v-reveal="1" class="card fond-nuit">
         <div>
@@ -27,7 +28,7 @@ const titleId = useId()
           <CopyButton :value="SITE.email" />
         </div>
         <div class="links">
-          <BaseButton variant="primary" :href="cv" download icon="download">{{
+          <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
             t('contact.cv')
           }}</BaseButton>
           <TextLink variant="standalone" :href="SITE.linkedin">LinkedIn</TextLink>
@@ -35,16 +36,11 @@ const titleId = useId()
         </div>
       </div>
     </div>
-  </section>
+  </PageSection>
 </template>
 
 <style scoped>
-.section {
-  padding: var(--space-section) var(--gutter);
-}
 .contact {
-  max-width: var(--container);
-  margin: 0 auto;
   display: grid;
   gap: var(--space-7);
   align-items: center;
@@ -67,13 +63,8 @@ h2 {
   font-size: clamp(3rem, 1.5rem + 7vw, 6rem);
   line-height: var(--leading-display);
 }
-.intro p {
-  margin: 0;
-  max-width: var(--measure);
-  font-size: var(--text-lead);
-  line-height: var(--leading-snug);
-}
-/* Affiche collée : inclinée sur bureau, elle se redresse et se soulève au survol ; droite sur mobile */
+/* Affiche collée : inclinée sur bureau (--poster-tilt), elle se redresse et se soulève au survol ;
+   droite sur mobile et en mouvement réduit */
 .card {
   display: grid;
   gap: var(--space-6);
@@ -83,18 +74,11 @@ h2 {
 }
 @media (min-width: 1024px) {
   .card {
-    transform: rotate(-2deg);
+    transform: rotate(var(--poster-tilt));
   }
   .card:hover,
   .card:focus-within {
     transform: translateY(calc(-1 * var(--card-lift))) rotate(0deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .card:hover,
-  .card:focus-within {
-    transform: none;
   }
 }
 .label {

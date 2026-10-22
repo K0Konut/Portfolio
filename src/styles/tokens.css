@@ -143,6 +143,8 @@
   --press-scale: 0.98;
   --card-lift: 8px;
   --pop-scale: 0.6;
+  /* Inclinaison des « affiches collées » (DA §5) ; droites en mouvement réduit */
+  --poster-tilt: -2deg;
   --reveal-distance: 24px;
   --letter-rise: 0.4em;
   --hero-parallax: 0.35;
@@ -159,6 +161,7 @@
     --card-lift: 0px;
     --reveal-distance: 0px;
     --pop-scale: 1;
+    --poster-tilt: 0deg;
     --duration-move: 0ms;
   }
 }

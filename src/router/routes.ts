@@ -8,6 +8,8 @@ interface PageDef {
   name: string
   paths: Record<Locale, string>
   noindex?: boolean
+  /** Rubrique de la navigation à laquelle la page appartient, si ce n'est pas elle-même */
+  section?: string
 }
 
 /* La table des pages : chaque page une fois, avec son chemin dans chaque langue (architecture technique §3).
@@ -15,7 +17,11 @@ interface PageDef {
 export const PAGES = [
   { name: 'accueil', paths: { fr: '/fr', en: '/en' } },
   { name: 'projets', paths: { fr: '/fr/projets', en: '/en/projects' } },
-  { name: 'etude-de-cas', paths: { fr: '/fr/projets/:slug', en: '/en/projects/:slug' } },
+  {
+    name: 'etude-de-cas',
+    paths: { fr: '/fr/projets/:slug', en: '/en/projects/:slug' },
+    section: 'projets',
+  },
   { name: 'a-propos', paths: { fr: '/fr/a-propos', en: '/en/about' } },
   { name: 'contact', paths: { fr: '/fr/contact', en: '/en/contact' } },
   {
@@ -36,6 +42,8 @@ export type PageName = (typeof PAGES)[number]['name']
 declare module 'vue-router' {
   interface RouteMeta {
     page?: PageName
+    /** Rubrique de la navigation à souligner (l'étude de cas appartient à « Projets ») */
+    section?: PageName
     locale?: Locale
     noindex?: boolean
     /** La page existe dans les autres langues (canonical et hreflang) ; faux pour une adresse inconnue. */
@@ -69,7 +77,13 @@ export function buildRoutes(): RouteRecordRaw[] {
       path: page.paths[locale],
       name: routeName(page.name, locale),
       component: placeholder,
-      meta: { page: page.name, locale, noindex: 'noindex' in page, alternates: true },
+      meta: {
+        page: page.name,
+        section: 'section' in page ? page.section : page.name,
+        locale,
+        noindex: 'noindex' in page,
+        alternates: true,
+      },
     })),
   )
   // En production, Nginx redirige « / » selon la langue du navigateur ; ici, le développement et le repli

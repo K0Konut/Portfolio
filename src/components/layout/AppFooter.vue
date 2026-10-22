@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useLocale } from '../../composables/useLocale'
 import { SITE } from '../../content/site'
-import { routeName, type Locale } from '../../router/routes'
 import CopyButton from '../ui/CopyButton.vue'
 import TextLink from '../ui/TextLink.vue'
 
 // Pied de page de toutes les pages (design system § AppFooter) : un repère calme, sans animation
-const { t, locale } = useI18n()
+const { t } = useI18n()
+const { to } = useLocale()
 const year = new Date().getFullYear()
 </script>
 
 <template>
   <footer class="fond-nuit">
-    <div class="foot">
+    <div class="container foot">
       <div class="cols">
         <div>
           <h2>{{ t('footer.cv') }}</h2>
@@ -31,7 +32,7 @@ const year = new Date().getFullYear()
         </div>
         <div>
           <h2>{{ t('footer.contact') }}</h2>
-          <CopyButton :value="SITE.email" class="mail" />
+          <CopyButton :value="SITE.email" small />
           <ul>
             <li><TextLink variant="standalone" :href="SITE.linkedin">LinkedIn</TextLink></li>
             <li><TextLink variant="standalone" :href="SITE.github">GitHub</TextLink></li>
@@ -46,23 +47,19 @@ const year = new Date().getFullYear()
               }}</TextLink>
             </li>
             <li>
-              <TextLink
-                variant="standalone"
-                :to="{ name: routeName('mentions-legales', locale as Locale) }"
-                >{{ t('footer.legal') }}</TextLink
-              >
+              <TextLink variant="standalone" :to="to('mentions-legales')">{{
+                t('footer.legal')
+              }}</TextLink>
             </li>
             <li>
-              <TextLink
-                variant="standalone"
-                :to="{ name: routeName('confidentialite', locale as Locale) }"
-                >{{ t('footer.privacy') }}</TextLink
-              >
+              <TextLink variant="standalone" :to="to('confidentialite')">{{
+                t('footer.privacy')
+              }}</TextLink>
             </li>
           </ul>
         </div>
       </div>
-      <small>© {{ year }} Costa Maskulov</small>
+      <small>© {{ year }} {{ SITE.name }}</small>
     </div>
   </footer>
 </template>
@@ -72,8 +69,6 @@ footer {
   padding-inline: var(--gutter);
 }
 .foot {
-  max-width: var(--container);
-  margin: 0 auto;
   padding: var(--space-8) 0 var(--space-6);
   display: grid;
   gap: var(--space-7);
@@ -93,9 +88,6 @@ ul {
   margin: 0;
   padding: 0;
   display: grid;
-}
-.mail :deep(.address) {
-  font-size: var(--text-ui);
 }
 small {
   font-size: var(--text-sm);
