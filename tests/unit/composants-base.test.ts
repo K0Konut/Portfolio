@@ -6,14 +6,11 @@ import CopyButton from '../../src/components/ui/CopyButton.vue'
 import TextLink from '../../src/components/ui/TextLink.vue'
 import { createAppI18n } from '../../src/i18n'
 
-const global = {
-  plugins: [createAppI18n()],
-  stubs: { RouterLink: { template: '<a><slot /></a>' } },
-}
+const options = () => ({ plugins: [createAppI18n()], stubs: { RouterLink: RouterLinkStub } })
 
 describe('BaseButton', () => {
   it('est un bouton quand il agit sur la page', () => {
-    const w = mount(BaseButton, { slots: { default: 'Me contacter' }, global })
+    const w = mount(BaseButton, { slots: { default: 'Me contacter' }, global: options() })
     expect(w.element.tagName).toBe('BUTTON')
     expect(w.attributes('type')).toBe('button')
   })
@@ -22,7 +19,7 @@ describe('BaseButton', () => {
     const w = mount(BaseButton, {
       props: { href: '/cv/cv-fr.pdf', download: true, icon: 'download' },
       slots: { default: 'Télécharger le CV' },
-      global,
+      global: options(),
     })
     expect(w.element.tagName).toBe('A')
     expect(w.attributes('download')).toBeDefined()
@@ -33,7 +30,7 @@ describe('BaseButton', () => {
     const w = mount(BaseButton, {
       props: { to: '/fr/projets' },
       slots: { default: 'Projets' },
-      global,
+      global: options(),
     })
     expect(w.findComponent(RouterLinkStub).props('to')).toBe('/fr/projets')
   })
@@ -42,7 +39,7 @@ describe('BaseButton', () => {
     const w = mount(BaseButton, {
       props: { href: 'https://github.com/K0Konut', icon: 'arrow-up-right' },
       slots: { default: 'GitHub' },
-      global,
+      global: options(),
     })
     expect(w.attributes('target')).toBe('_blank')
     expect(w.find('.sr-only').text()).toBe('(nouvel onglet)')
@@ -54,7 +51,7 @@ describe('TextLink', () => {
     const w = mount(TextLink, {
       props: { href: 'https://github.com/K0Konut' },
       slots: { default: 'GitHub' },
-      global,
+      global: options(),
     })
     expect(w.attributes('target')).toBe('_blank')
     expect(w.attributes('rel')).toBe('noopener')
@@ -65,7 +62,7 @@ describe('TextLink', () => {
     const w = mount(TextLink, {
       props: { href: '#projets' },
       slots: { default: 'Projets' },
-      global,
+      global: options(),
     })
     expect(w.attributes('target')).toBeUndefined()
     expect(w.find('.sr-only').exists()).toBe(false)
@@ -81,7 +78,7 @@ describe('CopyButton', () => {
   it('copie l’adresse, l’annonce, puis revient à « Copier »', async () => {
     vi.useFakeTimers()
     const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined)
-    const w = mount(CopyButton, { props: { value: 'a@b.fr' }, global })
+    const w = mount(CopyButton, { props: { value: 'a@b.fr' }, global: options() })
     await w.find('button').trigger('click')
     await flushPromises()
     expect(writeText).toHaveBeenCalledWith('a@b.fr')
@@ -94,7 +91,11 @@ describe('CopyButton', () => {
 
   it('sélectionne l’adresse si le presse-papiers est refusé', async () => {
     vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('refusé'))
-    const w = mount(CopyButton, { props: { value: 'a@b.fr' }, global, attachTo: document.body })
+    const w = mount(CopyButton, {
+      props: { value: 'a@b.fr' },
+      global: options(),
+      attachTo: document.body,
+    })
     await w.find('button').trigger('click')
     await flushPromises()
     expect(w.find('button').text()).toBe('Sélectionnée : Ctrl + C')
