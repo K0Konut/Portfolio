@@ -1,42 +1,31 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type { RouteLocationRaw } from 'vue-router'
+import { useLink, type LinkProps } from '../../composables/useLink'
 import BaseIcon from './BaseIcon.vue'
 import type { IconName } from './icons'
 
 const props = withDefaults(
-  defineProps<{
-    variant?: 'inline' | 'standalone'
-    to?: RouteLocationRaw
-    href?: string
-    download?: boolean
-    /** Icône du lien (`standalone`) ; un lien externe a toujours `arrow-up-right` */
-    icon?: IconName
-    iconStart?: boolean
-  }>(),
+  defineProps<
+    LinkProps & {
+      variant?: 'inline' | 'standalone'
+      /** Icône du lien (`standalone`) ; un lien externe a toujours `arrow-up-right` */
+      icon?: IconName
+      iconStart?: boolean
+    }
+  >(),
   { variant: 'inline', to: undefined, href: undefined, download: false, icon: undefined },
 )
 
-const { t } = useI18n()
-const external = computed(() => !!props.href && /^https?:\/\//.test(props.href))
+const { tag, attrs, external, newTab } = useLink(props)
 const shownIcon = computed(() => (external.value ? 'arrow-up-right' : props.icon))
 </script>
 
 <template>
-  <component
-    :is="to ? 'RouterLink' : 'a'"
-    :class="['link', `link-${variant}`]"
-    :to="to"
-    :href="href"
-    :download="download || undefined"
-    :target="external ? '_blank' : undefined"
-    :rel="external ? 'noopener' : undefined"
-  >
+  <component :is="tag" :class="['link', `link-${variant}`]" v-bind="attrs">
     <BaseIcon v-if="shownIcon && iconStart" :name="shownIcon" />
     <span class="label"><slot /></span>
     <BaseIcon v-if="shownIcon && !iconStart" :name="shownIcon" />
-    <span v-if="external" class="sr-only"> {{ t('ui.newTab') }}</span>
+    <span v-if="newTab" class="sr-only"> {{ newTab }}</span>
   </component>
 </template>
 
@@ -80,13 +69,13 @@ const shownIcon = computed(() => (external.value ? 'arrow-up-right' : props.icon
   height: var(--border-thin);
   background: currentColor;
 }
-/* Le trait épais se trace de gauche à droite ; avec « réduire les animations », il apparaît d'un coup */
+/* Le trait épais se trace de gauche à droite ; avec « réduire les animations », il apparaît d'un coup (--duration-move) */
 .link-standalone .label::after {
   height: var(--underline);
   background: var(--color-action);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--duration-fast) var(--ease-out);
+  transition: transform var(--duration-move) var(--ease-out);
 }
 .link-standalone:hover,
 .link-standalone:focus-visible {
@@ -95,10 +84,5 @@ const shownIcon = computed(() => (external.value ? 'arrow-up-right' : props.icon
 .link-standalone:hover .label::after,
 .link-standalone:focus-visible .label::after {
   transform: scaleX(1);
-}
-@media (prefers-reduced-motion: reduce) {
-  .link-standalone .label::after {
-    transition: none;
-  }
 }
 </style>

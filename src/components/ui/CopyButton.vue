@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import BaseButton from './BaseButton.vue'
 import BaseIcon from './BaseIcon.vue'
 
 const props = defineProps<{ value: string }>()
 const { t } = useI18n()
 
-/** Durée d'affichage de la confirmation (token --feedback-hold) */
-const HOLD_MS = 2000
-
 const status = ref<'idle' | 'copied' | 'selected'>('idle')
 const address = ref<HTMLElement>()
 let timer: ReturnType<typeof setTimeout> | undefined
 
+/** Durée d'affichage de la confirmation : le token --feedback-hold (en secondes) */
+function holdMs() {
+  const value = address.value && getComputedStyle(address.value).getPropertyValue('--feedback-hold')
+  return (parseFloat(value || '') || 2) * 1000
+}
+
 function settle(next: 'copied' | 'selected') {
   status.value = next
   clearTimeout(timer)
-  timer = setTimeout(() => (status.value = 'idle'), HOLD_MS)
+  timer = setTimeout(() => (status.value = 'idle'), holdMs())
 }
 
 // Presse-papiers refusé : on sélectionne l'adresse pour une copie au clavier
@@ -47,13 +51,13 @@ const labels = { idle: 'ui.copy', copied: 'ui.copied', selected: 'ui.selected' }
 <template>
   <div :class="['copy', { done: status === 'copied' }]">
     <span ref="address" class="address">{{ value }}</span>
-    <button type="button" @click="copy">
+    <BaseButton class="compact" @click="copy">
       <span class="swap">
         <BaseIcon name="copy" class="ic-copy" />
         <BaseIcon name="check" class="ic-check" />
       </span>
       <span>{{ t(labels[status]) }}</span>
-    </button>
+    </BaseButton>
     <span class="sr-only" aria-live="polite">{{ status === 'idle' ? '' : t(labels[status]) }}</span>
   </div>
 </template>
@@ -71,27 +75,13 @@ const labels = { idle: 'ui.copy', copied: 'ui.copied', selected: 'ui.selected' }
   user-select: all;
   overflow-wrap: anywhere;
 }
-button {
-  display: inline-flex;
-  align-items: center;
+/* Un bouton outline compact (design system § CopyButton) */
+.compact {
   gap: var(--space-2);
-  min-height: var(--target-min);
   padding: 0 var(--space-4);
-  border: var(--border-strong) solid var(--color-text);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--color-text);
-  font: var(--weight-bold) var(--text-sm) / var(--leading-none) var(--font-body);
-  cursor: pointer;
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  font-size: var(--text-sm);
 }
-button:hover {
-  background: var(--color-text);
-  color: var(--color-bg);
-}
-/* Fondu croisé de l'icône : « check » grandit de 0,6 à 1 ; fondu seul en mouvement réduit */
+/* Fondu croisé de l'icône : « check » grandit depuis --pop-scale ; fondu seul en mouvement réduit */
 .swap {
   display: inline-grid;
 }
@@ -103,7 +93,7 @@ button:hover {
 }
 .ic-check {
   opacity: 0;
-  transform: scale(0.6);
+  transform: scale(var(--pop-scale));
 }
 .done .ic-copy {
   opacity: 0;
@@ -111,11 +101,5 @@ button:hover {
 .done .ic-check {
   opacity: 1;
   transform: scale(1);
-}
-@media (prefers-reduced-motion: reduce) {
-  .ic-check,
-  .done .ic-check {
-    transform: none;
-  }
 }
 </style>

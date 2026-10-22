@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { flushPromises, mount } from '@vue/test-utils'
+import { flushPromises, mount, RouterLinkStub } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import BaseButton from '../../src/components/ui/BaseButton.vue'
 import CopyButton from '../../src/components/ui/CopyButton.vue'
@@ -27,6 +27,25 @@ describe('BaseButton', () => {
     expect(w.element.tagName).toBe('A')
     expect(w.attributes('download')).toBeDefined()
     expect(w.classes()).toContain('btn-download')
+  })
+
+  it('mène à une page du site par le routeur', () => {
+    const w = mount(BaseButton, {
+      props: { to: '/fr/projets' },
+      slots: { default: 'Projets' },
+      global,
+    })
+    expect(w.findComponent(RouterLinkStub).props('to')).toBe('/fr/projets')
+  })
+
+  it('ouvre un site externe dans un nouvel onglet, comme un lien texte', () => {
+    const w = mount(BaseButton, {
+      props: { href: 'https://github.com/K0Konut', icon: 'arrow-up-right' },
+      slots: { default: 'GitHub' },
+      global,
+    })
+    expect(w.attributes('target')).toBe('_blank')
+    expect(w.find('.sr-only').text()).toBe('(nouvel onglet)')
   })
 })
 

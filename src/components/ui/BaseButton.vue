@@ -1,39 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
+import { useLink, type LinkProps } from '../../composables/useLink'
 import BaseIcon from './BaseIcon.vue'
 
 type ButtonIcon = 'arrow-right' | 'download' | 'arrow-up-right'
 
 const props = withDefaults(
-  defineProps<{
-    variant?: 'primary' | 'outline'
-    /** Page du site (lien du routeur) */
-    to?: RouteLocationRaw
-    /** Fichier ou site externe */
-    href?: string
-    /** Télécharger le fichier de `href` (le CV) */
-    download?: boolean
-    icon?: ButtonIcon
-  }>(),
+  defineProps<LinkProps & { variant?: 'primary' | 'outline'; icon?: ButtonIcon }>(),
   { variant: 'outline', to: undefined, href: undefined, download: false, icon: undefined },
 )
 
 // Un lien quand il mène quelque part, un bouton quand il agit sur la page ; jamais un div cliquable
-const tag = computed(() => (props.to ? 'RouterLink' : props.href ? 'a' : 'button'))
+const { tag, attrs, newTab } = useLink(props)
 </script>
 
 <template>
-  <component
-    :is="tag"
-    :class="['btn', `btn-${variant}`, icon && `btn-${icon}`]"
-    :to="to"
-    :href="href"
-    :download="download || undefined"
-    :type="tag === 'button' ? 'button' : undefined"
-  >
+  <component :is="tag" :class="['btn', `btn-${variant}`, icon && `btn-${icon}`]" v-bind="attrs">
     <slot />
     <BaseIcon v-if="icon" :name="icon" />
+    <span v-if="newTab" class="sr-only"> {{ newTab }}</span>
   </component>
 </template>
 
@@ -54,7 +38,7 @@ const tag = computed(() => (props.to ? 'RouterLink' : props.href ? 'a' : 'button
     background-color var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
 }
-.btn :deep(.icon) {
+.btn .icon {
   transition: transform var(--duration-fast) var(--ease-out);
 }
 .btn-primary {
@@ -72,13 +56,13 @@ const tag = computed(() => (props.to ? 'RouterLink' : props.href ? 'a' : 'button
   transform: translateY(calc(-1 * var(--hover-lift)));
 }
 /* L'icône avance dans son sens : à droite, en bas pour le téléchargement, en diagonale vers l'extérieur */
-.btn:hover :deep(.icon) {
+.btn:hover .icon {
   transform: translateX(var(--hover-nudge));
 }
-.btn-download:hover :deep(.icon) {
+.btn-download:hover .icon {
   transform: translateY(var(--hover-nudge));
 }
-.btn-arrow-up-right:hover :deep(.icon) {
+.btn-arrow-up-right:hover .icon {
   transform: translate(var(--hover-nudge), calc(-1 * var(--hover-nudge)));
 }
 .btn:active {

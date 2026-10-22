@@ -130,6 +130,8 @@
   --duration-base: 700ms;
   --duration-reduced: 300ms;
   --duration-press: 120ms;
+  /* Durée des déplacements secondaires (trait qui se trace…), à 0 en mouvement réduit */
+  --duration-move: var(--duration-fast);
   --duration-letter: 600ms;
   --duration-hint: 1200ms;
   --duration-bar: 900ms;
@@ -140,6 +142,7 @@
   --hover-nudge: 4px;
   --press-scale: 0.98;
   --card-lift: 8px;
+  --pop-scale: 0.6;
   --reveal-distance: 24px;
   --letter-rise: 0.4em;
   --hero-parallax: 0.35;
@@ -155,5 +158,7 @@
     --press-scale: 1;
     --card-lift: 0px;
     --reveal-distance: 0px;
+    --pop-scale: 1;
+    --duration-move: 0ms;
   }
 }

@@ -6,8 +6,11 @@ import CopyButton from '../../components/ui/CopyButton.vue'
 import { ICONS, type IconName } from '../../components/ui/icons'
 import TextLink from '../../components/ui/TextLink.vue'
 import DsBlock from './DsBlock.vue'
+import { FONDS as ALL } from './fonds'
 
-const FONDS = ['fond-nuit', 'fond-violet', 'fond-lime', 'fond-creme']
+const FONDS = ALL.filter((f) =>
+  ['fond-nuit', 'fond-violet', 'fond-lime', 'fond-creme'].includes(f.cls),
+)
 const NAMES = Object.keys(ICONS) as IconName[]
 </script>
 
@@ -17,8 +20,8 @@ const NAMES = Object.keys(ICONS) as IconName[]
     intro="BaseButton, TextLink, BaseTag, BaseIcon, CopyButton et SkipLink, sur quatre fonds : les rôles changent, les composants non. Survolez, cliquez, parcourez au clavier."
   >
     <div class="grid">
-      <div v-for="f in FONDS" :key="f" :class="['panel', f]">
-        <p class="name">{{ f.replace('fond-', '') }}</p>
+      <div v-for="f in FONDS" :key="f.cls" :class="['panel', f.cls]">
+        <p class="name">{{ f.name }}</p>
         <div class="row">
           <BaseButton variant="primary" href="#" download icon="download"
             >Télécharger le CV</BaseButton
@@ -86,7 +89,6 @@ const NAMES = Object.keys(ICONS) as IconName[]
   font-family: var(--font-display);
   font-size: var(--text-h3);
   line-height: var(--leading-display);
-  text-transform: capitalize;
 }
 .row {
   display: flex;
