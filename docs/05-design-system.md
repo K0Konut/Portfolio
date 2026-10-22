@@ -189,6 +189,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | `--letter-rise` | `0.4em` | Hauteur dont chaque lettre monte avant de se poser |
 | `--hero-parallax` | `0.35` | Le nom descend à 35 % de la vitesse du scroll en quittant l'écran |
 | `--stagger-brick` | `60ms` | Étapes de la méthode, posées brique par brique |
+| `--stagger-bar` | `150ms` | Barre « après » d'un résultat chiffré, après l'« avant » |
 | `--hint-travel` | `12px` | Course du repère de l'indicateur de scroll |
 | `--duration-hint` | `1200ms` | Un aller de l'indicateur de scroll |
 | `--duration-bar` | `900ms` | Barres de `StatBlock` qui se remplissent |
@@ -478,7 +479,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Rôle** : un résultat chiffré, prouvé (ton de voix : « un fait, un chiffre plutôt qu'un adjectif »).
 - **Contenu** : la valeur en Bagel `--text-h1` (grand chiffre décoratif) ; un libellé en `--text-sm` et `--color-text-muted` ; si la valeur compare un avant et un après, deux barres de `--stat-bar` d'épaisseur, proportionnelles aux valeurs : « avant » en `--color-border`, « après » en `--color-highlight`, chacune avec sa valeur en clair.
 - **Mise en page** : 1 à 3 par ligne ; pas de carte autour (le chiffre suffit).
-- **Animation** : les barres se remplissent une fois (`scaleX`, `--duration-bar`, `--ease-out`) à l'arrivée à l'écran, l'« après » 150 ms après l'« avant ». Pas de compteur qui défile : motif trop vu, et un chiffre qui change est illisible.
+- **Animation** : les barres se remplissent une fois (`scaleX`, `--duration-bar`, `--ease-out`) à l'arrivée à l'écran, l'« après » `--stagger-bar` après l'« avant ». Pas de compteur qui défile : motif trop vu, et un chiffre qui change est illisible.
 - **Accessibilité** : les valeurs sont du texte ; les barres sont décoratives (`aria-hidden`).
 - **Animations réduites** : barres déjà remplies.
 

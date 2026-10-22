@@ -138,6 +138,7 @@
   --stagger-letter: 40ms;
   --stagger-block: 80ms;
   --stagger-brick: 60ms;
+  --stagger-bar: 150ms;
   --hover-lift: 3px;
   --hover-nudge: 4px;
   --press-scale: 0.98;

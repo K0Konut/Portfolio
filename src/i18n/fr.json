@@ -78,5 +78,24 @@
         "text": "En ligne dans des conteneurs Docker, sur mon propre serveur."
       }
     ]
+  },
+  "case": {
+    "toc": "Sommaire",
+    "next": "Projet suivant",
+    "all": "Tous les projets",
+    "after": "Suite"
+  },
+  "meta": {
+    "type": "Type",
+    "role": "Rôle",
+    "duration": "Durée",
+    "team": "Équipe",
+    "stack": "Stack",
+    "code": "Code",
+    "private": "Code privé"
+  },
+  "stat": {
+    "before": "avant",
+    "after": "après"
   }
 }

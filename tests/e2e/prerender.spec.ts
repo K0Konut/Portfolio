@@ -44,6 +44,9 @@ test("l'en-tête et le pied de page sont dans le HTML, avec le lien vers l'autre
   expect(html).toContain('aria-label="Navigation principale"')
   expect(html).toContain('href="/en/about"')
   expect(html).toContain('<footer')
+  // Les liens internes du pied de page gardent leur adresse (lien du routeur dans TextLink)
+  expect(html).toContain('href="/fr/mentions-legales"')
+  expect(html).toContain('href="/fr/confidentialite"')
 })
 
 test('le menu mobile se ferme avec Échap et rend le focus au bouton', async ({ page }) => {

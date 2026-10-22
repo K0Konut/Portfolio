@@ -9,7 +9,7 @@ defineProps<{ projects: ProjectSummary[] }>()
 <template>
   <ul class="posters">
     <li v-for="(project, i) in projects" :key="project.slug" v-reveal="i">
-      <ProjectCard :project="project" />
+      <ProjectCard class="poster" :project="project" />
     </li>
   </ul>
 </template>
@@ -24,6 +24,10 @@ defineProps<{ projects: ProjectSummary[] }>()
 }
 li {
   display: grid;
+}
+.poster:active {
+  transform: translateY(calc(-1 * var(--card-lift) / 2)) rotate(0deg);
+  transition-duration: var(--duration-press);
 }
 @media (min-width: 768px) {
   .posters {

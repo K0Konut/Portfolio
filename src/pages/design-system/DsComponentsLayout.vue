@@ -15,7 +15,7 @@ import BaseButton from '../../components/ui/BaseButton.vue'
       AppFooter (en bas).
     </p>
     <SectionWave :seed="9" from="nuit" to="violet" />
-    <PageIntro title="Projets">
+    <PageIntro title="En-tête de page">
       Tout ce que j’ai construit, du plus récent au plus ancien.
     </PageIntro>
     <SectionWave :seed="1" from="violet" to="nuit" />
@@ -30,7 +30,7 @@ import BaseButton from '../../components/ui/BaseButton.vue'
       </p>
     </PageSection>
     <SectionWave :seed="3" from="creme" to="vif" />
-    <PageSection fond="vif" title="Ma façon de travailler">
+    <PageSection fond="vif" title="Section vive">
       <template #intro>Chaque projet passe par les mêmes étapes.</template>
       <div><BaseButton href="#">Voir ma méthode</BaseButton></div>
     </PageSection>

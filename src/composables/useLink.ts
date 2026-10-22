@@ -17,17 +17,17 @@ export function useLink(props: LinkProps) {
   const { t } = useI18n()
   const external = computed(() => !!props.href && /^https?:\/\//.test(props.href))
   const tag = computed(() => (props.to ? RouterLink : props.href ? 'a' : 'button'))
-  const attrs = computed(() =>
-    tag.value === 'button'
-      ? { type: 'button' }
-      : {
-          to: props.to,
-          href: props.href,
-          download: props.download || undefined,
-          target: external.value ? '_blank' : undefined,
-          rel: external.value ? 'noopener' : undefined,
-        },
-  )
+  // Un lien du routeur ne reçoit que sa destination : un `href` vide écraserait celui qu'il calcule
+  const attrs = computed(() => {
+    if (props.to) return { to: props.to }
+    if (!props.href) return { type: 'button' }
+    return {
+      href: props.href,
+      download: props.download || undefined,
+      target: external.value ? '_blank' : undefined,
+      rel: external.value ? 'noopener' : undefined,
+    }
+  })
   const newTab = computed(() => (external.value ? t('ui.newTab') : ''))
   return { tag, attrs, external, newTab }
 }

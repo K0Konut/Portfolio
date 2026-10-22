@@ -78,5 +78,24 @@
         "text": "Online in Docker containers, on my own server."
       }
     ]
+  },
+  "case": {
+    "toc": "Contents",
+    "next": "Next project",
+    "all": "All projects",
+    "after": "What next"
+  },
+  "meta": {
+    "type": "Type",
+    "role": "Role",
+    "duration": "Duration",
+    "team": "Team",
+    "stack": "Stack",
+    "code": "Code",
+    "private": "Private code"
+  },
+  "stat": {
+    "before": "before",
+    "after": "after"
   }
 }
