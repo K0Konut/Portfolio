@@ -22,7 +22,7 @@ const titleId = useId()
   >
     <div class="container inner">
       <div v-if="title" v-reveal class="head">
-        <h2 :id="titleId">{{ title }}</h2>
+        <h2 :id="titleId" class="display">{{ title }}</h2>
         <p v-if="$slots.intro" class="lead"><slot name="intro" /></p>
       </div>
       <slot />
@@ -43,10 +43,6 @@ const titleId = useId()
   gap: var(--space-3);
 }
 h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
   font-size: var(--text-h2);
-  line-height: var(--leading-display);
 }
 </style>

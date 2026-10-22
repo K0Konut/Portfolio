@@ -7,7 +7,7 @@ const words = computed(() => props.name.split(' ').map((word) => [...word]))
 </script>
 
 <template>
-  <h1 class="hero-name">
+  <h1 class="hero-name display">
     <span class="sr-only">{{ name }}</span>
     <span aria-hidden="true">
       <template v-for="(letters, w) in words" :key="w">
@@ -21,11 +21,7 @@ const words = computed(() => props.name.split(' ').map((word) => [...word]))
 
 <style scoped>
 .hero-name {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
   font-size: var(--text-hero);
-  line-height: var(--leading-display);
   white-space: nowrap;
 }
 .word,

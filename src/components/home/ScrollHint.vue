@@ -10,7 +10,7 @@
   left: 50%;
   bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   width: var(--border-strong);
-  height: 40px;
+  height: var(--hint-height);
   background: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
   overflow: hidden;
 }

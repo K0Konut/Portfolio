@@ -26,19 +26,22 @@ const arcs = computed(() =>
   }),
 )
 const dots = computed(() => steps.value.map((_, k) => point(angle(k))))
-// Place du texte de chaque étape autour de l'anneau : côté, hauteur (en rayons), rapprochement
-const PLACES = [
-  ['droite', -0.866, 0.4],
-  ['droite', 0, 0],
-  ['droite', 0.866, 0.4],
-  ['gauche', 0.866, 0.4],
-  ['gauche', 0, 0],
-  ['gauche', -0.866, 0.4],
-] as const
+/* Place du texte de chaque étape autour de l'anneau, déduite de son angle : côté, hauteur (en rayons),
+   et rapprochement des étapes hautes et basses vers l'anneau */
+const place = (k: number) => {
+  const a = (angle(k) * Math.PI) / 180
+  const dy = -Math.cos(a)
+  return {
+    side: Math.sin(a) >= 0 ? 'droite' : 'gauche',
+    style: { '--dy': dy.toFixed(3), '--sh': Math.abs(dy) > 0.1 ? 0.4 : 0 },
+  }
+}
+/** Rayon de l'anneau, en part du côté du SVG (partagé avec le CSS) */
+const RING = { '--ring': R / 400 }
 </script>
 
 <template>
-  <div class="cycle">
+  <div class="cycle" :style="RING">
     <svg viewBox="0 0 400 400" aria-hidden="true">
       <defs>
         <marker
@@ -61,18 +64,18 @@ const PLACES = [
         marker-end="url(#ring-tip)"
         :d="arc.d"
       />
-      <template v-for="([x, y], k) in dots" :key="`dot-${k}`">
-        <circle :class="['dot', { last: k === dots.length - 1 }]" :cx="x" :cy="y" r="18" />
-        <text :class="['num', { last: k === dots.length - 1 }]" :x="x" :y="y">{{ k + 1 }}</text>
-      </template>
+      <g v-for="([x, y], k) in dots" :key="`dot-${k}`" :class="{ last: k === dots.length - 1 }">
+        <circle class="dot" :cx="x" :cy="y" r="18" />
+        <text class="num" :x="x" :y="y">{{ k + 1 }}</text>
+      </g>
     </svg>
     <ol class="steps">
       <li
         v-for="(step, k) in steps"
         :key="k"
         v-reveal="k"
-        :class="PLACES[k]?.[0]"
-        :style="{ '--dy': PLACES[k]?.[1], '--sh': PLACES[k]?.[2] }"
+        :class="place(k).side"
+        :style="place(k).style"
       >
         <span class="n">{{ k + 1 }}</span>
         <div>
@@ -180,7 +183,7 @@ li p {
 @media (min-width: 1024px) {
   .cycle {
     --D: 400px;
-    --r: calc(var(--D) * 0.425);
+    --r: calc(var(--D) * var(--ring));
     height: var(--D);
     padding: 0;
   }
@@ -211,9 +214,6 @@ li p {
     transform: translateY(-50%);
     width: calc(50% - var(--D) / 2 - var(--space-6));
   }
-  li.reveal.is-pending {
-    transform: translateY(calc(-50% + var(--reveal-distance)));
-  }
   .droite {
     left: calc(50% + var(--D) / 2 + var(--space-5) - var(--sh) * var(--r));
   }
@@ -224,12 +224,17 @@ li p {
   .gauche p {
     margin-left: auto;
   }
+  /* Numéro lu par les lecteurs d'écran, caché à l'écran (le numéro est dans l'anneau) */
   .n {
     position: absolute;
     width: 1px;
     height: 1px;
+    padding: 0;
+    margin: -1px;
     overflow: hidden;
     clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
   .loop {
     position: absolute;
@@ -259,7 +264,7 @@ li p {
   stroke: var(--color-text);
   stroke-width: 1.5;
 }
-.dot.last {
+.last .dot {
   fill: var(--color-action);
   stroke: var(--color-action);
 }
@@ -269,7 +274,7 @@ li p {
   text-anchor: middle;
   dominant-baseline: central;
 }
-.num.last {
+.last .num {
   fill: var(--color-on-action);
 }
 </style>

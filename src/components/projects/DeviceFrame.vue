@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type { Device } from '../../content/types'
+
 /* Cadre d'appareil à proportions fixes (design system § DeviceFrame) : la zone de fond prend la forme
    de la carte ; l'appareil garde ses proportions et « monte » du bas de la zone, coupé d'au plus 15 %
    (navigateur) ou 25 % (téléphone). Captures : 1440 × 900 (navigateur) ou 390 × 844 (téléphone). */
 withDefaults(
   defineProps<{
-    device: 'browser' | 'phone'
+    device: Device
     src?: string
     /** Description de l'écran ; vide dans une carte (le titre suffit) */
     alt?: string
@@ -12,10 +14,11 @@ withDefaults(
     label?: string
     /** Teinte du fond de capture (DA §5) ; violet foncé par défaut */
     stage?: string
-    eager?: boolean
   }>(),
-  { src: undefined, alt: '', label: '', stage: undefined, eager: false },
+  { src: undefined, alt: '', label: '', stage: undefined },
 )
+/** Taille des captures, par appareil */
+const SIZE = { browser: [1440, 900], phone: [390, 844] } as const
 </script>
 
 <template>
@@ -27,12 +30,12 @@ withDefaults(
           v-if="src"
           :src="src"
           :alt="alt"
-          :width="device === 'browser' ? 1440 : 390"
-          :height="device === 'browser' ? 900 : 844"
-          :loading="eager ? 'eager' : 'lazy'"
+          :width="SIZE[device][0]"
+          :height="SIZE[device][1]"
+          loading="lazy"
           decoding="async"
         />
-        <span v-else class="placeholder" aria-hidden="true">{{ label }}</span>
+        <span v-else class="placeholder display" aria-hidden="true">{{ label }}</span>
       </div>
     </div>
   </div>
@@ -114,9 +117,7 @@ img {
   padding: var(--space-3);
   background: var(--neutral-850);
   color: var(--neutral-400);
-  font-family: var(--font-display);
   font-size: var(--text-h3);
-  line-height: var(--leading-display);
   text-align: center;
 }
 .dev-phone .placeholder {

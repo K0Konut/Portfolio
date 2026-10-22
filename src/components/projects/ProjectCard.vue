@@ -11,7 +11,7 @@ const { to } = useLocale()
 </script>
 
 <template>
-  <article class="card">
+  <article class="card poster">
     <DeviceFrame
       :device="project.capture.device"
       :src="project.capture.src"
@@ -20,7 +20,7 @@ const { to } = useLocale()
     <div class="tags">
       <BaseTag v-for="tag in project.tags" :key="tag">{{ tag }}</BaseTag>
     </div>
-    <h3>
+    <h3 class="display">
       <RouterLink :to="to('etude-de-cas', { slug: project.slug })">{{ project.title }}</RouterLink>
     </h3>
     <p class="desc">{{ project.description }}</p>
@@ -37,15 +37,13 @@ const { to } = useLocale()
   padding: var(--space-5);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  transform: rotate(var(--tilt, 0deg));
   transition:
     transform var(--duration-fast) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out);
 }
 .card:hover,
-.card:has(a:focus-visible) {
+.card:focus-within {
   background: var(--color-surface-hover);
-  transform: translateY(calc(-1 * var(--card-lift))) rotate(0deg);
 }
 .card:active {
   transform: translateY(calc(-1 * var(--card-lift) / 2)) rotate(0deg);
@@ -61,11 +59,8 @@ const { to } = useLocale()
   gap: var(--space-2);
 }
 h3 {
-  margin: var(--space-1) 0 0;
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
+  margin-top: var(--space-1);
   font-size: var(--text-h3);
-  line-height: var(--leading-display);
 }
 h3 a {
   color: inherit;

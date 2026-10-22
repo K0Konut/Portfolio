@@ -2,17 +2,28 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { startTopography } from '../../composables/useTopography'
 
-// Courbes de niveau derrière la section d'accueil, démarrées après le premier affichage
+// Courbes de niveau derrière la section d'accueil, démarrées quand la page est au repos (hors chemin critique)
 const box = ref<HTMLElement>()
 const on = ref(false)
 let stop: (() => void) | undefined
+let idle = 0
 
 onMounted(() => {
-  if (!box.value) return
-  stop = startTopography(box.value)
-  on.value = !!stop
+  const start = () => {
+    if (!box.value) return
+    stop = startTopography(box.value)
+    on.value = !!stop
+  }
+  idle =
+    'requestIdleCallback' in window
+      ? requestIdleCallback(start, { timeout: 1000 })
+      : setTimeout(start, 200)
 })
-onBeforeUnmount(() => stop?.())
+onBeforeUnmount(() => {
+  if ('cancelIdleCallback' in window) cancelIdleCallback(idle)
+  clearTimeout(idle)
+  stop?.()
+})
 </script>
 
 <template>

@@ -18,7 +18,7 @@ const menuOpen = ref(false)
 
 <template>
   <header class="site-header">
-    <div class="bar">
+    <div class="bar" data-intro-hide>
       <RouterLink class="name" :to="to('accueil')">{{ SITE.name }}</RouterLink>
       <nav :aria-label="t('nav.label')">
         <RouterLink
@@ -71,6 +71,18 @@ const menuOpen = ref(false)
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   background: var(--color-header-bg);
   color: var(--color-header-text);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out);
+}
+/* Entrée avec la section d'accueil (DA §6) : la barre glisse depuis le haut quand l'attente se lève */
+html.js[data-intro='pending'] .bar {
+  translate: 0 calc(-1 * var(--reveal-distance));
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition-duration: var(--duration-reduced);
+  }
 }
 .name {
   display: inline-flex;
