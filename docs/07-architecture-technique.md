@@ -86,7 +86,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 | 404 | `/fr/404` | `/en/404` |
 
 - **Une table de routes** décrit chaque page une fois, avec son chemin dans les deux langues ; `LangSwitch` et les balises `hreflang` s'en servent pour mener à la page équivalente (architecture §2).
-- **Racine `/`** : Nginx redirige vers `/fr` ou `/en` selon la langue du navigateur (`Accept-Language`), `/fr` par défaut. Fonctionne sans JavaScript ; `hreflang="x-default"` pointe vers `/fr`. (Question laissée ouverte par l'architecture §2, tranchée ici.)
+- **Racine `/`** : Nginx redirige (302) vers `/fr` ou `/en` selon la langue du navigateur (`Accept-Language`), `/fr` par défaut. La réponse porte `Vary: Accept-Language` et `Cache-Control: no-store`, pour qu'aucun cache (navigateur, Nginx Proxy Manager) ne renvoie un visiteur vers la langue d'un autre. Fonctionne sans JavaScript ; `hreflang="x-default"` pointe vers `/fr`. (Question laissée ouverte par l'architecture §2, tranchée ici.)
 - **Pages de projet** : vite-ssg génère une page par fichier de `content/<langue>/projets/` (liste des routes calculée au build).
 - **404** : Nginx sert `/fr/404.html` pour une adresse inconnue sous `/fr`, `/en/404.html` sous `/en`, avec le code HTTP 404.
 
@@ -105,6 +105,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 - **Par page** (`useSeo`) : titre (architecture §5), description, `lang` du document, balises Open Graph (image : la capture du projet pour une étude de cas, une image générique sinon), `canonical`, `hreflang` FR, EN et `x-default`.
 - **`noindex`** : mentions légales, confidentialité et 404 (architecture §5).
 - **Sitemap** : `sitemap.xml` écrit à la fin du build à partir de la table de routes, avec les deux langues liées ; `robots.txt` le référence.
+- **Page `/design-system`** : la route n'est ajoutée qu'en développement (`import.meta.env.DEV`), donc absente du pré-rendu, du sitemap et de l'image de production ; un test de l'intégration continue vérifie qu'aucun fichier `design-system` n'existe dans le build.
 
 ## 6. Interface et animations
 
@@ -128,7 +129,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 **Image Docker** (multi-étapes) : une étape Node construit le site (`npm ci`, `npm run build`), une étape `nginx:alpine` ne contient que les fichiers statiques et `docker/nginx.conf`. Nginx sert :
 - la redirection de `/` selon la langue, les 404 par langue ;
 - des en-têtes de cache : fichiers à empreinte (JS, CSS, polices, images) en cache d'un an, HTML sans cache ;
-- des en-têtes de sécurité : `Content-Security-Policy` (scripts et styles du site seulement, aucune ressource tierce), `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. Le HTTPS et HSTS restent gérés par Nginx Proxy Manager, devant le conteneur.
+- des en-têtes de sécurité : `Content-Security-Policy` (scripts et styles du site seulement, aucune ressource tierce). Si le pré-rendu laisse des `<script>` ou `<style>` en ligne dans le HTML (état initial de vite-ssg, balises de @unhead/vue), un script de build calcule leur empreinte SHA-256 et l'ajoute à la politique écrite dans la configuration Nginx, sans `unsafe-inline` pour les scripts. Les composants posent des variables CSS dans l'attribut `style` (décalages d'apparition, inclinaisons), d'où `style-src-attr 'unsafe-inline'`, sans risque d'exécution de code. Les tests de bout en bout tournent avec la même politique et échouent à la moindre violation signalée dans la console ; `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. Le HTTPS et HSTS restent gérés par Nginx Proxy Manager, devant le conteneur.
 
 **GitHub Actions**
 
