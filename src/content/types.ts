@@ -37,7 +37,7 @@ export interface ProjectSummary {
   }
 }
 
-/** Une étape du parcours (design system § Timeline), du plus ancien au plus récent */
+/** Une étape du parcours (design system § CareerTimeline), du plus ancien au plus récent */
 export interface TimelineStep {
   /** Étiquette : lycée, école, stage ou job étudiant */
   kind: string

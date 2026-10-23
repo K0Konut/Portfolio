@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { reducedMotion } from '../../composables/motion'
 import { useLocale } from '../../composables/useLocale'
@@ -10,7 +10,7 @@ import TextLink from '../ui/TextLink.vue'
 /* Parcours de la page À propos (design system § CareerTimeline), du plus ancien au plus récent. Temps fort piloté
    par le scroll (DA §6) : un fil lime se trace par-dessus le premier, et chaque repère se remplit quand le fil
    l'atteint. Sans JavaScript, en mouvement réduit ou sans GSAP : fil tracé et repères remplis. */
-defineProps<{ steps: TimelineStep[] }>()
+const props = defineProps<{ steps: TimelineStep[] }>()
 const { t } = useI18n()
 const { to } = useLocale()
 const root = ref<HTMLElement>()
@@ -22,16 +22,30 @@ const libraries =
     ? undefined
     : Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
 
+let loaded: Awaited<NonNullable<typeof libraries>> | undefined
 let ctx: { revert(): void } | undefined
 let gone = false
 
 onMounted(async () => {
-  const el = root.value
-  const loaded = el && (await libraries?.catch(() => undefined))
-  if (gone || !el || !loaded) return
-  const [{ gsap }, { ScrollTrigger }] = loaded
-  gsap.registerPlugin(ScrollTrigger)
+  loaded = await libraries?.catch(() => undefined)
+  if (gone || !loaded) return
+  loaded[0].gsap.registerPlugin(loaded[1].ScrollTrigger)
   live.value = true
+  animate()
+})
+// D'une langue à l'autre, le routeur garde la page : les nouvelles étapes reçoivent leurs déclencheurs
+watch(() => props.steps, animate, { flush: 'post' })
+onBeforeUnmount(() => {
+  gone = true
+  ctx?.revert()
+})
+
+function animate() {
+  const el = root.value
+  if (!el || !loaded) return
+  const [{ gsap }, { ScrollTrigger }] = loaded
+  ctx?.revert()
+  for (const step of el.querySelectorAll('li')) step.classList.remove('on')
   // Le fil et les repères partagent la même ligne : 65 % de la hauteur de l'écran
   ctx = gsap.context(() => {
     gsap.fromTo(
@@ -52,18 +66,14 @@ onMounted(async () => {
       })
     }
   }, el)
-})
-onBeforeUnmount(() => {
-  gone = true
-  ctx?.revert()
-})
+}
 </script>
 
 <template>
   <div ref="root" :class="['timeline', { live }]">
     <span class="fill" aria-hidden="true" />
     <ol>
-      <li v-for="step in steps" :key="step.title">
+      <li v-for="(step, i) in steps" :key="i">
         <BaseTag>{{ step.kind }}</BaseTag>
         <time>{{ step.dates }}</time>
         <b>{{ step.title }}</b>

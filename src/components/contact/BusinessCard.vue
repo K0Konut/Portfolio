@@ -50,7 +50,7 @@ const { locale } = useLocale()
   border-radius: var(--radius-md);
   text-align: start;
 }
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .card {
     aspect-ratio: auto;
   }

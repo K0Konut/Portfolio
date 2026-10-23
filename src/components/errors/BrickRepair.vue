@@ -18,64 +18,65 @@ const { t } = useI18n()
 const { to } = useLocale()
 const router = useRouter()
 
-const brick = ref<HTMLButtonElement>()
+const ground = ref<HTMLElement>()
 const hole = ref<HTMLElement>()
 const offset = ref({ x: 0, y: 0 })
-/** Glisser en cours : pointeur au départ, et centre du trou vu depuis la brique au repos */
-const drag = ref<{ px: number; py: number; hx: number; hy: number }>()
+/** Glisser en cours : pointeur au départ, et décalage qui pose la brique sur le trou */
+const drag = ref<{ px: number; py: number; tx: number; ty: number }>()
 const near = ref(false)
 const placed = ref(false)
 let dragged = false
 let timer: ReturnType<typeof setTimeout> | undefined
 
-/** Écart entre le centre de la brique et celui du trou (la rotation et l'échelle ne déplacent pas le centre) */
-function gap() {
-  const b = brick.value?.getBoundingClientRect()
+/** Décalage du centre du sol (où la brique repose, immobile) au centre du trou */
+function target() {
+  const g = ground.value?.getBoundingClientRect()
   const h = hole.value?.getBoundingClientRect()
-  if (!b || !h) return { x: 0, y: 0 }
-  return { x: h.x + h.width / 2 - b.x - b.width / 2, y: h.y + h.height / 2 - b.y - b.height / 2 }
+  if (!g || !h) return { x: 0, y: 0 }
+  return { x: h.x + h.width / 2 - g.x - g.width / 2, y: h.y + h.height / 2 - g.y - g.height / 2 }
 }
 
 function place() {
   if (placed.value) return
-  const { x, y } = gap()
-  offset.value = { x: offset.value.x + x, y: offset.value.y + y }
+  offset.value = target()
   placed.value = true
   const delay = reducedMotion().matches ? seconds('--duration-reduced') : REDIRECT
   timer = setTimeout(() => router.push(to('accueil')), delay * 1000)
 }
 
+// Le bouton principal d'un seul pointeur : ni clic droit, ni second doigt
 function onDown(event: PointerEvent) {
-  if (placed.value) return
-  brick.value?.setPointerCapture(event.pointerId)
-  const { x, y } = gap()
+  if (placed.value || !event.isPrimary || event.button !== 0) return
+  ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
+  const { x, y } = target()
   const { x: ox, y: oy } = offset.value
-  drag.value = { px: event.clientX - ox, py: event.clientY - oy, hx: ox + x, hy: oy + y }
+  drag.value = { px: event.clientX - ox, py: event.clientY - oy, tx: x, ty: y }
   dragged = false
 }
 
 // Une seule mesure, au départ : pendant le glisser, l'écart au trou se calcule sans lire la mise en page
 function onMove(event: PointerEvent) {
   const d = drag.value
-  if (!d) return
+  if (!d || !event.isPrimary) return
   offset.value = { x: event.clientX - d.px, y: event.clientY - d.py }
   dragged ||= Math.hypot(offset.value.x, offset.value.y) > 4
-  near.value = Math.hypot(d.hx - offset.value.x, d.hy - offset.value.y) < REACH
+  near.value = Math.hypot(d.tx - offset.value.x, d.ty - offset.value.y) < REACH
 }
 
 /** Fin du glisser : près du trou, la brique s'y loge ; ailleurs (ou glisser interrompu), elle revient */
 function onUp(event: PointerEvent) {
-  if (!drag.value) return
+  if (!drag.value || !event.isPrimary) return
   drag.value = undefined
   if (near.value && event.type === 'pointerup') place()
   else if (dragged || event.type !== 'pointerup') offset.value = { x: 0, y: 0 }
   near.value = false
 }
 
-// Entrée, Espace ou un appui sans glisser déclenchent « click » ; un glisser, non
-function onClick() {
-  if (dragged) dragged = false
-  else place()
+// Entrée et Espace déclenchent un « click » sans pointeur (detail 0) : toujours une mise en place.
+// Un appui bref aussi ; le « click » qui suit un glisser à la souris, non.
+function onClick(event: MouseEvent) {
+  if (event.detail === 0 || !dragged) place()
+  dragged = false
 }
 
 onBeforeUnmount(() => clearTimeout(timer))
@@ -89,9 +90,8 @@ onBeforeUnmount(() => clearTimeout(timer))
         <div class="row"><i /><i /><i ref="hole" class="hole" /><i /></div>
         <div class="row"><i v-for="n in 5" :key="n" /></div>
       </div>
-      <div class="ground">
+      <div ref="ground" class="ground">
         <button
-          ref="brick"
           type="button"
           :class="['brick', { dragging: drag, placed }]"
           :style="{ '--x': `${offset.x}px`, '--y': `${offset.y}px` }"
@@ -122,13 +122,14 @@ onBeforeUnmount(() => clearTimeout(timer))
   --bh: var(--space-6);
   overflow: hidden;
 }
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .repair {
     --bw: var(--space-7);
     --bh: var(--space-5);
   }
 }
-/* Mur crème de trois rangées appareillées, avec un trou en pointillés */
+/* Mur crème de trois rangées appareillées (centrée, la rangée de quatre est décalée d'une demi-brique),
+   avec un trou en pointillés */
 .wall {
   display: grid;
   gap: var(--space-2);
@@ -137,9 +138,6 @@ onBeforeUnmount(() => clearTimeout(timer))
 .row {
   display: flex;
   gap: var(--space-2);
-}
-.row:nth-child(even) {
-  transform: translateX(calc((var(--bw) + var(--space-2)) / 2));
 }
 .wall i,
 .brick {

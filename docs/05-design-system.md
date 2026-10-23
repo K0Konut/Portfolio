@@ -224,7 +224,7 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `ProjectBento` | Grille bento des projets, lueur au pointeur | Projets |
 | `DeviceFrame` | Cadre navigateur / téléphone pour mettre en scène une capture | cartes, études de cas |
 | `ProcessSteps` | Les 6 étapes de la méthode, en cycle | Accueil, À propos |
-| `CareerTimeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
+| `CareerTimeline` | Parcours scolaire et professionnel | À propos |
 | `SkillCards` | Compétences en affiches collées, une carte par catégorie ; pastille violette pour les technos du site | À propos |
 | `MetaList` | Type, rôle, durée, stack d'une étude de cas | études de cas |
 | `CaseToc` | Sommaire collant (bureau uniquement) | études de cas |
