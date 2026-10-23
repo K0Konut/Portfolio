@@ -97,5 +97,24 @@
   "stat": {
     "before": "before",
     "after": "after"
+  },
+  "about": {
+    "caseStudy": "See the case study",
+    "legend": "Purple dot: the tech behind this site.",
+    "legendLink": "See how it is built"
+  },
+  "business": {
+    "title": "Contact",
+    "intro": "An internship to offer, a question about a project? Write to me.",
+    "role": "Engineering student · final-year full-stack internship",
+    "cv": "My CV"
+  },
+  "notFound": {
+    "title": "A brick is missing.",
+    "text": "Error 404: this page does not exist, or no longer does. Put the brick back to return home.",
+    "brick": "Put the brick back and return home",
+    "done": "The wall is complete. Back to the home page…",
+    "home": "Back to home",
+    "projects": "See the projects"
   }
 }

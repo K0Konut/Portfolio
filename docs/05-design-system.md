@@ -166,6 +166,7 @@ Les `@font-face` (avec `font-display: swap`) seront écrits en phase 7, une fois
 | Points de rupture | 768 px (tablette) · 1024 px (bureau) · constantes : CSS n'accepte pas de variables dans les media queries |
 | `--icon-sm` / `--icon-md` | 18 px · 24 px |
 | `--timeline-dot` | 14 px · repère d'une étape de la frise |
+| `--skill-dot` | 10 px · pastille devant une techno de `SkillCards` |
 | `--icon-stroke` | 2,5 · épaisseur du trait des icônes |
 
 ### Motion
@@ -223,7 +224,7 @@ Avec `prefers-reduced-motion: reduce`, les durées de déplacement tombent à 0 
 | `ProjectBento` | Grille bento des projets, lueur au pointeur | Projets |
 | `DeviceFrame` | Cadre navigateur / téléphone pour mettre en scène une capture | cartes, études de cas |
 | `ProcessSteps` | Les 6 étapes de la méthode, en cycle | Accueil, À propos |
-| `Timeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
+| `CareerTimeline` + `TimelineItem` | Parcours scolaire et professionnel | À propos |
 | `SkillCards` | Compétences en affiches collées, une carte par catégorie ; pastille violette pour les technos du site | À propos |
 | `MetaList` | Type, rôle, durée, stack d'une étude de cas | études de cas |
 | `CaseToc` | Sommaire collant (bureau uniquement) | études de cas |
@@ -431,7 +432,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Apparition** : étape par étape, chacune monte de `--reveal-distance` et apparaît, décalée de `--stagger-brick`.
 - **Animations réduites** : fondu de l'ensemble.
 
-### `Timeline` et `TimelineItem`
+### `CareerTimeline`
 
 - **Rôle** : le parcours scolaire et professionnel sur la page À propos (lycée, école, stages, jobs étudiants).
 - **Ordre** : du plus ancien au plus récent, comme un récit (la page Projets, elle, va du plus récent au plus ancien).

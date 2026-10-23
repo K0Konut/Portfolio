@@ -97,5 +97,24 @@
   "stat": {
     "before": "avant",
     "after": "après"
+  },
+  "about": {
+    "caseStudy": "Voir l’étude de cas",
+    "legend": "Pastille violette : les technos de ce site.",
+    "legendLink": "Voir comment il est construit"
+  },
+  "business": {
+    "title": "Contact",
+    "intro": "Un stage à proposer, une question sur un projet ? Écrivez-moi.",
+    "role": "Étudiant ingénieur · stage de fin d’études full-stack",
+    "cv": "Le CV"
+  },
+  "notFound": {
+    "title": "Il manque une brique.",
+    "text": "Erreur 404 : cette page n’existe pas, ou plus. Replacez la brique pour revenir à l’accueil.",
+    "brick": "Replacer la brique et revenir à l’accueil",
+    "done": "Le mur est complet. Retour à l’accueil…",
+    "home": "Retour à l’accueil",
+    "projects": "Voir les projets"
   }
 }

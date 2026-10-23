@@ -2,6 +2,7 @@
 import { useHead } from '@unhead/vue'
 import DsBackgrounds from './design-system/DsBackgrounds.vue'
 import DsColors from './design-system/DsColors.vue'
+import DsComponentsAbout from './design-system/DsComponentsAbout.vue'
 import DsComponentsBase from './design-system/DsComponentsBase.vue'
 import DsComponentsHome from './design-system/DsComponentsHome.vue'
 import DsComponentsProjects from './design-system/DsComponentsProjects.vue'
@@ -35,6 +36,7 @@ useHead({ title: 'Design system · Costa Maskulov', meta: [{ name: 'robots', con
     <DsComponentsLayout />
     <DsComponentsHome />
     <DsComponentsProjects />
+    <DsComponentsAbout />
   </main>
 </template>
 
