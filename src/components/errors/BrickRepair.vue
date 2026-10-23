@@ -1,35 +1,34 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, useId } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { reducedMotion } from '../../composables/motion'
+import { reducedMotion, seconds } from '../../composables/motion'
 import { useLocale } from '../../composables/useLocale'
+import PageIntro from '../sections/PageIntro.vue'
 import BaseButton from '../ui/BaseButton.vue'
 
 /* Page 404 (design system § BrickRepair) : « Il manque une brique. » La brique tombée se glisse dans le trou
    du mur (souris ou doigt) ; relâchée à moins de REACH px du trou, elle s'y loge et la page mène à l'accueil.
    Au clavier ou d'un simple appui, le bouton la met en place directement. */
 const REACH = 40
-/** Délai avant le retour à l'accueil (ms) : le temps de voir le mur complet ; 300 ms en mouvement réduit */
-const REDIRECT = 900
+/** Délai avant le retour à l'accueil (s) : le temps de voir le mur complet ; --duration-reduced en mouvement réduit */
+const REDIRECT = 0.9
 
 const { t } = useI18n()
 const { to } = useLocale()
 const router = useRouter()
-const titleId = useId()
 
 const brick = ref<HTMLButtonElement>()
 const hole = ref<HTMLElement>()
 const offset = ref({ x: 0, y: 0 })
-const dragging = ref(false)
+/** Glisser en cours : pointeur au départ, et centre du trou vu depuis la brique au repos */
+const drag = ref<{ px: number; py: number; hx: number; hy: number }>()
 const near = ref(false)
 const placed = ref(false)
-const status = ref('')
-let start: { x: number; y: number } | undefined
 let dragged = false
 let timer: ReturnType<typeof setTimeout> | undefined
 
-/** Écart entre le centre de la brique et celui du trou */
+/** Écart entre le centre de la brique et celui du trou (la rotation et l'échelle ne déplacent pas le centre) */
 function gap() {
   const b = brick.value?.getBoundingClientRect()
   const h = hole.value?.getBoundingClientRect()
@@ -42,31 +41,32 @@ function place() {
   const { x, y } = gap()
   offset.value = { x: offset.value.x + x, y: offset.value.y + y }
   placed.value = true
-  status.value = t('notFound.done')
-  timer = setTimeout(() => router.push(to('accueil')), reducedMotion().matches ? 300 : REDIRECT)
+  const delay = reducedMotion().matches ? seconds('--duration-reduced') : REDIRECT
+  timer = setTimeout(() => router.push(to('accueil')), delay * 1000)
 }
 
 function onDown(event: PointerEvent) {
   if (placed.value) return
   brick.value?.setPointerCapture(event.pointerId)
-  start = { x: event.clientX - offset.value.x, y: event.clientY - offset.value.y }
+  const { x, y } = gap()
+  const { x: ox, y: oy } = offset.value
+  drag.value = { px: event.clientX - ox, py: event.clientY - oy, hx: ox + x, hy: oy + y }
   dragged = false
-  dragging.value = true
 }
 
+// Une seule mesure, au départ : pendant le glisser, l'écart au trou se calcule sans lire la mise en page
 function onMove(event: PointerEvent) {
-  if (!start) return
-  offset.value = { x: event.clientX - start.x, y: event.clientY - start.y }
+  const d = drag.value
+  if (!d) return
+  offset.value = { x: event.clientX - d.px, y: event.clientY - d.py }
   dragged ||= Math.hypot(offset.value.x, offset.value.y) > 4
-  const { x, y } = gap()
-  near.value = Math.hypot(x, y) < REACH
+  near.value = Math.hypot(d.hx - offset.value.x, d.hy - offset.value.y) < REACH
 }
 
 /** Fin du glisser : près du trou, la brique s'y loge ; ailleurs (ou glisser interrompu), elle revient */
 function onUp(event: PointerEvent) {
-  if (!start) return
-  start = undefined
-  dragging.value = false
+  if (!drag.value) return
+  drag.value = undefined
   if (near.value && event.type === 'pointerup') place()
   else if (dragged || event.type !== 'pointerup') offset.value = { x: 0, y: 0 }
   near.value = false
@@ -82,49 +82,45 @@ onBeforeUnmount(() => clearTimeout(timer))
 </script>
 
 <template>
-  <section class="repair fond-violet" :aria-labelledby="titleId">
-    <div :class="['wall', { near, placed }]" aria-hidden="true">
-      <div class="row"><i v-for="n in 5" :key="n" /></div>
-      <div class="row"><i /><i /><i ref="hole" class="hole" /><i /></div>
-      <div class="row"><i v-for="n in 5" :key="n" /></div>
-    </div>
-    <div class="ground">
-      <button
-        ref="brick"
-        type="button"
-        :class="['brick', { dragging, placed }]"
-        :style="{ '--x': `${offset.x}px`, '--y': `${offset.y}px` }"
-        :aria-label="t('notFound.brick')"
-        @pointerdown="onDown"
-        @pointermove="onMove"
-        @pointerup="onUp"
-        @pointercancel="onUp"
-        @lostpointercapture="onUp"
-        @click="onClick"
-      />
-    </div>
-    <h1 :id="titleId" class="display">{{ t('notFound.title') }}</h1>
-    <p class="lead">{{ t('notFound.text') }}</p>
-    <p class="status" aria-live="polite">{{ status }}</p>
-    <div class="actions">
-      <BaseButton variant="primary" :to="to('accueil')">{{ t('notFound.home') }}</BaseButton>
-      <BaseButton :to="to('projets')" icon="arrow-right">{{ t('notFound.projects') }}</BaseButton>
-    </div>
-  </section>
+  <PageIntro :title="t('notFound.title')" class="repair" center full>
+    <template #before>
+      <div :class="['wall', { near, placed }]" aria-hidden="true">
+        <div class="row"><i v-for="n in 5" :key="n" /></div>
+        <div class="row"><i /><i /><i ref="hole" class="hole" /><i /></div>
+        <div class="row"><i v-for="n in 5" :key="n" /></div>
+      </div>
+      <div class="ground">
+        <button
+          ref="brick"
+          type="button"
+          :class="['brick', { dragging: drag, placed }]"
+          :style="{ '--x': `${offset.x}px`, '--y': `${offset.y}px` }"
+          :aria-label="t('notFound.brick')"
+          @pointerdown="onDown"
+          @pointermove="onMove"
+          @pointerup="onUp"
+          @pointercancel="onUp"
+          @lostpointercapture="onUp"
+          @click="onClick"
+        />
+      </div>
+    </template>
+    {{ t('notFound.text') }}
+    <template #after>
+      <p class="status" aria-live="polite">{{ placed ? t('notFound.done') : '' }}</p>
+      <div class="actions">
+        <BaseButton variant="primary" :to="to('accueil')">{{ t('notFound.home') }}</BaseButton>
+        <BaseButton :to="to('projets')" icon="arrow-right">{{ t('notFound.projects') }}</BaseButton>
+      </div>
+    </template>
+  </PageIntro>
 </template>
 
 <style scoped>
 .repair {
   --bw: var(--space-8);
   --bh: var(--space-6);
-  min-height: calc(100svh - var(--space-9));
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: var(--space-5);
-  padding: calc(var(--header-height) + var(--space-8)) var(--gutter) var(--space-9);
   overflow: hidden;
-  text-align: center;
 }
 @media (max-width: 599px) {
   .repair {
@@ -165,7 +161,8 @@ onBeforeUnmount(() => clearTimeout(timer))
 .placed .hole {
   visibility: hidden;
 }
-/* La brique tombée, inclinée ; elle se redresse en partie pendant le glisser, et passe en lime une fois placée */
+/* La brique tombée, inclinée ; elle se redresse en partie pendant le glisser, et passe en lime une fois placée.
+   Animations réduites : --duration-move vaut 0, la brique se met en place d'un coup, la couleur change en fondu */
 .ground {
   height: calc(var(--space-6) * 2);
   display: grid;
@@ -181,7 +178,7 @@ onBeforeUnmount(() => clearTimeout(timer))
   user-select: none;
   transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(var(--s));
   transition:
-    transform var(--duration-fast) var(--ease-out),
+    transform var(--duration-move) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out);
 }
 .brick.dragging {
@@ -195,9 +192,6 @@ onBeforeUnmount(() => clearTimeout(timer))
   background: var(--lime-500);
   cursor: default;
 }
-h1 {
-  font-size: var(--text-h1);
-}
 .status {
   margin: 0;
   min-height: 1.4em;
@@ -209,11 +203,5 @@ h1 {
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-3);
-}
-/* Animations réduites : pas de mouvement, la brique se met en place d'un coup */
-@media (prefers-reduced-motion: reduce) {
-  .brick {
-    transition: none;
-  }
 }
 </style>

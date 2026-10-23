@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocale } from '../../composables/useLocale'
 import { SITE } from '../../content/site'
+import PageIntro from '../sections/PageIntro.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import CopyButton from '../ui/CopyButton.vue'
 import TextLink from '../ui/TextLink.vue'
@@ -11,52 +11,33 @@ import TextLink from '../ui/TextLink.vue'
    sur le violet, droite et immobile ; seuls ses liens et boutons réagissent. */
 const { t } = useI18n()
 const { locale } = useLocale()
-const titleId = useId()
 </script>
 
 <template>
-  <section class="stage fond-violet" :aria-labelledby="titleId">
-    <div class="intro">
-      <h1 :id="titleId" v-reveal class="display">{{ t('business.title') }}</h1>
-      <p v-reveal="1" class="lead">{{ t('business.intro') }}</p>
-    </div>
-    <div v-reveal="2" class="card fond-creme">
-      <div class="who">
-        <b class="display">{{ SITE.name }}</b>
-        <span>{{ t('business.role') }}</span>
-      </div>
-      <div class="lines">
-        <CopyButton :value="SITE.email" />
-        <div class="links">
-          <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
-            t('business.cv')
-          }}</BaseButton>
-          <TextLink variant="standalone" :href="SITE.linkedin">LinkedIn</TextLink>
-          <TextLink variant="standalone" :href="SITE.github">GitHub</TextLink>
+  <PageIntro :title="t('business.title')" center full>
+    {{ t('business.intro') }}
+    <template #after>
+      <div v-reveal="2" class="card fond-creme">
+        <div class="who">
+          <b class="display">{{ SITE.name }}</b>
+          <span>{{ t('business.role') }}</span>
+        </div>
+        <div class="lines">
+          <CopyButton :value="SITE.email" />
+          <div class="links">
+            <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
+              t('business.cv')
+            }}</BaseButton>
+            <TextLink variant="standalone" :href="SITE.linkedin">LinkedIn</TextLink>
+            <TextLink variant="standalone" :href="SITE.github">GitHub</TextLink>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </template>
+  </PageIntro>
 </template>
 
 <style scoped>
-.stage {
-  min-height: calc(100svh - var(--space-9));
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: var(--space-7);
-  padding: calc(var(--header-height) + var(--space-8)) var(--gutter) var(--space-9);
-}
-.intro {
-  display: grid;
-  gap: var(--space-3);
-  justify-items: center;
-  text-align: center;
-}
-h1 {
-  font-size: var(--text-h1);
-}
 /* Format carte de visite (1,75:1, 40rem au plus) ; sur mobile, la hauteur de son contenu */
 .card {
   width: min(100%, 40rem);
@@ -64,8 +45,10 @@ h1 {
   display: grid;
   align-content: space-between;
   gap: var(--space-5);
+  margin-top: var(--space-5);
   padding: clamp(var(--space-5), 4vw, var(--space-7));
   border-radius: var(--radius-md);
+  text-align: start;
 }
 @media (max-width: 599px) {
   .card {

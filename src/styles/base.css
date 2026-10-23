@@ -229,3 +229,18 @@ svg {
 .poster:focus-within {
   transform: translateY(calc(-1 * var(--card-lift))) rotate(0deg);
 }
+/* Affiche qui apparaît au scroll (v-reveal) : les deux transitions se cumulent, seule l'apparition est décalée */
+.poster.reveal {
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out);
+  transition-delay:
+    0ms, calc(var(--i, 0) * var(--stagger-block)), calc(var(--i, 0) * var(--stagger-block));
+}
+@media (prefers-reduced-motion: reduce) {
+  .poster.reveal {
+    transition-duration: var(--duration-fast), var(--duration-reduced), var(--duration-reduced);
+    transition-delay: 0ms;
+  }
+}

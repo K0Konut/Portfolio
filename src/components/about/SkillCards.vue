@@ -5,8 +5,8 @@ import type { SkillCategory } from '../../content/types'
 import TextLink from '../ui/TextLink.vue'
 
 /* Compétences de la page À propos (design system § SkillCards) : une carte sombre par catégorie, en
-   « affiches collées » sur bureau. Les cartes se posent une à une à l'arrivée à l'écran (v-reveal, sur
-   l'enveloppe : l'affiche garde son inclinaison) ; la pastille violette marque les technos de ce site. */
+   « affiches collées » sur bureau. Les cartes se posent une à une à l'arrivée à l'écran (v-reveal) ;
+   la pastille violette marque les technos de ce site. */
 defineProps<{ categories: SkillCategory[] }>()
 const { t } = useI18n()
 const { to } = useLocale()
@@ -15,16 +15,19 @@ const { to } = useLocale()
 <template>
   <div class="skills">
     <div class="cards">
-      <div v-for="(category, i) in categories" :key="category.title" v-reveal="i">
-        <article class="card poster fond-nuit">
-          <h3>{{ category.title }}</h3>
-          <ul>
-            <li v-for="skill in category.skills" :key="skill.name" :class="{ site: skill.site }">
-              {{ skill.name }}
-            </li>
-          </ul>
-        </article>
-      </div>
+      <article
+        v-for="(category, i) in categories"
+        :key="category.title"
+        v-reveal="i"
+        class="card poster fond-nuit"
+      >
+        <h3>{{ category.title }}</h3>
+        <ul>
+          <li v-for="skill in category.skills" :key="skill.name" :class="{ site: skill.site }">
+            {{ skill.name }}
+          </li>
+        </ul>
+      </article>
     </div>
     <p v-reveal class="legend">
       <i aria-hidden="true" />{{ t('about.legend') }}
@@ -43,9 +46,6 @@ const { to } = useLocale()
 .cards {
   display: grid;
   gap: var(--space-5);
-}
-.cards > div {
-  display: grid;
 }
 .card {
   display: grid;
@@ -106,37 +106,31 @@ li.site::before,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-/* Bureau : cinq affiches en quinconce, chacune avec son inclinaison ; droites hors bureau */
+/* Bureau : cinq affiches en quinconce, chacune avec son inclinaison (multiples de --poster-tilt, nulle en
+   mouvement réduit) ; droites hors bureau */
 @media (min-width: 1024px) {
   .cards {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     align-items: start;
     gap: var(--space-4);
   }
-  .cards > div:nth-child(even) {
+  .card:nth-child(even) {
     margin-top: var(--space-7);
   }
-  .cards > div:nth-child(5n + 1) .card {
-    --tilt: -2deg;
+  .card:nth-child(5n + 1) {
+    --tilt: var(--poster-tilt);
   }
-  .cards > div:nth-child(5n + 2) .card {
-    --tilt: 1.5deg;
+  .card:nth-child(5n + 2) {
+    --tilt: calc(var(--poster-tilt) * -0.75);
   }
-  .cards > div:nth-child(5n + 3) .card {
-    --tilt: -1deg;
+  .card:nth-child(5n + 3) {
+    --tilt: calc(var(--poster-tilt) * 0.5);
   }
-  .cards > div:nth-child(5n + 4) .card {
-    --tilt: 2deg;
+  .card:nth-child(5n + 4) {
+    --tilt: calc(var(--poster-tilt) * -1);
   }
-  .cards > div:nth-child(5n + 5) .card {
-    --tilt: -1.5deg;
-  }
-}
-/* Animations réduites : pas de soulèvement, l'affiche garde son inclinaison au survol */
-@media (prefers-reduced-motion: reduce) {
-  .card:hover,
-  .card:focus-within {
-    transform: rotate(var(--tilt, 0deg));
+  .card:nth-child(5n + 5) {
+    --tilt: calc(var(--poster-tilt) * 0.75);
   }
 }
 </style>
