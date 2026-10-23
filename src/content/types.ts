@@ -36,3 +36,22 @@ export interface ProjectSummary {
     label?: string
   }
 }
+
+/** Une étape du parcours (design system § CareerTimeline), du plus ancien au plus récent */
+export interface TimelineStep {
+  /** Étiquette : lycée, école, stage ou job étudiant */
+  kind: string
+  dates: string
+  title: string
+  /** Lieu et rôle */
+  place: string
+  text: string
+  /** Slug de l'étude de cas liée, s'il y en a une */
+  caseStudy?: string
+}
+
+/** Une catégorie de compétences (design system § SkillCards) ; `site` : techno utilisée par ce site */
+export interface SkillCategory {
+  title: string
+  skills: { name: string; site?: boolean }[]
+}

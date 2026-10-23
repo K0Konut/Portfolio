@@ -58,7 +58,7 @@ src/
     home/                    HeroName, TopoBackground, ScrollHint, ProcessSteps
     projects/                ProjectCard, ProjectBento, DeviceFrame
     case/                    MetaList, CaseToc, StatBlock, CaseNav
-    about/                   Timeline, TimelineItem, SkillCards
+    about/                   CareerTimeline, SkillCards
     contact/                 BusinessCard
     errors/                  BrickRepair
   pages/                     une vue par route (Accueil, Projets, EtudeDeCas…)
@@ -177,7 +177,7 @@ Trois temps, validés par le propriétaire : le socle, puis les composants, puis
 - `feat/dev/composants_mise_en_page` : `AppHeader`, `MobileMenu`, `LangSwitch`, `AppFooter`, `Section`, `SectionWave`, `PageIntro`, `ContactCard`.
 - `feat/dev/composants_accueil` : `HeroName`, `TopoBackground`, `ScrollHint`, `ProcessSteps`, `ProjectCard`, `DeviceFrame`.
 - `feat/dev/composants_projets` : `ProjectBento`, `MetaList`, `CaseToc`, `StatBlock`, `CaseNav`.
-- `feat/dev/composants_a_propos_contact_404` : `Timeline`, `SkillCards`, `BusinessCard`, `BrickRepair`.
+- `feat/dev/composants_a_propos_contact_404` : `CareerTimeline`, `SkillCards`, `BusinessCard`, `BrickRepair`.
 
 **3. Les pages**, qui appellent les composants et le contenu :
 - `feat/dev/contenu` : chargeur de contenu, types, vérification, sitemap.
