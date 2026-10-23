@@ -1,10 +1,15 @@
-import type { Component } from 'vue'
+import { defineComponent, h, onMounted, ref, type Component } from 'vue'
 import capture from '../../assets/projets/ce-portfolio.png'
 import ScrollHint from '../../components/home/ScrollHint.vue'
 import TopoBackground from '../../components/home/TopoBackground.vue'
 import DeviceFrame from '../../components/projects/DeviceFrame.vue'
 import ProjectCard from '../../components/projects/ProjectCard.vue'
 import StatBlock from '../../components/case/StatBlock.vue'
+import AppFooter from '../../components/layout/AppFooter.vue'
+import AppHeader from '../../components/layout/AppHeader.vue'
+import LangSwitch from '../../components/layout/LangSwitch.vue'
+import MobileMenu from '../../components/layout/MobileMenu.vue'
+import SkipLink from '../../components/layout/SkipLink.vue'
 import type { Fond } from '../../components/sections/fonds'
 import PageIntro from '../../components/sections/PageIntro.vue'
 import PageSection from '../../components/sections/PageSection.vue'
@@ -91,7 +96,7 @@ export const PLANNED: Record<Family, string[]> = {
     'NextLink',
   ],
   'Mise en page': ['PosterGrid', 'BentoGrid'],
-  Site: ['AppHeader', 'MobileMenu', 'LangSwitch', 'AppFooter', 'SkipLink', 'ContactLinks'],
+  Site: ['ContactLinks'],
 }
 
 const FONDS: readonly Fond[] = ['nuit', 'violet', 'vif', 'lime', 'rose', 'creme']
@@ -108,6 +113,52 @@ const list = (text: unknown) =>
     .map((s) => s.trim())
     .filter(Boolean)
 const attr = (name: string, value: unknown) => (value ? ` ${name}="${value}"` : '')
+
+/* Démos qui ne tiennent pas dans une simple liste d'options */
+
+// Le menu s'ouvre en fenêtre modale : un bouton pour l'ouvrir, Échap ou « Fermer » pour le refermer
+const MobileMenuDemo = defineComponent(() => {
+  const open = ref(false)
+  return () => [
+    h(BaseButton, { compact: true, onClick: () => (open.value = true) }, () => 'Ouvrir le menu'),
+    h(MobileMenu, {
+      modelValue: open.value,
+      'onUpdate:modelValue': (v: boolean) => (open.value = v),
+    }),
+  ]
+})
+
+// Le lien d'évitement n'apparaît qu'au focus clavier
+const SkipLinkDemo = defineComponent(() => () => [
+  h('p', { style: 'margin: 0' }, 'Cliquez dans ce cadre, puis appuyez sur Tab.'),
+  h(SkipLink),
+])
+
+// v-reveal ne cache que ce qui est sous la ligne de flottaison : la démo part de l'état caché à chaque montage
+const RevealDemo = defineComponent({
+  props: { count: { type: Number, default: 3 } },
+  setup(props) {
+    const pending = ref(true)
+    onMounted(() =>
+      requestAnimationFrame(() => requestAnimationFrame(() => (pending.value = false))),
+    )
+    return () =>
+      h(
+        'div',
+        { style: 'display: grid; gap: var(--space-4)' },
+        Array.from({ length: props.count }, (_, i) =>
+          h(
+            'div',
+            {
+              class: ['reveal', { 'is-pending': pending.value }],
+              style: `--i: ${i}; padding: var(--space-5); border-radius: var(--radius-md); background: var(--color-surface)`,
+            },
+            `Bloc ${i + 1}`,
+          ),
+        ),
+      )
+  },
+})
 
 export const ENTRIES: Entry[] = [
   {
@@ -155,6 +206,26 @@ export const ENTRIES: Entry[] = [
     controls: [],
     fond: 'violet',
     frame: 'position: relative; height: 12rem',
+  },
+  {
+    id: 'v-reveal',
+    name: 'v-reveal',
+    family: 'Animations',
+    description:
+      'Directive d’apparition au scroll : le bloc monte de `--reveal-distance` et apparaît, une seule fois, décalé selon son rang. Seuls les blocs sous la ligne de flottaison sont cachés, et seulement par le script.',
+    component: RevealDemo,
+    props: [
+      {
+        name: 'valeur',
+        type: 'number',
+        default: '0',
+        description: 'Rang du bloc : décalage de `--stagger-block` × rang',
+      },
+    ],
+    controls: [
+      { key: 'count', label: 'Nombre de blocs', type: 'number', initial: 3, min: 1, max: 6 },
+    ],
+    code: () => '<div v-reveal="1">…</div>',
   },
   {
     id: 'base-button',
@@ -475,6 +546,76 @@ export const ENTRIES: Entry[] = [
       { name: 'actions', description: 'Les boutons' },
       { name: 'after', description: 'Sous la phrase' },
     ],
+  },
+  {
+    id: 'app-header',
+    name: 'AppHeader',
+    family: 'Site',
+    description:
+      'En-tête fixe qui « pend » au-dessus du contenu : nom, navigation, langue. Sous 768 px, un bouton « Menu » ouvre `MobileMenu`.',
+    component: AppHeader,
+    props: [],
+    controls: [],
+    frame: 'height: 26rem',
+  },
+  {
+    id: 'mobile-menu',
+    name: 'MobileMenu',
+    family: 'Site',
+    description:
+      'Menu plein écran sur mobile, sur l’élément `<dialog>` natif : le reste de la page devient inerte, Échap ferme, le focus revient au bouton.',
+    component: MobileMenuDemo,
+    props: [{ name: 'v-model', type: 'boolean', description: 'Ouvert ou fermé' }],
+    controls: [],
+    code: () => '<MobileMenu v-model="menuOpen" />',
+    frame: 'height: 34rem',
+  },
+  {
+    id: 'lang-switch',
+    name: 'LangSwitch',
+    family: 'Site',
+    description:
+      'Bascule FR / EN vers la page équivalente dans l’autre langue ; depuis une adresse inconnue, vers l’accueil.',
+    component: LangSwitch,
+    props: [
+      {
+        name: 'variant',
+        type: "'header' | 'menu'",
+        description: 'Dans l’en-tête ou dans le menu mobile',
+      },
+    ],
+    controls: [
+      {
+        key: 'variant',
+        label: 'Variante',
+        type: 'select',
+        initial: 'menu',
+        options: ['header', 'menu'],
+      },
+    ],
+    fond: 'violet',
+  },
+  {
+    id: 'app-footer',
+    name: 'AppFooter',
+    family: 'Site',
+    description:
+      'Pied de page de toutes les pages : CV, contact, liens du site. Un repère calme, sans animation.',
+    component: AppFooter,
+    props: [],
+    controls: [],
+  },
+  {
+    id: 'skip-link',
+    name: 'SkipLink',
+    family: 'Site',
+    description:
+      '« Aller au contenu », premier élément focusable de chaque page : hors de l’écran au repos, il glisse en haut à gauche au focus.',
+    component: SkipLinkDemo,
+    props: [],
+    controls: [],
+    code: () => '<SkipLink />',
+    frame: 'height: 6rem',
   },
 ]
 
