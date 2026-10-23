@@ -1,6 +1,6 @@
 # Design system — Portfolio personnel
 
-Version 1.2 — 23/10/2026 — **statut : en relecture** (catalogue de briques génériques ; v1.1 validée le 22/10/2026)
+Version 1.2 — 23/10/2026 — **statut : validé** (catalogue de briques génériques, validé par le propriétaire le 23/10/2026)
 
 v1.2 : les composants deviennent des briques génériques rangées par famille, à la manière d'une bibliothèque (vue-bits.dev) ; les sections (`HomeHero`, `ContactCard`, `BusinessCard`, `BrickRepair`, `SkillCards`, `CaseNav`…) laissent leurs mécanismes aux briques et leur contenu aux pages (§5, composition des pages) ; nouveaux composants `LetterReveal`, `ScrollParallax`, `DragToSnap`, `PosterCard`, `PosterGrid`, `BentoGrid`, `BaseTimeline`, `CycleSteps`, `NumberedSteps`, `DotList`, `DefinitionList`, `StickyToc`, `NextLink`, `ContactLinks` ; catalogue de développement avec panneau de réglages en direct (§6).
 

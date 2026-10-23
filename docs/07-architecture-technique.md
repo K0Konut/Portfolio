@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.1 — 23/10/2026 — **statut : en relecture** (v1.0 validée le 22/10/2026 ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques)
+Version 1.1 — 23/10/2026 — **statut : validé** (v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1, déploiement par GitHub Actions et image Docker.
 
