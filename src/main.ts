@@ -12,7 +12,7 @@ const routes = buildRoutes()
 // et Vite retire alors la page et son code du site publié (architecture technique §5).
 if (import.meta.env.DEV) {
   routes.push({
-    path: '/design-system',
+    path: '/design-system/:entry?',
     name: 'design-system',
     component: () => import('./pages/DesignSystemPage.vue'),
   })
