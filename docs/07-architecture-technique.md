@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.0 — 22/10/2026 — **statut : validé**
+Version 1.1 — 23/10/2026 — **statut : en relecture** (v1.0 validée le 22/10/2026 ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1, déploiement par GitHub Actions et image Docker.
 
@@ -47,21 +47,22 @@ src/
   i18n/  fr.json  en.json    textes de l'interface
   content/                   chargement et types du contenu (§4)
   styles/
-    tokens.css               tokens du design system v1.1
+    tokens.css               tokens du design system v1.2
     base.css                 reset, typo, fonds de section (`fond-*`)
   composables/               useReveal, useReducedMotion, useCopy,
                              useTopography, useSeo, useLocale…
-  components/
-    layout/                  AppHeader, MobileMenu, LangSwitch, AppFooter, SkipLink
-    ui/                      BaseButton, TextLink, Tag, Icon, CopyButton
-    sections/                Section, SectionWave, PageIntro, ContactCard
-    home/                    HeroName, TopoBackground, ScrollHint, ProcessSteps
-    projects/                ProjectCard, ProjectBento, DeviceFrame
-    case/                    MetaList, CaseToc, StatBlock, CaseNav
-    about/                   CareerTimeline, SkillCards
-    contact/                 BusinessCard
-    errors/                  BrickRepair
-  pages/                     une vue par route (Accueil, Projets, EtudeDeCas…)
+  components/                briques du catalogue (design system v1.2 §3), par famille
+    fonds/                   TopoBackground, SectionWave
+    textes/                  LetterReveal
+    animations/              ScrollParallax, ScrollHint, DragToSnap
+    ui/                      BaseButton, TextLink, BaseTag, BaseIcon, CopyButton, PosterCard,
+                             ProjectCard, DeviceFrame, DotList, DefinitionList, StatBlock,
+                             BaseTimeline, CycleSteps, NumberedSteps, StickyToc, NextLink
+    mise-en-page/            PageSection, PageIntro, PosterGrid, BentoGrid
+    site/                    AppHeader, MobileMenu, LangSwitch, AppFooter, SkipLink, ContactLinks
+  pages/                     une vue par route (Accueil, Projets, EtudeDeCas…), qui assemble les briques
+    blocs/                   assemblages repris sur plusieurs pages (Parlons-en)
+    design-system/           catalogue de développement : une page et une description par composant
 tests/
   unit/                      Vitest + Vue Test Utils
   e2e/                       Playwright (+ contrôle d'accessibilité axe)
@@ -178,6 +179,12 @@ Trois temps, validés par le propriétaire : le socle, puis les composants, puis
 - `feat/dev/composants_accueil` : `HeroName`, `TopoBackground`, `ScrollHint`, `ProcessSteps`, `ProjectCard`, `DeviceFrame`.
 - `feat/dev/composants_projets` : `ProjectBento`, `MetaList`, `CaseToc`, `StatBlock`, `CaseNav`.
 - `feat/dev/composants_a_propos_contact_404` : `CareerTimeline`, `SkillCards`, `BusinessCard`, `BrickRepair`.
+
+**2 bis. Des briques, pas des sections** (design system v1.2, décision du 23/10/2026) : les lots ci-dessus ont produit des sections de page ; elles sont refondues en briques génériques, et la page `/design-system` devient un catalogue avec panneau de réglages en direct :
+- `feat/dev/catalogue` : le catalogue (navigation par famille, page par composant, panneau de réglages, états, code, tableau des options), branché d'abord sur les briques qui existent déjà.
+- `refactor/dev/briques_animations` : `LetterReveal`, `ScrollParallax`, `DragToSnap`, `ScrollHint`, `TopoBackground` réglables.
+- `refactor/dev/briques_composants` : `PosterCard`, `DotList`, `DefinitionList`, `StatBlock`, `BaseTimeline`, `CycleSteps`, `NumberedSteps`, `StickyToc`, `NextLink`, `ContactLinks`.
+- `refactor/dev/briques_mise_en_page` : `PosterGrid`, `BentoGrid` ; suppression des anciennes sections.
 
 **3. Les pages**, qui appellent les composants et le contenu :
 - `feat/dev/contenu` : chargeur de contenu, types, vérification, sitemap.
