@@ -9,14 +9,19 @@ describe('catalogue du design system', () => {
     expect(new Set(ids).size).toBe(ids.length)
   })
 
-  it('passe au composant les réglages non vides, sans le texte du slot', () => {
-    const values = { ...initialValues(button), href: '' }
+  it('passe au composant les réglages, sans le slot ni le choix « aucune » d’une liste', () => {
+    const values = { ...initialValues(button), icon: '', href: '' }
     expect(propsOf(button, values)).toEqual({
       variant: 'primary',
-      icon: 'download',
+      href: '',
       download: false,
       compact: false,
     })
+  })
+
+  it('échappe les guillemets dans le code copié', () => {
+    const values = { ...initialValues(button), href: 'a"b' }
+    expect(codeOf(button, values)).toContain('href="a&quot;b"')
   })
 
   it('écrit le code avec les seules options qui changent la valeur par défaut', () => {

@@ -50,33 +50,47 @@ function onMessage(event: MessageEvent) {
   else if (event.data?.type === 'ds-height') height.value = event.data.height
 }
 
-// « Copié » seulement si le presse-papiers a accepté, pendant --feedback-hold
+// « Copié » seulement si le presse-papiers a accepté (absent hors https ou localhost), pendant --feedback-hold
+let timer: ReturnType<typeof setTimeout> | undefined
 async function copy() {
-  copied.value = await navigator.clipboard.writeText(code.value).then(
-    () => true,
-    () => false,
-  )
-  setTimeout(() => (copied.value = false), seconds('--feedback-hold') * 1000)
+  try {
+    await navigator.clipboard.writeText(code.value)
+    copied.value = true
+  } catch {
+    copied.value = false
+  }
+  clearTimeout(timer)
+  timer = setTimeout(() => (copied.value = false), seconds('--feedback-hold') * 1000)
 }
 
-// Un état forcé : la classe sur la racine du composant, et sur ses liens et boutons pour le focus
+/* Un état forcé : la classe sur la racine du composant, et sur ses liens et boutons pour le focus. Si le
+   composant se redessine seul (Vue réécrit alors ses classes), elle est remise. */
+const forced = new WeakMap<HTMLElement, MutationObserver>()
 const vState: Directive<HTMLElement, string> = {
-  mounted: apply,
-  updated: apply,
-}
-function apply(el: HTMLElement, { value }: { value: string }) {
-  const root = el.firstElementChild
-  if (!value || !root) return
-  root.classList.add(value)
-  if (value === 'ds-focus')
-    for (const f of root.querySelectorAll('a, button')) f.classList.add(value)
+  mounted(el, { value }) {
+    if (!value) return
+    const apply = () => {
+      const root = el.firstElementChild
+      if (!root) return
+      const targets = [root, ...(value === 'ds-focus' ? root.querySelectorAll('a, button') : [])]
+      for (const t of targets) if (!t.classList.contains(value)) t.classList.add(value)
+    }
+    apply()
+    const observer = new MutationObserver(apply)
+    observer.observe(el, { subtree: true, childList: true, attributeFilter: ['class'] })
+    forced.set(el, observer)
+  },
+  unmounted: (el) => forced.get(el)?.disconnect(),
 }
 
 onMounted(() => {
   addEventListener('message', onMessage)
   if (props.entry.states) forceStates()
 })
-onBeforeUnmount(() => removeEventListener('message', onMessage))
+onBeforeUnmount(() => {
+  removeEventListener('message', onMessage)
+  clearTimeout(timer)
+})
 </script>
 
 <template>
@@ -116,7 +130,7 @@ onBeforeUnmount(() => removeEventListener('message', onMessage))
           ref="frame"
           :src="src"
           :title="`Démo de ${entry.name}`"
-          :style="{ width, height: `${Math.max(height, 96)}px` }"
+          :style="{ width, height: entry.screen ? '40rem' : `${Math.max(height, 96)}px` }"
         />
       </div>
       <aside class="panel" aria-label="Options">
@@ -131,10 +145,24 @@ onBeforeUnmount(() => removeEventListener('message', onMessage))
         <figure v-for="s in STATES" :key="s.label" :class="`fond-${fond}`">
           <div v-state="s.cls" class="state" :style="entry.frame">
             <component :is="entry.component" v-bind="bound">
-              <template v-if="'slot' in values" #default>{{ values.slot }}</template>
+              <template v-if="values.slot" #default>{{ values.slot }}</template>
             </component>
           </div>
           <figcaption>{{ s.label }}</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section v-if="entry.states" class="states" aria-label="Sur les six fonds">
+      <h2 class="ds-label">Sur les six fonds</h2>
+      <div class="state-grid">
+        <figure v-for="f in FONDS" :key="f" :class="`fond-${f}`">
+          <div :style="entry.frame">
+            <component :is="entry.component" v-bind="bound">
+              <template v-if="values.slot" #default>{{ values.slot }}</template>
+            </component>
+          </div>
+          <figcaption>{{ f }}</figcaption>
         </figure>
       </div>
     </section>

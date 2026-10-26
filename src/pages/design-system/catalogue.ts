@@ -18,6 +18,7 @@ import BaseTag from '../../components/ui/BaseTag.vue'
 import CopyButton from '../../components/ui/CopyButton.vue'
 import TextLink from '../../components/ui/TextLink.vue'
 import { ICONS } from '../../components/ui/icons'
+import { FONDS as FOND_CLASSES } from './fonds'
 import MobileMenuDemo from './demos/MobileMenuDemo.vue'
 import RevealDemo from './demos/RevealDemo.vue'
 import SkipLinkDemo from './demos/SkipLinkDemo.vue'
@@ -59,8 +60,10 @@ export interface Entry {
   /** Fond de la démo, et style du cadre (hauteur des fonds et animations) */
   fond?: Fond
   frame?: string
-  /** Montre les états (survol, focus, appuyé) côte à côte */
+  /** Montre les états (survol, focus, appuyé) côte à côte, et le composant sur les six fonds */
   states?: boolean
+  /** Démo à la hauteur d'un écran (le composant dépend de la hauteur de l'écran) */
+  screen?: boolean
 }
 
 export const FAMILIES = [
@@ -92,7 +95,7 @@ export const PLANNED: Record<Family, string[]> = {
   Site: ['ContactLinks'],
 }
 
-export const FONDS: readonly Fond[] = ['nuit', 'violet', 'vif', 'lime', 'rose', 'creme']
+export const FONDS = FOND_CLASSES.map((f) => f.cls.slice('fond-'.length) as Fond)
 const STAGES: Record<string, string | undefined> = {
   défaut: undefined,
   lime: 'var(--lime-500)',
@@ -105,7 +108,7 @@ const list = (text: unknown) =>
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
-const attr = (name: string, value: unknown) => (value ? ` ${name}="${value}"` : '')
+const attr = (name: string, value: unknown) => (value ? ` ${name}="${quote(value)}"` : '')
 
 export const ENTRIES: Entry[] = [
   {
@@ -428,7 +431,7 @@ export const ENTRIES: Entry[] = [
       },
     }),
     code: (v) =>
-      `<StatBlock :stat="{ value: '${v.value}', label: '${v.label}'${v.compare ? `, compare: { before: ${v.before}, after: ${v.after} }` : ''} }" />`,
+      `<StatBlock :stat="{ value: '${quote(js(v.value))}', label: '${quote(js(v.label))}'${v.compare ? `, compare: { before: ${v.before}, after: ${v.after} }` : ''} }" />`,
     frame: 'max-width: 20rem',
   },
   {
@@ -459,6 +462,7 @@ export const ENTRIES: Entry[] = [
   },
   {
     id: 'page-intro',
+    screen: true,
     name: 'PageIntro',
     family: 'Mise en page',
     description:
@@ -578,6 +582,7 @@ export const TOKEN_PAGES = [
   { id: 'typographie', name: 'Typographie', component: page(() => import('./DsTypography.vue')) },
   { id: 'espacements', name: 'Espacements', component: page(() => import('./DsSpacing.vue')) },
   { id: 'motion', name: 'Motion', component: page(() => import('./DsMotion.vue')) },
+  { id: 'icones', name: 'Icônes', component: page(() => import('./DsIcons.vue')) },
 ]
 export const LEGACY_PAGES = [
   {
@@ -606,15 +611,20 @@ export function initialValues(entry: Entry): Values {
   return Object.fromEntries(entry.controls.map((c) => [c.key, c.initial]))
 }
 
-/** Options passées au composant : valeurs vides retirées, le slot à part */
+/** Options passées au composant : le choix « aucune » d'une liste (valeur vide) retiré, le slot à part */
 export function propsOf(entry: Entry, values: Values): Record<string, unknown> {
+  const none = new Set(entry.controls.filter((c) => c.type === 'select').map((c) => c.key))
   const raw = entry.bind?.(values) ?? values
   return Object.fromEntries(
     Object.entries(raw).filter(
-      ([key, value]) => key !== 'slot' && value !== '' && value !== undefined,
+      ([key, value]) => key !== 'slot' && value !== undefined && !(value === '' && none.has(key)),
     ),
   )
 }
+
+/** Valeur dans un attribut entre guillemets, ou dans une chaîne JavaScript entre apostrophes */
+export const quote = (value: unknown) => String(value).replace(/"/g, '&quot;')
+export const js = (value: unknown) => String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'")
 
 /** Code d'appel avec les réglages en cours ; seules les options qui changent la valeur par défaut */
 export function codeOf(entry: Entry, values: Values): string {
@@ -627,7 +637,7 @@ export function codeOf(entry: Entry, values: Values): string {
     if (value === true) return [kebab(name)]
     return typeof value === 'number'
       ? [`:${kebab(name)}="${value}"`]
-      : [`${kebab(name)}="${value}"`]
+      : [`${kebab(name)}="${quote(value)}"`]
   })
   const open = `<${entry.name}${attrs.map((a) => ` ${a}`).join('')}`
   return values.slot ? `${open}>${values.slot}</${entry.name}>` : `${open} />`

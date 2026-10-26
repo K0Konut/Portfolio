@@ -19,8 +19,8 @@ if ('reduced' in route.query) forceReducedMotion()
 
 type Message = { type: 'ds-values'; values: Values; fond: Fond } | { type: 'ds-replay' }
 
-function onMessage(event: MessageEvent<Message>) {
-  if (event.origin !== location.origin) return
+function onMessage(event: MessageEvent<Message | null>) {
+  if (event.origin !== location.origin || event.source !== parent || !event.data) return
   if (event.data.type === 'ds-values') {
     values.value = event.data.values
     fond.value = event.data.fond
@@ -46,10 +46,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main v-if="entry" ref="demo" :class="['demo', `fond-${fond}`]">
+  <main v-if="entry" id="contenu" ref="demo" tabindex="-1" :class="['demo', `fond-${fond}`]">
     <div :style="entry.frame">
       <component :is="entry.component" :key="run" v-bind="propsOf(entry, values)">
-        <template v-if="'slot' in values" #default>{{ values.slot }}</template>
+        <template v-if="values.slot" #default>{{ values.slot }}</template>
       </component>
     </div>
   </main>
