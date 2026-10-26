@@ -4,8 +4,8 @@ import { ref } from 'vue'
 /* Un élément à glisser jusqu'à une cible, où il se loge (design system § DragToSnap) : souris ou doigt
    (Pointer Events, bouton principal d'un seul pointeur), ou Entrée / Espace / appui bref, qui le logent
    directement. Relâché hors de portée, ou glisser interrompu, il revient à sa place.
-   Le déplacement passe par la propriété `translate` : la page reste libre de `rotate`, `scale` ou `transform`,
-   et stylise les états par les classes `dragging` et `placed`. */
+   Le composant ne porte que le déplacement ; l'apparence vient de la page, par le slot, qui reçoit les états
+   `dragging` et `placed` (inclinaison, couleur et leurs transitions restent à la page). */
 const props = withDefaults(
   defineProps<{
     /** L'élément cible */
@@ -105,21 +105,23 @@ function onClick(event: MouseEvent) {
     @lostpointercapture="onUp"
     @click="onClick"
   >
-    <slot />
+    <slot :dragging="!!drag" :placed="placed" />
   </button>
 </template>
 
 <style scoped>
-/* Retour et mise en place en --duration-move (instantanés en mouvement réduit) ; la page ajoute ses propres
-   transitions par --drag-transitions (rotation, couleur…) */
+/* Retour et mise en place en --duration-move (instantanés en mouvement réduit) ; rien pendant le glisser */
 .drag {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
   cursor: grab;
   touch-action: none;
   user-select: none;
   translate: var(--x) var(--y);
-  transition:
-    translate var(--duration-move) var(--ease-out),
-    var(--drag-transitions, opacity 0s);
+  transition: translate var(--duration-move) var(--ease-out);
 }
 .dragging {
   cursor: grabbing;

@@ -224,9 +224,6 @@ export const ENTRIES: Entry[] = [
       },
       { key: 'stack', label: 'Un mot par ligne (mobile)', type: 'boolean', initial: false },
     ],
-    bind: (v) => ({ ...v }),
-    code: (v) =>
-      `<LetterReveal text="${quote(v.text)}"${v.as === 'span' ? '' : ` as="${v.as}"`} :stagger="${v.stagger}"${v.delay ? ` :delay="${v.delay}"` : ''}${v.start === 'load' ? '' : ` start="${v.start}"`}${v.stack ? ' stack' : ''} class="display" />`,
     frame:
       'font-family: var(--font-display); font-size: var(--text-h1); line-height: var(--leading-display)',
     fond: 'violet',
@@ -320,7 +317,7 @@ export const ENTRIES: Entry[] = [
     name: 'DragToSnap',
     family: 'Animations',
     description:
-      'Élément à glisser jusqu’à une cible, où il se loge (souris, doigt, ou Entrée et Espace). Relâché hors de portée, il revient. La page stylise les états `dragging` et `placed`, et ajoute ses transitions par `--drag-transitions`.',
+      'Élément à glisser jusqu’à une cible, où il se loge (souris, doigt, ou Entrée et Espace). Relâché hors de portée, il revient. Le composant ne porte que le déplacement : l’apparence vient de la page, par le slot, qui reçoit `dragging` et `placed`.',
     component: DragToSnapDemo,
     props: [
       { name: 'target', type: 'HTMLElement', description: 'L’élément cible' },
@@ -339,7 +336,9 @@ export const ENTRIES: Entry[] = [
         step: 10,
       },
     ],
-    slots: [{ name: 'défaut', description: 'Le contenu de l’élément' }],
+    slots: [
+      { name: 'défaut', description: 'L’apparence de l’élément ; reçoit `dragging` et `placed`' },
+    ],
     code: (v) =>
       `<DragToSnap :target="hole" :reach="${v.reach}" label="Replacer la brique" @near="near = $event" @snap="onSnap" />`,
   },

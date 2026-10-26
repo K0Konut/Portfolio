@@ -17,17 +17,17 @@ const FRAME_MS = 1000 / 30
 /** Teinte intermédiaire du rendu validé, entre le violet vif et le rose (DA : « violet électrique qui tire vers le rose ») */
 const MID = '#6f63ff'
 
-/** Réglages du fond (design system § TopoBackground) */
+/** Réglages du fond (design system § TopoBackground) ; les valeurs par défaut sont dans TopoBackground */
 export interface TopographyOptions {
   /** Tokens de couleur des creux et des hauteurs */
-  from?: string
-  to?: string
-  /** Vitesse de l'ondulation (1 : celle du rendu validé) */
-  speed?: number
-  /** Nombre de courbes (1,4 : celui du rendu validé) */
-  density?: number
+  from: string
+  to: string
+  /** Vitesse de l'ondulation */
+  speed: number
+  /** Nombre de courbes */
+  density: number
   /** Lignes estompées au centre, derrière le contenu */
-  fade?: boolean
+  fade: boolean
 }
 
 const VERTEX = '#version 300 es\nin vec2 position;void main(){gl_Position=vec4(position,0.,1.);}'
@@ -63,13 +63,7 @@ const vec3 = (c: number[]) => c.map((v) => (v / 255).toFixed(3)).join(',')
 /** Dessine le fond dans `box` ; renvoie la fonction d'arrêt, ou `undefined` sans WebGL 2 (le fond violet reste). */
 export function startTopography(
   box: HTMLElement,
-  {
-    from = 'violet-500',
-    to = 'pink-500',
-    speed = 1,
-    density = 1.4,
-    fade = true,
-  }: TopographyOptions = {},
+  { from, to, speed, density, fade }: TopographyOptions,
 ): (() => void) | undefined {
   const canvas = document.createElement('canvas')
   const gl = canvas.getContext('webgl2', {

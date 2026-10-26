@@ -14,11 +14,18 @@ withDefaults(
   { delay: 1.5, passes: 2 },
 )
 
+// S'efface au premier défilement compté depuis son affichage, puis n'écoute plus
 const gone = ref(false)
+let from = 0
 const leave = () => {
-  if (scrollY > 10) gone.value = true
+  if (Math.abs(scrollY - from) <= 10) return
+  gone.value = true
+  removeEventListener('scroll', leave)
 }
-onMounted(() => addEventListener('scroll', leave, { passive: true }))
+onMounted(() => {
+  from = scrollY
+  addEventListener('scroll', leave, { passive: true })
+})
 onBeforeUnmount(() => removeEventListener('scroll', leave))
 </script>
 
@@ -42,8 +49,8 @@ onBeforeUnmount(() => removeEventListener('scroll', leave))
   height: var(--hint-height);
   background: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
   overflow: hidden;
-  animation: hint-in 0.4s var(--ease-out) var(--delay) backwards;
-  transition: opacity 0.3s var(--ease-out);
+  animation: hint-in var(--duration-reduced) var(--ease-out) var(--delay) backwards;
+  transition: opacity var(--duration-reduced) var(--ease-out);
 }
 .gone {
   opacity: 0;

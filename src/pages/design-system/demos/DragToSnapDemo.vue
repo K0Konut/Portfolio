@@ -13,13 +13,15 @@ const snapped = ref(false)
   <div class="demo">
     <div ref="target" :class="['target', { near, snapped }]" />
     <DragToSnap
-      class="chip"
+      v-slot="{ placed }"
       :target="target"
       :reach="reach"
       label="Glisser vers la cible"
       @near="near = $event"
       @snap="snapped = true"
-    />
+    >
+      <span :class="['chip', { placed }]" />
+    </DragToSnap>
     <p class="state" aria-live="polite">
       {{ snapped ? 'snap : logé' : near ? 'near : à portée' : 'Glissez le carré dans la cible.' }}
     </p>
@@ -45,9 +47,9 @@ const snapped = ref(false)
   border-style: solid;
 }
 .chip {
-  border: 0;
+  display: block;
   background: var(--color-text);
-  --drag-transitions: background-color var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 .chip.placed {
   background: var(--color-action);

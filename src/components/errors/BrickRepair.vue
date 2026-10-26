@@ -43,12 +43,14 @@ onBeforeUnmount(() => clearTimeout(timer))
       </div>
       <div class="ground">
         <DragToSnap
-          class="brick"
+          v-slot="{ dragging, placed: inPlace }"
           :target="hole"
           :label="t('notFound.brick')"
           @near="near = $event"
           @snap="onSnap"
-        />
+        >
+          <span :class="['brick', { dragging, placed: inPlace }]" />
+        </DragToSnap>
       </div>
     </template>
     {{ t('notFound.text') }}
@@ -113,16 +115,16 @@ onBeforeUnmount(() => clearTimeout(timer))
   place-items: center;
 }
 .brick {
-  border: 0;
-  padding: 0;
   rotate: -14deg;
-  --drag-transitions:
-    rotate var(--duration-move) var(--ease-out), scale var(--duration-move) var(--ease-out),
+  transition:
+    rotate var(--duration-move) var(--ease-out),
+    scale var(--duration-move) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out);
 }
 .brick.dragging {
   rotate: -4deg;
   scale: 1.06;
+  transition: none;
 }
 .brick.placed {
   rotate: 0deg;

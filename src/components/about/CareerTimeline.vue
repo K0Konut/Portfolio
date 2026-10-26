@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { reducedMotion } from '../../composables/motion'
+import { loadScrollTrigger } from '../../composables/motion'
 import { useLocale } from '../../composables/useLocale'
 import type { TimelineStep } from '../../content/types'
 import BaseTag from '../ui/BaseTag.vue'
@@ -16,20 +16,15 @@ const { to } = useLocale()
 const root = ref<HTMLElement>()
 const live = ref(false)
 
-const reduce = !import.meta.env.SSR && reducedMotion().matches
-const libraries =
-  import.meta.env.SSR || reduce
-    ? undefined
-    : Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
+const libraries = loadScrollTrigger()
 
-let loaded: Awaited<NonNullable<typeof libraries>> | undefined
+let loaded: Awaited<typeof libraries>
 let ctx: { revert(): void } | undefined
 let gone = false
 
 onMounted(async () => {
-  loaded = await libraries?.catch(() => undefined)
+  loaded = await libraries
   if (gone || !loaded) return
-  loaded[0].gsap.registerPlugin(loaded[1].ScrollTrigger)
   live.value = true
   animate()
 })
@@ -43,7 +38,7 @@ onBeforeUnmount(() => {
 function animate() {
   const el = root.value
   if (!el || !loaded) return
-  const [{ gsap }, { ScrollTrigger }] = loaded
+  const { gsap, ScrollTrigger } = loaded
   ctx?.revert()
   for (const step of el.querySelectorAll('li')) step.classList.remove('on')
   // Le fil et les repères partagent la même ligne : 65 % de la hauteur de l'écran

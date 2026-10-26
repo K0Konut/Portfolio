@@ -538,7 +538,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Options** : `target` (l'élément cible) ; `reach` (distance de capture, 40 px) ; `label` (nom accessible du bouton) ; `disabled`. Slot défaut : l'apparence de l'élément. Événements : `near` (vrai ou faux, quand l'élément entre ou sort de la portée de la cible) ; `snap` (l'élément s'est logé).
 - **Interaction** : glisser à la souris ou au doigt (Pointer Events, `touch-action: none`, bouton principal d'un seul pointeur) ; relâché dans la portée, l'élément se loge au centre de la cible ; relâché ailleurs, ou glisser interrompu par le navigateur, il revient à sa place. La position de la cible est mesurée une fois au début du glisser, depuis le point de repos (immobile).
 - **Clavier et appui bref** : l'élément est un `button` ; Entrée, Espace ou un appui sans glisser le logent directement.
-- **États** (classes exposées) : repos, `dragging` (pendant le glisser), `placed` (logé). L'apparence de chaque état est fixée par la page. Le déplacement passe par la propriété `translate` : la page reste libre de `rotate`, `scale` ou `transform`, et ajoute ses propres transitions par la variable `--drag-transitions`.
+- **États** : repos, `dragging` (pendant le glisser), `placed` (logé). Le composant ne porte que le déplacement (propriété `translate`, en `--duration-move`) ; l'apparence vient de la page, par le slot, qui reçoit `dragging` et `placed` (inclinaison, couleur et leurs transitions).
 - **Animations réduites** : mise en place sans transition (`--duration-move`).
 
 ---

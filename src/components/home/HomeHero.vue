@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { bezier, number, reducedMotion, seconds } from '../../composables/motion'
+import { cubicEase, fontReady, number, reducedMotion, seconds } from '../../composables/motion'
 import { useLocale } from '../../composables/useLocale'
 import { SITE } from '../../content/site'
 import ScrollHint from '../animations/ScrollHint.vue'
@@ -41,8 +41,7 @@ onMounted(async () => {
     return
   }
   const { gsap } = loaded
-  const [x1, y1, x2, y2] = bezier('--ease-out')
-  const ease = (p: number) => cubicBezier(x1, y1, x2, y2, p)
+  const ease = cubicEase('--ease-out')
   const base = seconds('--duration-base')
 
   ctx = gsap.context(() => {
@@ -72,11 +71,8 @@ onMounted(async () => {
           0.6,
         )
     }
-    // L'entrée attend la police Bagel (300 ms au plus), pour ne pas animer une police de secours
-    Promise.race([
-      document.fonts.load('1em "Bagel Fat One"'),
-      new Promise((resolve) => setTimeout(resolve, 300)),
-    ]).then(() => {
+    // L'entrée attend la police du nom (300 ms au plus), pour ne pas animer une police de secours
+    fontReady(el.querySelector('h1') ?? el).then(() => {
       if (gone) return
       pending.value = false
       tl.play(0)
@@ -87,28 +83,13 @@ onBeforeUnmount(() => {
   gone = true
   ctx?.revert()
 })
-
-/** Courbe de Bézier cubique (x1, y1, x2, y2) évaluée en p, comme cubic-bezier() en CSS */
-function cubicBezier(x1: number, y1: number, x2: number, y2: number, p: number) {
-  const at = (a: number, b: number, s: number) =>
-    3 * a * s * (1 - s) ** 2 + 3 * b * s ** 2 * (1 - s) + s ** 3
-  let lo = 0
-  let hi = 1
-  let s = p
-  for (let i = 0; i < 20; i++) {
-    s = (lo + hi) / 2
-    if (at(x1, x2, s) < p) lo = s
-    else hi = s
-  }
-  return at(y1, y2, s)
-}
 </script>
 
 <template>
   <section ref="root" class="hero fond-violet" aria-labelledby="nom">
     <TopoBackground />
     <div class="inner">
-      <ScrollParallax id="nom" class="name-wrap" data-intro-hide>
+      <ScrollParallax id="nom" data-intro-hide>
         <LetterReveal
           ref="name"
           as="h1"

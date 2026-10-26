@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { fontReady } from '../../composables/motion'
 
 /* Texte dont les lettres montent et se posent une à une (design system § LetterReveal). Le texte est en clair
    pour les lecteurs d'écran ; les lettres découpées sont dans un doublon aria-hidden. Les lettres ne sont
    cachées qu'avec JavaScript (classe .js du document) : sans script, le texte est visible d'emblée.
-   Démarrage : à l'ouverture (`load`, une fois la police d'affichage prête), à l'arrivée à l'écran (`visible`),
+   Démarrage : à l'ouverture (`load`, une fois sa police prête), à l'arrivée à l'écran (`visible`),
    ou par la page (`manual`, méthode `play`). */
 const props = withDefaults(
   defineProps<{
@@ -46,12 +47,13 @@ onMounted(() => {
     })
     observer.observe(root.value)
   } else if (props.start !== 'manual') {
-    // La police d'affichage d'abord (300 ms au plus), pour ne pas animer une police de secours
-    Promise.race([
-      document.fonts.load('1em "Bagel Fat One"'),
-      new Promise((resolve) => setTimeout(resolve, 300)),
-      // Deux images plus tard : l'état caché doit avoir été affiché pour que les lettres s'animent
-    ]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => !gone && play())))
+    // La police d'abord (300 ms au plus), puis deux images : l'état caché doit avoir été affiché
+    // pour que les lettres s'animent
+    const el = root.value
+    if (el)
+      fontReady(el).then(() =>
+        requestAnimationFrame(() => requestAnimationFrame(() => !gone && play())),
+      )
   }
 })
 onBeforeUnmount(() => {
