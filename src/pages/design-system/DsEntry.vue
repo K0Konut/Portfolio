@@ -5,6 +5,7 @@ import BaseButton from '../../components/ui/BaseButton.vue'
 import { codeOf, type Entry, initialValues, propsOf, type Values } from './catalogue'
 import DsControls from './DsControls.vue'
 import DsReference from './DsReference.vue'
+import DsText from './DsText.vue'
 import { forceStates } from './forceStyles'
 
 /* Page d'un composant du catalogue (design system v1.2 §6) : démo isolée dans une iframe (ses points de rupture
@@ -55,9 +56,6 @@ async function copy() {
   setTimeout(() => (copied.value = false), 1500)
 }
 
-/** Description : `code` entre accents graves */
-const parts = computed(() => props.entry.description.split('`'))
-
 // Un état forcé : la classe sur la racine du composant, et sur ses liens et boutons pour le focus
 const vState: Directive<HTMLElement, string> = {
   mounted: apply,
@@ -83,12 +81,7 @@ onBeforeUnmount(() => removeEventListener('message', onMessage))
     <header>
       <p class="family">{{ entry.family }}</p>
       <h1>{{ entry.name }}</h1>
-      <p class="description">
-        <template v-for="(part, i) in parts" :key="i">
-          <code v-if="i % 2">{{ part }}</code>
-          <template v-else>{{ part }}</template>
-        </template>
-      </p>
+      <p class="description"><DsText :text="entry.description" /></p>
     </header>
 
     <div class="toolbar" role="group" aria-label="Réglages de la démo">

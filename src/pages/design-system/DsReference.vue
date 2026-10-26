@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Entry } from './catalogue'
+import DsText from './DsText.vue'
 
 // Référence d'un composant du catalogue : options, slots et événements
 defineProps<{ entry: Entry }>()
@@ -26,7 +27,7 @@ defineProps<{ entry: Entry }>()
             <code>{{ p.type }}</code>
           </td>
           <td>{{ p.default ?? '—' }}</td>
-          <td>{{ p.description }}</td>
+          <td><DsText :text="p.description" /></td>
         </tr>
       </tbody>
     </table>
@@ -35,13 +36,13 @@ defineProps<{ entry: Entry }>()
         <dt>
           Slot <code>{{ s.name }}</code>
         </dt>
-        <dd>{{ s.description }}</dd>
+        <dd><DsText :text="s.description" /></dd>
       </template>
       <template v-for="e in entry.events" :key="e.name">
         <dt>
           Événement <code>{{ e.name }}</code>
         </dt>
-        <dd>{{ e.description }}</dd>
+        <dd><DsText :text="e.description" /></dd>
       </template>
     </dl>
   </section>
