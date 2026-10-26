@@ -1,4 +1,4 @@
-import { defineComponent, h, onMounted, ref, type Component } from 'vue'
+import { defineAsyncComponent, type Component } from 'vue'
 import capture from '../../assets/projets/ce-portfolio.png'
 import ScrollHint from '../../components/home/ScrollHint.vue'
 import TopoBackground from '../../components/home/TopoBackground.vue'
@@ -8,8 +8,6 @@ import StatBlock from '../../components/case/StatBlock.vue'
 import AppFooter from '../../components/layout/AppFooter.vue'
 import AppHeader from '../../components/layout/AppHeader.vue'
 import LangSwitch from '../../components/layout/LangSwitch.vue'
-import MobileMenu from '../../components/layout/MobileMenu.vue'
-import SkipLink from '../../components/layout/SkipLink.vue'
 import type { Fond } from '../../components/sections/fonds'
 import PageIntro from '../../components/sections/PageIntro.vue'
 import PageSection from '../../components/sections/PageSection.vue'
@@ -20,25 +18,21 @@ import BaseTag from '../../components/ui/BaseTag.vue'
 import CopyButton from '../../components/ui/CopyButton.vue'
 import TextLink from '../../components/ui/TextLink.vue'
 import { ICONS } from '../../components/ui/icons'
+import MobileMenuDemo from './demos/MobileMenuDemo.vue'
+import RevealDemo from './demos/RevealDemo.vue'
+import SkipLinkDemo from './demos/SkipLinkDemo.vue'
 
 /* Catalogue de développement (design system v1.2 §6) : une description par composant, dont la page tire
    la démo, le panneau de réglages, le code et le tableau des options. */
 
 export type Values = Record<string, string | number | boolean>
 
-export type Control =
-  | { key: string; label: string; type: 'text'; initial: string }
-  | {
-      key: string
-      label: string
-      type: 'number'
-      initial: number
-      min: number
-      max: number
-      step?: number
-    }
-  | { key: string; label: string; type: 'boolean'; initial: boolean }
-  | { key: string; label: string; type: 'select'; initial: string; options: readonly string[] }
+export type Control = { key: string; label: string } & (
+  | { type: 'text'; initial: string }
+  | { type: 'number'; initial: number; min: number; max: number; step?: number }
+  | { type: 'boolean'; initial: boolean }
+  | { type: 'select'; initial: string; options: readonly string[] }
+)
 
 /** Une option du composant, pour le tableau (pas forcément réglable) */
 export interface PropDoc {
@@ -58,7 +52,6 @@ export interface Entry {
   /** Contrôles du panneau ; la clé « slot » remplit le slot par défaut */
   controls: Control[]
   slots?: { name: string; description: string }[]
-  events?: { name: string; description: string }[]
   /** Valeurs des contrôles → options du composant (par défaut : les mêmes clés) */
   bind?: (values: Values) => Record<string, unknown>
   /** Code d'appel, quand `bind` transforme les valeurs */
@@ -99,7 +92,7 @@ export const PLANNED: Record<Family, string[]> = {
   Site: ['ContactLinks'],
 }
 
-const FONDS: readonly Fond[] = ['nuit', 'violet', 'vif', 'lime', 'rose', 'creme']
+export const FONDS: readonly Fond[] = ['nuit', 'violet', 'vif', 'lime', 'rose', 'creme']
 const STAGES: Record<string, string | undefined> = {
   défaut: undefined,
   lime: 'var(--lime-500)',
@@ -113,52 +106,6 @@ const list = (text: unknown) =>
     .map((s) => s.trim())
     .filter(Boolean)
 const attr = (name: string, value: unknown) => (value ? ` ${name}="${value}"` : '')
-
-/* Démos qui ne tiennent pas dans une simple liste d'options */
-
-// Le menu s'ouvre en fenêtre modale : un bouton pour l'ouvrir, Échap ou « Fermer » pour le refermer
-const MobileMenuDemo = defineComponent(() => {
-  const open = ref(false)
-  return () => [
-    h(BaseButton, { compact: true, onClick: () => (open.value = true) }, () => 'Ouvrir le menu'),
-    h(MobileMenu, {
-      modelValue: open.value,
-      'onUpdate:modelValue': (v: boolean) => (open.value = v),
-    }),
-  ]
-})
-
-// Le lien d'évitement n'apparaît qu'au focus clavier
-const SkipLinkDemo = defineComponent(() => () => [
-  h('p', { style: 'margin: 0' }, 'Cliquez dans ce cadre, puis appuyez sur Tab.'),
-  h(SkipLink),
-])
-
-// v-reveal ne cache que ce qui est sous la ligne de flottaison : la démo part de l'état caché à chaque montage
-const RevealDemo = defineComponent({
-  props: { count: { type: Number, default: 3 } },
-  setup(props) {
-    const pending = ref(true)
-    onMounted(() =>
-      requestAnimationFrame(() => requestAnimationFrame(() => (pending.value = false))),
-    )
-    return () =>
-      h(
-        'div',
-        { style: 'display: grid; gap: var(--space-4)' },
-        Array.from({ length: props.count }, (_, i) =>
-          h(
-            'div',
-            {
-              class: ['reveal', { 'is-pending': pending.value }],
-              style: `--i: ${i}; padding: var(--space-5); border-radius: var(--radius-md); background: var(--color-surface)`,
-            },
-            `Bloc ${i + 1}`,
-          ),
-        ),
-      )
-  },
-})
 
 export const ENTRIES: Entry[] = [
   {
@@ -619,20 +566,41 @@ export const ENTRIES: Entry[] = [
   },
 ]
 
-/** Les pages de tokens et les démos des sections en attente de refonte (étape 2 bis) */
+/** Les pages de tokens, et les démos des sections en attente de refonte (étape 2 bis), chargées à l'ouverture */
+const page = (load: () => Promise<{ default: Component }>) => defineAsyncComponent(load)
 export const TOKEN_PAGES = [
-  { id: 'couleurs', name: 'Couleurs' },
-  { id: 'fonds-de-section', name: 'Fonds de section' },
-  { id: 'typographie', name: 'Typographie' },
-  { id: 'espacements', name: 'Espacements' },
-  { id: 'motion', name: 'Motion' },
-] as const
+  { id: 'couleurs', name: 'Couleurs', component: page(() => import('./DsColors.vue')) },
+  {
+    id: 'fonds-de-section',
+    name: 'Fonds de section',
+    component: page(() => import('./DsBackgrounds.vue')),
+  },
+  { id: 'typographie', name: 'Typographie', component: page(() => import('./DsTypography.vue')) },
+  { id: 'espacements', name: 'Espacements', component: page(() => import('./DsSpacing.vue')) },
+  { id: 'motion', name: 'Motion', component: page(() => import('./DsMotion.vue')) },
+]
 export const LEGACY_PAGES = [
-  { id: 'ancien-mise-en-page', name: 'En-tête, Parlons-en' },
-  { id: 'ancien-accueil', name: 'Accueil' },
-  { id: 'ancien-projets', name: 'Projets et étude de cas' },
-  { id: 'ancien-a-propos', name: 'À propos, Contact, 404' },
-] as const
+  {
+    id: 'ancien-mise-en-page',
+    name: 'En-tête, Parlons-en',
+    component: page(() => import('./DsComponentsLayout.vue')),
+  },
+  {
+    id: 'ancien-accueil',
+    name: 'Accueil',
+    component: page(() => import('./DsComponentsHome.vue')),
+  },
+  {
+    id: 'ancien-projets',
+    name: 'Projets et étude de cas',
+    component: page(() => import('./DsComponentsProjects.vue')),
+  },
+  {
+    id: 'ancien-a-propos',
+    name: 'À propos, Contact, 404',
+    component: page(() => import('./DsComponentsAbout.vue')),
+  },
+]
 
 export function initialValues(entry: Entry): Values {
   return Object.fromEntries(entry.controls.map((c) => [c.key, c.initial]))
@@ -654,8 +622,8 @@ export function codeOf(entry: Entry, values: Values): string {
   const kebab = (name: string) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)
   const attrs = entry.props.flatMap(({ name, default: fallback }) => {
     const value = values[name]
-    if (value === undefined || value === '' || String(value) === fallback) return []
-    if (value === false) return []
+    if (value === undefined || value === '' || value === false || String(value) === fallback)
+      return []
     if (value === true) return [kebab(name)]
     return typeof value === 'number'
       ? [`:${kebab(name)}="${value}"`]

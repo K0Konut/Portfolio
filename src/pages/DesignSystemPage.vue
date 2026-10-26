@@ -1,39 +1,18 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { computed, type Component } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ENTRIES, FAMILIES, LEGACY_PAGES, PLANNED, TOKEN_PAGES } from './design-system/catalogue'
-import DsBackgrounds from './design-system/DsBackgrounds.vue'
-import DsColors from './design-system/DsColors.vue'
-import DsComponentsAbout from './design-system/DsComponentsAbout.vue'
-import DsComponentsHome from './design-system/DsComponentsHome.vue'
-import DsComponentsLayout from './design-system/DsComponentsLayout.vue'
-import DsComponentsProjects from './design-system/DsComponentsProjects.vue'
-import DsDemo from './design-system/DsDemo.vue'
 import DsEntry from './design-system/DsEntry.vue'
-import DsMotion from './design-system/DsMotion.vue'
-import DsSpacing from './design-system/DsSpacing.vue'
-import DsTypography from './design-system/DsTypography.vue'
 
 /* Catalogue du design system v1.2 (§6), en développement seulement (architecture technique §5) : les tokens,
-   puis une page par composant, rangés par famille. « ?bare » : la démo seule, pour l'iframe d'une page. */
+   puis une page par composant, rangés par famille. La démo d'un composant a sa propre route (DsDemo). */
 useHead({ title: 'Design system · Costa Maskulov', meta: [{ name: 'robots', content: 'noindex' }] })
-
-const PAGES: Record<string, Component> = {
-  couleurs: DsColors,
-  'fonds-de-section': DsBackgrounds,
-  typographie: DsTypography,
-  espacements: DsSpacing,
-  motion: DsMotion,
-  'ancien-mise-en-page': DsComponentsLayout,
-  'ancien-accueil': DsComponentsHome,
-  'ancien-projets': DsComponentsProjects,
-  'ancien-a-propos': DsComponentsAbout,
-}
 
 const route = useRoute()
 const id = computed(() => String(route.params.entry ?? ''))
 const entry = computed(() => ENTRIES.find((e) => e.id === id.value))
+const page = computed(() => [...TOKEN_PAGES, ...LEGACY_PAGES].find((p) => p.id === id.value))
 const legacy = computed(() => LEGACY_PAGES.some((p) => p.id === id.value))
 const families = FAMILIES.map((name) => ({
   name,
@@ -44,12 +23,7 @@ const link = (entry: string) => ({ name: 'design-system', params: { entry } })
 </script>
 
 <template>
-  <DsDemo
-    v-if="'bare' in route.query && entry"
-    :entry="entry"
-    :reduced="'reduced' in route.query"
-  />
-  <main v-else id="contenu" tabindex="-1" class="catalogue">
+  <main id="contenu" tabindex="-1" class="catalogue">
     <nav class="side" aria-label="Catalogue">
       <RouterLink class="home" :to="link('')">Design system</RouterLink>
       <div class="group">
@@ -81,7 +55,7 @@ const link = (entry: string) => ({ name: 'design-system', params: { entry } })
 
     <div :class="['content', { wide: legacy }]">
       <DsEntry v-if="entry" :key="entry.id" :entry="entry" />
-      <component :is="PAGES[id]" v-else-if="PAGES[id]" />
+      <component :is="page.component" v-else-if="page" />
       <div v-else class="intro">
         <h1>Design system</h1>
         <p>
@@ -184,5 +158,25 @@ li a.router-link-exact-active {
 code {
   font-size: 0.85em;
   color: var(--color-text-subtle);
+}
+</style>
+
+<style>
+/* Styles communs du catalogue (page de développement) : intitulés et champs */
+.catalogue .ds-label {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-subtle);
+}
+.catalogue .ds-field {
+  min-height: var(--target-min);
+  padding: 0 var(--space-3);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: var(--weight-regular);
 }
 </style>

@@ -7,8 +7,8 @@ defineProps<{ entry: Entry }>()
 </script>
 
 <template>
-  <section v-if="entry.props.length || entry.slots || entry.events" aria-label="Référence">
-    <h2>Référence</h2>
+  <section v-if="entry.props.length || entry.slots" aria-label="Référence">
+    <h2 class="ds-label">Référence</h2>
     <table v-if="entry.props.length">
       <thead>
         <tr>
@@ -31,18 +31,12 @@ defineProps<{ entry: Entry }>()
         </tr>
       </tbody>
     </table>
-    <dl v-if="entry.slots || entry.events" class="refs">
+    <dl v-if="entry.slots" class="refs">
       <template v-for="s in entry.slots" :key="s.name">
         <dt>
           Slot <code>{{ s.name }}</code>
         </dt>
         <dd><DsText :text="s.description" /></dd>
-      </template>
-      <template v-for="e in entry.events" :key="e.name">
-        <dt>
-          Événement <code>{{ e.name }}</code>
-        </dt>
-        <dd><DsText :text="e.description" /></dd>
       </template>
     </dl>
   </section>
@@ -51,12 +45,6 @@ defineProps<{ entry: Entry }>()
 <style scoped>
 section {
   overflow-x: auto;
-}
-h2 {
-  margin: 0 0 var(--space-4);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-  color: var(--color-text-subtle);
 }
 code {
   font-size: 0.9em;

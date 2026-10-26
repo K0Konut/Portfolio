@@ -46,6 +46,8 @@ declare module 'vue-router' {
     section?: PageName
     locale?: Locale
     noindex?: boolean
+    /** Sans en-tête ni pied de page (démo isolée du catalogue de développement) */
+    bare?: boolean
     /** La page existe dans les autres langues (canonical et hreflang) ; faux pour une adresse inconnue. */
     alternates?: boolean
   }

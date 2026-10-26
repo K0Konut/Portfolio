@@ -11,11 +11,19 @@ const routes = buildRoutes()
 // Vitrine des composants : en développement seulement. La condition est remplacée par « false » au build,
 // et Vite retire alors la page et son code du site publié (architecture technique §5).
 if (import.meta.env.DEV) {
-  routes.push({
-    path: '/design-system/:entry?',
-    name: 'design-system',
-    component: () => import('./pages/DesignSystemPage.vue'),
-  })
+  routes.push(
+    {
+      path: '/design-system/:entry?',
+      name: 'design-system',
+      component: () => import('./pages/DesignSystemPage.vue'),
+    },
+    {
+      path: '/design-system/:entry/demo',
+      name: 'design-system-demo',
+      component: () => import('./pages/design-system/DsDemo.vue'),
+      meta: { bare: true },
+    },
+  )
 }
 
 export const createApp = ViteSSG(

@@ -2,7 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Directive } from 'vue'
 import type { Fond } from '../../components/sections/fonds'
 import BaseButton from '../../components/ui/BaseButton.vue'
-import { codeOf, type Entry, initialValues, propsOf, type Values } from './catalogue'
+import { seconds } from '../../composables/motion'
+import { codeOf, type Entry, FONDS, initialValues, propsOf, type Values } from './catalogue'
 import DsControls from './DsControls.vue'
 import DsReference from './DsReference.vue'
 import DsText from './DsText.vue'
@@ -12,7 +13,6 @@ import { forceStates } from './forceStyles'
    suivent la largeur choisie), panneau de réglages, états côte à côte, code et tableau des options. */
 const props = defineProps<{ entry: Entry }>()
 
-const FONDS: Fond[] = ['nuit', 'violet', 'vif', 'lime', 'rose', 'creme']
 const WIDTHS = [
   { label: 'Mobile', width: '390px' },
   { label: 'Tablette', width: '768px' },
@@ -35,14 +35,14 @@ const frame = ref<HTMLIFrameElement>()
 const copied = ref(false)
 
 const src = computed(
-  () => `/design-system/${props.entry.id}?bare${reduced.value ? '&reduced' : ''}`,
+  () => `/design-system/${props.entry.id}/demo${reduced.value ? '?reduced' : ''}`,
 )
 const code = computed(() => codeOf(props.entry, values.value))
 const bound = computed(() => propsOf(props.entry, values.value))
 
 const send = (message: object) => frame.value?.contentWindow?.postMessage(message, location.origin)
 const sync = () => send({ type: 'ds-values', values: { ...values.value }, fond: fond.value })
-watch([values, fond], sync, { deep: true })
+watch([values, fond], sync)
 
 function onMessage(event: MessageEvent) {
   if (event.origin !== location.origin || event.source !== frame.value?.contentWindow) return
@@ -50,10 +50,13 @@ function onMessage(event: MessageEvent) {
   else if (event.data?.type === 'ds-height') height.value = event.data.height
 }
 
+// « Copié » seulement si le presse-papiers a accepté, pendant --feedback-hold
 async function copy() {
-  await navigator.clipboard.writeText(code.value).catch(() => undefined)
-  copied.value = true
-  setTimeout(() => (copied.value = false), 1500)
+  copied.value = await navigator.clipboard.writeText(code.value).then(
+    () => true,
+    () => false,
+  )
+  setTimeout(() => (copied.value = false), seconds('--feedback-hold') * 1000)
 }
 
 // Un état forcé : la classe sur la racine du composant, et sur ses liens et boutons pour le focus
@@ -87,7 +90,7 @@ onBeforeUnmount(() => removeEventListener('message', onMessage))
     <div class="toolbar" role="group" aria-label="Réglages de la démo">
       <label>
         Fond
-        <select v-model="fond">
+        <select v-model="fond" class="ds-field">
           <option v-for="f in FONDS" :key="f" :value="f">{{ f }}</option>
         </select>
       </label>
@@ -117,20 +120,19 @@ onBeforeUnmount(() => removeEventListener('message', onMessage))
         />
       </div>
       <aside class="panel" aria-label="Options">
-        <h2>Options</h2>
+        <h2 class="ds-label">Options</h2>
         <DsControls v-model="values" :controls="entry.controls" />
       </aside>
     </div>
 
     <section v-if="entry.states" class="states" aria-label="États">
-      <h2>États</h2>
+      <h2 class="ds-label">États</h2>
       <div class="state-grid">
         <figure v-for="s in STATES" :key="s.label" :class="`fond-${fond}`">
           <div v-state="s.cls" class="state" :style="entry.frame">
-            <component :is="entry.component" v-if="'slot' in values" v-bind="bound">{{
-              values.slot
-            }}</component>
-            <component :is="entry.component" v-else v-bind="bound" />
+            <component :is="entry.component" v-bind="bound">
+              <template v-if="'slot' in values" #default>{{ values.slot }}</template>
+            </component>
           </div>
           <figcaption>{{ s.label }}</figcaption>
         </figure>
@@ -138,7 +140,7 @@ onBeforeUnmount(() => removeEventListener('message', onMessage))
     </section>
 
     <section class="code" aria-label="Code">
-      <h2>Code</h2>
+      <h2 class="ds-label">Code</h2>
       <div class="code-row">
         <pre><code>{{ code }}</code></pre>
         <BaseButton compact @click="copy">{{ copied ? 'Copié' : 'Copier' }}</BaseButton>
@@ -172,20 +174,10 @@ h1 {
   font-size: var(--text-h2);
   line-height: var(--leading-display);
 }
-h2 {
-  margin: 0 0 var(--space-4);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-  color: var(--color-text-subtle);
-}
 .description {
   margin: 0;
   max-width: var(--measure);
   color: var(--color-text-muted);
-}
-code {
-  font-size: 0.9em;
-  color: var(--color-text);
 }
 .toolbar {
   display: flex;
@@ -200,15 +192,6 @@ code {
   align-items: center;
   gap: var(--space-2);
   min-height: var(--target-min);
-}
-.toolbar select {
-  min-height: var(--target-min);
-  padding: 0 var(--space-3);
-  border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg);
-  color: var(--color-text);
-  font: inherit;
 }
 .check input {
   width: var(--icon-sm);

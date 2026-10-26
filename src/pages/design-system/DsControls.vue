@@ -17,6 +17,7 @@ function set(key: string, value: string | number | boolean) {
       <span>{{ c.label }}</span>
       <select
         v-if="c.type === 'select'"
+        class="ds-field"
         :value="values[c.key]"
         @change="set(c.key, ($event.target as HTMLSelectElement).value)"
       >
@@ -41,6 +42,7 @@ function set(key: string, value: string | number | boolean) {
       </span>
       <input
         v-else
+        class="ds-field"
         type="text"
         :value="values[c.key]"
         @input="set(c.key, ($event.target as HTMLInputElement).value)"
@@ -67,17 +69,6 @@ function set(key: string, value: string | number | boolean) {
 .control.boolean {
   grid-template-columns: 1fr auto;
   align-items: center;
-}
-input[type='text'],
-select {
-  min-height: var(--target-min);
-  padding: 0 var(--space-3);
-  border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg);
-  color: var(--color-text);
-  font: inherit;
-  font-weight: var(--weight-regular);
 }
 input[type='checkbox'] {
   width: var(--icon-md);

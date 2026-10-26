@@ -9,7 +9,7 @@ import { useSeo } from './composables/useSeo'
 useSeo()
 // Démo isolée du catalogue de développement (iframe de /design-system) : sans en-tête ni pied de page
 const route = useRoute()
-const bare = computed(() => import.meta.env.DEV && 'bare' in route.query)
+const bare = computed(() => route.meta.bare)
 </script>
 
 <template>
