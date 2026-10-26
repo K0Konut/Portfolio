@@ -19,7 +19,8 @@ describe('LetterReveal', () => {
     const w = mount(LetterReveal, { props: { text: 'Costa', start: 'manual' } })
     expect(w.classes()).toContain('pending')
     ;(w.vm as unknown as { play: () => void }).play()
-    await w.vm.$nextTick()
+    // play() attend deux images
+    await new Promise((resolve) => setTimeout(resolve, 100))
     expect(w.classes()).not.toContain('pending')
   })
 })

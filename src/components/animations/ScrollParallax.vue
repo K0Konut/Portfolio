@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { loadScrollTrigger, number } from '../../composables/motion'
 
 /* Ce qu'il enveloppe glisse plus lentement que le scroll et s'estompe pendant que sa section quitte l'écran
@@ -23,10 +23,12 @@ const libraries = loadScrollTrigger()
 let ctx: { revert(): void } | undefined
 let gone = false
 
-onMounted(async () => {
-  const loaded = await libraries
+let loaded: Awaited<typeof libraries>
+
+function build() {
   const target = el.value
   if (gone || !loaded || !target) return
+  ctx?.revert()
   const { gsap } = loaded
   const section = target.closest('section') ?? target.parentElement ?? target
   const speed = props.speed ?? number('--hero-parallax')
@@ -49,7 +51,16 @@ onMounted(async () => {
       },
     )
   })
+}
+
+onMounted(async () => {
+  loaded = await libraries
+  build()
+  // Les polices chargées changent les hauteurs : les repères du scroll sont recalculés
+  document.fonts?.ready.then(() => !gone && loaded?.ScrollTrigger.refresh())
 })
+// Un réglage change (catalogue) : l'effet est reconstruit
+watch(() => [props.speed, props.fade, props.until], build)
 onBeforeUnmount(() => {
   gone = true
   ctx?.revert()

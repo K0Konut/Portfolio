@@ -24,36 +24,36 @@ const props = withDefaults(
 )
 
 const root = ref<HTMLElement>()
-const pending = ref(true)
+// `visible` : rien n'est caché dans le HTML, seulement au montage et sous la ligne de flottaison (comme v-reveal)
+const pending = ref(props.start !== 'visible')
 const words = computed(() => {
   let i = 0
   return props.text.split(' ').map((word) => [...word].map((letter) => ({ letter, i: i++ })))
 })
 
-/** Lance l'entrée des lettres */
+/** Lance l'entrée des lettres, deux images plus tard : l'état caché doit avoir été affiché pour s'animer */
 function play() {
-  pending.value = false
+  requestAnimationFrame(() => requestAnimationFrame(() => !gone && (pending.value = false)))
 }
 defineExpose({ play })
 
 let observer: IntersectionObserver | undefined
 let gone = false
 onMounted(() => {
-  if (props.start === 'visible' && root.value && 'IntersectionObserver' in window) {
+  if (props.start === 'visible') {
+    const el = root.value
+    if (!el || !('IntersectionObserver' in window) || el.getBoundingClientRect().top < innerHeight)
+      return
+    pending.value = true
     observer = new IntersectionObserver(([entry]) => {
       if (!entry?.isIntersecting) return
       observer?.disconnect()
       play()
     })
-    observer.observe(root.value)
+    observer.observe(el)
   } else if (props.start !== 'manual') {
-    // La police d'abord (300 ms au plus), puis deux images : l'état caché doit avoir été affiché
-    // pour que les lettres s'animent
-    const el = root.value
-    if (el)
-      fontReady(el).then(() =>
-        requestAnimationFrame(() => requestAnimationFrame(() => !gone && play())),
-      )
+    // La police d'abord (300 ms au plus), pour ne pas animer une police de secours
+    if (root.value) fontReady(root.value).then(play)
   }
 })
 onBeforeUnmount(() => {
@@ -66,7 +66,7 @@ onBeforeUnmount(() => {
   <component
     :is="as"
     ref="root"
-    :class="['letters', { pending, stack }]"
+    :class="['letters', { pending, stack, fallback: start !== 'visible' }]"
     :style="{
       '--delay': `${delay}s`,
       '--stagger': stagger === undefined ? undefined : `${stagger}s`,
@@ -96,9 +96,20 @@ onBeforeUnmount(() => {
     translate var(--duration-letter) var(--ease-out);
   transition-delay: calc(var(--delay) + var(--i) * var(--stagger, var(--stagger-letter)));
 }
+/* Caché seulement avec JavaScript ; en secours, si l'entrée n'a pas démarré au bout de 3 s (script lent ou en
+   échec), le texte apparaît quand même, comme le reste de la page (base.css, data-intro-hide) */
 .js .pending .letter {
   opacity: 0;
   translate: 0 var(--letter-rise);
+}
+.js .fallback.pending .letter {
+  animation: letters-fallback 0s 3s forwards;
+}
+@keyframes letters-fallback {
+  to {
+    opacity: 1;
+    translate: none;
+  }
 }
 @media (max-width: 767px) {
   .stack .word {

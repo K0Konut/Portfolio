@@ -14,15 +14,13 @@ const RATES = CONTROLS.map((i) => SPEED * Math.sin(i * MORPH_SPEED))
 /** Instant de référence (secondes) de l'image fixe */
 const STILL_TIME = 12
 const FRAME_MS = 1000 / 30
-/** Teinte intermédiaire du rendu validé, entre le violet vif et le rose (DA : « violet électrique qui tire vers le rose ») */
-const MID = '#6f63ff'
-
 /** Réglages du fond (design system § TopoBackground) ; les valeurs par défaut sont dans TopoBackground */
 export interface TopographyOptions {
-  /** Tokens de couleur des creux et des hauteurs */
+  /** Tokens de couleur des creux, des pentes et des hauteurs */
   from: string
+  via: string
   to: string
-  /** Vitesse de l'ondulation */
+  /** Vitesse de l'ondulation (lue à chaque image : elle peut changer sans redémarrage) */
   speed: number
   /** Nombre de courbes */
   density: number
@@ -63,7 +61,7 @@ const vec3 = (c: number[]) => c.map((v) => (v / 255).toFixed(3)).join(',')
 /** Dessine le fond dans `box` ; renvoie la fonction d'arrêt, ou `undefined` sans WebGL 2 (le fond violet reste). */
 export function startTopography(
   box: HTMLElement,
-  { from, to, speed, density, fade }: TopographyOptions,
+  options: TopographyOptions,
 ): (() => void) | undefined {
   const canvas = document.createElement('canvas')
   const gl = canvas.getContext('webgl2', {
@@ -73,12 +71,11 @@ export function startTopography(
   })
   if (!gl) return undefined
 
-  // Teintes lues dans les tokens ; la teinte intermédiaire est celle du rendu validé, ou le milieu des deux
+  // Teintes lues dans les tokens ; densité et estompe sont fixées dans le shader
+  const { from, via, to, density, fade } = options
   const css = getComputedStyle(document.documentElement)
-  const low = rgb(css.getPropertyValue(`--${from}`))
-  const high = rgb(css.getPropertyValue(`--${to}`))
-  const mid =
-    from === 'violet-500' && to === 'pink-500' ? rgb(MID) : low.map((v, i) => (v + high[i]!) / 2)
+  const color = (name: string) => rgb(css.getPropertyValue(`--${name}`))
+  const [low, mid, high] = [color(from), color(via), color(to)]
   const program = gl.createProgram()
   for (const [type, source] of [
     [gl.VERTEX_SHADER, VERTEX],
@@ -110,7 +107,7 @@ export function startTopography(
   let time = STILL_TIME
   const draw = () => {
     for (let i = 0; i < 16; i++)
-      values[i] = MORPH * Math.sin(time * speed * RATES[i]! + CONTROLS[i]!)
+      values[i] = MORPH * Math.sin(time * options.speed * RATES[i]! + CONTROLS[i]!)
     gl.uniform4fv(controls, values)
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.drawArrays(gl.TRIANGLES, 0, 3)

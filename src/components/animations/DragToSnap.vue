@@ -28,15 +28,19 @@ const near = ref(false)
 const placed = ref(false)
 let dragged = false
 
-/** Décalage du point de repos (position sans transformation) au centre de la cible */
+/** Décalage du point de repos au centre de la cible : la position affichée, moins le déplacement en cours
+    (lu dans le style calculé, donc juste même au milieu d'un retour animé) */
 function toTarget() {
   const button = el.value
-  const parent = button?.offsetParent?.getBoundingClientRect()
   const goal = props.target?.getBoundingClientRect()
-  if (!button || !parent || !goal) return { x: 0, y: 0 }
+  if (!button || !goal) return { x: 0, y: 0 }
+  const box = button.getBoundingClientRect()
+  const [tx = 0, ty = 0] = getComputedStyle(button)
+    .translate.split(' ')
+    .map((v) => parseFloat(v) || 0)
   return {
-    x: goal.x + goal.width / 2 - (parent.x + button.offsetLeft + button.offsetWidth / 2),
-    y: goal.y + goal.height / 2 - (parent.y + button.offsetTop + button.offsetHeight / 2),
+    x: goal.x + goal.width / 2 - (box.x + box.width / 2 - tx),
+    y: goal.y + goal.height / 2 - (box.y + box.height / 2 - ty),
   }
 }
 

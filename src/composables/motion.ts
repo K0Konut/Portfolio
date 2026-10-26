@@ -45,13 +45,12 @@ export function cubicEase(name: string): (p: number) => number {
   }
 }
 
-/** La police de `el` chargée (300 ms au plus), pour ne pas animer une police de secours */
+/** La police de `el` chargée (300 ms au plus, jamais en échec), pour ne pas animer une police de secours */
 export function fontReady(el: Element): Promise<unknown> {
   const { fontSize, fontFamily } = getComputedStyle(el)
-  return Promise.race([
-    document.fonts.load(`${fontSize} ${fontFamily}`),
-    new Promise((resolve) => setTimeout(resolve, 300)),
-  ])
+  // Police introuvable ou API absente : on n'attend pas, l'animation ne doit jamais rester bloquée
+  const loading = document.fonts?.load(`${fontSize} ${fontFamily}`).catch(() => undefined)
+  return Promise.race([loading, new Promise((resolve) => setTimeout(resolve, 300))])
 }
 
 type Scroll = {

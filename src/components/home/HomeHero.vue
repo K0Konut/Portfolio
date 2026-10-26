@@ -115,7 +115,8 @@ onBeforeUnmount(() => {
         </div>
       </ScrollParallax>
     </div>
-    <ScrollHint />
+    <!-- Après le départ de l'entrée : il apparaît en dernier, son délai compte à partir de là -->
+    <ScrollHint v-if="!pending" />
   </section>
 </template>
 

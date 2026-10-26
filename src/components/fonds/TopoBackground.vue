@@ -6,25 +6,28 @@ import { startTopography } from '../../composables/useTopography'
    quand la page est au repos (hors chemin critique). Les valeurs par défaut donnent le rendu de l'accueil. */
 const props = withDefaults(
   defineProps<{
-    /** Token de couleur des creux et des hauteurs */
+    /** Tokens de couleur des creux, des pentes et des hauteurs */
     from?: string
+    via?: string
     to?: string
     speed?: number
     density?: number
     fade?: boolean
   }>(),
-  { from: 'violet-500', to: 'pink-500', speed: 1, density: 1.4, fade: true },
+  { from: 'violet-500', via: 'topo-via', to: 'pink-500', speed: 1, density: 1.4, fade: true },
 )
 
 const box = ref<HTMLElement>()
 const on = ref(false)
 let stop: (() => void) | undefined
 let idle = 0
+let started = false
 
+// Les réglages sont passés tels quels : la vitesse est relue à chaque image
 function start() {
+  started = true
   stop?.()
-  if (!box.value) return
-  stop = startTopography(box.value, { ...props })
+  stop = box.value ? startTopography(box.value, props) : undefined
   on.value = !!stop
 }
 
@@ -34,8 +37,11 @@ onMounted(() => {
       ? requestIdleCallback(start, { timeout: 1000 })
       : setTimeout(start, 200)
 })
-// Un réglage change (catalogue) : le fond est redessiné avec les nouvelles valeurs
-watch(props, () => stop && start())
+// Teintes, densité ou estompe changent (catalogue) : le shader est recompilé ; la vitesse, elle, suit seule
+watch(
+  () => [props.from, props.via, props.to, props.density, props.fade],
+  () => started && start(),
+)
 onBeforeUnmount(() => {
   if ('cancelIdleCallback' in window) cancelIdleCallback(idle)
   clearTimeout(idle)

@@ -50,6 +50,7 @@ S'appuie sur la direction artistique « Affiche de nuit » et sur l'architecture
 | `--violet-700` | `#17105B` | palette du propriétaire |
 | `--lime-500` | `#C7FF00` | palette du propriétaire |
 | `--pink-500` | `#FF6BD6` | palette du propriétaire |
+| `--topo-via` | `#6F63FF` | pentes du fond topographique, entre le violet vif et le rose |
 | `--neutral-50` | `#F5F1E8` | palette du propriétaire |
 | `--neutral-100` | `#E8E1D4` | palette du propriétaire |
 | `--neutral-400` | `#A39E94` | **ajout** : métadonnées et texte discret |
@@ -504,7 +505,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `TopoBackground`
 
 - **Rôle** : des courbes de niveau qui ondulent lentement derrière une section (DA §6). WebGL 2 natif, sans bibliothèque.
-- **Options** : `from` et `to` (noms des tokens de couleur des creux et des hauteurs, `violet-500` et `pink-500` par défaut ; la teinte intermédiaire est celle du rendu validé, ou le milieu des deux) ; `speed` (1) ; `density` (nombre de courbes, 1,4) ; `fade` (estompe au centre, derrière le contenu, vrai par défaut).
+- **Options** : `from`, `via` et `to` (noms des tokens de couleur des creux, des pentes et des hauteurs : `violet-500`, `topo-via` et `pink-500` par défaut) ; `speed` (1, modifiable sans redémarrage) ; `density` (nombre de courbes, 1,4) ; `fade` (estompe au centre, derrière le contenu, vrai par défaut).
 - **Comportement** : apparaît en fondu ; ne réagit pas au curseur ; se met en pause hors de l'écran et quand l'onglet est caché.
 - **Accessibilité** : décoratif. **Animations réduites** : image fixe. Sans WebGL : le fond de la section seul.
 

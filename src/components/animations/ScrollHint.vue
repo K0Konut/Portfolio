@@ -62,7 +62,8 @@ onBeforeUnmount(() => removeEventListener('scroll', leave))
   width: 100%;
   height: var(--hint-travel);
   background: var(--color-highlight);
-  animation: hint-pass var(--duration-hint) ease-in-out calc(var(--delay) + 0.1s) var(--passes);
+  animation: hint-pass var(--duration-hint) ease-in-out calc(var(--delay) + 0.1s) var(--passes)
+    backwards;
 }
 @keyframes hint-in {
   from {
