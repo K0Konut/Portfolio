@@ -1,24 +1,41 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { startTopography } from '../../composables/useTopography'
 
-// Courbes de niveau derrière la section d'accueil, démarrées quand la page est au repos (hors chemin critique)
+/* Courbes de niveau qui ondulent lentement derrière une section (design system § TopoBackground), démarrées
+   quand la page est au repos (hors chemin critique). Les valeurs par défaut donnent le rendu de l'accueil. */
+const props = withDefaults(
+  defineProps<{
+    /** Token de couleur des creux et des hauteurs */
+    from?: string
+    to?: string
+    speed?: number
+    density?: number
+    fade?: boolean
+  }>(),
+  { from: 'violet-500', to: 'pink-500', speed: 1, density: 1.4, fade: true },
+)
+
 const box = ref<HTMLElement>()
 const on = ref(false)
 let stop: (() => void) | undefined
 let idle = 0
 
+function start() {
+  stop?.()
+  if (!box.value) return
+  stop = startTopography(box.value, { ...props })
+  on.value = !!stop
+}
+
 onMounted(() => {
-  const start = () => {
-    if (!box.value) return
-    stop = startTopography(box.value)
-    on.value = !!stop
-  }
   idle =
     'requestIdleCallback' in window
       ? requestIdleCallback(start, { timeout: 1000 })
       : setTimeout(start, 200)
 })
+// Un réglage change (catalogue) : le fond est redessiné avec les nouvelles valeurs
+watch(props, () => stop && start())
 onBeforeUnmount(() => {
   if ('cancelIdleCallback' in window) cancelIdleCallback(idle)
   clearTimeout(idle)

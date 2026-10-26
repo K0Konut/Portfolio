@@ -1,7 +1,8 @@
 import { defineAsyncComponent, type Component } from 'vue'
 import capture from '../../assets/projets/ce-portfolio.png'
-import ScrollHint from '../../components/home/ScrollHint.vue'
-import TopoBackground from '../../components/home/TopoBackground.vue'
+import ScrollHint from '../../components/animations/ScrollHint.vue'
+import TopoBackground from '../../components/fonds/TopoBackground.vue'
+import LetterReveal from '../../components/textes/LetterReveal.vue'
 import DeviceFrame from '../../components/projects/DeviceFrame.vue'
 import ProjectCard from '../../components/projects/ProjectCard.vue'
 import StatBlock from '../../components/case/StatBlock.vue'
@@ -19,8 +20,10 @@ import CopyButton from '../../components/ui/CopyButton.vue'
 import TextLink from '../../components/ui/TextLink.vue'
 import { ICONS } from '../../components/ui/icons'
 import { FONDS as FOND_CLASSES } from './fonds'
+import DragToSnapDemo from './demos/DragToSnapDemo.vue'
 import MobileMenuDemo from './demos/MobileMenuDemo.vue'
 import RevealDemo from './demos/RevealDemo.vue'
+import ScrollParallaxDemo from './demos/ScrollParallaxDemo.vue'
 import SkipLinkDemo from './demos/SkipLinkDemo.vue'
 
 /* Catalogue de développement (design system v1.2 §6) : une description par composant, dont la page tire
@@ -79,8 +82,8 @@ export type Family = (typeof FAMILIES)[number]
 /** Briques prévues par le design system v1.2, pas encore construites */
 export const PLANNED: Record<Family, string[]> = {
   Fonds: [],
-  'Textes animés': ['LetterReveal'],
-  Animations: ['ScrollParallax', 'DragToSnap'],
+  'Textes animés': [],
+  Animations: [],
   Composants: [
     'PosterCard',
     'DotList',
@@ -96,6 +99,7 @@ export const PLANNED: Record<Family, string[]> = {
 }
 
 export const FONDS = FOND_CLASSES.map((f) => f.cls.slice('fond-'.length) as Fond)
+const TONES = ['violet-500', 'pink-500', 'lime-500', 'violet-700', 'neutral-50']
 const STAGES: Record<string, string | undefined> = {
   défaut: undefined,
   lime: 'var(--lime-500)',
@@ -116,12 +120,116 @@ export const ENTRIES: Entry[] = [
     name: 'TopoBackground',
     family: 'Fonds',
     description:
-      'Courbes de niveau qui ondulent lentement (WebGL), derrière une section. Pause hors de l’écran ; image fixe en mouvement réduit.',
+      'Courbes de niveau qui ondulent lentement (WebGL), derrière une section. Pause hors de l’écran ; image fixe en mouvement réduit ; sans WebGL, le fond de la section seul. Les valeurs par défaut donnent le rendu de l’accueil.',
     component: TopoBackground,
-    props: [],
-    controls: [],
+    props: [
+      {
+        name: 'from',
+        type: 'string',
+        default: 'violet-500',
+        description: 'Token de couleur des creux',
+      },
+      {
+        name: 'to',
+        type: 'string',
+        default: 'pink-500',
+        description: 'Token de couleur des hauteurs',
+      },
+      { name: 'speed', type: 'number', default: '1', description: 'Vitesse de l’ondulation' },
+      { name: 'density', type: 'number', default: '1.4', description: 'Nombre de courbes' },
+      {
+        name: 'fade',
+        type: 'boolean',
+        default: 'true',
+        description: 'Lignes estompées au centre, derrière le contenu',
+      },
+    ],
+    controls: [
+      { key: 'from', label: 'Creux', type: 'select', initial: 'violet-500', options: TONES },
+      { key: 'to', label: 'Hauteurs', type: 'select', initial: 'pink-500', options: TONES },
+      { key: 'speed', label: 'Vitesse', type: 'number', initial: 1, min: 0, max: 6, step: 0.25 },
+      {
+        key: 'density',
+        label: 'Densité',
+        type: 'number',
+        initial: 1.4,
+        min: 0.4,
+        max: 5,
+        step: 0.2,
+      },
+      { key: 'fade', label: 'Estompé au centre', type: 'boolean', initial: true },
+    ],
     fond: 'violet',
     frame: 'position: relative; height: 22rem',
+  },
+  {
+    id: 'letter-reveal',
+    name: 'LetterReveal',
+    family: 'Textes animés',
+    description:
+      'Texte dont les lettres montent et se posent une à une. Le texte reste en clair pour les lecteurs d’écran ; sans JavaScript, il est visible d’emblée. En mouvement réduit, il apparaît en fondu.',
+    component: LetterReveal,
+    props: [
+      { name: 'text', type: 'string', description: 'Le texte' },
+      { name: 'as', type: 'string', default: 'span', description: 'Balise (h1, p…)' },
+      {
+        name: 'stagger',
+        type: 'number',
+        description: 'Décalage entre deux lettres (s), `--stagger-letter` par défaut',
+      },
+      {
+        name: 'delay',
+        type: 'number',
+        default: '0',
+        description: 'Délai avant la première lettre (s)',
+      },
+      {
+        name: 'start',
+        type: "'load' | 'visible' | 'manual'",
+        default: 'load',
+        description: 'À l’ouverture, à l’arrivée à l’écran, ou par la méthode `play`',
+      },
+      {
+        name: 'stack',
+        type: 'boolean',
+        default: 'false',
+        description: 'Un mot par ligne sous 768 px',
+      },
+    ],
+    controls: [
+      { key: 'text', label: 'Texte', type: 'text', initial: 'Costa Maskulov' },
+      {
+        key: 'as',
+        label: 'Balise',
+        type: 'select',
+        initial: 'p',
+        options: ['h1', 'h2', 'p', 'span'],
+      },
+      {
+        key: 'stagger',
+        label: 'Décalage (s)',
+        type: 'number',
+        initial: 0.04,
+        min: 0.01,
+        max: 0.2,
+        step: 0.01,
+      },
+      { key: 'delay', label: 'Délai (s)', type: 'number', initial: 0, min: 0, max: 2, step: 0.1 },
+      {
+        key: 'start',
+        label: 'Démarrage',
+        type: 'select',
+        initial: 'load',
+        options: ['load', 'visible'],
+      },
+      { key: 'stack', label: 'Un mot par ligne (mobile)', type: 'boolean', initial: false },
+    ],
+    bind: (v) => ({ ...v }),
+    code: (v) =>
+      `<LetterReveal text="${quote(v.text)}"${v.as === 'span' ? '' : ` as="${v.as}"`} :stagger="${v.stagger}"${v.delay ? ` :delay="${v.delay}"` : ''}${v.start === 'load' ? '' : ` start="${v.start}"`}${v.stack ? ' stack' : ''} class="display" />`,
+    frame:
+      'font-family: var(--font-display); font-size: var(--text-h1); line-height: var(--leading-display)',
+    fond: 'violet',
   },
   {
     id: 'section-wave',
@@ -150,12 +258,90 @@ export const ENTRIES: Entry[] = [
     name: 'ScrollHint',
     family: 'Animations',
     description:
-      'Trait discret qui indique que la page continue : deux allers puis immobile, jamais en boucle. Disparaît au premier scroll.',
+      'Trait discret, en bas de la section qui le contient, qui indique que la page continue : il apparaît après un délai, son repère fait quelques allers puis s’immobilise (jamais de boucle), et il s’efface au premier défilement.',
     component: ScrollHint,
-    props: [],
-    controls: [],
+    props: [
+      {
+        name: 'delay',
+        type: 'number',
+        default: '1.5',
+        description: 'Délai avant l’apparition (s)',
+      },
+      { name: 'passes', type: 'number', default: '2', description: 'Nombre d’allers du repère' },
+    ],
+    controls: [
+      { key: 'delay', label: 'Délai (s)', type: 'number', initial: 0.5, min: 0, max: 3, step: 0.1 },
+      { key: 'passes', label: 'Allers', type: 'number', initial: 2, min: 1, max: 4 },
+    ],
     fond: 'violet',
     frame: 'position: relative; height: 12rem',
+  },
+  {
+    id: 'scroll-parallax',
+    name: 'ScrollParallax',
+    family: 'Animations',
+    description:
+      'Ce qu’il enveloppe glisse plus lentement que le scroll et s’estompe pendant que sa section quitte l’écran. Seuls `transform` et `opacity` bougent ; aucun effet en mouvement réduit. Faites défiler dans le cadre.',
+    component: ScrollParallaxDemo,
+    props: [
+      {
+        name: 'speed',
+        type: 'number',
+        description:
+          'Glissement, en part de la hauteur de la section (`--hero-parallax` par défaut)',
+      },
+      { name: 'fade', type: 'boolean', default: 'true', description: 'S’estompe en même temps' },
+      {
+        name: 'until',
+        type: 'number',
+        default: '1',
+        description: 'Part du trajet sur laquelle l’effet se fait',
+      },
+    ],
+    controls: [
+      { key: 'speed', label: 'Vitesse', type: 'number', initial: 0.35, min: 0, max: 1, step: 0.05 },
+      { key: 'fade', label: 'S’estompe', type: 'boolean', initial: true },
+      {
+        key: 'until',
+        label: 'Part du trajet',
+        type: 'number',
+        initial: 1,
+        min: 0.2,
+        max: 1,
+        step: 0.1,
+      },
+    ],
+    code: (v) =>
+      `<ScrollParallax :speed="${v.speed}"${v.fade ? '' : ' :fade="false"'}${v.until === 1 ? '' : ` :until="${v.until}"`}>…</ScrollParallax>`,
+    screen: true,
+  },
+  {
+    id: 'drag-to-snap',
+    name: 'DragToSnap',
+    family: 'Animations',
+    description:
+      'Élément à glisser jusqu’à une cible, où il se loge (souris, doigt, ou Entrée et Espace). Relâché hors de portée, il revient. La page stylise les états `dragging` et `placed`, et ajoute ses transitions par `--drag-transitions`.',
+    component: DragToSnapDemo,
+    props: [
+      { name: 'target', type: 'HTMLElement', description: 'L’élément cible' },
+      { name: 'reach', type: 'number', default: '40', description: 'Distance de capture (px)' },
+      { name: 'label', type: 'string', description: 'Nom accessible du bouton' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Désactivé' },
+    ],
+    controls: [
+      {
+        key: 'reach',
+        label: 'Portée (px)',
+        type: 'number',
+        initial: 40,
+        min: 10,
+        max: 160,
+        step: 10,
+      },
+    ],
+    slots: [{ name: 'défaut', description: 'Le contenu de l’élément' }],
+    code: (v) =>
+      `<DragToSnap :target="hole" :reach="${v.reach}" label="Replacer la brique" @near="near = $event" @snap="onSnap" />`,
   },
   {
     id: 'v-reveal',

@@ -219,7 +219,7 @@ Rangés par famille, comme une bibliothèque de composants (référence : vue-bi
 
 | Composant | Rôle | Options principales | Vient de |
 |---|---|---|---|
-| `LetterReveal` | Texte dont les lettres montent et se posent une à une | `text`, `as` (balise), `stagger`, `delay`, `start` (`load`, `visible`, `manual`), `stackBelow` (un mot par ligne sous une largeur) | `HeroName` |
+| `LetterReveal` | Texte dont les lettres montent et se posent une à une | `text`, `as` (balise), `stagger`, `delay`, `start` (`load`, `visible`, `manual`), `stack` (un mot par ligne sous 768 px) | `HeroName` |
 
 ### Animations
 
@@ -504,14 +504,15 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `TopoBackground`
 
 - **Rôle** : des courbes de niveau qui ondulent lentement derrière une section (DA §6). WebGL 2 natif, sans bibliothèque.
-- **Options** : `from` et `to` (teintes des lignes, violet vif → rose par défaut) ; `speed` (1) ; `density` (nombre de courbes) ; `fade` (estompe au centre, derrière le contenu, vrai par défaut).
+- **Options** : `from` et `to` (noms des tokens de couleur des creux et des hauteurs, `violet-500` et `pink-500` par défaut ; la teinte intermédiaire est celle du rendu validé, ou le milieu des deux) ; `speed` (1) ; `density` (nombre de courbes, 1,4) ; `fade` (estompe au centre, derrière le contenu, vrai par défaut).
 - **Comportement** : apparaît en fondu ; ne réagit pas au curseur ; se met en pause hors de l'écran et quand l'onglet est caché.
 - **Accessibilité** : décoratif. **Animations réduites** : image fixe. Sans WebGL : le fond de la section seul.
 
 ### `LetterReveal`
 
 - **Rôle** : un texte affiche dont les lettres montent et se posent une à une (le nom de la section d'accueil).
-- **Options** : `text` ; `as` (balise, `span` par défaut) ; `stagger` (`--stagger-letter`) ; `delay` ; `start` (`load` à l'ouverture, `visible` à l'arrivée à l'écran, `manual` via la méthode exposée `play`) ; `stackBelow` (largeur sous laquelle chaque mot passe à la ligne, 768 px par défaut).
+- **Options** : `text` ; `as` (balise, `span` par défaut) ; `stagger` (`--stagger-letter`) ; `delay` ; `start` (`load` à l'ouverture, `visible` à l'arrivée à l'écran, `manual` via la méthode exposée `play`) ; `stack` (chaque mot passe à la ligne sous 768 px).
+- **Rendu** : animation en CSS (une transition par lettre, décalée de son rang) ; les lettres ne sont cachées qu'avec JavaScript (classe `.js` du document).
 - **Mouvement** : chaque lettre monte de `--letter-rise` et se pose en `--duration-letter`, décalée de `stagger`, courbe `--ease-out`. Démarre quand la police Bagel est prête (300 ms d'attente au plus).
 - **Accessibilité** : le texte en clair pour les lecteurs d'écran ; les lettres découpées dans un doublon `aria-hidden`. Sans JavaScript, le texte est visible d'emblée.
 - **Animations réduites** : fondu de l'ensemble (`--duration-reduced`).
@@ -528,7 +529,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Rôle** : indiquer, très discrètement, que la page continue (DA §6).
 - **Options** : `delay` (1,5 s) ; `passes` (2).
 - **Forme** : un trait vertical fin (`--border-strong`, `--hint-height`, `--color-text-muted`) ; un segment `--color-highlight` le parcourt de `--hint-travel`.
-- **Mouvement** : apparaît après `delay`, fait `passes` allers (`--duration-hint` chacun), puis s'immobilise : il ne boucle jamais (WCAG 2.2.2). Disparaît en fondu dès le premier scroll.
+- **Mouvement** (en CSS, sans script) : apparaît après `delay`, fait `passes` allers (`--duration-hint` chacun), puis s'immobilise : il ne boucle jamais (WCAG 2.2.2). Disparaît en fondu dès le premier scroll. Il se place en bas de la section qui le contient.
 - **Accessibilité** : décoratif. **Animations réduites** : trait immobile.
 
 ### `DragToSnap`
@@ -537,7 +538,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Options** : `target` (l'élément cible) ; `reach` (distance de capture, 40 px) ; `label` (nom accessible du bouton) ; `disabled`. Slot défaut : l'apparence de l'élément. Événements : `near` (vrai ou faux, quand l'élément entre ou sort de la portée de la cible) ; `snap` (l'élément s'est logé).
 - **Interaction** : glisser à la souris ou au doigt (Pointer Events, `touch-action: none`, bouton principal d'un seul pointeur) ; relâché dans la portée, l'élément se loge au centre de la cible ; relâché ailleurs, ou glisser interrompu par le navigateur, il revient à sa place. La position de la cible est mesurée une fois au début du glisser, depuis le point de repos (immobile).
 - **Clavier et appui bref** : l'élément est un `button` ; Entrée, Espace ou un appui sans glisser le logent directement.
-- **États** (classes exposées) : repos, `dragging` (pendant le glisser), `placed` (logé). L'apparence de chaque état est fixée par la page.
+- **États** (classes exposées) : repos, `dragging` (pendant le glisser), `placed` (logé). L'apparence de chaque état est fixée par la page. Le déplacement passe par la propriété `translate` : la page reste libre de `rotate`, `scale` ou `transform`, et ajoute ses propres transitions par la variable `--drag-transitions`.
 - **Animations réduites** : mise en place sans transition (`--duration-move`).
 
 ---
