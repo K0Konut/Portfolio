@@ -3,7 +3,8 @@ import { computed, useId } from 'vue'
 
 /* Étapes d'un cycle (design system § CycleSteps) : anneau numéroté sur bureau, frise verticale en boucle sur
    mobile et tablette. Les étapes sont réparties dans le sens horaire depuis le haut ; le retour de la
-   dernière vers la première est en pointillés. Le slot `center` porte la phrase du retour. */
+   dernière vers la première est en pointillés. Le slot `center` porte la phrase du retour.
+   Un nombre pair d'étapes : avec un nombre impair, une étape tomberait en bas de l'anneau, sans place pour son texte. */
 const props = defineProps<{ steps: { title: string; text: string }[] }>()
 const tip = `${useId()}-tip`
 

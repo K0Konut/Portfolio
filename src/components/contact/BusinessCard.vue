@@ -35,6 +35,7 @@ const { t } = useI18n()
   gap: var(--space-5);
   margin-top: var(--space-5);
   text-align: start;
+  --contact-links-gap: var(--space-3);
 }
 @media (max-width: 767px) {
   .card {

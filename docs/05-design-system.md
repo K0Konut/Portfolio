@@ -457,7 +457,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `CycleSteps`
 
 - **Rôle** : des étapes qui forment un cycle (la méthode : besoin → déploiement, puis un nouveau tour).
-- **Options** : `steps` (`title`, `text`). Slot `center` : la phrase du retour (« Les retours relancent un tour. »).
+- **Options** : `steps` (`title`, `text`), en nombre pair (aucune étape en bas de l’anneau). Slot `center` : la phrase du retour (« Les retours relancent un tour. »).
 - **Bureau (≥ 1024 px)** : un anneau (SVG, `aria-hidden`) de 400 px, les étapes numérotées dessus, réparties dans le sens horaire depuis le haut ; des arcs fléchés de l'une à l'autre ; l'arc de la dernière vers la première en pointillés. Les textes à droite pour la première moitié, à gauche pour la seconde, alignés vers l'anneau ; la phrase du retour au centre. La dernière étape a un repère plein `--color-action`.
 - **Mobile et tablette** : une frise verticale (repères ronds reliés par un fil), puis une ligne qui remonte par la gauche jusqu'à la première étape, avec la phrase du retour en bas.
 - **Accessibilité** : `<ol>` numérotée ; l'anneau est décoratif.

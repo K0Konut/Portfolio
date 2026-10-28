@@ -23,7 +23,7 @@ describe('SkillCards', () => {
       { title: 'front', skills: [{ name: 'Vue.js', site: true }, { name: 'Nuxt' }] },
     ]
     const w = mount(SkillCards, { props: { categories }, global: (await setup()).global })
-    const marked = w.findAll('li').filter((li) => li.find('.dot.on').exists())
+    const marked = w.findAll('li').filter((li) => li.find('.skill-dot.on').exists())
     expect(marked.map((li) => li.text())).toEqual(['Vue.js'])
     expect(w.find('.legend a').attributes('href')).toBe('/fr/projets/ce-portfolio')
   })

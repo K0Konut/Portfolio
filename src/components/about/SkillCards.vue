@@ -29,7 +29,7 @@ const { to } = useLocale()
       </PosterCard>
     </div>
     <p v-reveal class="legend">
-      <i class="dot on" aria-hidden="true" />{{ t('about.legend') }}
+      <i class="skill-dot on" aria-hidden="true" />{{ t('about.legend') }}
       <TextLink :to="to('etude-de-cas', { slug: 'ce-portfolio' })">{{
         t('about.legendLink')
       }}</TextLink>

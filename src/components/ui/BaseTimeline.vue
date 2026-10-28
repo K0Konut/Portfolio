@@ -36,19 +36,23 @@ if (props.draw) loadScrollTrigger()
 
 let ctx: { revert(): void } | undefined
 let gone = false
+/** Numéro du dernier appel : un appel qui attendait GSAP pendant qu'un réglage changeait n'agit plus */
+let run = 0
 
 onMounted(animate)
-// Le routeur garde la page d'une langue à l'autre : les nouvelles étapes reçoivent leurs déclencheurs
-watch([() => props.items, () => props.draw], animate, { flush: 'post' })
+// Le routeur garde la page d'une langue à l'autre : les nouvelles étapes reçoivent leurs déclencheurs ;
+// `alternate` change la hauteur des étapes, donc la place des déclencheurs
+watch([() => props.items, () => props.draw, () => props.alternate], animate, { flush: 'post' })
 onBeforeUnmount(() => {
   gone = true
   ctx?.revert()
 })
 
 async function animate() {
+  const current = ++run
   const loaded = props.draw ? await loadScrollTrigger() : undefined
   const el = root.value
-  if (gone || !el) return
+  if (gone || current !== run || !el) return
   ctx?.revert()
   ctx = undefined
   for (const step of el.querySelectorAll(':scope > ol > li')) step.classList.remove('on')

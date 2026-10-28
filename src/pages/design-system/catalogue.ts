@@ -775,7 +775,7 @@ export const ENTRIES: Entry[] = [
     ],
     slots: [{ name: 'item', description: 'Le contenu d’une étape ; reçoit `item` et `index`' }],
     bind: (v) => ({
-      items: TIMELINES[Number(v.count) - 1],
+      items: TIMELINES[Math.min(Math.max(Number(v.count), 1), TIMELINES.length) - 1],
       alternate: v.alternate,
       draw: v.draw,
     }),
@@ -792,7 +792,7 @@ export const ENTRIES: Entry[] = [
     component: CycleStepsDemo,
     props: [{ name: 'steps', type: '{ title, text }[]', description: 'Les étapes, dans l’ordre' }],
     controls: [
-      { key: 'count', label: 'Étapes', type: 'number', initial: 6, min: 3, max: 6 },
+      { key: 'count', label: 'Étapes', type: 'number', initial: 6, min: 2, max: 6, step: 2 },
       {
         key: 'center',
         label: 'Phrase du retour (slot)',

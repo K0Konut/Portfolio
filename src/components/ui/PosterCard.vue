@@ -23,7 +23,8 @@ withDefaults(defineProps<{ fond?: Fond; tilt?: number; lift?: boolean; as?: stri
 </template>
 
 <style scoped>
-/* Marges en part de la place de la carte : serrées dans une grille de cinq, larges seule */
+/* Marges en part de la largeur du bloc qui contient la carte (sa cellule de grille, ou sa colonne) :
+   serrées dans une grille de cinq, larges pour une carte seule */
 .poster-card {
   padding: clamp(var(--space-5), 8%, var(--space-7));
   border-radius: var(--radius-md);

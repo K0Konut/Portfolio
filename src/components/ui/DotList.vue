@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/* Liste courte à pastilles (design system § DotList) ; la pastille d'une ligne mise en avant (.dot.on,
+/* Liste courte à pastilles (design system § DotList) ; la pastille d'une ligne mise en avant (.skill-dot.on,
    base.css) porte une information : la page affiche une légende. */
 defineProps<{ items: { name: string; highlight?: boolean }[] }>()
 </script>
@@ -7,7 +7,7 @@ defineProps<{ items: { name: string; highlight?: boolean }[] }>()
 <template>
   <ul class="dot-list">
     <li v-for="item in items" :key="item.name">
-      <i :class="['dot', { on: item.highlight }]" aria-hidden="true" />{{ item.name }}
+      <i :class="['skill-dot', { on: item.highlight }]" aria-hidden="true" />{{ item.name }}
     </li>
   </ul>
 </template>

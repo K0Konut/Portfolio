@@ -32,7 +32,8 @@ const { locale } = useLocale()
 <style scoped>
 .contact-links {
   display: grid;
-  gap: var(--space-5);
+  /* Réglable par la page : plus serré sur la carte de visite */
+  gap: var(--contact-links-gap, var(--space-6));
 }
 .label {
   margin: 0 0 var(--space-2);

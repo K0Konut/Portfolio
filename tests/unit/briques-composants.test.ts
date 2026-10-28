@@ -68,14 +68,14 @@ describe('BaseTimeline', () => {
 })
 
 describe('CycleSteps', () => {
-  it('répartit n’importe quel nombre d’étapes, et donne à chaque anneau sa propre flèche', async () => {
-    const steps = ['A', 'B', 'C'].map((title) => ({ title, text: '' }))
+  it('répartit les étapes sur l’anneau, et donne à chaque anneau sa propre flèche', async () => {
+    const steps = ['A', 'B', 'C', 'D'].map((title) => ({ title, text: '' }))
     const w = mount(CycleSteps, {
       props: { steps },
       slots: { center: 'Un nouveau tour.' },
       global: await options(),
     })
-    expect(w.findAll('.line')).toHaveLength(3)
+    expect(w.findAll('.line')).toHaveLength(4)
     expect(w.findAll('.back')).toHaveLength(1)
     const id = w.find('marker').attributes('id')
     expect(w.find('.line').attributes('marker-end')).toBe(`url(#${id})`)
