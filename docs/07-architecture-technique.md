@@ -39,7 +39,7 @@ content/                     contenu, séparé du code (§4)
 public/
   fonts/                     polices auto-hébergées (déjà en place)
   cv/                        CV FR et EN (PDF)
-  robots.txt  favicon.svg
+  favicon.svg                (robots.txt est écrit au build, §5)
 src/
   main.ts                    point d'entrée vite-ssg
   router/pages.ts            table des pages FR / EN (pré-rendu, sitemap, SEO)

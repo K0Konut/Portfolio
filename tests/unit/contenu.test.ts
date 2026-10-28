@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { slugify } from '../../scripts/markdown'
+import { slugify, tocPlugin } from '../../scripts/markdown'
 import { sitemapXml } from '../../src/router/sitemap'
 import { skills, timeline } from '../../src/content/about'
 import { featuredProjects, parseProject, projectBody, projects } from '../../src/content/projects'
@@ -31,6 +31,7 @@ describe('parseProject', () => {
     ['title', { title: undefined }],
     ['stack', { stack: [] }],
     ['date', { date: '2025' }],
+    ['date', { date: '2025-13' }],
     ['featured', { featured: 'oui' }],
     ['capture.device', { capture: { device: 'tablet' } }],
     ['capture.image', { capture: { device: 'phone', image: 'absente.png' } }],
@@ -76,6 +77,21 @@ describe('slugify', () => {
   it('retire accents et ponctuation', () => {
     expect(slugify('Choix techniques')).toBe('choix-techniques')
     expect(slugify('Méthode : l’essentiel !')).toBe('methode-l-essentiel')
+  })
+})
+
+describe('sommaire des études de cas', () => {
+  it('prend le texte affiché des h2, sans la syntaxe Markdown', async () => {
+    const { default: markdown } = await import('markdown-exit')
+    const md = markdown()
+    tocPlugin(md)
+    const env: { frontmatter?: { toc?: unknown } } = {}
+    const html = md.render('## Choix `techniques`\n\n## Voir [la démo](https://x.fr)', env)
+    expect(env.frontmatter?.toc).toEqual([
+      { id: 'choix-techniques', label: 'Choix techniques' },
+      { id: 'voir-la-demo', label: 'Voir la démo' },
+    ])
+    expect(html).toContain('<h2 id="choix-techniques">')
   })
 })
 

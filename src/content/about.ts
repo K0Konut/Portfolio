@@ -1,4 +1,4 @@
-import type { Locale } from '../router/routes'
+import type { Locale } from '../router/pages'
 import type { SkillCategory, TimelineStep } from './types'
 
 /* Parcours et compétences, un fichier par langue : content/<langue>/parcours.ts et competences.ts.

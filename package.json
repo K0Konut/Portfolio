@@ -13,7 +13,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check-content": "node --env-file-if-exists=.env.production scripts/check-content.ts"
+    "check-content": "node scripts/check-content.ts"
   },
   "dependencies": {
     "@unhead/vue": "^2.1.17",

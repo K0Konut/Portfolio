@@ -1,5 +1,5 @@
 import type { Component } from 'vue'
-import { LOCALES, type Locale } from '../router/routes'
+import { LOCALES, type Locale } from '../router/pages'
 import type { Device, Project, ProjectMeta } from './types'
 
 /* Chargeur des études de cas : un fichier Markdown par projet et par langue, content/<langue>/projets/<slug>.md
@@ -42,7 +42,7 @@ export function parseProject(
     check(field, isText(meta[field]))
   for (const field of ['tags', 'stack']) check(field, isTextList(meta[field]))
   for (const field of ['code', 'demo', 'privateCode']) check(field, isOptionalText(meta[field]))
-  check('date', isText(meta.date) && /^\d{4}-\d{2}$/.test(meta.date))
+  check('date', isText(meta.date) && /^\d{4}-(0[1-9]|1[0-2])$/.test(meta.date))
   check('featured', meta.featured === undefined || typeof meta.featured === 'boolean')
   const capture = (meta.capture ?? {}) as Record<string, unknown>
   check('capture.device', DEVICES.includes(capture.device))

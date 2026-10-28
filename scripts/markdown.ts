@@ -17,7 +17,11 @@ export function tocPlugin(md: MarkdownExit) {
     const toc: { id: string; label: string }[] = []
     state.tokens.forEach((token, i) => {
       if (token.type !== 'heading_open' || token.tag !== 'h2') return
-      const label = state.tokens[i + 1]?.content ?? ''
+      // Le texte affiché, sans la syntaxe Markdown (`code`, [lien](…))
+      const label = (state.tokens[i + 1]?.children ?? [])
+        .filter((child) => child.type === 'text' || child.type === 'code_inline')
+        .map((child) => child.content)
+        .join('')
       const id = slugify(label)
       token.attrSet('id', id)
       toc.push({ id, label })

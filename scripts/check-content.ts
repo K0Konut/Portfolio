@@ -1,7 +1,8 @@
 /* Refuse la mise en ligne tant qu'il reste du contenu provisoire (architecture technique §4).
    Lancé à la release (image Docker), pas sur chaque PR : le contenu est provisoire pendant le développement. */
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { loadEnv } from 'vite'
 
 const MARKER = 'à compléter'
 const files = [
@@ -16,7 +17,14 @@ const problems = files.flatMap((file) =>
     .split('\n')
     .flatMap((line, i) => (line.includes(MARKER) ? [`${file}:${i + 1}  ${line.trim()}`] : [])),
 )
-if (!process.env.VITE_SITE_URL) problems.push('VITE_SITE_URL manquant : le domaine du site')
+// Chaque contenu français a sa traduction (même chemin sous content/en/)
+for (const file of files.filter((f) => f.startsWith(join('content', 'fr')))) {
+  const en = file.replace(join('content', 'fr'), join('content', 'en'))
+  if (!existsSync(en)) problems.push(`${en} manquant : traduction de ${file}`)
+}
+// Lu comme le build le lit (.env, .env.production, .env.production.local…)
+if (!loadEnv('production', process.cwd()).VITE_SITE_URL)
+  problems.push('VITE_SITE_URL manquant : le domaine du site')
 
 if (problems.length) {
   console.error(`Contenu provisoire, mise en ligne refusée :\n${problems.join('\n')}`)
