@@ -38,6 +38,18 @@ export interface ProjectSummary {
   }
 }
 
+/** Un projet complet, lu dans content/<langue>/projets/<slug>.md (architecture technique §4) */
+export interface Project extends ProjectSummary {
+  /** Date de sortie, AAAA-MM : trie la page Projets, du plus récent au plus ancien */
+  date: string
+  /** Fait partie des trois projets de l'accueil */
+  featured: boolean
+  meta: ProjectMeta
+  links: { code?: string; demo?: string }
+  /** Les h2 du corps, pour StickyToc */
+  toc: { id: string; label: string }[]
+}
+
 /** Une étape du parcours, du plus ancien au plus récent, montrée en BaseTimeline */
 export interface TimelineStep {
   /** Étiquette : lycée, école, stage ou job étudiant */

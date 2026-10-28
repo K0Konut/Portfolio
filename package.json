@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check-content": "node --env-file-if-exists=.env.production scripts/check-content.ts"
   },
   "dependencies": {
     "@unhead/vue": "^2.1.17",
@@ -37,6 +38,7 @@
     "prettier": "^3.9.10",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.72.0",
+    "unplugin-vue-markdown": "^32.1.1",
     "vite": "^8.3.0",
     "vitest": "^5.0.5",
     "vue-eslint-parser": "^10.4.1",
