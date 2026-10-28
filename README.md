@@ -4,6 +4,11 @@
 
 <p align="center">
   <a href="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI : lint, types, tests et build sur dev"></a>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Vue-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue">
+  <img src="https://img.shields.io/badge/CSS-663399?logo=css&logoColor=white" alt="CSS">
+  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/Node-24-5FA04E?logo=nodedotjs&logoColor=white" alt="Node 24">
 </p>
 
 Le portfolio d'un étudiant ingénieur en génie logiciel (ESIEA Paris) qui cherche un stage de fin d'études en développement full-stack. Le site fait aussi office de preuve : sa propre conception suit un process complet, du PRD au code. Chaque étape est documentée dans [`docs/`](docs/) et validée avant la suivante.
