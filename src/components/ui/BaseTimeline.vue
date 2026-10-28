@@ -39,7 +39,7 @@ let gone = false
 
 onMounted(animate)
 // Le routeur garde la page d'une langue à l'autre : les nouvelles étapes reçoivent leurs déclencheurs
-watch(() => [props.items, props.draw], animate, { flush: 'post' })
+watch([() => props.items, () => props.draw], animate, { flush: 'post' })
 onBeforeUnmount(() => {
   gone = true
   ctx?.revert()

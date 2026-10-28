@@ -36,7 +36,7 @@ onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
-  <nav class="toc" :aria-label="label ?? t('case.toc')">
+  <nav class="toc" :aria-label="label ?? t('ui.toc')">
     <ol>
       <li v-for="item in items" :key="item.id">
         <a :href="`#${item.id}`" :aria-current="item.id === current ? 'location' : undefined">{{

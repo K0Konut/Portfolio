@@ -29,7 +29,7 @@ const { to } = useLocale()
       </PosterCard>
     </div>
     <p v-reveal class="legend">
-      <i aria-hidden="true" />{{ t('about.legend') }}
+      <i class="dot on" aria-hidden="true" />{{ t('about.legend') }}
       <TextLink :to="to('etude-de-cas', { slug: 'ce-portfolio' })">{{
         t('about.legendLink')
       }}</TextLink>
@@ -59,15 +59,6 @@ h3 {
   font-size: var(--text-lead);
   line-height: var(--leading-none);
   color: var(--color-highlight);
-}
-/* Pastille de la légende : celle d'une ligne mise en avant de DotList. La couleur porte une information */
-.legend i {
-  flex: none;
-  width: var(--skill-dot);
-  height: var(--skill-dot);
-  border-radius: var(--radius-pill);
-  background: var(--violet-500);
-  box-shadow: 0 0 0 var(--underline) var(--neutral-50);
 }
 .legend {
   margin: 0;

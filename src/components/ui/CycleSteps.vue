@@ -25,16 +25,19 @@ const arcs = computed(() =>
   }),
 )
 const dots = computed(() => props.steps.map((_, k) => point(angle(k))))
-/* Place du texte de chaque étape autour de l'anneau, déduite de son angle : côté, hauteur (en rayons),
+/* Chaque étape et la place de son texte autour de l'anneau, déduite de son angle : côté, hauteur (en rayons),
    et rapprochement des étapes hautes et basses vers l'anneau */
-const place = (k: number) => {
-  const a = (angle(k) * Math.PI) / 180
-  const dy = -Math.cos(a)
-  return {
-    side: Math.sin(a) >= 0 ? 'droite' : 'gauche',
-    style: { '--dy': dy.toFixed(3), '--sh': Math.abs(dy) > 0.1 ? 0.4 : 0 },
-  }
-}
+const places = computed(() =>
+  props.steps.map((step, k) => {
+    const a = (angle(k) * Math.PI) / 180
+    const dy = -Math.cos(a)
+    return {
+      step,
+      side: Math.sin(a) >= 0 ? 'droite' : 'gauche',
+      style: { '--dy': dy.toFixed(3), '--sh': Math.abs(dy) > 0.1 ? 0.4 : 0 },
+    }
+  }),
+)
 /** Rayon de l'anneau, en part du côté du SVG (partagé avec le CSS) */
 const RING = { '--ring': R / 400 }
 </script>
@@ -70,11 +73,11 @@ const RING = { '--ring': R / 400 }
     </svg>
     <ol class="steps">
       <li
-        v-for="(step, k) in steps"
+        v-for="({ step, side, style }, k) in places"
         :key="k"
         v-reveal="k"
-        :class="place(k).side"
-        :style="place(k).style"
+        :class="side"
+        :style="style"
       >
         <span class="n">{{ k + 1 }}</span>
         <div>

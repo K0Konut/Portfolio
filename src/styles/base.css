@@ -220,6 +220,19 @@ svg {
   line-height: var(--leading-display);
 }
 
+/* Pastille de DotList et de sa légende : grise, ou violet vif cernée de crème (.on). La couleur porte une information */
+.dot {
+  flex: none;
+  width: var(--skill-dot);
+  height: var(--skill-dot);
+  border-radius: var(--radius-pill);
+  background: var(--neutral-700);
+}
+.dot.on {
+  background: var(--violet-500);
+  box-shadow: 0 0 0 var(--underline) var(--neutral-50);
+}
+
 /* Affiche collée (DA §5) : inclinée de --tilt, elle se redresse et se soulève au survol ou au focus */
 .poster {
   transform: rotate(var(--tilt, 0deg));

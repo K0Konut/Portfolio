@@ -133,6 +133,8 @@ const TIMELINE = [
   },
   { tag: 'job étudiant', title: 'Job étudiant', text: 'Ce que ce job a apporté.' },
 ]
+// Une liste par nombre d'étapes : le même tableau d'un réglage à l'autre, la frise ne se reconstruit pas
+const TIMELINES = TIMELINE.map((_, i) => TIMELINE.slice(0, i + 1))
 const attr = (name: string, value: unknown) => (value ? ` ${name}="${quote(value)}"` : '')
 
 export const ENTRIES: Entry[] = [
@@ -773,7 +775,7 @@ export const ENTRIES: Entry[] = [
     ],
     slots: [{ name: 'item', description: 'Le contenu d’une étape ; reçoit `item` et `index`' }],
     bind: (v) => ({
-      items: TIMELINE.slice(0, Number(v.count)),
+      items: TIMELINES[Number(v.count) - 1],
       alternate: v.alternate,
       draw: v.draw,
     }),
@@ -803,6 +805,7 @@ export const ENTRIES: Entry[] = [
       v.center
         ? `<CycleSteps :steps="steps">\n  <template #center>${v.center}</template>\n</CycleSteps>`
         : '<CycleSteps :steps="steps" />',
+    bind: (v) => ({ steps: STEPS.slice(0, Number(v.count)), center: v.center }),
     fond: 'vif',
   },
   {

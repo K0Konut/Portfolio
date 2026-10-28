@@ -93,7 +93,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 
 ## 4. Contenu en fichiers
 
-- **Étude de cas** : un fichier Markdown par projet et par langue. L'en-tête YAML porte les données de la carte et de la fiche (titre, slug, date de sortie, type, rôle, durée, équipe, stack, liens code et démo, capture et son format, `featured` pour la sélection de l'accueil, `codePrive`). Le corps suit le gabarit commun (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) ; les `h2` alimentent le sommaire (`CaseToc`).
+- **Étude de cas** : un fichier Markdown par projet et par langue. L'en-tête YAML porte les données de la carte et de la fiche (titre, slug, date de sortie, type, rôle, durée, équipe, stack, liens code et démo, capture et son format, `featured` pour la sélection de l'accueil, `codePrive`). Le corps suit le gabarit commun (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) ; les `h2` alimentent le sommaire (`StickyToc`).
 - **Pages** : les textes longs (section d'accueil, « Mon histoire »…) dans `content/<langue>/pages/` ; les libellés courts dans `src/i18n/`.
 - **Données** : parcours et compétences en YAML, partagés entre les langues pour les noms propres, avec les phrases traduites.
 - **Typage** : le chargeur (`src/content/`) valide l'en-tête de chaque fichier au build ; un champ manquant ou mal typé fait échouer le build, avec le nom du fichier.
