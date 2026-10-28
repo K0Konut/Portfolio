@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.1 — 23/10/2026 — **statut : validé** (v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques)
+Version 1.2 — 28/10/2026 — **statut : validé** (v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1, déploiement par GitHub Actions et image Docker.
 
@@ -31,11 +31,10 @@ Pas de Nuxt : choix du propriétaire. Le routage, le pré-rendu, l'i18n, le site
 content/                     contenu, séparé du code (§4)
   fr/  en/
     projets/<slug>.md        une étude de cas par fichier
+    parcours.ts              frise (dates, lieux, rôles)
+    competences.ts           catégories et technos (+ marque « ce site »)
     pages/                   textes des pages (accueil, à propos…)
     legal/                   mentions légales, confidentialité
-  data/
-    parcours.yaml            frise (dates, lieux, rôles)
-    competences.yaml         catégories et technos (+ marque « ce site »)
   images/projets/<slug>/     capture 1440 × 900 ou 390 × 844
 public/
   fonts/                     polices auto-hébergées (déjà en place)
@@ -66,7 +65,7 @@ src/
 tests/
   unit/                      Vitest + Vue Test Utils
   e2e/                       Playwright (+ contrôle d'accessibilité axe)
-scripts/                     sitemap, vérification du contenu
+scripts/                     plugin Markdown (sommaire), vérification du contenu
 docker/  nginx.conf          image de production (§7)
 .github/workflows/           intégration continue et image (§7)
 ```
@@ -93,19 +92,19 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 
 ## 4. Contenu en fichiers
 
-- **Étude de cas** : un fichier Markdown par projet et par langue. L'en-tête YAML porte les données de la carte et de la fiche (titre, slug, date de sortie, type, rôle, durée, équipe, stack, liens code et démo, capture et son format, `featured` pour la sélection de l'accueil, `codePrive`). Le corps suit le gabarit commun (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) ; les `h2` alimentent le sommaire (`StickyToc`).
+- **Étude de cas** : un fichier Markdown par projet et par langue. L'en-tête YAML porte les données de la carte et de la fiche (titre, description, étiquettes, date de sortie `AAAA-MM`, type, rôle, durée, équipe, stack, liens `code` et `demo`, capture et son appareil, `featured` pour la sélection de l'accueil, `privateCode`) ; le slug est le nom du fichier. Le corps suit le gabarit commun (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) ; les `h2` alimentent le sommaire (`StickyToc`).
 - **Pages** : les textes longs (section d'accueil, « Mon histoire »…) dans `content/<langue>/pages/` ; les libellés courts dans `src/i18n/`.
-- **Données** : parcours et compétences en YAML, partagés entre les langues pour les noms propres, avec les phrases traduites.
+- **Données** : parcours et compétences en TypeScript (`satisfies TimelineStep[]`), un fichier par langue comme les études de cas : le compilateur vérifie chaque champ, sans dépendance YAML ni validateur.
 - **Typage** : le chargeur (`src/content/`) valide l'en-tête de chaque fichier au build ; un champ manquant ou mal typé fait échouer le build, avec le nom du fichier.
 - **Ordre** : la page Projets trie par date de sortie, du plus récent au plus ancien ; l'accueil prend les trois projets `featured`.
-- **Contenu provisoire** : les maquettes marquent « à compléter » ce qui manque (mail, LinkedIn, dates, stacks, captures). Un script (`scripts/check-content.ts`) refuse le build de production s'il reste un de ces marqueurs.
+- **Contenu provisoire** : les maquettes marquent « à compléter » ce qui manque (mail, LinkedIn, dates, stacks, captures). Un script (`npm run check-content`) refuse la mise en ligne s'il reste un de ces marqueurs ou si `VITE_SITE_URL` manque. Il tourne à la construction de l'image Docker, pas sur chaque PR : le contenu reste provisoire pendant le développement.
 
 ## 5. SEO et balises `head`
 
 - **HTML complet** pour chaque page, généré au build (vite-ssg).
 - **Par page** (`useSeo`) : titre (architecture §5), description, `lang` du document, balises Open Graph (image : la capture du projet pour une étude de cas, une image générique sinon), `canonical`, `hreflang` FR, EN et `x-default`.
 - **`noindex`** : mentions légales, confidentialité et 404 (architecture §5).
-- **Sitemap** : `sitemap.xml` écrit à la fin du build à partir de la table de routes, avec les deux langues liées ; `robots.txt` le référence.
+- **Sitemap** : `sitemap.xml` écrit à la fin du build à partir de la table de routes (`src/router/sitemap.ts`), avec les deux langues liées ; `robots.txt` le référence. Sans `VITE_SITE_URL` (développement, CI), seul `robots.txt` est écrit.
 - **Page `/design-system`** : la route n'est ajoutée qu'en développement (`import.meta.env.DEV`), donc absente du pré-rendu, du sitemap et de l'image de production ; un test de l'intégration continue vérifie qu'aucun fichier `design-system` n'existe dans le build.
 
 ## 6. Interface et animations
