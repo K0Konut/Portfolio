@@ -184,7 +184,7 @@ Trois temps, validés par le propriétaire : le socle, puis les composants, puis
 - `feat/dev/catalogue` : le catalogue (navigation par famille, page par composant, panneau de réglages, états, code, tableau des options), branché d'abord sur les briques qui existent déjà.
 - `refactor/dev/briques_animations` : `LetterReveal`, `ScrollParallax`, `DragToSnap`, `ScrollHint`, `TopoBackground` réglables.
 - `refactor/dev/briques_composants` : `PosterCard`, `DotList`, `DefinitionList`, `StatBlock`, `BaseTimeline`, `CycleSteps`, `NumberedSteps`, `StickyToc`, `NextLink`, `ContactLinks`.
-- `refactor/dev/briques_mise_en_page` : `PosterGrid`, `BentoGrid` ; suppression des anciennes sections.
+- `refactor/dev/briques_mise_en_page` : `PosterGrid`, `BentoGrid` ; suppression des anciennes sections (refaites au lot pages) ; composants rangés par famille (§2).
 
 **3. Les pages**, qui appellent les composants et le contenu :
 - `feat/dev/contenu` : chargeur de contenu, types, vérification, sitemap.

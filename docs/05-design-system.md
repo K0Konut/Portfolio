@@ -500,6 +500,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 - **Grille** : bureau, 3 colonnes : le premier en 2 × 2, puis deux à droite, puis un simple et un large (deux colonnes, contenu côte à côte) ; tablette, 2 colonnes, le premier sur toute la largeur ; mobile, une colonne. Au-delà de cinq, les suivants se rangent à la suite.
 - **Fond de capture** (DA §5) : chaque cellule pose `--stage` selon sa place : lime pour la première, puis violet foncé, rose, gris (`--neutral-700`), violet foncé, puis un cycle de quatre ; deux voisines n'ont jamais la même teinte, en 1, 2 ou 3 colonnes, et jamais de lime à côté de la première. Jamais de violet vif.
 - **Lueur** (`glow`, souris seulement) : le bord et l'intérieur des cellules proches du pointeur s'allument (dégradé rose puis violet vif, halo violet vif à 30 %), d'autant plus que le pointeur est près ; la cellule survolée s'incline vers lui. Une écriture par image ; mesures sur la cellule, qui ne s'incline pas.
+- **Enfants** : chaque enfant est rangé dans une cellule ; la grande cellule étire sa première ligne (le média, `DeviceFrame`) et agrandit son titre `h3`, la cellule large met le média à gauche.
 - **Animations réduites** : pas d'inclinaison ; la lueur reste.
 
 ### `TopoBackground`

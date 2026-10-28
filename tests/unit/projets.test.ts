@@ -2,7 +2,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
-import CaseNav from '../../src/components/case/CaseNav.vue'
 import StatBlock from '../../src/components/ui/StatBlock.vue'
 import { vReveal } from '../../src/directives/reveal'
 import { createAppI18n } from '../../src/i18n'
@@ -34,17 +33,5 @@ describe('StatBlock', () => {
     })
     expect(w.find('.bars').exists()).toBe(false)
     expect(w.text()).toBe('7étapes')
-  })
-})
-
-describe('CaseNav', () => {
-  it('mène au projet suivant et à la liste, dans la langue de la page', async () => {
-    const w = mount(CaseNav, {
-      props: { next: { slug: 'stage-cnam', title: 'Stage au CNAM' } },
-      global: await options(),
-    })
-    const hrefs = w.findAll('a').map((a) => a.attributes('href'))
-    expect(hrefs).toEqual(['/fr/projets/stage-cnam', '/fr/projets'])
-    expect(w.find('section').attributes('aria-label')).toBe('Suite')
   })
 })

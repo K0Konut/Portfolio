@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import AppFooter from './components/layout/AppFooter.vue'
-import AppHeader from './components/layout/AppHeader.vue'
-import SkipLink from './components/layout/SkipLink.vue'
+import AppFooter from './components/site/AppFooter.vue'
+import AppHeader from './components/site/AppHeader.vue'
+import SkipLink from './components/site/SkipLink.vue'
 import { useSeo } from './composables/useSeo'
 
 useSeo()

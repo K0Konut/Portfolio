@@ -6,7 +6,7 @@ import DeviceFrame from './DeviceFrame.vue'
 
 /* Carte de projet (design system § ProjectCard) : un seul lien, sur le titre, étendu à toute la carte.
    Au survol ou au focus, elle s'éclaircit ; pas d'ombre (design plat). Le conteneur fixe sa disposition :
-   affiche collée (ProjectPosters) ou tuile du bento (ProjectBento). */
+   affiche collée (PosterGrid) ou tuile du bento (BentoGrid). */
 defineProps<{ project: ProjectSummary }>()
 const { to } = useLocale()
 </script>
