@@ -1,8 +1,11 @@
-# Vérifications de chaque PR vers dev ou main (architecture technique §7)
+# Vérifications de chaque PR vers dev ou main (architecture technique §7) ; le lint est dans lint.yml
 name: CI
 
 on:
   pull_request:
+    branches: [dev, main]
+  # Après chaque merge, pour que le badge du README reflète l'état de dev
+  push:
     branches: [dev, main]
 
 # Un nouveau push sur la PR annule la vérification précédente, devenue inutile
@@ -20,8 +23,6 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Lint et format
-        run: npm run lint && npm run format:check
       - name: Types
         run: npm run type-check
       - name: Tests unitaires

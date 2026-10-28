@@ -3,7 +3,13 @@
 <p align="center"><strong>Créatif dans l'interface, rigoureux dans la méthode.</strong></p>
 
 <p align="center">
-  <img src="docs/06-maquettes/captures/accueil-bureau.png" alt="Maquette de la page d'accueil : le nom en grand sur un fond violet à courbes de niveau" width="820">
+  <a href="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI : types, tests et build sur dev"></a>
+  <a href="https://github.com/K0Konut/Portfolio/actions/workflows/lint.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/lint.yml/badge.svg?branch=dev" alt="Lint : ESLint et Prettier sur dev"></a>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Vue-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue">
+  <img src="https://img.shields.io/badge/CSS-663399?logo=css&logoColor=white" alt="CSS">
+  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/Node-24-5FA04E?logo=nodedotjs&logoColor=white" alt="Node 24">
 </p>
 
 Le portfolio d'un étudiant ingénieur en génie logiciel (ESIEA Paris) qui cherche un stage de fin d'études en développement full-stack. Le site fait aussi office de preuve : sa propre conception suit un process complet, du PRD au code. Chaque étape est documentée dans [`docs/`](docs/) et validée avant la suivante.
@@ -38,17 +44,6 @@ Sept phases, dans l'ordre. Chacune s'appuie sur la précédente et passe par une
 | 7. Architecture technique et code | [`07-architecture-technique.md`](docs/07-architecture-technique.md)                                          | en cours                                      |
 
 Les décisions structurantes, avec leur raison, sont tenues dans [`decisions.md`](docs/decisions.md).
-
-<table>
-  <tr>
-    <td><img src="docs/06-maquettes/captures/projets-bureau.png" alt="Maquette de la page Projets, en grille bento"></td>
-    <td><img src="docs/06-maquettes/captures/a-propos-bureau.png" alt="Maquette de la page À propos, avec la frise du parcours"></td>
-  </tr>
-  <tr>
-    <td align="center">Projets</td>
-    <td align="center">À propos</td>
-  </tr>
-</table>
 
 ## Stack
 
@@ -132,7 +127,7 @@ Une brique reçoit tout par ses options et ses slots. Elle ne contient aucun tex
 
 - **Accessibilité** : WCAG 2.2 AA visé. Navigation au clavier, focus visible, contrastes vérifiés, `prefers-reduced-motion` respecté par chaque animation.
 - **Performance** : objectif Lighthouse ≥ 95 sur les quatre axes. Polices auto-hébergées, GSAP et WebGL chargés après le premier affichage.
-- **Intégration continue** : chaque PR vers `dev` ou `main` passe le lint, le format, les types, les tests unitaires, le pré-rendu, puis les tests de bout en bout et d'accessibilité ([`ci.yml`](.github/workflows/ci.yml)).
+- **Intégration continue** : chaque PR vers `dev` ou `main`, puis chaque merge, passe le lint et le format ([`lint.yml`](.github/workflows/lint.yml)), les types, les tests unitaires, le pré-rendu, puis les tests de bout en bout et d'accessibilité ([`ci.yml`](.github/workflows/ci.yml)).
 
 ## Contribuer : le workflow Git
 
