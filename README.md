@@ -3,7 +3,7 @@
 <p align="center"><strong>Créatif dans l'interface, rigoureux dans la méthode.</strong></p>
 
 <p align="center">
-  <img src="docs/06-maquettes/captures/accueil-bureau.png" alt="Maquette de la page d'accueil : le nom en grand sur un fond violet à courbes de niveau" width="820">
+  <a href="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI : lint, types, tests et build sur dev"></a>
 </p>
 
 Le portfolio d'un étudiant ingénieur en génie logiciel (ESIEA Paris) qui cherche un stage de fin d'études en développement full-stack. Le site fait aussi office de preuve : sa propre conception suit un process complet, du PRD au code. Chaque étape est documentée dans [`docs/`](docs/) et validée avant la suivante.
@@ -38,17 +38,6 @@ Sept phases, dans l'ordre. Chacune s'appuie sur la précédente et passe par une
 | 7. Architecture technique et code | [`07-architecture-technique.md`](docs/07-architecture-technique.md)                                          | en cours                                      |
 
 Les décisions structurantes, avec leur raison, sont tenues dans [`decisions.md`](docs/decisions.md).
-
-<table>
-  <tr>
-    <td><img src="docs/06-maquettes/captures/projets-bureau.png" alt="Maquette de la page Projets, en grille bento"></td>
-    <td><img src="docs/06-maquettes/captures/a-propos-bureau.png" alt="Maquette de la page À propos, avec la frise du parcours"></td>
-  </tr>
-  <tr>
-    <td align="center">Projets</td>
-    <td align="center">À propos</td>
-  </tr>
-</table>
 
 ## Stack
 
