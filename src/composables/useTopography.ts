@@ -14,13 +14,30 @@ const RATES = CONTROLS.map((i) => SPEED * Math.sin(i * MORPH_SPEED))
 /** Instant de référence (secondes) de l'image fixe */
 const STILL_TIME = 12
 const FRAME_MS = 1000 / 30
-/** Teinte intermédiaire entre le violet vif et le rose (DA : « violet électrique qui tire vers le rose ») */
-const MID = '#6f63ff'
+/** Réglages du fond (design system § TopoBackground) ; les valeurs par défaut sont dans TopoBackground */
+export interface TopographyOptions {
+  /** Tokens de couleur des creux, des pentes et des hauteurs */
+  from: string
+  via: string
+  to: string
+  /** Vitesse de l'ondulation (lue à chaque image : elle peut changer sans redémarrage) */
+  speed: number
+  /** Nombre de courbes */
+  density: number
+  /** Lignes estompées au centre, derrière le contenu */
+  fade: boolean
+}
 
 const VERTEX = '#version 300 es\nin vec2 position;void main(){gl_Position=vec4(position,0.,1.);}'
-const fragment = (low: string, mid: string, high: string) => `#version 300 es
+const fragment = (
+  low: string,
+  mid: string,
+  high: string,
+  bands: number,
+  fade: boolean,
+) => `#version 300 es
 precision highp float;
-const float MORPH=${MORPH.toFixed(1)},BANDS=1.4,THICKNESS=.014,GLOW=.4,CONTRAST=3.,OPACITY=.55;
+const float MORPH=${MORPH.toFixed(1)},BANDS=${bands.toFixed(2)},THICKNESS=.014,GLOW=.4,CONTRAST=3.,OPACITY=.55;
 const vec3 LOW=vec3(${low}),MID=vec3(${mid}),HIGH=vec3(${high});
 uniform vec2 iResolution;uniform vec4 uCtrl[4];out vec4 fragColor;
 float bez(float t,vec4 c){float w=6.2831853*t;return .5*(c.x*sin(w)+c.y*cos(w)+c.z*sin(2.*w)+c.w*cos(2.*w));}
@@ -31,17 +48,21 @@ float aa=fwidth(f)+.0001;float mask=1.-smoothstep(THICKNESS-aa,THICKNESS+aa,ld);
 float glow=1.-smoothstep(THICKNESS,THICKNESS+GLOW*.5+aa,ld);
 float e=clamp(fv/(MORPH*2.5+.001),0.,1.);vec3 col=elev(e);
 float cov=pow(clamp(mask+glow*.55,0.,1.),CONTRAST);
-vec2 d=(uv-vec2(.5,.52))*vec2(iResolution.x/iResolution.y,1.);float center=smoothstep(.12,.62,length(d*vec2(.55,1.1)));
+vec2 d=(uv-vec2(.5,.52))*vec2(iResolution.x/iResolution.y,1.);float center=${fade ? 'smoothstep(.12,.62,length(d*vec2(.55,1.1)))' : '1.'};
 float a=cov*OPACITY*center;fragColor=vec4(col*a,a);}`
 
-/** Couleur CSS (#rrggbb) en vec3 GLSL */
-function vec3(hex: string) {
+const rgb = (hex: string) => {
   const n = parseInt(hex.trim().slice(1), 16)
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => (c / 255).toFixed(3)).join(',')
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
+/** Couleur (composantes 0 à 255) en vec3 GLSL */
+const vec3 = (c: number[]) => c.map((v) => (v / 255).toFixed(3)).join(',')
 
 /** Dessine le fond dans `box` ; renvoie la fonction d'arrêt, ou `undefined` sans WebGL 2 (le fond violet reste). */
-export function startTopography(box: HTMLElement): (() => void) | undefined {
+export function startTopography(
+  box: HTMLElement,
+  options: TopographyOptions,
+): (() => void) | undefined {
   const canvas = document.createElement('canvas')
   const gl = canvas.getContext('webgl2', {
     alpha: true,
@@ -50,19 +71,15 @@ export function startTopography(box: HTMLElement): (() => void) | undefined {
   })
   if (!gl) return undefined
 
-  // Teintes lues dans les tokens : violet vif en bas, rose sur les hauteurs
+  // Teintes lues dans les tokens ; densité et estompe sont fixées dans le shader
+  const { from, via, to, density, fade } = options
   const css = getComputedStyle(document.documentElement)
+  const color = (name: string) => rgb(css.getPropertyValue(`--${name}`))
+  const [low, mid, high] = [color(from), color(via), color(to)]
   const program = gl.createProgram()
   for (const [type, source] of [
     [gl.VERTEX_SHADER, VERTEX],
-    [
-      gl.FRAGMENT_SHADER,
-      fragment(
-        vec3(css.getPropertyValue('--violet-500')),
-        vec3(MID),
-        vec3(css.getPropertyValue('--pink-500')),
-      ),
-    ],
+    [gl.FRAGMENT_SHADER, fragment(vec3(low), vec3(mid), vec3(high), density, fade)],
   ] as const) {
     const shader = gl.createShader(type)!
     gl.shaderSource(shader, source)
@@ -89,7 +106,8 @@ export function startTopography(box: HTMLElement): (() => void) | undefined {
 
   let time = STILL_TIME
   const draw = () => {
-    for (let i = 0; i < 16; i++) values[i] = MORPH * Math.sin(time * RATES[i]! + CONTROLS[i]!)
+    for (let i = 0; i < 16; i++)
+      values[i] = MORPH * Math.sin(time * options.speed * RATES[i]! + CONTROLS[i]!)
     gl.uniform4fv(controls, values)
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.drawArrays(gl.TRIANGLES, 0, 3)

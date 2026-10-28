@@ -68,6 +68,8 @@ describe('BrickRepair', () => {
     const { router, global } = await setup()
     vi.useFakeTimers()
     const w = mount(BrickRepair, { global })
+    // Le trou (la cible) n'existe qu'après le premier rendu
+    await flushPromises()
     await w.find('.brick').trigger('click')
     expect(w.find('.brick').classes()).toContain('placed')
     expect(w.find('[aria-live]').text()).toBe('Le mur est complet. Retour à l’accueil…')

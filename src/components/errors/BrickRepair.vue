@@ -4,13 +4,13 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { reducedMotion, seconds } from '../../composables/motion'
 import { useLocale } from '../../composables/useLocale'
+import DragToSnap from '../animations/DragToSnap.vue'
 import PageIntro from '../sections/PageIntro.vue'
 import BaseButton from '../ui/BaseButton.vue'
 
-/* Page 404 (design system § BrickRepair) : « Il manque une brique. » La brique tombée se glisse dans le trou
-   du mur (souris ou doigt) ; relâchée à moins de REACH px du trou, elle s'y loge et la page mène à l'accueil.
-   Au clavier ou d'un simple appui, le bouton la met en place directement. */
-const REACH = 40
+/* Page 404 (design system v1.2 §5) : « Il manque une brique. » La brique tombée (DragToSnap) se glisse dans
+   le trou du mur ; une fois logée, la page mène à l'accueil. Le mur, le trou et l'apparence de la brique sont
+   propres à la page. */
 /** Délai avant le retour à l'accueil (s) : le temps de voir le mur complet ; --duration-reduced en mouvement réduit */
 const REDIRECT = 0.9
 
@@ -18,65 +18,16 @@ const { t } = useI18n()
 const { to } = useLocale()
 const router = useRouter()
 
-const ground = ref<HTMLElement>()
 const hole = ref<HTMLElement>()
-const offset = ref({ x: 0, y: 0 })
-/** Glisser en cours : pointeur au départ, et décalage qui pose la brique sur le trou */
-const drag = ref<{ px: number; py: number; tx: number; ty: number }>()
 const near = ref(false)
 const placed = ref(false)
-let dragged = false
 let timer: ReturnType<typeof setTimeout> | undefined
 
-/** Décalage du centre du sol (où la brique repose, immobile) au centre du trou */
-function target() {
-  const g = ground.value?.getBoundingClientRect()
-  const h = hole.value?.getBoundingClientRect()
-  if (!g || !h) return { x: 0, y: 0 }
-  return { x: h.x + h.width / 2 - g.x - g.width / 2, y: h.y + h.height / 2 - g.y - g.height / 2 }
-}
-
-function place() {
-  if (placed.value) return
-  offset.value = target()
+// La brique est logée : l'état l'annonce, puis la page mène à l'accueil
+function onSnap() {
   placed.value = true
   const delay = reducedMotion().matches ? seconds('--duration-reduced') : REDIRECT
   timer = setTimeout(() => router.push(to('accueil')), delay * 1000)
-}
-
-// Le bouton principal d'un seul pointeur : ni clic droit, ni second doigt
-function onDown(event: PointerEvent) {
-  if (placed.value || !event.isPrimary || event.button !== 0) return
-  ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
-  const { x, y } = target()
-  const { x: ox, y: oy } = offset.value
-  drag.value = { px: event.clientX - ox, py: event.clientY - oy, tx: x, ty: y }
-  dragged = false
-}
-
-// Une seule mesure, au départ : pendant le glisser, l'écart au trou se calcule sans lire la mise en page
-function onMove(event: PointerEvent) {
-  const d = drag.value
-  if (!d || !event.isPrimary) return
-  offset.value = { x: event.clientX - d.px, y: event.clientY - d.py }
-  dragged ||= Math.hypot(offset.value.x, offset.value.y) > 4
-  near.value = Math.hypot(d.tx - offset.value.x, d.ty - offset.value.y) < REACH
-}
-
-/** Fin du glisser : près du trou, la brique s'y loge ; ailleurs (ou glisser interrompu), elle revient */
-function onUp(event: PointerEvent) {
-  if (!drag.value || !event.isPrimary) return
-  drag.value = undefined
-  if (near.value && event.type === 'pointerup') place()
-  else if (dragged || event.type !== 'pointerup') offset.value = { x: 0, y: 0 }
-  near.value = false
-}
-
-// Entrée et Espace déclenchent un « click » sans pointeur (detail 0) : toujours une mise en place.
-// Un appui bref aussi ; le « click » qui suit un glisser à la souris, non.
-function onClick(event: MouseEvent) {
-  if (event.detail === 0 || !dragged) place()
-  dragged = false
 }
 
 onBeforeUnmount(() => clearTimeout(timer))
@@ -90,19 +41,16 @@ onBeforeUnmount(() => clearTimeout(timer))
         <div class="row"><i /><i /><i ref="hole" class="hole" /><i /></div>
         <div class="row"><i v-for="n in 5" :key="n" /></div>
       </div>
-      <div ref="ground" class="ground">
-        <button
-          type="button"
-          :class="['brick', { dragging: drag, placed }]"
-          :style="{ '--x': `${offset.x}px`, '--y': `${offset.y}px` }"
-          :aria-label="t('notFound.brick')"
-          @pointerdown="onDown"
-          @pointermove="onMove"
-          @pointerup="onUp"
-          @pointercancel="onUp"
-          @lostpointercapture="onUp"
-          @click="onClick"
-        />
+      <div class="ground">
+        <DragToSnap
+          v-slot="{ dragging, placed: inPlace }"
+          :target="hole"
+          :label="t('notFound.brick')"
+          @near="near = $event"
+          @snap="onSnap"
+        >
+          <span :class="['brick', { dragging, placed: inPlace }]" />
+        </DragToSnap>
       </div>
     </template>
     {{ t('notFound.text') }}
@@ -167,28 +115,20 @@ onBeforeUnmount(() => clearTimeout(timer))
   place-items: center;
 }
 .brick {
-  --rot: -14deg;
-  --s: 1;
-  border: 0;
-  padding: 0;
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-  transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(var(--s));
+  rotate: -14deg;
   transition:
-    transform var(--duration-move) var(--ease-out),
+    rotate var(--duration-move) var(--ease-out),
+    scale var(--duration-move) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out);
 }
 .brick.dragging {
-  --rot: -4deg;
-  --s: 1.06;
-  cursor: grabbing;
+  rotate: -4deg;
+  scale: 1.06;
   transition: none;
 }
 .brick.placed {
-  --rot: 0deg;
+  rotate: 0deg;
   background: var(--lime-500);
-  cursor: default;
 }
 .status {
   margin: 0;

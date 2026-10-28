@@ -38,6 +38,8 @@
   --violet-700: #17105b;
   --lime-500: #c7ff00;
   --pink-500: #ff6bd6;
+  /* Teinte des pentes du fond topographique, entre le violet vif et le rose (DA : « violet électrique qui tire vers le rose ») */
+  --topo-via: #6f63ff;
   --neutral-50: #f5f1e8;
   --neutral-100: #e8e1d4;
   --neutral-400: #a39e94;
