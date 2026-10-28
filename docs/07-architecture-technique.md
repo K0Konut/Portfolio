@@ -144,7 +144,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 ## 8. Qualité
 
 - **Lint et format** : ESLint (configuration plate, `eslint-plugin-vue`, `typescript-eslint`) et Prettier ; `npm run lint` et `npm run format`.
-- **Tests unitaires** (Vitest + Vue Test Utils) : chargeur de contenu (champs obligatoires, tri, `featured`), table de routes et équivalences de langue, `CopyButton` (copie, repli par sélection), logique de `BrickRepair` (dépôt près du trou, retour, clavier), composables de mouvement réduit.
+- **Tests unitaires** (Vitest + Vue Test Utils) : chargeur de contenu (champs obligatoires, tri, `featured`), table de routes et équivalences de langue, `CopyButton` (copie, repli par sélection), logique de `DragToSnap` (dépôt près de la cible, retour, clavier), composables de mouvement réduit.
 - **Tests de bout en bout** (Playwright) : les parcours du PRD — P1, télécharger le CV en un clic depuis l'accueil ; P2, ouvrir une étude de cas, passer au projet suivant, ouvrir la page Contact et copier le mail ; changer de langue sur une page de projet ; replacer la brique de la 404 au clavier.
 - **Accessibilité** : contrôle axe sur chaque page dans les tests de bout en bout ; WCAG 2.2 AA (PRD) ; vérification manuelle du clavier et du lecteur d'écran avant chaque release.
 - **Performance** : Lighthouse CI ≥ 95 sur les quatre axes ; polices préchargées (Bagel Fat One, Manrope) en `font-display: swap` ; images aux dimensions déclarées ; JavaScript découpé par page ; GSAP et WebGL chargés après le premier affichage.

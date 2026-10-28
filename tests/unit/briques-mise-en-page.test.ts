@@ -28,4 +28,20 @@ describe('BentoGrid', () => {
     await new Promise((resolve) => requestAnimationFrame(resolve))
     expect(w.find('li').attributes('style')).toBeUndefined()
   })
+
+  it('avec glow, allume la cellule sous le pointeur, puis l’éteint quand glow se coupe', async () => {
+    const w = mount(BentoGrid, { props: { glow: true }, slots: { default: children }, global })
+    const cell = w.find('li').element as HTMLElement
+    // happy-dom n'a pas de mise en page : chaque cellule mesure 0 × 0 en (0, 0), sous le pointeur
+    await w.find('ul').trigger('pointermove', { pointerType: 'mouse', clientX: 0, clientY: 0 })
+    await new Promise((resolve) => requestAnimationFrame(resolve))
+    expect(cell.style.getPropertyValue('--glow')).toBe('1.000')
+    await w.setProps({ glow: false })
+    expect(cell.style.getPropertyValue('--glow')).toBe('0')
+  })
+
+  it('ne fait pas une cellule du texte du slot', () => {
+    const w = mount(BentoGrid, { slots: { default: () => ['texte', ...children()] }, global })
+    expect(w.findAll('li')).toHaveLength(3)
+  })
 })

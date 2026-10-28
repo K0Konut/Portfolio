@@ -22,14 +22,11 @@ const props = withDefaults(
 )
 const slots = defineSlots<{ default(): VNode[] }>()
 
-const grid = ref<HTMLElement>()
+/** Les cellules, dans un ordre quelconque (refs d'un v-for) : il ne compte pas ici */
+const cells = ref<HTMLElement[]>([])
 let frame = 0
 let pointer: { x: number; y: number } | undefined
 const reduced = import.meta.env.SSR ? undefined : reducedMotion()
-
-function cells() {
-  return grid.value ? [...grid.value.querySelectorAll<HTMLElement>(':scope > li')] : []
-}
 
 function paint() {
   frame = 0
@@ -37,7 +34,7 @@ function paint() {
   const { x: px, y: py } = pointer
   // Toutes les lectures avant les écritures : une seule mise en page par image. On mesure la cellule, qui ne
   // s'incline pas : mesurer l'enfant incliné ferait clignoter l'inclinaison au bord.
-  const rects = cells().map((cell) => [cell, cell.getBoundingClientRect()] as const)
+  const rects = cells.value.map((cell) => [cell, cell.getBoundingClientRect()] as const)
   const still = reduced?.matches
   for (const [cell, r] of rects) {
     const x = px - r.left
@@ -73,7 +70,7 @@ function onLeave() {
   pointer = undefined
   cancelAnimationFrame(frame)
   frame = 0
-  for (const cell of cells()) {
+  for (const cell of cells.value) {
     cell.style.setProperty('--glow', '0')
     cell.style.setProperty('--rx', '0deg')
     cell.style.setProperty('--ry', '0deg')
@@ -88,12 +85,12 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 </script>
 
 <template>
-  <ul ref="grid" class="bento" v-on="glow ? { pointermove: onMove, pointerleave: onLeave } : {}">
-    <li
-      v-for="(child, i) in slotChildren(slots.default?.())"
-      :key="child.key ?? i"
-      v-reveal="i % 3"
-    >
+  <ul
+    :class="['bento', { glow }]"
+    v-on="glow ? { pointermove: onMove, pointerleave: onLeave } : {}"
+  >
+    <!-- Clé par place : les clés des enfants peuvent se répéter d'un fragment à l'autre -->
+    <li v-for="(child, i) in slotChildren(slots.default?.())" ref="cells" :key="i" v-reveal="i % 3">
       <component :is="child" class="tile" />
     </li>
   </ul>
@@ -137,14 +134,15 @@ li:nth-child(2) {
   --stage: var(--violet-700);
 }
 
-/* Enfant : droit ; la lueur (deux pseudo-éléments sous son contenu) et l'inclinaison suivent le pointeur */
-li > :deep(.tile) {
+/* Avec glow : la lueur (deux pseudo-éléments sous le contenu de l'enfant) et son inclinaison suivent le
+   pointeur. Sans glow, l'enfant garde ses propres transformations */
+.glow > li > :deep(.tile) {
   position: relative;
   isolation: isolate;
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
 }
-li > :deep(.tile)::before,
-li > :deep(.tile)::after {
+.glow > li > :deep(.tile)::before,
+.glow > li > :deep(.tile)::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -153,14 +151,14 @@ li > :deep(.tile)::after {
   pointer-events: none;
   opacity: var(--glow);
 }
-li > :deep(.tile)::before {
+.glow > li > :deep(.tile)::before {
   background: radial-gradient(
     30rem circle at var(--mx) var(--my),
     color-mix(in srgb, var(--violet-500) 30%, transparent),
     transparent 60%
   );
 }
-li > :deep(.tile)::after {
+.glow > li > :deep(.tile)::after {
   padding: 2px;
   background: radial-gradient(
     24rem circle at var(--mx) var(--my),

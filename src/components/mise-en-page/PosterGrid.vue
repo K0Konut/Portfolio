@@ -13,8 +13,10 @@ const slots = defineSlots<{ default(): VNode[] }>()
 
 <template>
   <ul :class="['poster-grid', `cols-${columns}`]">
-    <li v-for="(child, i) in slotChildren(slots.default?.())" :key="child.key ?? i" v-reveal="i">
-      <component :is="child" class="poster" />
+    <!-- Clé par place : les clés des enfants peuvent se répéter d'un fragment à l'autre -->
+    <li v-for="(child, i) in slotChildren(slots.default?.())" :key="i" v-reveal="i">
+      <!-- Une PosterCard :lift="false" reste immobile -->
+      <component :is="child" :class="{ poster: child.props?.lift !== false }" />
     </li>
   </ul>
 </template>
@@ -29,6 +31,11 @@ const slots = defineSlots<{ default(): VNode[] }>()
 }
 li {
   display: grid;
+}
+/* Appui : la carte redescend à mi-hauteur */
+li > :deep(.poster:active) {
+  transform: translateY(calc(-1 * var(--card-lift) / 2)) rotate(0deg);
+  transition-duration: var(--duration-press);
 }
 @media (min-width: 768px) {
   .poster-grid {

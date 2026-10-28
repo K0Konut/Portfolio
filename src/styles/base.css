@@ -242,11 +242,6 @@ svg {
 .poster:focus-within {
   transform: translateY(calc(-1 * var(--card-lift))) rotate(0deg);
 }
-/* Appui : l'affiche redescend à mi-hauteur */
-.poster:active {
-  transform: translateY(calc(-1 * var(--card-lift) / 2)) rotate(0deg);
-  transition-duration: var(--duration-press);
-}
 /* Affiche qui apparaît au scroll (v-reveal) : les deux transitions se cumulent, seule l'apparition est décalée */
 .poster.reveal {
   transition:
