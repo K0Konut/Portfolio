@@ -1,46 +1,60 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import type { RouteLocationRaw } from 'vue-router'
 import { loadScrollTrigger } from '../../composables/motion'
-import { useLocale } from '../../composables/useLocale'
-import type { TimelineStep } from '../../content/types'
-import BaseTag from '../ui/BaseTag.vue'
-import TextLink from '../ui/TextLink.vue'
+import BaseTag from './BaseTag.vue'
+import TextLink from './TextLink.vue'
 
-/* Parcours de la page À propos (design system § CareerTimeline), du plus ancien au plus récent. Temps fort piloté
-   par le scroll (DA §6) : un fil lime se trace par-dessus le premier, et chaque repère se remplit quand le fil
-   l'atteint. Sans JavaScript, en mouvement réduit ou sans GSAP : fil tracé et repères remplis. */
-const props = defineProps<{ steps: TimelineStep[] }>()
-const { t } = useI18n()
-const { to } = useLocale()
+export interface TimelineItem {
+  tag?: string
+  date?: string
+  title: string
+  subtitle?: string
+  text?: string
+  link?: { to: RouteLocationRaw; label: string }
+}
+
+/* Frise d'étapes, de la plus ancienne à la plus récente (design system § BaseTimeline). Avec `draw`, un fil
+   se trace par-dessus le premier au rythme du scroll, et chaque repère se remplit quand le fil l'atteint.
+   Sans JavaScript, en mouvement réduit, sans GSAP ou sans `draw` : fil tracé et repères remplis. */
+const props = withDefaults(
+  defineProps<{
+    items: TimelineItem[]
+    /** Frise centrée alternée à partir de 1024 px */
+    alternate?: boolean
+    /** Fil tracé au scroll */
+    draw?: boolean
+  }>(),
+  { alternate: true, draw: true },
+)
+defineSlots<{ item(props: { item: TimelineItem; index: number }): unknown }>()
 const root = ref<HTMLElement>()
 const live = ref(false)
 
-const libraries = loadScrollTrigger()
+// Chargement lancé dès la création, pour ne pas attendre le montage
+if (props.draw) loadScrollTrigger()
 
-let loaded: Awaited<typeof libraries>
 let ctx: { revert(): void } | undefined
 let gone = false
 
-onMounted(async () => {
-  loaded = await libraries
-  if (gone || !loaded) return
-  live.value = true
-  animate()
-})
-// D'une langue à l'autre, le routeur garde la page : les nouvelles étapes reçoivent leurs déclencheurs
-watch(() => props.steps, animate, { flush: 'post' })
+onMounted(animate)
+// Le routeur garde la page d'une langue à l'autre : les nouvelles étapes reçoivent leurs déclencheurs
+watch(() => [props.items, props.draw], animate, { flush: 'post' })
 onBeforeUnmount(() => {
   gone = true
   ctx?.revert()
 })
 
-function animate() {
+async function animate() {
+  const loaded = props.draw ? await loadScrollTrigger() : undefined
   const el = root.value
-  if (!el || !loaded) return
-  const { gsap, ScrollTrigger } = loaded
+  if (gone || !el) return
   ctx?.revert()
-  for (const step of el.querySelectorAll('li')) step.classList.remove('on')
+  ctx = undefined
+  for (const step of el.querySelectorAll(':scope > ol > li')) step.classList.remove('on')
+  live.value = !!loaded
+  if (!loaded) return
+  const { gsap, ScrollTrigger } = loaded
   // Le fil et les repères partagent la même ligne : 65 % de la hauteur de l'écran
   ctx = gsap.context(() => {
     gsap.fromTo(
@@ -52,7 +66,7 @@ function animate() {
         scrollTrigger: { trigger: el, start: 'top 65%', end: 'bottom 65%', scrub: 0.4 },
       },
     )
-    for (const step of el.querySelectorAll('li')) {
+    for (const step of el.querySelectorAll(':scope > ol > li')) {
       ScrollTrigger.create({
         trigger: step,
         start: 'top 65%',
@@ -65,22 +79,20 @@ function animate() {
 </script>
 
 <template>
-  <div ref="root" :class="['timeline', { live }]">
+  <div ref="root" :class="['timeline', { live, alternate }]">
     <span class="fill" aria-hidden="true" />
     <ol>
-      <li v-for="(step, i) in steps" :key="i">
-        <BaseTag>{{ step.kind }}</BaseTag>
-        <time>{{ step.dates }}</time>
-        <b>{{ step.title }}</b>
-        <span class="place">{{ step.place }}</span>
-        <p>{{ step.text }}</p>
-        <TextLink
-          v-if="step.caseStudy"
-          variant="standalone"
-          :to="to('etude-de-cas', { slug: step.caseStudy })"
-          icon="arrow-right"
-          >{{ t('about.caseStudy') }}</TextLink
-        >
+      <li v-for="(item, i) in items" :key="i">
+        <slot name="item" :item="item" :index="i">
+          <BaseTag v-if="item.tag">{{ item.tag }}</BaseTag>
+          <time v-if="item.date">{{ item.date }}</time>
+          <b>{{ item.title }}</b>
+          <span v-if="item.subtitle">{{ item.subtitle }}</span>
+          <p v-if="item.text">{{ item.text }}</p>
+          <TextLink v-if="item.link" variant="standalone" :to="item.link.to" icon="arrow-right">{{
+            item.link.label
+          }}</TextLink>
+        </slot>
       </li>
     </ol>
   </div>
@@ -151,29 +163,29 @@ p {
 
 /* Bureau : frise centrée alternée, le fil au milieu, une étape à gauche (texte à droite), la suivante à droite */
 @media (min-width: 1024px) {
-  .timeline {
+  .alternate {
     --wire: calc(50% - var(--border-strong) / 2);
     max-width: none;
   }
-  ol {
+  .alternate ol {
     padding: 0;
   }
-  li {
+  .alternate li {
     width: calc(50% - var(--space-7));
   }
-  li:nth-child(odd) {
+  .alternate li:nth-child(odd) {
     justify-self: start;
     justify-items: end;
     text-align: right;
   }
-  li:nth-child(even) {
+  .alternate li:nth-child(even) {
     justify-self: end;
   }
-  li:nth-child(odd)::before {
+  .alternate li:nth-child(odd)::before {
     left: auto;
     right: calc(-1 * (var(--space-7) + var(--timeline-dot) / 2));
   }
-  li:nth-child(even)::before {
+  .alternate li:nth-child(even)::before {
     left: calc(-1 * (var(--space-7) + var(--timeline-dot) / 2));
   }
 }

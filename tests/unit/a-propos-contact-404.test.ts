@@ -2,7 +2,6 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
-import CareerTimeline from '../../src/components/about/CareerTimeline.vue'
 import SkillCards from '../../src/components/about/SkillCards.vue'
 import BusinessCard from '../../src/components/contact/BusinessCard.vue'
 import BrickRepair from '../../src/components/errors/BrickRepair.vue'
@@ -18,38 +17,13 @@ async function setup() {
 
 afterEach(() => vi.useRealTimers())
 
-describe('CareerTimeline', () => {
-  it('liste les étapes dans l’ordre, avec un lien seulement vers une étude de cas existante', async () => {
-    const steps = [
-      {
-        kind: 'école',
-        dates: '2021 – 2026',
-        title: 'ESIEA',
-        place: 'Paris',
-        text: 'Cycle ingénieur.',
-      },
-      {
-        kind: 'stage',
-        dates: '2025',
-        title: 'CNAM',
-        place: 'Paris',
-        text: 'Stage.',
-        caseStudy: 'stage-cnam',
-      },
-    ]
-    const w = mount(CareerTimeline, { props: { steps }, global: (await setup()).global })
-    expect(w.findAll('ol > li b').map((b) => b.text())).toEqual(['ESIEA', 'CNAM'])
-    expect(w.findAll('a').map((a) => a.attributes('href'))).toEqual(['/fr/projets/stage-cnam'])
-  })
-})
-
 describe('SkillCards', () => {
   it('marque les technos de ce site et renvoie à l’étude de cas du portfolio', async () => {
     const categories = [
       { title: 'front', skills: [{ name: 'Vue.js', site: true }, { name: 'Nuxt' }] },
     ]
     const w = mount(SkillCards, { props: { categories }, global: (await setup()).global })
-    expect(w.findAll('li.site').map((li) => li.text())).toEqual(['Vue.js'])
+    expect(w.findAll('li.highlight').map((li) => li.text())).toEqual(['Vue.js'])
     expect(w.find('.legend a').attributes('href')).toBe('/fr/projets/ce-portfolio')
   })
 })

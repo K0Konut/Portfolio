@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import HomeHero from '../../components/home/HomeHero.vue'
-import ProcessSteps from '../../components/home/ProcessSteps.vue'
 import ProjectPosters from '../../components/projects/ProjectPosters.vue'
 import PageSection from '../../components/sections/PageSection.vue'
 import SectionWave from '../../components/sections/SectionWave.vue'
+import CycleSteps from '../../components/ui/CycleSteps.vue'
 import { PROJETS } from './projets'
+
+const { t, tm } = useI18n()
+const steps = computed(() => tm('method.steps') as { title: string; text: string }[])
 </script>
 
 <template>
@@ -22,7 +27,9 @@ import { PROJETS } from './projets'
       <template #intro
         >Chaque projet passe par les mêmes étapes, du besoin jusqu’à la mise en ligne.</template
       >
-      <ProcessSteps />
+      <CycleSteps :steps="steps">
+        <template #center>{{ t('method.loop') }}</template>
+      </CycleSteps>
     </PageSection>
     <SectionWave :seed="4" from="vif" to="nuit" />
   </div>

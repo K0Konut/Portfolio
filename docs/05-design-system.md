@@ -401,7 +401,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 - **Rôle** : la carte « affiche » de la DA (§5) : une surface d'un fond de section, posée sur une autre, éventuellement inclinée, qui se soulève au survol.
 - **Options** : `fond` (`nuit` par défaut ; réaffecte les rôles comme une section) ; `tilt` (multiple de `--poster-tilt`, 0 par défaut ; appliqué à partir de 1024 px seulement) ; `lift` (se soulève de `--card-lift` et se redresse au survol ou au focus d'un élément intérieur, vrai par défaut) ; `as` (balise, `div` par défaut, `article` pour un contenu autonome).
-- **Style** : rayon `--radius-md`, marges intérieures `clamp(--space-5, 4vw, --space-7)`. Pas d'ombre (principe « plat »).
+- **Style** : rayon `--radius-md`, marges intérieures `clamp(--space-5, 8 %, --space-7)` (en part de la largeur de la place : serrées dans une grille de cinq, larges pour une carte seule). Pas d'ombre (principe « plat »).
 - **Apparition** : compatible avec `v-reveal` sur le même élément (les transitions d'apparition et de soulèvement se cumulent).
 - **Animations réduites** : `--poster-tilt` et `--card-lift` valent 0 : carte droite, sans soulèvement.
 

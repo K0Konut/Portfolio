@@ -5,7 +5,6 @@ import TopoBackground from '../../components/fonds/TopoBackground.vue'
 import LetterReveal from '../../components/textes/LetterReveal.vue'
 import DeviceFrame from '../../components/projects/DeviceFrame.vue'
 import ProjectCard from '../../components/projects/ProjectCard.vue'
-import StatBlock from '../../components/case/StatBlock.vue'
 import AppFooter from '../../components/layout/AppFooter.vue'
 import AppHeader from '../../components/layout/AppHeader.vue'
 import LangSwitch from '../../components/layout/LangSwitch.vue'
@@ -18,13 +17,24 @@ import BaseIcon from '../../components/ui/BaseIcon.vue'
 import BaseTag from '../../components/ui/BaseTag.vue'
 import CopyButton from '../../components/ui/CopyButton.vue'
 import TextLink from '../../components/ui/TextLink.vue'
+import BaseTimeline from '../../components/ui/BaseTimeline.vue'
+import DefinitionList from '../../components/ui/DefinitionList.vue'
+import DotList from '../../components/ui/DotList.vue'
+import NextLink from '../../components/ui/NextLink.vue'
+import NumberedSteps from '../../components/ui/NumberedSteps.vue'
+import PosterCard from '../../components/ui/PosterCard.vue'
+import StatBlock from '../../components/ui/StatBlock.vue'
+import ContactLinks from '../../components/site/ContactLinks.vue'
+import fr from '../../i18n/fr.json'
 import { ICONS } from '../../components/ui/icons'
 import { FONDS as FOND_CLASSES } from './fonds'
+import CycleStepsDemo from './demos/CycleStepsDemo.vue'
 import DragToSnapDemo from './demos/DragToSnapDemo.vue'
 import MobileMenuDemo from './demos/MobileMenuDemo.vue'
 import RevealDemo from './demos/RevealDemo.vue'
 import ScrollParallaxDemo from './demos/ScrollParallaxDemo.vue'
 import SkipLinkDemo from './demos/SkipLinkDemo.vue'
+import StickyTocDemo from './demos/StickyTocDemo.vue'
 
 /* Catalogue de développement (design system v1.2 §6) : une description par composant, dont la page tire
    la démo, le panneau de réglages, le code et le tableau des options. */
@@ -84,18 +94,9 @@ export const PLANNED: Record<Family, string[]> = {
   Fonds: [],
   'Textes animés': [],
   Animations: [],
-  Composants: [
-    'PosterCard',
-    'DotList',
-    'DefinitionList',
-    'BaseTimeline',
-    'CycleSteps',
-    'NumberedSteps',
-    'StickyToc',
-    'NextLink',
-  ],
+  Composants: [],
   'Mise en page': ['PosterGrid', 'BentoGrid'],
-  Site: ['ContactLinks'],
+  Site: [],
 }
 
 export const FONDS = FOND_CLASSES.map((f) => f.cls.slice('fond-'.length) as Fond)
@@ -112,6 +113,26 @@ const list = (text: unknown) =>
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+const STEPS = fr.method.steps
+const TIMELINE = [
+  { tag: 'lycée', date: '2019 – 2021', title: 'Bac STI2D', subtitle: 'Lycée', text: 'Le déclic.' },
+  {
+    tag: 'école',
+    date: '2021 – 2026',
+    title: 'Cycle ingénieur',
+    subtitle: 'ESIEA, Paris',
+    text: 'Projets logiciels en équipe.',
+  },
+  {
+    tag: 'stage',
+    date: '2025',
+    title: 'Stage de développement',
+    subtitle: 'CNAM',
+    text: 'Un code privé, montré par son process.',
+    link: { to: '/fr/projets/stage-cnam', label: 'Voir l’étude de cas' },
+  },
+  { tag: 'job étudiant', title: 'Job étudiant', text: 'Ce que ce job a apporté.' },
+]
 const attr = (name: string, value: unknown) => (value ? ` ${name}="${quote(value)}"` : '')
 
 export const ENTRIES: Entry[] = [
@@ -498,6 +519,54 @@ export const ENTRIES: Entry[] = [
     states: true,
   },
   {
+    id: 'poster-card',
+    name: 'PosterCard',
+    family: 'Composants',
+    description:
+      'Carte « affiche » : la surface d’un fond posée sur une autre, inclinée sur bureau, qui se soulève et se redresse au survol. Plate, sans ombre ; droite et immobile en mouvement réduit.',
+    component: PosterCard,
+    props: [
+      { name: 'fond', type: 'Fond', default: 'nuit', description: 'Fond de la carte' },
+      {
+        name: 'tilt',
+        type: 'number',
+        default: '0',
+        description: 'Inclinaison, en multiple de `--poster-tilt` (à partir de 1024 px)',
+      },
+      {
+        name: 'lift',
+        type: 'boolean',
+        default: 'true',
+        description: 'Se soulève et se redresse au survol ou au focus',
+      },
+      { name: 'as', type: 'string', default: 'div', description: 'Balise (`article`…)' },
+    ],
+    controls: [
+      {
+        key: 'slot',
+        label: 'Contenu',
+        type: 'text',
+        initial: 'Une affiche collée sur la section.',
+      },
+      { key: 'fond', label: 'Fond', type: 'select', initial: 'nuit', options: FONDS },
+      {
+        key: 'tilt',
+        label: 'Inclinaison',
+        type: 'number',
+        initial: 1,
+        min: -2,
+        max: 2,
+        step: 0.25,
+      },
+      { key: 'lift', label: 'Se soulève', type: 'boolean', initial: true },
+      { key: 'as', label: 'Balise', type: 'select', initial: 'div', options: ['div', 'article'] },
+    ],
+    slots: [{ name: 'défaut', description: 'Le contenu' }],
+    fond: 'lime',
+    frame: 'max-width: 24rem',
+    states: true,
+  },
+  {
     id: 'device-frame',
     name: 'DeviceFrame',
     family: 'Composants',
@@ -586,6 +655,61 @@ export const ENTRIES: Entry[] = [
     states: true,
   },
   {
+    id: 'dot-list',
+    name: 'DotList',
+    family: 'Composants',
+    description:
+      'Liste courte à pastilles ; les lignes mises en avant ont une pastille violet vif cernée de crème. La couleur porte une information : la page affiche une légende.',
+    component: DotList,
+    props: [{ name: 'items', type: '{ name, highlight? }[]', description: 'Les lignes' }],
+    controls: [
+      {
+        key: 'names',
+        label: 'Lignes (virgules)',
+        type: 'text',
+        initial: 'Vue.js, Nuxt, TypeScript, Docker',
+      },
+      {
+        key: 'highlight',
+        label: 'Mises en avant (virgules)',
+        type: 'text',
+        initial: 'Vue.js, TypeScript',
+      },
+    ],
+    bind: (v) => ({
+      items: list(v.names).map((name) => ({ name, highlight: list(v.highlight).includes(name) })),
+    }),
+    code: () => '<DotList :items="items" />',
+  },
+  {
+    id: 'definition-list',
+    name: 'DefinitionList',
+    family: 'Composants',
+    description:
+      'Fiche d’informations : un libellé et une valeur par ligne, et en dessous une précision facultative.',
+    component: DefinitionList,
+    props: [{ name: 'items', type: '{ label, value, note? }[]', description: 'Les lignes' }],
+    controls: [
+      { key: 'value', label: 'Valeur de la dernière ligne', type: 'text', initial: 'Code privé' },
+      {
+        key: 'note',
+        label: 'Précision',
+        type: 'text',
+        initial: 'Le code appartient au CNAM ; l’étude de cas montre le process.',
+      },
+    ],
+    bind: (v) => ({
+      items: [
+        { label: 'Type', value: 'Stage' },
+        { label: 'Rôle', value: 'Développeur full-stack' },
+        { label: 'Stack', value: 'Vue 3 · TypeScript · Java' },
+        { label: 'Code', value: v.value, note: v.note || undefined },
+      ],
+    }),
+    code: () => '<DefinitionList :items="items" />',
+    frame: 'max-width: 32rem',
+  },
+  {
     id: 'stat-block',
     name: 'StatBlock',
     family: 'Composants',
@@ -593,7 +717,10 @@ export const ENTRIES: Entry[] = [
       'Résultat chiffré : le chiffre en grand, son libellé, et pour une comparaison deux barres qui se remplissent une fois à l’arrivée à l’écran.',
     component: StatBlock,
     props: [
-      { name: 'stat', type: 'Stat', description: 'value, label et compare (before, after)' },
+      { name: 'value', type: 'string', description: 'Le chiffre' },
+      { name: 'label', type: 'string', description: 'Son libellé' },
+      { name: 'before', type: 'number', description: 'Valeur avant (avec `after`, les barres)' },
+      { name: 'after', type: 'number', description: 'Valeur après' },
       { name: 'index', type: 'number', description: 'Rang, pour le décalage d’apparition' },
     ],
     controls: [
@@ -609,15 +736,127 @@ export const ENTRIES: Entry[] = [
       { key: 'after', label: 'Après', type: 'number', initial: 6, min: 0, max: 2000 },
     ],
     bind: (v) => ({
-      stat: {
-        value: v.value,
-        label: v.label,
-        compare: v.compare ? { before: v.before, after: v.after } : undefined,
-      },
+      value: v.value,
+      label: v.label,
+      before: v.compare ? v.before : undefined,
+      after: v.compare ? v.after : undefined,
     }),
     code: (v) =>
-      `<StatBlock :stat="{ value: '${quote(js(v.value))}', label: '${quote(js(v.label))}'${v.compare ? `, compare: { before: ${v.before}, after: ${v.after} }` : ''} }" />`,
+      `<StatBlock${attr('value', v.value)}${attr('label', v.label)}${v.compare ? ` :before="${v.before}" :after="${v.after}"` : ''} />`,
     frame: 'max-width: 20rem',
+  },
+  {
+    id: 'base-timeline',
+    name: 'BaseTimeline',
+    family: 'Composants',
+    description:
+      'Frise d’étapes, de la plus ancienne à la plus récente : centrée alternée sur bureau, fil à gauche ailleurs. Avec `draw`, un second fil se trace au rythme du scroll et remplit les repères qu’il atteint ; sinon, et en mouvement réduit, tout est tracé.',
+    component: BaseTimeline,
+    props: [
+      {
+        name: 'items',
+        type: '{ tag?, date?, title, subtitle?, text?, link? }[]',
+        description: 'Les étapes ; `link` : `{ to, label }`',
+      },
+      {
+        name: 'alternate',
+        type: 'boolean',
+        default: 'true',
+        description: 'Centrée alternée à partir de 1024 px',
+      },
+      { name: 'draw', type: 'boolean', default: 'true', description: 'Fil tracé au scroll' },
+    ],
+    controls: [
+      { key: 'count', label: 'Étapes', type: 'number', initial: 4, min: 1, max: 4 },
+      { key: 'alternate', label: 'Alternée (bureau)', type: 'boolean', initial: true },
+      { key: 'draw', label: 'Tracée au scroll', type: 'boolean', initial: true },
+    ],
+    slots: [{ name: 'item', description: 'Le contenu d’une étape ; reçoit `item` et `index`' }],
+    bind: (v) => ({
+      items: TIMELINE.slice(0, Number(v.count)),
+      alternate: v.alternate,
+      draw: v.draw,
+    }),
+    code: (v) =>
+      `<BaseTimeline :items="items"${v.alternate ? '' : ' :alternate="false"'}${v.draw ? '' : ' :draw="false"'} />`,
+    screen: true,
+  },
+  {
+    id: 'cycle-steps',
+    name: 'CycleSteps',
+    family: 'Composants',
+    description:
+      'Étapes d’un cycle : anneau numéroté sur bureau, avec un arc fléché de l’une à l’autre et le retour en pointillés ; frise verticale qui remonte à la première sur mobile et tablette. Les étapes apparaissent une à une.',
+    component: CycleStepsDemo,
+    props: [{ name: 'steps', type: '{ title, text }[]', description: 'Les étapes, dans l’ordre' }],
+    controls: [
+      { key: 'count', label: 'Étapes', type: 'number', initial: 6, min: 3, max: 6 },
+      {
+        key: 'center',
+        label: 'Phrase du retour (slot)',
+        type: 'text',
+        initial: 'Les retours relancent un tour.',
+      },
+    ],
+    slots: [{ name: 'center', description: 'La phrase du retour, au centre de l’anneau' }],
+    code: (v) =>
+      v.center
+        ? `<CycleSteps :steps="steps">\n  <template #center>${v.center}</template>\n</CycleSteps>`
+        : '<CycleSteps :steps="steps" />',
+    fond: 'vif',
+  },
+  {
+    id: 'numbered-steps',
+    name: 'NumberedSteps',
+    family: 'Composants',
+    description:
+      'Étapes détaillées : le numéro en grand, le nom et sa phrase ; un filet relie les numéros. Les étapes apparaissent une à une.',
+    component: NumberedSteps,
+    props: [{ name: 'steps', type: '{ title, text }[]', description: 'Les étapes, dans l’ordre' }],
+    controls: [{ key: 'count', label: 'Étapes', type: 'number', initial: 4, min: 1, max: 6 }],
+    bind: (v) => ({ steps: STEPS.slice(0, Number(v.count)) }),
+    code: () => '<NumberedSteps :steps="steps" />',
+  },
+  {
+    id: 'sticky-toc',
+    name: 'StickyToc',
+    family: 'Composants',
+    description:
+      'Sommaire collant d’une page longue, sur bureau seulement : il suit le bloc en cours (le dernier dont le haut a passé le premier tiers de l’écran). Faites défiler dans le cadre.',
+    component: StickyTocDemo,
+    props: [
+      { name: 'items', type: '{ id, label }[]', description: 'Les blocs de la page' },
+      {
+        name: 'label',
+        type: 'string',
+        default: 'Sommaire',
+        description: 'Nom accessible de la navigation',
+      },
+    ],
+    controls: [{ key: 'count', label: 'Blocs', type: 'number', initial: 3, min: 2, max: 6 }],
+    code: () => '<StickyToc :items="blocks" />',
+    screen: true,
+  },
+  {
+    id: 'next-link',
+    name: 'NextLink',
+    family: 'Composants',
+    description:
+      'Grand lien vers la suite : un libellé, le titre en grand et une flèche, qui avance au survol pendant que le titre se souligne.',
+    component: NextLink,
+    props: [
+      { name: 'label', type: 'string', description: 'Le libellé (« Projet suivant »)' },
+      { name: 'title', type: 'string', description: 'Le titre' },
+      { name: 'to', type: 'RouteLocationRaw', description: 'La page' },
+    ],
+    controls: [
+      { key: 'label', label: 'Libellé', type: 'text', initial: 'Projet suivant' },
+      { key: 'title', label: 'Titre', type: 'text', initial: 'Stage au CNAM' },
+    ],
+    bind: (v) => ({ ...v, to: '/fr/projets/stage-cnam' }),
+    code: (v) => `<NextLink${attr('label', v.label)}${attr('title', v.title)} :to="next" />`,
+    fond: 'rose',
+    states: true,
   },
   {
     id: 'page-section',
@@ -752,6 +991,28 @@ export const ENTRIES: Entry[] = [
     controls: [],
     code: () => '<SkipLink />',
     frame: 'height: 6rem',
+  },
+  {
+    id: 'contact-links',
+    name: 'ContactLinks',
+    family: 'Site',
+    description:
+      'Les coordonnées, au même format partout : l’adresse à copier, puis le CV de la langue de la page, LinkedIn et GitHub. Valeurs lues dans `SITE`.',
+    component: ContactLinks,
+    props: [
+      {
+        name: 'cvLabel',
+        type: 'string',
+        default: 'Télécharger le CV',
+        description: 'Texte du bouton du CV',
+      },
+      { name: 'addressLabel', type: 'string', description: 'Libellé au-dessus de l’adresse' },
+    ],
+    controls: [
+      { key: 'cvLabel', label: 'Bouton du CV', type: 'text', initial: 'Télécharger le CV' },
+      { key: 'addressLabel', label: 'Libellé de l’adresse', type: 'text', initial: 'Mon adresse' },
+    ],
+    bind: (v) => ({ cvLabel: v.cvLabel || undefined, addressLabel: v.addressLabel || undefined }),
   },
 ]
 

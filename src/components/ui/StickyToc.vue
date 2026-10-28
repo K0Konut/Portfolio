@@ -2,10 +2,14 @@
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-/* Sommaire collant de l'étude de cas, sur bureau (design system § CaseToc). Le bloc en cours de lecture
+/* Sommaire collant d'une page longue, sur bureau (design system § StickyToc). Le bloc en cours de lecture
    est le dernier dont le haut a passé le premier tiers de l'écran : un IntersectionObserver signale
    chaque passage de cette ligne, et la position n'est lue qu'à ce moment-là. */
-const props = defineProps<{ items: { id: string; label: string }[] }>()
+const props = defineProps<{
+  items: { id: string; label: string }[]
+  /** Nom accessible de la navigation, « Sommaire » par défaut */
+  label?: string
+}>()
 const { t } = useI18n()
 const current = ref(props.items[0]?.id)
 let observer: IntersectionObserver | undefined
@@ -26,13 +30,13 @@ function observe() {
 }
 
 onMounted(observe)
-// D'une étude de cas à la suivante, le routeur garde la page : on observe les nouveaux blocs
+// Le routeur garde la page quand seuls ses blocs changent (étude de cas suivante) : on observe les nouveaux
 watch(() => props.items, observe, { flush: 'post' })
 onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
-  <nav class="toc" :aria-label="t('case.toc')">
+  <nav class="toc" :aria-label="label ?? t('case.toc')">
     <ol>
       <li v-for="item in items" :key="item.id">
         <a :href="`#${item.id}`" :aria-current="item.id === current ? 'location' : undefined">{{
