@@ -1,7 +1,7 @@
 /** Appareil du cadre de capture (design system § DeviceFrame) */
 export type Device = 'browser' | 'phone'
 
-/** Fiche d'une étude de cas (design system § MetaList) */
+/** Fiche d'une étude de cas, montrée en DefinitionList */
 export interface ProjectMeta {
   type: string
   role: string
@@ -12,11 +12,12 @@ export interface ProjectMeta {
   privateCode?: string
 }
 
-/** Résultat chiffré (design system § StatBlock) ; `compare` dessine les barres avant / après */
+/** Résultat chiffré (design system § StatBlock) ; `before` et `after` dessinent les barres */
 export interface Stat {
   value: string
   label: string
-  compare?: { before: number; after: number }
+  before?: number
+  after?: number
 }
 
 /** Résumé d'un projet : ce que montrent les cartes (accueil, page Projets). Le contenu complet arrive
@@ -37,7 +38,7 @@ export interface ProjectSummary {
   }
 }
 
-/** Une étape du parcours (design system § CareerTimeline), du plus ancien au plus récent */
+/** Une étape du parcours, du plus ancien au plus récent, montrée en BaseTimeline */
 export interface TimelineStep {
   /** Étiquette : lycée, école, stage ou job étudiant */
   kind: string
@@ -50,7 +51,7 @@ export interface TimelineStep {
   caseStudy?: string
 }
 
-/** Une catégorie de compétences (design system § SkillCards) ; `site` : techno utilisée par ce site */
+/** Une catégorie de compétences ; `site` : techno utilisée par ce site (mise en avant dans DotList) */
 export interface SkillCategory {
   title: string
   skills: { name: string; site?: boolean }[]

@@ -13,6 +13,7 @@
     "text": "Page en construction."
   },
   "ui": {
+    "toc": "Sommaire",
     "skip": "Aller au contenu",
     "newTab": "(nouvel onglet)",
     "copy": "Copier",
@@ -80,7 +81,6 @@
     ]
   },
   "case": {
-    "toc": "Sommaire",
     "next": "Projet suivant",
     "all": "Tous les projets",
     "after": "Suite"

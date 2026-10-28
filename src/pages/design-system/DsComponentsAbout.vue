@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import SkillCards from '../../components/about/SkillCards.vue'
-import CareerTimeline from '../../components/about/CareerTimeline.vue'
 import BusinessCard from '../../components/contact/BusinessCard.vue'
 import BrickRepair from '../../components/errors/BrickRepair.vue'
 import PageSection from '../../components/sections/PageSection.vue'
 import SectionWave from '../../components/sections/SectionWave.vue'
+import BaseTimeline from '../../components/ui/BaseTimeline.vue'
+import { useLocale } from '../../composables/useLocale'
 import type { SkillCategory, TimelineStep } from '../../content/types'
 
 // Contenu d'exemple de la maquette (le vrai contenu arrive avec le chargeur de contenu)
@@ -39,6 +42,20 @@ const STEPS: TimelineStep[] = [
     text: 'Une ou deux lignes sur ce que ce job a apporté.',
   },
 ]
+const { t } = useI18n()
+const { to } = useLocale()
+const ITEMS = computed(() =>
+  STEPS.map((step) => ({
+    tag: step.kind,
+    date: step.dates,
+    title: step.title,
+    subtitle: step.place,
+    text: step.text,
+    link: step.caseStudy
+      ? { to: to('etude-de-cas', { slug: step.caseStudy }), label: t('about.caseStudy') }
+      : undefined,
+  })),
+)
 const site = (...names: string[]) => names.map((name) => ({ name, site: true }))
 const other = (...names: string[]) => names.map((name) => ({ name }))
 const SKILLS: SkillCategory[] = [
@@ -63,11 +80,11 @@ const SKILLS: SkillCategory[] = [
 <template>
   <!-- Composants des pages À propos, Contact et 404 -->
   <div aria-label="Composants À propos, Contact et 404">
-    <PageSection title="CareerTimeline">
+    <PageSection title="BaseTimeline">
       <template #intro
         >Le parcours : le fil se trace au scroll, les repères se remplissent.</template
       >
-      <CareerTimeline :steps="STEPS" />
+      <BaseTimeline :items="ITEMS" />
     </PageSection>
     <SectionWave :seed="3" from="nuit" to="violet" />
     <PageSection fond="violet" title="SkillCards">

@@ -13,6 +13,7 @@
     "text": "Page under construction."
   },
   "ui": {
+    "toc": "Contents",
     "skip": "Skip to content",
     "newTab": "(new tab)",
     "copy": "Copy",
@@ -80,7 +81,6 @@
     ]
   },
   "case": {
-    "toc": "Contents",
     "next": "Next project",
     "all": "All projects",
     "after": "What next"

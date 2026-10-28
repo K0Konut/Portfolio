@@ -1,29 +1,35 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { Stat } from '../../content/types'
 
-/* Résultat chiffré (design system § StatBlock) : le chiffre en grand, son libellé ; pour un avant / après,
+/* Résultat chiffré (design system § StatBlock) : le chiffre en grand, son libellé ; avec `before` et `after`,
    deux barres proportionnelles qui se remplissent une fois à l'arrivée à l'écran (v-reveal), l'« après »
    --stagger-bar après l'« avant ». Pas de compteur qui défile. Les barres sont décoratives : tout est dans le texte. */
-const props = defineProps<{ stat: Stat; index?: number }>()
+const props = defineProps<{
+  value: string
+  label: string
+  before?: number
+  after?: number
+  /** Rang, pour le décalage d'apparition */
+  index?: number
+}>()
 const { t } = useI18n()
 
 const bars = computed(() => {
-  const compare = props.stat.compare
-  if (!compare) return []
-  const max = Math.max(compare.before, compare.after) || 1
+  const { before, after } = props
+  if (before === undefined || after === undefined) return []
+  const max = Math.max(before, after) || 1
   return [
-    { key: 'before', label: t('stat.before'), value: compare.before, width: compare.before / max },
-    { key: 'after', label: t('stat.after'), value: compare.after, width: compare.after / max },
+    { key: 'before', label: t('stat.before'), value: before, width: before / max },
+    { key: 'after', label: t('stat.after'), value: after, width: after / max },
   ]
 })
 </script>
 
 <template>
   <div v-reveal="index" class="stat">
-    <span class="value display">{{ stat.value }}</span>
-    <span class="label">{{ stat.label }}</span>
+    <span class="value display">{{ value }}</span>
+    <span class="label">{{ label }}</span>
     <div v-if="bars.length" class="bars">
       <div v-for="bar in bars" :key="bar.key" :class="['bar', bar.key]">
         <span>{{ bar.label }}</span>

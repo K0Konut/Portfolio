@@ -401,7 +401,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 - **Rôle** : la carte « affiche » de la DA (§5) : une surface d'un fond de section, posée sur une autre, éventuellement inclinée, qui se soulève au survol.
 - **Options** : `fond` (`nuit` par défaut ; réaffecte les rôles comme une section) ; `tilt` (multiple de `--poster-tilt`, 0 par défaut ; appliqué à partir de 1024 px seulement) ; `lift` (se soulève de `--card-lift` et se redresse au survol ou au focus d'un élément intérieur, vrai par défaut) ; `as` (balise, `div` par défaut, `article` pour un contenu autonome).
-- **Style** : rayon `--radius-md`, marges intérieures `clamp(--space-5, 4vw, --space-7)`. Pas d'ombre (principe « plat »).
+- **Style** : rayon `--radius-md`, marges intérieures `clamp(--space-5, 8 %, --space-7)` (en part de la largeur de la place : serrées dans une grille de cinq, larges pour une carte seule). Pas d'ombre (principe « plat »).
 - **Apparition** : compatible avec `v-reveal` sur le même élément (les transitions d'apparition et de soulèvement se cumulent).
 - **Animations réduites** : `--poster-tilt` et `--card-lift` valent 0 : carte droite, sans soulèvement.
 
@@ -457,7 +457,7 @@ Repris du header existant du propriétaire, adapté à la DA.
 ### `CycleSteps`
 
 - **Rôle** : des étapes qui forment un cycle (la méthode : besoin → déploiement, puis un nouveau tour).
-- **Options** : `steps` (`title`, `text`). Slot `center` : la phrase du retour (« Les retours relancent un tour. »).
+- **Options** : `steps` (`title`, `text`), en nombre pair (aucune étape en bas de l’anneau). Slot `center` : la phrase du retour (« Les retours relancent un tour. »).
 - **Bureau (≥ 1024 px)** : un anneau (SVG, `aria-hidden`) de 400 px, les étapes numérotées dessus, réparties dans le sens horaire depuis le haut ; des arcs fléchés de l'une à l'autre ; l'arc de la dernière vers la première en pointillés. Les textes à droite pour la première moitié, à gauche pour la seconde, alignés vers l'anneau ; la phrase du retour au centre. La dernière étape a un repère plein `--color-action`.
 - **Mobile et tablette** : une frise verticale (repères ronds reliés par un fil), puis une ligne qui remonte par la gauche jusqu'à la première étape, avec la phrase du retour en bas.
 - **Accessibilité** : `<ol>` numérotée ; l'anneau est décoratif.

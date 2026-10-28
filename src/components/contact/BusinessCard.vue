@@ -1,38 +1,26 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useLocale } from '../../composables/useLocale'
 import { SITE } from '../../content/site'
 import PageIntro from '../sections/PageIntro.vue'
-import BaseButton from '../ui/BaseButton.vue'
-import CopyButton from '../ui/CopyButton.vue'
-import TextLink from '../ui/TextLink.vue'
+import ContactLinks from '../site/ContactLinks.vue'
+import PosterCard from '../ui/PosterCard.vue'
 
 /* Page Contact (design system § BusinessCard) : toute la page tient sur une carte de visite crème posée
    sur le violet, droite et immobile ; seuls ses liens et boutons réagissent. */
 const { t } = useI18n()
-const { locale } = useLocale()
 </script>
 
 <template>
   <PageIntro :title="t('business.title')" center full>
     {{ t('business.intro') }}
     <template #after>
-      <div v-reveal="2" class="card fond-creme">
+      <PosterCard v-reveal="2" class="card" fond="creme" :lift="false">
         <div class="who">
           <b class="display">{{ SITE.name }}</b>
           <span>{{ t('business.role') }}</span>
         </div>
-        <div class="lines">
-          <CopyButton :value="SITE.email" />
-          <div class="links">
-            <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
-              t('business.cv')
-            }}</BaseButton>
-            <TextLink variant="standalone" :href="SITE.linkedin">LinkedIn</TextLink>
-            <TextLink variant="standalone" :href="SITE.github">GitHub</TextLink>
-          </div>
-        </div>
-      </div>
+        <ContactLinks :cv-label="t('business.cv')" />
+      </PosterCard>
     </template>
   </PageIntro>
 </template>
@@ -46,9 +34,8 @@ const { locale } = useLocale()
   align-content: space-between;
   gap: var(--space-5);
   margin-top: var(--space-5);
-  padding: clamp(var(--space-5), 4vw, var(--space-7));
-  border-radius: var(--radius-md);
   text-align: start;
+  --contact-links-gap: var(--space-3);
 }
 @media (max-width: 767px) {
   .card {
@@ -64,15 +51,5 @@ const { locale } = useLocale()
   margin-top: var(--space-2);
   color: var(--color-text-subtle);
   font-weight: var(--weight-medium);
-}
-.lines {
-  display: grid;
-  gap: var(--space-3);
-}
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-5);
 }
 </style>

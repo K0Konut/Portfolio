@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import CaseNav from '../../components/case/CaseNav.vue'
-import CaseToc from '../../components/case/CaseToc.vue'
-import MetaList from '../../components/case/MetaList.vue'
-import StatBlock from '../../components/case/StatBlock.vue'
 import ProjectBento from '../../components/projects/ProjectBento.vue'
 import PageSection from '../../components/sections/PageSection.vue'
 import SectionWave from '../../components/sections/SectionWave.vue'
+import DefinitionList from '../../components/ui/DefinitionList.vue'
+import StatBlock from '../../components/ui/StatBlock.vue'
+import StickyToc from '../../components/ui/StickyToc.vue'
 import type { ProjectMeta, Stat } from '../../content/types'
 import { PROJETS, TODO } from './projets'
 
@@ -31,8 +32,21 @@ const STATS: Stat[] = [
   {
     value: '6',
     label: 'fonds de section, contre un seul dans la première direction artistique',
-    compare: { before: 1, after: 6 },
+    before: 1,
+    after: 6,
   },
+]
+// La fiche de l'étude de cas ; un code privé : la mention et sa raison, jamais un bouton désactivé
+const { t } = useI18n()
+const fiche = (meta: ProjectMeta) => [
+  { label: t('meta.type'), value: meta.type },
+  { label: t('meta.role'), value: meta.role },
+  { label: t('meta.duration'), value: meta.duration },
+  { label: t('meta.team'), value: meta.team },
+  { label: t('meta.stack'), value: meta.stack.join(' · ') },
+  ...(meta.privateCode
+    ? [{ label: t('meta.code'), value: t('meta.private'), note: meta.privateCode }]
+    : []),
 ]
 const BLOCKS = [
   { id: 'ds-contexte', label: 'Contexte' },
@@ -51,24 +65,24 @@ const BLOCKS = [
       <ProjectBento :projects="PROJETS" />
     </PageSection>
     <SectionWave :seed="2" from="nuit" to="violet" />
-    <PageSection fond="violet" title="MetaList">
+    <PageSection fond="violet" title="DefinitionList">
       <template #intro
         >La fiche de l’étude de cas ; avec un code privé, la mention et sa raison.</template
       >
       <div class="fiches">
-        <MetaList :meta="META" />
-        <MetaList :meta="META_PRIVE" />
+        <DefinitionList :items="fiche(META)" />
+        <DefinitionList :items="fiche(META_PRIVE)" />
       </div>
     </PageSection>
     <SectionWave :seed="5" from="violet" to="nuit" />
-    <PageSection title="CaseToc et StatBlock">
+    <PageSection title="StickyToc et StatBlock">
       <div class="case">
-        <CaseToc :items="BLOCKS" />
+        <StickyToc :items="BLOCKS" />
         <div class="blocks">
           <section v-for="block in BLOCKS" :id="block.id" :key="block.id" class="block">
             <h3 class="display">{{ block.label }}</h3>
             <div v-if="block.id === 'ds-resultats'" class="stats">
-              <StatBlock v-for="(stat, i) in STATS" :key="stat.label" :stat="stat" :index="i" />
+              <StatBlock v-for="(stat, i) in STATS" :key="stat.label" v-bind="stat" :index="i" />
             </div>
             <p v-else>
               Un bloc de l’étude de cas. Le sommaire, à gauche sur bureau, suit le bloc en cours de

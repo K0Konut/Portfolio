@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed, useId } from 'vue'
 
-/* Méthode en cycle de six étapes (design system § ProcessSteps, variante « cycle ») : anneau numéroté
-   sur bureau, frise verticale en boucle sur mobile et tablette. L'étape k est à 30° + 60°·k, dans le sens
-   horaire depuis le haut ; le retour de 6 vers 1 est en pointillés. */
-const { t, tm } = useI18n()
-const steps = computed(() => tm('method.steps') as { title: string; text: string }[])
+/* Étapes d'un cycle (design system § CycleSteps) : anneau numéroté sur bureau, frise verticale en boucle sur
+   mobile et tablette. Les étapes sont réparties dans le sens horaire depuis le haut ; le retour de la
+   dernière vers la première est en pointillés. Le slot `center` porte la phrase du retour.
+   Un nombre pair d'étapes : avec un nombre impair, une étape tomberait en bas de l'anneau, sans place pour son texte. */
+const props = defineProps<{ steps: { title: string; text: string }[] }>()
+const tip = `${useId()}-tip`
 
 const R = 170
 const GAP = 10
@@ -17,25 +17,28 @@ const point = (deg: number, r = R) => {
     number,
   ]
 }
-const angle = (k: number) => 30 + 60 * k
+const angle = (k: number) => (360 / props.steps.length) * (k + 0.5)
 const arcs = computed(() =>
-  steps.value.map((_, k) => {
+  props.steps.map((_, k) => {
     const [x1, y1] = point(angle(k) + GAP)
     const [x2, y2] = point(angle(k + 1) - GAP)
-    return { d: `M${x1} ${y1}A${R} ${R} 0 0 1 ${x2} ${y2}`, back: k === steps.value.length - 1 }
+    return { d: `M${x1} ${y1}A${R} ${R} 0 0 1 ${x2} ${y2}`, back: k === props.steps.length - 1 }
   }),
 )
-const dots = computed(() => steps.value.map((_, k) => point(angle(k))))
-/* Place du texte de chaque étape autour de l'anneau, déduite de son angle : côté, hauteur (en rayons),
+const dots = computed(() => props.steps.map((_, k) => point(angle(k))))
+/* Chaque étape et la place de son texte autour de l'anneau, déduite de son angle : côté, hauteur (en rayons),
    et rapprochement des étapes hautes et basses vers l'anneau */
-const place = (k: number) => {
-  const a = (angle(k) * Math.PI) / 180
-  const dy = -Math.cos(a)
-  return {
-    side: Math.sin(a) >= 0 ? 'droite' : 'gauche',
-    style: { '--dy': dy.toFixed(3), '--sh': Math.abs(dy) > 0.1 ? 0.4 : 0 },
-  }
-}
+const places = computed(() =>
+  props.steps.map((step, k) => {
+    const a = (angle(k) * Math.PI) / 180
+    const dy = -Math.cos(a)
+    return {
+      step,
+      side: Math.sin(a) >= 0 ? 'droite' : 'gauche',
+      style: { '--dy': dy.toFixed(3), '--sh': Math.abs(dy) > 0.1 ? 0.4 : 0 },
+    }
+  }),
+)
 /** Rayon de l'anneau, en part du côté du SVG (partagé avec le CSS) */
 const RING = { '--ring': R / 400 }
 </script>
@@ -45,7 +48,7 @@ const RING = { '--ring': R / 400 }
     <svg viewBox="0 0 400 400" aria-hidden="true">
       <defs>
         <marker
-          id="ring-tip"
+          :id="tip"
           viewBox="0 0 10 10"
           refX="8"
           refY="5"
@@ -61,7 +64,7 @@ const RING = { '--ring': R / 400 }
         v-for="(arc, k) in arcs"
         :key="k"
         :class="['line', { back: arc.back }]"
-        marker-end="url(#ring-tip)"
+        :marker-end="`url(#${tip})`"
         :d="arc.d"
       />
       <g v-for="([x, y], k) in dots" :key="`dot-${k}`" :class="{ last: k === dots.length - 1 }">
@@ -71,11 +74,11 @@ const RING = { '--ring': R / 400 }
     </svg>
     <ol class="steps">
       <li
-        v-for="(step, k) in steps"
+        v-for="({ step, side, style }, k) in places"
         :key="k"
         v-reveal="k"
-        :class="place(k).side"
-        :style="place(k).style"
+        :class="side"
+        :style="style"
       >
         <span class="n">{{ k + 1 }}</span>
         <div>
@@ -84,7 +87,8 @@ const RING = { '--ring': R / 400 }
         </div>
       </li>
     </ol>
-    <p class="loop">{{ t('method.loop') }}</p>
+    <!-- Toujours là, même vide : la ligne du retour finit à sa hauteur, sur mobile -->
+    <p class="loop"><slot name="center" /></p>
   </div>
 </template>
 
@@ -177,6 +181,7 @@ li p {
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   line-height: 20px;
+  min-height: 20px;
 }
 
 /* Bureau : l'anneau au centre, les étapes autour */
