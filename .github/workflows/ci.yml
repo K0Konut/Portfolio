@@ -4,6 +4,9 @@ name: CI
 on:
   pull_request:
     branches: [dev, main]
+  # Après chaque merge, pour que le badge du README reflète l'état de dev
+  push:
+    branches: [dev, main]
 
 # Un nouveau push sur la PR annule la vérification précédente, devenue inutile
 concurrency:
