@@ -99,16 +99,24 @@ export function buildRoutes(): RouteRecordRaw[] {
   return routes
 }
 
-/** Chemins à pré-rendre : chaque page dans chaque langue ; une page à paramètres (`:slug`)
-    est déclinée pour chaque jeu de paramètres fourni. Jamais « / » ni /design-system. */
+/** Chaque déclinaison d'une page : son chemin dans chaque langue. Une page à paramètres (`:slug`)
+    est déclinée pour chaque jeu de paramètres fourni, et n'existe pas sans. */
+export function pageInstances(
+  page: (typeof PAGES)[number],
+  params: Partial<Record<PageName, readonly Record<string, string>[]>>,
+): Record<Locale, string>[] {
+  const sets = page.paths[DEFAULT_LOCALE].includes(':') ? (params[page.name] ?? []) : [{}]
+  return sets.map((set) => ({
+    fr: fillParams(page.paths.fr, set, page.name),
+    en: fillParams(page.paths.en, set, page.name),
+  }))
+}
+
+/** Chemins à pré-rendre : chaque page dans chaque langue (voir `pageInstances`). Jamais « / » ni /design-system. */
 export function prerenderPaths(
   params: Partial<Record<PageName, readonly Record<string, string>[]>>,
 ): string[] {
   return PAGES.flatMap((page) =>
-    LOCALES.flatMap((locale) => {
-      const path: string = page.paths[locale]
-      if (!path.includes(':')) return [path]
-      return (params[page.name] ?? []).map((p) => fillParams(path, p, page.name))
-    }),
+    pageInstances(page, params).flatMap((paths) => Object.values(paths)),
   )
 }
