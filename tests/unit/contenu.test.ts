@@ -24,7 +24,7 @@ describe('parseProject', () => {
     const p = parseProject(FILE, META, IMAGES)
     expect(p).toMatchObject({ slug: 'exemple', featured: false, links: {}, toc: [] })
     expect(p.capture).toEqual({ device: 'phone', src: '/assets/capture.png', label: undefined })
-    expect(p.meta).toMatchObject({ type: 'Projet d’école', team: '4 personnes', stack: ['Vue 3'] })
+    expect(p.meta).toMatchObject({ type: 'Projet d’école', team: '4 personnes' })
   })
 
   it.each([
@@ -54,7 +54,7 @@ describe('études de cas', () => {
       'resultats',
       'enseignements',
     ])
-    expect(projectBody('fr', 'ce-portfolio')).toBeTypeOf('function')
+    expect(projectBody('fr', 'ce-portfolio')).toBeDefined()
   })
 
   it('trie du plus récent au plus ancien et met en avant trois projets au plus', () => {

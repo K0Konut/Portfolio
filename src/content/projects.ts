@@ -1,15 +1,16 @@
 import type { Component } from 'vue'
-import { DEFAULT_LOCALE, LOCALES, type Locale } from '../router/routes'
-import type { Device, Project } from './types'
+import { LOCALES, type Locale } from '../router/routes'
+import type { Device, Project, ProjectMeta } from './types'
 
 /* Chargeur des études de cas : un fichier Markdown par projet et par langue, content/<langue>/projets/<slug>.md
    (architecture technique §4). L'en-tête est validé au chargement : au build, un champ manquant ou mal typé
-   fait échouer le pré-rendu, avec le nom du fichier. Le corps n'est chargé qu'à l'ouverture de l'étude de cas. */
-const metas = import.meta.glob<Record<string, unknown>>('/content/*/projets/*.md', {
-  eager: true,
-  import: 'data',
-})
-const bodies = import.meta.glob<Component>('/content/*/projets/*.md', { import: 'default' })
+   fait échouer le pré-rendu, avec le nom du fichier.
+   shortcut: le corps de chaque étude de cas part avec le chargeur (quelques Ko par projet) ; passer à un
+   module d'en-têtes séparé si le nombre de projets grossit. */
+const files = import.meta.glob<{ data: Record<string, unknown>; default: Component }>(
+  '/content/*/projets/*.md',
+  { eager: true },
+)
 const images = import.meta.glob<string>('/content/images/projets/*/*.{png,jpg,webp}', {
   eager: true,
   import: 'default',
@@ -22,23 +23,10 @@ const isOptionalText = (v: unknown) => v === undefined || isText(v)
 const DEVICES: readonly unknown[] = ['browser', 'phone'] satisfies Device[]
 
 /** L'en-tête d'une étude de cas, une fois validé */
-interface ProjectFile {
-  title: string
-  description: string
-  date: string
-  tags: string[]
-  stack: string[]
-  type: string
-  role: string
-  duration: string
-  team: string
-  privateCode?: string
-  code?: string
-  demo?: string
-  featured?: boolean
-  capture: { device: Device; image?: string; label?: string }
-  toc?: Project['toc']
-}
+type ProjectFile = ProjectMeta &
+  Pick<Project, 'title' | 'description' | 'date' | 'tags' | 'stack'> &
+  Partial<Pick<Project, 'featured' | 'toc'>> &
+  Project['links'] & { capture: Project['capture'] & { image?: string } }
 
 /** Valide l'en-tête d'une étude de cas et la met en forme ; `file` : /content/<langue>/projets/<slug>.md */
 export function parseProject(
@@ -80,7 +68,6 @@ export function parseProject(
       role: m.role,
       duration: m.duration,
       team: m.team,
-      stack: m.stack,
       privateCode: m.privateCode,
     },
     links: { code: m.code, demo: m.demo },
@@ -91,9 +78,9 @@ export function parseProject(
 const PROJECTS = Object.fromEntries(
   LOCALES.map((locale) => [
     locale,
-    Object.entries(metas)
+    Object.entries(files)
       .filter(([file]) => file.startsWith(`/content/${locale}/`))
-      .map(([file, meta]) => parseProject(file, meta))
+      .map(([file, mod]) => parseProject(file, mod.data))
       .sort((a, b) => b.date.localeCompare(a.date)),
   ]),
 ) as Record<Locale, Project[]>
@@ -107,9 +94,6 @@ export const featuredProjects = (locale: Locale): Project[] =>
     .filter((p) => p.featured)
     .slice(0, 3)
 
-/** Le corps d'une étude de cas (composant Vue issu du Markdown), chargé à la demande */
-export const projectBody = (locale: Locale, slug: string) =>
-  bodies[`/content/${locale}/projets/${slug}.md`]
-
-/** Slugs des études de cas à pré-rendre (les fichiers de la langue par défaut) */
-export const PROJECT_SLUGS: readonly string[] = projects(DEFAULT_LOCALE).map((p) => p.slug)
+/** Le corps d'une étude de cas : le composant Vue issu du Markdown */
+export const projectBody = (locale: Locale, slug: string): Component | undefined =>
+  files[`/content/${locale}/projets/${slug}.md`]?.default

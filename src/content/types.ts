@@ -7,7 +7,6 @@ export interface ProjectMeta {
   role: string
   duration: string
   team: string
-  stack: string[]
   /** Raison, en une phrase, quand le code n'est pas public (stage) */
   privateCode?: string
 }

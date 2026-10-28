@@ -42,7 +42,8 @@ public/
   robots.txt  favicon.svg
 src/
   main.ts                    point d'entrée vite-ssg
-  router/routes.ts           routes FR / EN et pages dynamiques
+  router/pages.ts            table des pages FR / EN (pré-rendu, sitemap, SEO)
+  router/routes.ts           routes du routeur, tirées de la table
   i18n/  fr.json  en.json    textes de l'interface
   content/                   chargement et types du contenu (§4)
   styles/
