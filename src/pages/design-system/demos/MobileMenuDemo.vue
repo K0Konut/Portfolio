@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import MobileMenu from '../../../components/layout/MobileMenu.vue'
+import MobileMenu from '../../../components/site/MobileMenu.vue'
 import BaseButton from '../../../components/ui/BaseButton.vue'
 
 // Le menu s'ouvre en fenêtre modale : un bouton pour l'ouvrir, Échap ou « Fermer » pour le refermer

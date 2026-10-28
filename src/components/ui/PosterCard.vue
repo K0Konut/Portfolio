@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Fond } from '../sections/fonds'
+import type { Fond } from '../fonds/fonds'
 
 /* Carte « affiche » (DA §5, design system § PosterCard) : la surface d'un fond posée sur une autre,
    inclinée sur bureau de `tilt` × --poster-tilt, qui se soulève et se redresse au survol (`lift`).

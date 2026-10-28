@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { ENTRIES, FAMILIES, LEGACY_PAGES, PLANNED, TOKEN_PAGES } from './design-system/catalogue'
+import { ENTRIES, FAMILIES, TOKEN_PAGES } from './design-system/catalogue'
 import DsEntry from './design-system/DsEntry.vue'
 
 /* Catalogue du design system v1.2 (§6), en développement seulement (architecture technique §5) : les tokens,
@@ -12,12 +12,10 @@ useHead({ title: 'Design system · Costa Maskulov', meta: [{ name: 'robots', con
 const route = useRoute()
 const id = computed(() => String(route.params.entry ?? ''))
 const entry = computed(() => ENTRIES.find((e) => e.id === id.value))
-const page = computed(() => [...TOKEN_PAGES, ...LEGACY_PAGES].find((p) => p.id === id.value))
-const legacy = computed(() => LEGACY_PAGES.some((p) => p.id === id.value))
+const page = computed(() => TOKEN_PAGES.find((p) => p.id === id.value))
 const families = FAMILIES.map((name) => ({
   name,
   entries: ENTRIES.filter((e) => e.family === name),
-  planned: PLANNED[name],
 }))
 const link = (entry: string) => ({ name: 'design-system', params: { entry } })
 </script>
@@ -40,20 +38,11 @@ const link = (entry: string) => ({ name: 'design-system', params: { entry } })
           <li v-for="e in f.entries" :key="e.id">
             <RouterLink :to="link(e.id)">{{ e.name }}</RouterLink>
           </li>
-          <li v-for="name in f.planned" :key="name" class="planned">{{ name }}</li>
-        </ul>
-      </div>
-      <div class="group">
-        <p>À refondre (étape 2 bis)</p>
-        <ul>
-          <li v-for="p in LEGACY_PAGES" :key="p.id">
-            <RouterLink :to="link(p.id)">{{ p.name }}</RouterLink>
-          </li>
         </ul>
       </div>
     </nav>
 
-    <div :class="['content', { wide: legacy }]">
+    <div class="content">
       <DsEntry v-if="entry" :key="entry.id" :entry="entry" />
       <component :is="page.component" v-else-if="page" />
       <div v-else class="intro">
@@ -109,12 +98,9 @@ ul {
   padding: 0;
   border-left: var(--border-thin) solid var(--color-border);
 }
-li a,
-.planned {
+li a {
   display: block;
   padding: var(--space-1) var(--space-3);
-}
-li a {
   color: var(--color-text-muted);
   text-decoration: none;
 }
@@ -127,15 +113,8 @@ li a.router-link-exact-active {
   color: var(--color-text);
   font-weight: var(--weight-bold);
 }
-.planned {
-  color: var(--neutral-700);
-}
 .content {
   min-width: 0;
-}
-/* Les anciennes démos sont des sections pleine largeur */
-.content.wide {
-  margin-inline: calc(-1 * var(--gutter));
 }
 .intro {
   display: grid;

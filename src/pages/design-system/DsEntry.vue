@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch, type Directive } from 'vue'
-import type { Fond } from '../../components/sections/fonds'
+import type { Fond } from '../../components/fonds/fonds'
 import BaseButton from '../../components/ui/BaseButton.vue'
 import { seconds } from '../../composables/motion'
 import { codeOf, type Entry, FONDS, initialValues, propsOf, type Values } from './catalogue'

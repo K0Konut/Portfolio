@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useId } from 'vue'
-import type { Fond } from './fonds'
+import type { Fond } from '../fonds/fonds'
 
 withDefaults(
   defineProps<{

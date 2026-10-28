@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import PageIntro from '../components/sections/PageIntro.vue'
+import PageIntro from '../components/mise-en-page/PageIntro.vue'
 
 // Page provisoire commune à toutes les routes ; remplacée page par page (architecture technique §11)
 const route = useRoute()

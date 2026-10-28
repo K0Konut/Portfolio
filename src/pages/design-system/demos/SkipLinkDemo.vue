@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SkipLink from '../../../components/layout/SkipLink.vue'
+import SkipLink from '../../../components/site/SkipLink.vue'
 // Le lien d'évitement n'apparaît qu'au focus clavier
 </script>
 

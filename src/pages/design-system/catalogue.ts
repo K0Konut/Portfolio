@@ -3,15 +3,15 @@ import capture from '../../assets/projets/ce-portfolio.png'
 import ScrollHint from '../../components/animations/ScrollHint.vue'
 import TopoBackground from '../../components/fonds/TopoBackground.vue'
 import LetterReveal from '../../components/textes/LetterReveal.vue'
-import DeviceFrame from '../../components/projects/DeviceFrame.vue'
-import ProjectCard from '../../components/projects/ProjectCard.vue'
-import AppFooter from '../../components/layout/AppFooter.vue'
-import AppHeader from '../../components/layout/AppHeader.vue'
-import LangSwitch from '../../components/layout/LangSwitch.vue'
-import type { Fond } from '../../components/sections/fonds'
-import PageIntro from '../../components/sections/PageIntro.vue'
-import PageSection from '../../components/sections/PageSection.vue'
-import SectionWave from '../../components/sections/SectionWave.vue'
+import DeviceFrame from '../../components/ui/DeviceFrame.vue'
+import ProjectCard from '../../components/ui/ProjectCard.vue'
+import AppFooter from '../../components/site/AppFooter.vue'
+import AppHeader from '../../components/site/AppHeader.vue'
+import LangSwitch from '../../components/site/LangSwitch.vue'
+import type { Fond } from '../../components/fonds/fonds'
+import PageIntro from '../../components/mise-en-page/PageIntro.vue'
+import PageSection from '../../components/mise-en-page/PageSection.vue'
+import SectionWave from '../../components/fonds/SectionWave.vue'
 import BaseButton from '../../components/ui/BaseButton.vue'
 import BaseIcon from '../../components/ui/BaseIcon.vue'
 import BaseTag from '../../components/ui/BaseTag.vue'
@@ -29,7 +29,9 @@ import fr from '../../i18n/fr.json'
 import { ICONS } from '../../components/ui/icons'
 import { FONDS as FOND_CLASSES } from './fonds'
 import CycleStepsDemo from './demos/CycleStepsDemo.vue'
+import BentoGridDemo from './demos/BentoGridDemo.vue'
 import DragToSnapDemo from './demos/DragToSnapDemo.vue'
+import PosterGridDemo from './demos/PosterGridDemo.vue'
 import MobileMenuDemo from './demos/MobileMenuDemo.vue'
 import RevealDemo from './demos/RevealDemo.vue'
 import ScrollParallaxDemo from './demos/ScrollParallaxDemo.vue'
@@ -88,16 +90,6 @@ export const FAMILIES = [
   'Site',
 ] as const
 export type Family = (typeof FAMILIES)[number]
-
-/** Briques prévues par le design system v1.2, pas encore construites */
-export const PLANNED: Record<Family, string[]> = {
-  Fonds: [],
-  'Textes animés': [],
-  Animations: [],
-  Composants: [],
-  'Mise en page': ['PosterGrid', 'BentoGrid'],
-  Site: [],
-}
 
 export const FONDS = FOND_CLASSES.map((f) => f.cls.slice('fond-'.length) as Fond)
 const TONES = ['violet-500', 'pink-500', 'lime-500', 'violet-700', 'neutral-50']
@@ -926,6 +918,86 @@ export const ENTRIES: Entry[] = [
     ],
   },
   {
+    id: 'poster-grid',
+    name: 'PosterGrid',
+    family: 'Mise en page',
+    description:
+      'Grille « affiches collées » : sur bureau, chaque enfant s’incline et se décale selon sa place, se soulève et se redresse au survol ; une colonne sur mobile, deux sur tablette, droites. Les enfants se posent un à un.',
+    component: PosterGridDemo,
+    props: [
+      {
+        name: 'columns',
+        type: '3 | 5',
+        default: '3',
+        description: 'Colonnes sur bureau (à partir de 1024 px)',
+      },
+    ],
+    controls: [
+      {
+        key: 'columns',
+        label: 'Colonnes',
+        type: 'select',
+        initial: '3',
+        options: ['3', '5'],
+      },
+      { key: 'count', label: 'Enfants', type: 'number', initial: 3, min: 1, max: 5 },
+    ],
+    slots: [{ name: 'défaut', description: 'Les cartes ; chacune devient une affiche (.poster)' }],
+    bind: (v) => ({ columns: Number(v.columns), count: v.count }),
+    fond: 'violet',
+    code: (v) => `<PosterGrid${v.columns === '5' ? ' :columns="5"' : ''}>…</PosterGrid>`,
+  },
+  {
+    id: 'bento-grid',
+    name: 'BentoGrid',
+    family: 'Mise en page',
+    description:
+      'Grille bento : le premier enfant en grand, puis deux à droite, un simple et un large. Chaque cellule pose la teinte du fond de capture selon sa place, jamais la même que sa voisine. Avec `glow`, à la souris, la lueur suit le pointeur et la carte survolée s’incline vers lui (pas d’inclinaison en mouvement réduit).',
+    component: BentoGridDemo,
+    props: [
+      {
+        name: 'glow',
+        type: 'boolean',
+        default: 'false',
+        description: 'Lueur et inclinaison au pointeur (souris)',
+      },
+      { name: 'reach', type: 'number', default: '320', description: 'Portée de la lueur (px)' },
+      { name: 'tilt', type: 'number', default: '3', description: 'Inclinaison maximale (degrés)' },
+    ],
+    controls: [
+      { key: 'count', label: 'Enfants', type: 'number', initial: 5, min: 1, max: 8 },
+      { key: 'glow', label: 'Lueur au pointeur', type: 'boolean', initial: true },
+      {
+        key: 'reach',
+        label: 'Portée (px)',
+        type: 'number',
+        initial: 320,
+        min: 80,
+        max: 640,
+        step: 20,
+      },
+      {
+        key: 'tilt',
+        label: 'Inclinaison (°)',
+        type: 'number',
+        initial: 3,
+        min: 0,
+        max: 8,
+        step: 0.5,
+      },
+    ],
+    slots: [
+      {
+        name: 'défaut',
+        description:
+          'Les cartes : une grille dont la première ligne est le média (`DeviceFrame`), avec un titre `h3`',
+      },
+    ],
+    code: (v) =>
+      `<BentoGrid${v.glow ? ' glow' : ''}${v.reach === 320 ? '' : ` :reach="${v.reach}"`}${v.tilt === 3 ? '' : ` :tilt="${v.tilt}"`}>…</BentoGrid>`,
+    screen: true,
+  },
+  {
     id: 'app-header',
     name: 'AppHeader',
     family: 'Site',
@@ -1019,7 +1091,7 @@ export const ENTRIES: Entry[] = [
   },
 ]
 
-/** Les pages de tokens, et les démos des sections en attente de refonte (étape 2 bis), chargées à l'ouverture */
+/** Les pages de tokens, chargées à l'ouverture */
 const page = (load: () => Promise<{ default: Component }>) => defineAsyncComponent(load)
 export const TOKEN_PAGES = [
   { id: 'couleurs', name: 'Couleurs', component: page(() => import('./DsColors.vue')) },
@@ -1033,29 +1105,6 @@ export const TOKEN_PAGES = [
   { id: 'motion', name: 'Motion', component: page(() => import('./DsMotion.vue')) },
   { id: 'icones', name: 'Icônes', component: page(() => import('./DsIcons.vue')) },
 ]
-export const LEGACY_PAGES = [
-  {
-    id: 'ancien-mise-en-page',
-    name: 'En-tête, Parlons-en',
-    component: page(() => import('./DsComponentsLayout.vue')),
-  },
-  {
-    id: 'ancien-accueil',
-    name: 'Accueil',
-    component: page(() => import('./DsComponentsHome.vue')),
-  },
-  {
-    id: 'ancien-projets',
-    name: 'Projets et étude de cas',
-    component: page(() => import('./DsComponentsProjects.vue')),
-  },
-  {
-    id: 'ancien-a-propos',
-    name: 'À propos, Contact, 404',
-    component: page(() => import('./DsComponentsAbout.vue')),
-  },
-]
-
 export function initialValues(entry: Entry): Values {
   return Object.fromEntries(entry.controls.map((c) => [c.key, c.initial]))
 }

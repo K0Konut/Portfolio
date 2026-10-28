@@ -2,9 +2,9 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
-import LangSwitch from '../../src/components/layout/LangSwitch.vue'
-import MobileMenu from '../../src/components/layout/MobileMenu.vue'
-import { wavePath } from '../../src/components/sections/wave'
+import LangSwitch from '../../src/components/site/LangSwitch.vue'
+import MobileMenu from '../../src/components/site/MobileMenu.vue'
+import { wavePath } from '../../src/components/fonds/wave'
 import { createAppI18n } from '../../src/i18n'
 import { buildRoutes } from '../../src/router/routes'
 

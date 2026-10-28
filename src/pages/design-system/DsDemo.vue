@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import type { Fond } from '../../components/sections/fonds'
+import type { Fond } from '../../components/fonds/fonds'
 import { useRoute } from 'vue-router'
 import { ENTRIES, type Entry, initialValues, propsOf, type Values } from './catalogue'
 import { forceReducedMotion } from './forceStyles'
