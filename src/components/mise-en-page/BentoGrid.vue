@@ -6,8 +6,10 @@ import { slotChildren } from '../../composables/slotChildren'
 /* Grille bento (design system § BentoGrid) : le premier enfant en grand. Chaque cellule pose --stage
    (fond de capture de DeviceFrame) selon sa place. Avec `glow`, à la souris, les enfants proches du pointeur
    s'allument (bord et halo), d'autant plus qu'il est près, et l'enfant survolé s'incline vers lui.
-   Une seule écriture par image. Contrat avec l'enfant : une grille dont la première ligne est le média
-   (la grande cellule l'étire, la cellule large le met à gauche), et un titre h3, agrandi dans la grande. */
+   Une seule écriture par image, et rien pour les cellules éteintes qui le restent. Contrat avec l'enfant :
+   une grille dont le premier élément est le média (la grande cellule l'étire, la cellule large le met à
+   gauche) ; la cellule pose --frame-ratio: auto (DeviceFrame) et, dans la grande, --card-title (ProjectCard).
+   L'enfant reçoit la classe .tile : il doit n'avoir qu'une racine. */
 const props = withDefaults(
   defineProps<{
     glow?: boolean
@@ -36,6 +38,7 @@ function paint() {
   // Toutes les lectures avant les écritures : une seule mise en page par image. On mesure la cellule, qui ne
   // s'incline pas : mesurer l'enfant incliné ferait clignoter l'inclinaison au bord.
   const rects = cells().map((cell) => [cell, cell.getBoundingClientRect()] as const)
+  const still = reduced?.matches
   for (const [cell, r] of rects) {
     const x = px - r.left
     const y = py - r.top
@@ -43,10 +46,12 @@ function paint() {
       Math.max(r.left - px, 0, px - r.right),
       Math.max(r.top - py, 0, py - r.bottom),
     )
-    const tilt = distance === 0 && !reduced?.matches
+    const glow = Math.max(0, 1 - distance / props.reach)
+    if (glow === 0 && Number(cell.style.getPropertyValue('--glow') || 0) === 0) continue
+    const tilt = distance === 0 && !still
     cell.style.setProperty('--mx', `${x}px`)
     cell.style.setProperty('--my', `${y}px`)
-    cell.style.setProperty('--glow', Math.max(0, 1 - distance / props.reach).toFixed(3))
+    cell.style.setProperty('--glow', glow.toFixed(3))
     cell.style.setProperty(
       '--rx',
       tilt ? `${((0.5 - y / r.height) * props.tilt * 2).toFixed(2)}deg` : '0deg',
@@ -59,7 +64,7 @@ function paint() {
 }
 
 function onMove(event: PointerEvent) {
-  if (!props.glow || event.pointerType !== 'mouse') return
+  if (event.pointerType !== 'mouse') return
   pointer = { x: event.clientX, y: event.clientY }
   frame ||= requestAnimationFrame(paint)
 }
@@ -83,7 +88,7 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 </script>
 
 <template>
-  <ul ref="grid" class="bento" @pointermove="onMove" @pointerleave="onLeave">
+  <ul ref="grid" class="bento" v-on="glow ? { pointermove: onMove, pointerleave: onLeave } : {}">
     <li
       v-for="(child, i) in slotChildren(slots.default?.())"
       :key="child.key ?? i"
@@ -183,19 +188,16 @@ li > :deep(.tile)::after {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   li:first-child {
+    --frame-ratio: auto;
+    --card-title: var(--text-h2);
     grid-column: span 2;
     grid-row: span 2;
   }
   li:first-child > :deep(.tile) {
     grid-template-rows: minmax(22rem, 1fr) auto;
   }
-  li:first-child :deep(.frame) {
-    aspect-ratio: auto;
-  }
-  li:first-child :deep(h3) {
-    font-size: var(--text-h2);
-  }
   li:nth-child(5) {
+    --frame-ratio: auto;
     grid-column: span 2;
   }
   /* Cellule large : le média à gauche, le texte à droite */
@@ -205,9 +207,8 @@ li > :deep(.tile)::after {
     column-gap: var(--space-5);
     align-items: center;
   }
-  li:nth-child(5) :deep(.frame) {
+  li:nth-child(5) > :deep(.tile) > :first-child {
     align-self: stretch;
-    aspect-ratio: auto;
   }
 }
 </style>

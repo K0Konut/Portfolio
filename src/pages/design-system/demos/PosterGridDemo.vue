@@ -23,7 +23,7 @@ const SKILLS = [
     </template>
     <template v-else>
       <PosterCard v-for="s in SKILLS.slice(0, count)" :key="s.title" as="article" class="skill">
-        <h3>{{ s.title }}</h3>
+        <h3 class="hl">{{ s.title }}</h3>
         <DotList :items="s.items.map((name) => ({ name }))" />
       </PosterCard>
     </template>
@@ -38,10 +38,6 @@ const SKILLS = [
 }
 h3 {
   margin: 0;
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: var(--weight-regular);
   font-size: var(--text-lead);
-  color: var(--color-highlight);
 }
 </style>

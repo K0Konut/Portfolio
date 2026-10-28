@@ -5,7 +5,8 @@ import { slotChildren } from '../../composables/slotChildren'
 /* Grille « affiches collées » (DA §5, design system § PosterGrid) : une colonne sur mobile, deux à partir de
    768 px, `columns` sur bureau, où chaque enfant reçoit une inclinaison (--tilt, multiple de --poster-tilt,
    nulle en mouvement réduit) et un décalage selon sa place. Les enfants deviennent des affiches (.poster) :
-   ils se soulèvent et se redressent au survol, et se posent un à un à l'arrivée à l'écran. */
+   ils se soulèvent et se redressent au survol, et se posent un à un à l'arrivée à l'écran. Chaque enfant
+   doit n'avoir qu'une racine, qui reçoit la classe. */
 withDefaults(defineProps<{ columns?: 3 | 5 }>(), { columns: 3 })
 const slots = defineSlots<{ default(): VNode[] }>()
 </script>
@@ -28,11 +29,6 @@ const slots = defineSlots<{ default(): VNode[] }>()
 }
 li {
   display: grid;
-}
-/* Appui : la carte redescend à mi-hauteur */
-li > :deep(.poster:active) {
-  transform: translateY(calc(-1 * var(--card-lift) / 2)) rotate(0deg);
-  transition-duration: var(--duration-press);
 }
 @media (min-width: 768px) {
   .poster-grid {

@@ -66,7 +66,8 @@ const { to } = useLocale()
 }
 h3 {
   margin-top: var(--space-1);
-  font-size: var(--text-h3);
+  /* Agrandi dans la grande cellule de BentoGrid */
+  font-size: var(--card-title, var(--text-h3));
 }
 h3 a {
   color: inherit;

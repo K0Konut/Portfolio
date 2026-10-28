@@ -45,7 +45,8 @@ const SIZE = { browser: [1440, 900], phone: [390, 844] } as const
 .frame {
   --pad: var(--space-5);
   container-type: size;
-  aspect-ratio: 16 / 10;
+  /* Une grille peut libérer la zone (BentoGrid : --frame-ratio: auto) */
+  aspect-ratio: var(--frame-ratio, 16 / 10);
   display: flex;
   justify-content: center;
   align-items: flex-end;
