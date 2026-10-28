@@ -1,4 +1,4 @@
-# Vérifications de chaque PR vers dev ou main (architecture technique §7)
+# Vérifications de chaque PR vers dev ou main (architecture technique §7) ; le lint est dans lint.yml
 name: CI
 
 on:
@@ -23,8 +23,6 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Lint et format
-        run: npm run lint && npm run format:check
       - name: Types
         run: npm run type-check
       - name: Tests unitaires

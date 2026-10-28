@@ -3,7 +3,8 @@
 <p align="center"><strong>Créatif dans l'interface, rigoureux dans la méthode.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI : lint, types, tests et build sur dev"></a>
+  <a href="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI : types, tests et build sur dev"></a>
+  <a href="https://github.com/K0Konut/Portfolio/actions/workflows/lint.yml?query=branch%3Adev"><img src="https://github.com/K0Konut/Portfolio/actions/workflows/lint.yml/badge.svg?branch=dev" alt="Lint : ESLint et Prettier sur dev"></a>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
   <img src="https://img.shields.io/badge/Vue-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue">
   <img src="https://img.shields.io/badge/CSS-663399?logo=css&logoColor=white" alt="CSS">
@@ -126,7 +127,7 @@ Une brique reçoit tout par ses options et ses slots. Elle ne contient aucun tex
 
 - **Accessibilité** : WCAG 2.2 AA visé. Navigation au clavier, focus visible, contrastes vérifiés, `prefers-reduced-motion` respecté par chaque animation.
 - **Performance** : objectif Lighthouse ≥ 95 sur les quatre axes. Polices auto-hébergées, GSAP et WebGL chargés après le premier affichage.
-- **Intégration continue** : chaque PR vers `dev` ou `main` passe le lint, le format, les types, les tests unitaires, le pré-rendu, puis les tests de bout en bout et d'accessibilité ([`ci.yml`](.github/workflows/ci.yml)).
+- **Intégration continue** : chaque PR vers `dev` ou `main`, puis chaque merge, passe le lint et le format ([`lint.yml`](.github/workflows/lint.yml)), les types, les tests unitaires, le pré-rendu, puis les tests de bout en bout et d'accessibilité ([`ci.yml`](.github/workflows/ci.yml)).
 
 ## Contribuer : le workflow Git
 
