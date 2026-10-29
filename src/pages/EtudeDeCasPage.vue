@@ -31,12 +31,13 @@ const next = computed(() =>
 )
 
 const title = computed(() => project.value && `${project.value.title} · ${SITE.name}`)
+const description = computed(() => project.value?.description)
 // Précise les balises de useSeo ; projet introuvable (ou pas encore traduit) : la 404, hors des moteurs
 useSeoMeta({
   title,
   ogTitle: title,
-  description: computed(() => project.value?.description),
-  ogDescription: computed(() => project.value?.description),
+  description,
+  ogDescription: description,
   ogImage: computed(() => project.value?.capture.src && absolute(project.value.capture.src)),
   robots: computed(() => (project.value ? undefined : 'noindex')),
 })

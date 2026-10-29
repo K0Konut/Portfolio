@@ -20,7 +20,7 @@ export function useSeo() {
   const { locale, alternate } = useLocale()
 
   const page = computed(() => route.meta.page ?? '404')
-  const url = (l: Locale) => SITE_URL + alternate(l)
+  const url = (l: Locale) => absolute(alternate(l) ?? '')
   const title = computed(() => t(`pages.${page.value}.title`))
   const description = computed(() => {
     const key = `pages.${page.value}.description`
@@ -49,8 +49,8 @@ export function useSeo() {
     ogDescription: description,
     ogUrl: computed(() => (route.meta.alternates ? url(locale.value) : undefined)),
     ogLocale: computed(() => (locale.value === 'fr' ? 'fr_FR' : 'en_US')),
-    // Image générique : la section d'accueil (public/og.png, 1200 × 630)
-    ogImage: absolute('/og.png'),
+    // Image générique : la section d'accueil (public/og.jpg, 1200 × 630)
+    ogImage: absolute('/og.jpg'),
     twitterCard: 'summary_large_image',
   })
 }

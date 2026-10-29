@@ -108,9 +108,9 @@ test("chaque page porte sa description et son aperçu de partage (Open Graph), l
 }) => {
   const home = await (await request.get('/fr/')).text()
   expect(home).toMatch(/<meta name="description" content="Portfolio de Costa Maskulov/)
-  expect(home).toMatch(/<meta property="og:image" content="[^"]*\/og\.png"/)
+  expect(home).toMatch(/<meta property="og:image" content="[^"]*\/og\.jpg"/)
   const study = await (await request.get('/fr/projets/ce-portfolio/')).text()
   expect(study).toMatch(/<meta property="og:image" content="[^"]*\/assets\/capture-[^"]+\.png"/)
   expect(study.match(/<meta name="description"/g)).toHaveLength(1)
-  expect((await request.get('/og.png')).status()).toBe(200)
+  expect((await request.get('/og.jpg')).status()).toBe(200)
 })
