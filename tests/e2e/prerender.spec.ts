@@ -11,7 +11,12 @@ const pages = [
     h1: 'Costa Maskulov',
   },
   { path: '/en/about/', lang: 'en', title: 'About · Costa Maskulov' },
-  { path: '/fr/projets/ce-portfolio/', lang: 'fr', title: 'Étude de cas · Costa Maskulov' },
+  {
+    path: '/fr/projets/ce-portfolio/',
+    lang: 'fr',
+    title: 'Ce portfolio · Costa Maskulov',
+    h1: 'Ce portfolio',
+  },
 ]
 
 for (const { path, lang, title, h1 = title } of pages) {

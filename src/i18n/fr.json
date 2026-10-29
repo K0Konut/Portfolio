@@ -83,7 +83,8 @@
   "case": {
     "next": "Projet suivant",
     "all": "Tous les projets",
-    "after": "Suite"
+    "after": "Suite",
+    "demo": "Démo"
   },
   "meta": {
     "type": "Type",
@@ -126,5 +127,9 @@
     "methodIntro": "Chaque projet passe par les mêmes étapes, du besoin jusqu’à la mise en ligne.",
     "methodMore": "Voir ma méthode",
     "contactIntro": "Vous cherchez un développeur full-stack pour un stage de fin d’études ? Écrivez-moi."
+  },
+  "projects": {
+    "intro": "Tout ce que j’ai construit, du plus récent au plus ancien. Chaque projet a son étude de cas : le besoin, la méthode et les choix techniques.",
+    "contactIntro": "Un projet vous a parlé ? Écrivez-moi."
   }
 }

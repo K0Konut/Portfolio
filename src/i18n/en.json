@@ -83,7 +83,8 @@
   "case": {
     "next": "Next project",
     "all": "All projects",
-    "after": "What next"
+    "after": "What next",
+    "demo": "Demo"
   },
   "meta": {
     "type": "Type",
@@ -126,5 +127,9 @@
     "methodIntro": "Every project goes through the same steps, from the need to going live.",
     "methodMore": "See my method",
     "contactIntro": "Looking for a full-stack developer for an end-of-studies internship? Write to me."
+  },
+  "projects": {
+    "intro": "Everything I have built, from the most recent to the oldest. Each project has its case study: the need, the method and the technical choices.",
+    "contactIntro": "Did a project speak to you? Write to me."
   }
 }

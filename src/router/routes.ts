@@ -22,6 +22,8 @@ const placeholder = () => import('../pages/PlaceholderPage.vue')
 // Les pages construites ; les autres gardent la page provisoire jusqu'à leur tour (architecture technique §11)
 const views: Partial<Record<PageName, () => Promise<Component>>> = {
   accueil: () => import('../pages/AccueilPage.vue'),
+  projets: () => import('../pages/ProjetsPage.vue'),
+  'etude-de-cas': () => import('../pages/EtudeDeCasPage.vue'),
 }
 
 export function buildRoutes(): RouteRecordRaw[] {

@@ -43,13 +43,13 @@ Deux lecteurs à servir. La recruteuse RH, qui trie vite et sans bagage techniqu
 
 Sept phases, dans l’ordre, chacune avec son livrable, sa branche Git et sa validation avant de passer à la suivante.
 
-1. **PRD** : ce qu’on construit et pourquoi.
-2. **Territoire de marque** : positionnement, valeurs, ton de voix.
-3. **Direction artistique** : couleurs, typographie, mouvement.
-4. **Architecture et UX** : arborescence, parcours, wireframes.
-5. **Design system** : tokens et composants, avec leurs états.
-6. **Maquettes** : les écrans clés, construits en code.
-7. **Code** : l’intégration en Vue.
+1. **PRD.** Ce qu’on construit et pourquoi.
+2. **Territoire de marque.** Positionnement, valeurs, ton de voix.
+3. **Direction artistique.** Couleurs, typographie, mouvement.
+4. **Architecture et UX.** Arborescence, parcours, wireframes.
+5. **Design system.** Tokens et composants, avec leurs états.
+6. **Maquettes.** Les écrans clés, construits en code.
+7. **Code.** L’intégration en Vue.
 
 Les maquettes sont faites directement en code, avec les vrais composants : chaque choix visuel se fait sur une page où l’on bascule entre plusieurs versions, dans le navigateur.
 
@@ -59,25 +59,25 @@ Les maquettes sont faites directement en code, avec les vrais composants : chaqu
 
 Des composants génériques, des « briques », tous construits sur des tokens : aucune valeur en dur. Chacun a sa page dans un catalogue de développement, avec ses réglages en direct, ses états et le mode « mouvement réduit ».
 
-Compromis : plus de temps avant le premier écran, moins de retouches ensuite.
+_Compromis : plus de temps avant le premier écran, moins de retouches ensuite._
 
 ### Le fond animé en WebGL natif
 
 Les courbes de niveau de l’accueil reprennent un composant écrit pour une bibliothèque 3D, réécrit en WebGL 2 sans elle : une dépendance de moins. Image fixe en mouvement réduit, pause hors de l’écran.
 
-Compromis : un shader à maintenir soi-même.
+_Compromis : un shader à maintenir soi-même._
 
 ### Tout auto-hébergé
 
 Polices servies par le site, conteneur Docker sur mon serveur, aucune mesure d’audience : aucun service tiers, pas de bandeau de consentement.
 
-Compromis : la disponibilité dépend de mon serveur.
+_Compromis : la disponibilité dépend de mon serveur._
 
 ### Vue 3, Vite et TypeScript, sans Nuxt
 
 Chaque page est pré-rendue en HTML complet avec vite-ssg, pour le référencement. Le routage bilingue, les balises `head` et le sitemap sont assemblés à la main, en petits morceaux lisibles.
 
-Compromis : plus de code maison qu’avec Nuxt.
+_Compromis : plus de code maison qu’avec Nuxt._
 
 ## Résultats
 
