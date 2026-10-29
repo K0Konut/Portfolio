@@ -24,6 +24,7 @@ const views: Partial<Record<PageName, () => Promise<Component>>> = {
   accueil: () => import('../pages/AccueilPage.vue'),
   projets: () => import('../pages/ProjetsPage.vue'),
   'etude-de-cas': () => import('../pages/EtudeDeCasPage.vue'),
+  'a-propos': () => import('../pages/AProposPage.vue'),
 }
 
 export function buildRoutes(): RouteRecordRaw[] {

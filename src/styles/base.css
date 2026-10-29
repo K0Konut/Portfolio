@@ -82,6 +82,17 @@ svg {
   color: var(--color-text-muted);
 }
 
+/* Texte en Markdown (content/) : blocs serrés, lignes limitées à --measure ; chaque page en précise le reste */
+.prose {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.prose :is(p, ul, ol) {
+  margin: 0;
+  max-width: var(--measure);
+}
+
 /* Lien de l'en-tête (navigation, langues) : un trait se trace au survol, il reste sur l'élément en cours */
 .trace {
   position: relative;

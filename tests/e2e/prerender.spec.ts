@@ -10,7 +10,7 @@ const pages = [
     title: 'Costa Maskulov · Développeur full-stack',
     h1: 'Costa Maskulov',
   },
-  { path: '/en/about/', lang: 'en', title: 'About · Costa Maskulov' },
+  { path: '/en/about/', lang: 'en', title: 'About · Costa Maskulov', h1: 'About' },
   {
     path: '/fr/projets/ce-portfolio/',
     lang: 'fr',

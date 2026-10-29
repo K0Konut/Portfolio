@@ -103,7 +103,17 @@
   "about": {
     "caseStudy": "Voir l’étude de cas",
     "legend": "Pastille violette : les technos de ce site.",
-    "legendLink": "Voir comment il est construit"
+    "legendLink": "Voir comment il est construit",
+    "intro": "Étudiant ingénieur à l’ESIEA, j’aime partir d’un besoin et le transformer en produit qui marche, du premier croquis à la mise en ligne.",
+    "storyTitle": "Mon histoire",
+    "pathTitle": "Mon parcours",
+    "pathIntro": "Du lycée à l’école d’ingénieur, avec les stages en chemin.",
+    "skillsTitle": "Compétences",
+    "skillsIntro": "Ce que je sais faire, et que je peux défendre en entretien.",
+    "methodLoop": "Puis les retours de chaque mise en ligne relancent un tour.",
+    "teamTitle": "En équipe",
+    "teamText": "Je travaille en sprints, avec une courte réunion chaque jour (le daily) : on suit l’avancement, on lève les blocages tôt, et on garde le contact humain.",
+    "contactIntro": "Envie d’en savoir plus ? Écrivez-moi."
   },
   "business": {
     "title": "Contact",

@@ -29,7 +29,15 @@ export const createApp = ViteSSG(
   App,
   {
     routes,
-    scrollBehavior: (to, _from, saved) => saved ?? (to.hash ? { el: to.hash } : { top: 0 }),
+    // Vers une ancre : le décalage de l'en-tête fixe (scroll-padding-top, base.css), que le routeur ignore sinon
+    scrollBehavior: (to, _from, saved) =>
+      saved ??
+      (to.hash
+        ? {
+            el: to.hash,
+            top: parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0,
+          }
+        : { top: 0 }),
   },
   ({ app, router }) => {
     const i18n = createAppI18n()
