@@ -32,7 +32,12 @@ export default defineConfig(({ mode }) => {
       rolldownOptions: {
         output: {
           // GSAP dans son propre fichier : l'accueil l'importe directement, les autres pages à la demande
-          codeSplitting: { groups: [{ name: 'gsap', test: /node_modules[\\/]gsap/ }] },
+          codeSplitting: {
+            // Le cœur seulement : ScrollTrigger reste chargé à la demande (rien en mouvement réduit)
+            groups: [
+              { name: 'gsap', test: /node_modules[\\/]gsap[\\/](index|gsap-core|CSSPlugin)\.js/ },
+            ],
+          },
         },
       },
     },

@@ -36,7 +36,9 @@ const wave = computed(() =>
         fill-rule="evenodd"
         :d="`M0,0H${wave.width}V${reference.height}H0Z${wave.d}`"
       />
-      <path v-else :class="`fond-${from}`" :d="wave.d" />
+      <!-- Le dessus déborde de 2 px sur la section du dessus, de la même couleur : à 125 ou 150 % de zoom,
+           la jonction tombe entre deux pixels et le fond de la vague y faisait un liseré -->
+      <path v-else :class="`fond-${from}`" :d="`M0,-2H${wave.width}V1H0Z${wave.d}`" />
     </svg>
   </div>
 </template>
@@ -44,10 +46,13 @@ const wave = computed(() =>
 <style scoped>
 .wave {
   line-height: 0;
+  /* La section suivante recouvre le dernier pixel, de la même couleur : pas de liseré à la jonction */
+  margin-bottom: -1px;
 }
 svg {
   display: block;
   width: 100%;
+  overflow: visible;
 }
 /* La classe fond-* du tracé ne sert qu'à lui donner sa couleur de fond */
 path {

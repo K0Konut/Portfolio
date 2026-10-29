@@ -53,9 +53,13 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
       <CycleSteps :steps="steps">
         <template #center>{{ t('method.loop') }}</template>
       </CycleSteps>
-      <BaseButton v-reveal class="start" icon="arrow-right" :to="to('a-propos')">{{
-        t('home.methodMore')
-      }}</BaseButton>
+      <BaseButton
+        v-reveal
+        class="start"
+        icon="arrow-right"
+        :to="{ ...to('a-propos'), hash: '#methode' }"
+        >{{ t('home.methodMore') }}</BaseButton
+      >
     </PageSection>
     <SectionWave :seed="4" from="vif" to="lime" />
     <ParlonsEn :intro="t('home.contactIntro')" />

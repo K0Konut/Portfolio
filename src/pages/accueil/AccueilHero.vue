@@ -23,7 +23,11 @@ const { t } = useI18n()
 const { locale, to } = useLocale()
 const root = ref<HTMLElement>()
 const name = ref<InstanceType<typeof LetterReveal>>()
-const pending = ref(true)
+// Entrée en attente au premier chargement seulement (HTML pré-rendu) ; en revenant sur l'accueil par un
+// lien interne, l'en-tête déjà affiché ne doit pas se cacher de nouveau
+const pending = ref(
+  import.meta.env.SSR || document.documentElement.getAttribute('data-intro') === 'pending',
+)
 // « done » plutôt qu'un attribut retiré : si l'entrée part avant la première mise à jour du head côté
 // navigateur, l'attribut reçu du HTML pré-rendu ne serait jamais enlevé
 useHead({ htmlAttrs: { 'data-intro': computed(() => (pending.value ? 'pending' : 'done')) } })
