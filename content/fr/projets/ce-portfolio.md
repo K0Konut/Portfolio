@@ -59,25 +59,25 @@ Les maquettes sont faites directement en code, avec les vrais composants : chaqu
 
 Des composants génériques, des « briques », tous construits sur des tokens : aucune valeur en dur. Chacun a sa page dans un catalogue de développement, avec ses réglages en direct, ses états et le mode « mouvement réduit ».
 
-_Compromis : plus de temps avant le premier écran, moins de retouches ensuite._
+<small>Compromis : plus de temps avant le premier écran, moins de retouches ensuite.</small>
 
 ### Le fond animé en WebGL natif
 
 Les courbes de niveau de l’accueil reprennent un composant écrit pour une bibliothèque 3D, réécrit en WebGL 2 sans elle : une dépendance de moins. Image fixe en mouvement réduit, pause hors de l’écran.
 
-_Compromis : un shader à maintenir soi-même._
+<small>Compromis : un shader à maintenir soi-même.</small>
 
 ### Tout auto-hébergé
 
 Polices servies par le site, conteneur Docker sur mon serveur, aucune mesure d’audience : aucun service tiers, pas de bandeau de consentement.
 
-_Compromis : la disponibilité dépend de mon serveur._
+<small>Compromis : la disponibilité dépend de mon serveur.</small>
 
 ### Vue 3, Vite et TypeScript, sans Nuxt
 
 Chaque page est pré-rendue en HTML complet avec vite-ssg, pour le référencement. Le routage bilingue, les balises `head` et le sitemap sont assemblés à la main, en petits morceaux lisibles.
 
-_Compromis : plus de code maison qu’avec Nuxt._
+<small>Compromis : plus de code maison qu’avec Nuxt.</small>
 
 ## Résultats
 

@@ -84,7 +84,8 @@
     "next": "Projet suivant",
     "all": "Tous les projets",
     "after": "Suite",
-    "demo": "Démo"
+    "demo": "Démo",
+    "capture": "Capture de {title}"
   },
   "meta": {
     "type": "Type",

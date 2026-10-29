@@ -73,3 +73,18 @@ test('le menu mobile se ferme avec Échap et rend le focus au bouton', async ({ 
   await expect(page.getByRole('dialog')).toBeHidden()
   await expect(page.getByRole('button', { name: 'Menu' })).toBeFocused()
 })
+
+test('P2 : des projets à une étude de cas, par son sommaire, puis retour à la liste', async ({
+  page,
+}) => {
+  await page.goto('/fr/projets/')
+  await page.getByRole('link', { name: 'Ce portfolio' }).click()
+  await expect(page.getByRole('heading', { level: 1, name: 'Ce portfolio' })).toBeVisible()
+  await page
+    .getByRole('navigation', { name: 'Sommaire' })
+    .getByRole('link', { name: 'Résultats' })
+    .click()
+  await expect(page.locator('#resultats')).toBeInViewport()
+  await page.getByRole('link', { name: 'Tous les projets' }).click()
+  await expect(page).toHaveURL(/\/fr\/projets\/?$/)
+})

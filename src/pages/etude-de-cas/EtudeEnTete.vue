@@ -53,8 +53,10 @@ const fiche = computed(() => {
         class="shot"
         :device="project.capture.device"
         :src="project.capture.src"
+        :alt="t('case.capture', { title: project.title })"
         :label="project.capture.label ?? project.title"
         stage="var(--lime-500)"
+        eager
       />
     </div>
   </section>

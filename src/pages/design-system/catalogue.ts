@@ -397,7 +397,8 @@ export const ENTRIES: Entry[] = [
       {
         name: 'icon',
         type: "'arrow-right' | 'download' | 'arrow-up-right' | 'github'",
-        description: 'Icône à droite, qui avance au survol dans son sens',
+        description:
+          'Icône à droite ; une flèche avance au survol dans son sens, le logo github ne bouge pas',
       },
       { name: 'to', type: 'RouteLocationRaw', description: 'Page du site (lien du routeur)' },
       { name: 'href', type: 'string', description: 'Fichier ou site externe (nouvel onglet)' },
@@ -581,6 +582,12 @@ export const ENTRIES: Entry[] = [
       { name: 'alt', type: 'string', description: 'Description de l’écran (vide dans une carte)' },
       { name: 'label', type: 'string', description: 'Texte de l’écran provisoire' },
       { name: 'stage', type: 'string', description: 'Teinte du fond de capture' },
+      {
+        name: 'eager',
+        type: 'boolean',
+        default: 'false',
+        description: 'Chargée tout de suite (capture principale, visible dès l’arrivée)',
+      },
     ],
     controls: [
       {

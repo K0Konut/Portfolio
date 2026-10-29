@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import SectionWave from '../components/fonds/SectionWave.vue'
+import PageIntro from '../components/mise-en-page/PageIntro.vue'
 import PageSection from '../components/mise-en-page/PageSection.vue'
 import NextLink from '../components/ui/NextLink.vue'
 import StickyToc from '../components/ui/StickyToc.vue'
@@ -30,8 +31,11 @@ const next = computed(() =>
 
 useHead({
   title: computed(() => project.value && `${project.value.title} · ${SITE.name}`),
+  // Projet introuvable (ou pas encore traduit) : le message de la 404, hors des moteurs de recherche
   meta: computed(() =>
-    project.value ? [{ name: 'description', content: project.value.description }] : [],
+    project.value
+      ? [{ name: 'description', content: project.value.description }]
+      : [{ name: 'robots', content: 'noindex' }],
   ),
 })
 </script>
@@ -62,6 +66,10 @@ useHead({
         </nav>
       </PageSection>
       <SectionWave :seed="7" from="rose" to="nuit" />
+    </template>
+    <template v-else>
+      <PageIntro :title="t('notFound.title')">{{ t('notFound.text') }}</PageIntro>
+      <SectionWave :seed="7" from="violet" to="nuit" />
     </template>
   </main>
 </template>
@@ -118,17 +126,15 @@ useHead({
   font-size: var(--text-lead);
   line-height: var(--leading-snug);
 }
-/* Le compromis d'un choix technique, écrit en italique dans le Markdown */
-.prose :deep(p:has(> em:only-child)) {
+/* Le compromis d'un choix technique, écrit <small> dans le Markdown */
+.prose :deep(small) {
   font-size: var(--text-sm);
   color: var(--color-text-subtle);
 }
-.prose :deep(p > em:only-child) {
-  font-style: normal;
-}
 /* Listes : le titre de chaque élément en gras, sur sa ligne */
 .prose :deep(:is(ul, ol)) {
-  list-style: none;
+  /* Une puce invisible plutôt que « none » : Safari garderait sinon la liste muette pour VoiceOver */
+  list-style-type: '\200B';
   padding: 0;
   display: grid;
 }
