@@ -51,7 +51,7 @@ export interface Project extends ProjectSummary {
 
 /** Une étape du parcours, du plus ancien au plus récent, montrée en BaseTimeline */
 export interface TimelineStep {
-  /** Étiquette : lycée, école, stage ou job étudiant */
+  /** Étiquette, dans la langue du fichier : lycée, école, échange, stage, job étudiant… */
   kind: string
   dates: string
   title: string

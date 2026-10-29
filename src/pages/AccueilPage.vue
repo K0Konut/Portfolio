@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SectionWave from '../components/fonds/SectionWave.vue'
 import PageSection from '../components/mise-en-page/PageSection.vue'
@@ -13,6 +13,7 @@ import { pageText } from '../content/pages'
 import { featuredProjects } from '../content/projects'
 import AccueilHero from './accueil/AccueilHero.vue'
 import ParlonsEn from './blocs/ParlonsEn.vue'
+import TitreEtTexte from './blocs/TitreEtTexte.vue'
 
 /* Accueil (design system §5, architecture de contenu §4) : violet → nuit → crème → vif → lime,
    une vague à chaque changement de fond, jusqu'au pied de page (nuit). */
@@ -20,7 +21,6 @@ const { t, tm } = useI18n()
 const { locale, to } = useLocale()
 const projects = computed(() => featuredProjects(locale.value))
 const who = computed(() => pageText(locale.value, 'qui-je-suis'))
-const whoTitle = useId()
 const steps = computed(() => tm('method.steps') as { title: string; text: string }[])
 </script>
 
@@ -37,16 +37,9 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
       }}</TextLink>
     </PageSection>
     <SectionWave :seed="2" from="nuit" to="creme" />
-    <!-- Titre à côté du texte sur bureau : la section porte le sien (labelledby) -->
-    <PageSection fond="creme" :labelledby="whoTitle">
-      <div class="about">
-        <h2 :id="whoTitle" v-reveal class="display">{{ t('home.whoTitle') }}</h2>
-        <div v-reveal="1" class="about-text">
-          <component :is="who" v-if="who" class="lead" />
-          <BaseButton icon="arrow-right" :to="to('a-propos')">{{ t('home.whoMore') }}</BaseButton>
-        </div>
-      </div>
-    </PageSection>
+    <TitreEtTexte :title="t('home.whoTitle')" :text="who">
+      <BaseButton icon="arrow-right" :to="to('a-propos')">{{ t('home.whoMore') }}</BaseButton>
+    </TitreEtTexte>
     <SectionWave :seed="3" from="creme" to="vif" />
     <PageSection fond="vif" :title="t('home.methodTitle')">
       <template #intro>{{ t('home.methodIntro') }}</template>
@@ -73,26 +66,5 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
 }
 .start {
   justify-self: start;
-}
-.about {
-  display: grid;
-  gap: var(--space-6);
-}
-@media (min-width: 1024px) {
-  .about {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-    align-items: start;
-  }
-}
-.about h2 {
-  font-size: var(--text-h2);
-}
-.about-text {
-  display: grid;
-  gap: var(--space-6);
-  justify-items: start;
-}
-.about-text :deep(p) {
-  margin: 0;
 }
 </style>

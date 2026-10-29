@@ -93,15 +93,8 @@ useHead({
   gap: var(--space-6);
 }
 
-/* Le corps en Markdown : un h2 par bloc du gabarit (contexte, besoin…), texte limité à --measure */
-.prose {
-  display: grid;
-  gap: var(--space-4);
-  min-width: 0;
-}
+/* Le corps en Markdown (base : .prose, base.css) : un h2 par bloc du gabarit (contexte, besoin…) */
 .prose :deep(:is(p, ul, ol)) {
-  margin: 0;
-  max-width: var(--measure);
   color: var(--color-text-muted);
 }
 .prose :deep(h2) {
@@ -110,7 +103,6 @@ useHead({
   font-weight: var(--weight-regular);
   font-size: var(--text-h2);
   line-height: var(--leading-display);
-  scroll-margin-top: calc(var(--header-height) + var(--space-5));
 }
 .prose :deep(* + h2) {
   margin-top: var(--space-8);
