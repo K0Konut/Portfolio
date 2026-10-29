@@ -34,7 +34,12 @@ const path = computed(() =>
       : undefined,
   })),
 )
-const skills = computed(() => allSkills(locale.value))
+const skills = computed(() =>
+  allSkills(locale.value).map(({ title, skills }) => ({
+    title,
+    items: skills.map(({ name, site }) => ({ name, highlight: site })),
+  })),
+)
 const steps = computed(() => tm('method.steps') as { title: string; text: string }[])
 </script>
 
@@ -53,8 +58,8 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
       <template #intro>{{ t('about.skillsIntro') }}</template>
       <PosterGrid :columns="5">
         <PosterCard v-for="category in skills" :key="category.title" as="article" class="skills">
-          <h3>{{ category.title }}</h3>
-          <DotList :items="category.skills.map(({ name, site }) => ({ name, highlight: site }))" />
+          <h3 class="hl">{{ category.title }}</h3>
+          <DotList :items="category.items" />
         </PosterCard>
       </PosterGrid>
       <p v-reveal class="legend">
@@ -92,12 +97,7 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
 }
 .skills h3 {
   margin: 0;
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: var(--weight-regular);
   font-size: var(--text-lead);
-  line-height: var(--leading-none);
-  color: var(--color-highlight);
 }
 .legend {
   margin: 0;

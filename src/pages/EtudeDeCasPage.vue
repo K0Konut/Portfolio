@@ -103,7 +103,6 @@ useHead({
   font-weight: var(--weight-regular);
   font-size: var(--text-h2);
   line-height: var(--leading-display);
-  scroll-margin-top: calc(var(--header-height) + var(--space-5));
 }
 .prose :deep(* + h2) {
   margin-top: var(--space-8);
