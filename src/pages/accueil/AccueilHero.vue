@@ -89,7 +89,7 @@ onBeforeUnmount(() => {
 <template>
   <!-- Le fond topographique couvre la section et sa vague : les courbes descendent jusqu'au bord ondulé -->
   <div class="hero-zone fond-violet">
-    <TopoBackground />
+    <TopoBackground class="topo-zone" />
     <section ref="root" class="hero" aria-labelledby="nom">
       <div class="inner">
         <ScrollParallax id="nom" data-intro-hide>
@@ -129,6 +129,14 @@ onBeforeUnmount(() => {
 .hero-zone {
   position: relative;
   overflow: hidden;
+}
+/* Le violet et le fond topographique s'arrêtent un peu avant le bas, toujours nuit plein sous la vague :
+   à 125 ou 150 % de zoom, le bord tombe entre deux pixels et ils y transparaissaient en liseré */
+.hero-zone {
+  background: linear-gradient(var(--color-bg) calc(100% - var(--space-2)), transparent 0);
+}
+.hero-zone > .topo-zone {
+  bottom: var(--space-2);
 }
 .hero {
   position: relative;
