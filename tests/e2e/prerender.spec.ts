@@ -102,3 +102,15 @@ test("l'à-propos porte l'ancre « methode », cible du bouton « Voir ma métho
 }) => {
   expect(await (await request.get('/fr/a-propos/')).text()).toContain('id="methode"')
 })
+
+test("chaque page porte sa description et son aperçu de partage (Open Graph), l'étude de cas sa capture", async ({
+  request,
+}) => {
+  const home = await (await request.get('/fr/')).text()
+  expect(home).toMatch(/<meta name="description" content="Portfolio de Costa Maskulov/)
+  expect(home).toMatch(/<meta property="og:image" content="[^"]*\/og\.jpg"/)
+  const study = await (await request.get('/fr/projets/ce-portfolio/')).text()
+  expect(study).toMatch(/<meta property="og:image" content="[^"]*\/assets\/capture-[^"]+\.png"/)
+  expect(study.match(/<meta name="description"/g)).toHaveLength(1)
+  expect((await request.get('/og.jpg')).status()).toBe(200)
+})
