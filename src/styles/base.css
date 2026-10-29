@@ -92,6 +92,15 @@ svg {
   margin: 0;
   max-width: var(--measure);
 }
+/* Un lien dans le texte : comme TextLink inline */
+.prose a {
+  color: var(--color-action);
+  text-decoration-thickness: var(--border-thin);
+  text-underline-offset: 0.2em;
+}
+.prose a:is(:hover, :focus-visible) {
+  text-decoration-thickness: var(--underline);
+}
 
 /* Lien de l'en-tête (navigation, langues) : un trait se trace au survol, il reste sur l'élément en cours */
 .trace {

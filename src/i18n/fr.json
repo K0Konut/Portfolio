@@ -9,9 +9,6 @@
     "confidentialite": { "title": "Confidentialité · Costa Maskulov" },
     "404": { "title": "Page introuvable · Costa Maskulov" }
   },
-  "placeholder": {
-    "text": "Page en construction."
-  },
   "ui": {
     "toc": "Sommaire",
     "skip": "Aller au contenu",
