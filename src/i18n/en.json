@@ -9,9 +9,6 @@
     "confidentialite": { "title": "Privacy · Costa Maskulov" },
     "404": { "title": "Page not found · Costa Maskulov" }
   },
-  "placeholder": {
-    "text": "Page under construction."
-  },
   "ui": {
     "toc": "Contents",
     "skip": "Skip to content",

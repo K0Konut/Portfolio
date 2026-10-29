@@ -18,13 +18,15 @@ declare module 'vue-router' {
   }
 }
 
-const placeholder = () => import('../pages/PlaceholderPage.vue')
-// Les pages construites ; les autres gardent la page provisoire jusqu'à leur tour (architecture technique §11)
-const views: Partial<Record<PageName, () => Promise<Component>>> = {
+const views: Record<PageName, () => Promise<Component>> = {
   accueil: () => import('../pages/AccueilPage.vue'),
   projets: () => import('../pages/ProjetsPage.vue'),
   'etude-de-cas': () => import('../pages/EtudeDeCasPage.vue'),
   'a-propos': () => import('../pages/AProposPage.vue'),
+  contact: () => import('../pages/ContactPage.vue'),
+  'mentions-legales': () => import('../pages/LegalPage.vue'),
+  confidentialite: () => import('../pages/LegalPage.vue'),
+  '404': () => import('../pages/IntrouvablePage.vue'),
 }
 
 export function buildRoutes(): RouteRecordRaw[] {
@@ -32,7 +34,7 @@ export function buildRoutes(): RouteRecordRaw[] {
     LOCALES.map((locale) => ({
       path: page.paths[locale],
       name: routeName(page.name, locale),
-      component: views[page.name] ?? placeholder,
+      component: views[page.name],
       meta: {
         page: page.name,
         section: 'section' in page ? page.section : page.name,
@@ -47,7 +49,7 @@ export function buildRoutes(): RouteRecordRaw[] {
   routes.push({
     path: '/:pathMatch(.*)*',
     name: 'introuvable',
-    component: placeholder,
+    component: views['404'],
     meta: { page: '404', noindex: true },
   })
   return routes

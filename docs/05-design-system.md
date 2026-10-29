@@ -586,7 +586,7 @@ Accueil `violet` (section d'accueil) → `nuit` (projets) → `creme` (qui je su
 
 ### 404
 
-`PageIntro` `center` `full` : « Il manque une brique. » et « Erreur 404 : cette page n'existe pas, ou plus. Replacez la brique pour revenir à l'accueil. » ; slot `before` : un mur crème de trois rangées appareillées (5, 4 et 5 briques de `--space-8` × `--space-6`, `--space-7` × `--space-5` sous 768 px), avec un trou en pointillés `--color-highlight`, puis la brique (`DragToSnap`, cible : le trou) inclinée de -14°, redressée à -4° pendant le glisser, lime une fois logée ; le trou s'allume quand `near`. Slot `after` : la ligne d'état (`aria-live`, « Le mur est complet. Retour à l'accueil… » au `snap`) et les boutons « Retour à l'accueil » (`primary`) et « Voir les projets » (`outline`, `arrow-right`). Au `snap`, la page mène à l'accueil après 0,9 s (`--duration-reduced` en mouvement réduit).
+`PageIntro` `center` `full` : « Il manque une brique. » et « Erreur 404 : cette page n'existe pas, ou plus. Replacez la brique pour revenir à l'accueil. » ; slot `before` : un mur crème de trois rangées appareillées (5, 4 et 5 briques de `--space-8` × `--space-6`, `--space-7` × `--space-5` sous 768 px), avec un trou en pointillés `--color-highlight`, puis la brique (`DragToSnap`, cible : le trou) inclinée de -14°, redressée à -4° pendant le glisser, lime une fois logée ; le trou s'allume quand `near`. Slot `after` : la ligne d'état (`aria-live`, « Le mur est complet. Retour à l'accueil… » au `snap`) et les boutons « Retour à l'accueil » (`primary`) et « Voir les projets » (`outline`, `arrow-right`). Au `snap`, la page mène à l'accueil après 0,9 s, y compris en mouvement réduit : le temps que l'état soit annoncé.
 
 ---
 

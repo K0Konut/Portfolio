@@ -33,8 +33,7 @@ content/                     contenu, séparé du code (§4)
     projets/<slug>.md        une étude de cas par fichier
     parcours.ts              frise (dates, lieux, rôles)
     competences.ts           catégories et technos (+ marque « ce site »)
-    pages/                   textes des pages (accueil, à propos…)
-    legal/                   mentions légales, confidentialité
+    pages/                   textes longs des pages (accueil, à propos, mentions légales, confidentialité)
   images/projets/<slug>/     capture 1440 × 900 ou 390 × 844
 public/
   fonts/                     polices auto-hébergées (déjà en place)

@@ -94,9 +94,6 @@ useHead({
 }
 
 /* Le corps en Markdown (base : .prose, base.css) : un h2 par bloc du gabarit (contexte, besoin…) */
-.prose :deep(:is(p, ul, ol)) {
-  color: var(--color-text-muted);
-}
 .prose :deep(h2) {
   margin: 0;
   font-family: var(--font-display);

@@ -30,17 +30,7 @@ const shownIcon = computed(() => (external.value ? 'arrow-up-right' : props.icon
 </template>
 
 <style scoped>
-/* Toujours souligné : un lien ne se confond jamais avec une mise en valeur (DA §2, règle 1) */
-.link-inline {
-  color: var(--color-action);
-  text-decoration: underline;
-  text-decoration-thickness: var(--border-thin);
-  text-underline-offset: 0.2em;
-}
-.link-inline:hover,
-.link-inline:focus-visible {
-  text-decoration-thickness: var(--underline);
-}
+/* .link-inline : style commun avec les liens du Markdown (base.css) */
 .link-inline .icon {
   display: inline;
   vertical-align: -0.15em;

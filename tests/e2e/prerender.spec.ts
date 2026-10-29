@@ -13,6 +13,13 @@ const pages = [
   { path: '/en/about/', lang: 'en', title: 'About · Costa Maskulov', h1: 'About' },
   { path: '/fr/a-propos/', lang: 'fr', title: 'À propos · Costa Maskulov', h1: 'À propos' },
   {
+    path: '/fr/404/',
+    lang: 'fr',
+    title: 'Page introuvable · Costa Maskulov',
+    h1: 'Il manque une brique.',
+  },
+  { path: '/fr/contact/', lang: 'fr', title: 'Contact · Costa Maskulov', h1: 'Contact' },
+  {
     path: '/fr/projets/ce-portfolio/',
     lang: 'fr',
     title: 'Ce portfolio · Costa Maskulov',
