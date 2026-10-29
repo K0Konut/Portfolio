@@ -301,14 +301,14 @@ Repris du header existant du propriétaire, adapté à la DA.
 
 - **Rôle** : déclencher une action ou mener à une page importante (CV, contact, tous les projets, projet suivant).
 - **Élément** : `<a>` quand il mène quelque part (avec `download` pour le CV), `<button type="button">` quand il agit sur la page. Jamais un `<div>` cliquable.
-- **Options** : `variant` (`primary`, `outline` par défaut) ; `icon` (`arrow-right`, `download`, `arrow-up-right`) ; `to` (route) ou `href` ; `download` ; `compact` (hauteur `--target-min`, pour `CopyButton`).
+- **Options** : `variant` (`primary`, `outline` par défaut) ; `icon` (`arrow-right`, `download`, `arrow-up-right`, `github`) ; `to` (route) ou `href` ; `download` ; `compact` (hauteur `--target-min`, pour `CopyButton`).
 - **Variantes**
   - `primary` : fond `--color-action`, texte `--color-on-action`. Une seule par écran visible : c'est l'action principale.
   - `outline` : transparent, bordure `--border-strong` et texte `--color-text`.
 - **Taille unique** : Manrope `--weight-bold`, `--text-ui`, `--leading-none` ; marges `--space-4` × `--space-5` ; hauteur ≥ `--target-min` ; rayon `--radius-pill`.
-- **Icône optionnelle, à droite** (`--icon-sm`) : `arrow-right` pour aller vers une page, `download` pour le CV, `arrow-up-right` pour un site externe. Pas d'icône décorative.
+- **Icône optionnelle, à droite** (`--icon-sm`) : `arrow-right` pour aller vers une page, `download` pour le CV, `arrow-up-right` pour un site externe, `github` pour le code d'un projet. Pas d'icône décorative.
 - **États**
-  - Survol : `primary` passe en fond `--color-text` ; `outline` se remplit en `--color-text` avec texte `--color-bg`. Le bouton monte de `--hover-lift`. L'icône avance de `--hover-nudge` dans son sens (droite, bas pour `download`, diagonale pour `arrow-up-right`). Durée `--duration-fast`, courbe `--ease-out`.
+  - Survol : `primary` passe en fond `--color-text` ; `outline` se remplit en `--color-text` avec texte `--color-bg`. Le bouton monte de `--hover-lift`. L'icône avance de `--hover-nudge` dans son sens (droite, bas pour `download`, diagonale pour `arrow-up-right` ; le logo `github` ne bouge pas). Durée `--duration-fast`, courbe `--ease-out`.
   - Clic : `scale(var(--press-scale))` en `--duration-press`.
   - Focus : anneau `--focus-width` en `--color-focus`, décalé de `--focus-offset`.
   - Pas d'état désactivé ni de chargement : aucune action de la V1 n'en a besoin.

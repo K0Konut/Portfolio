@@ -39,7 +39,7 @@ const fiche = computed(() => {
         <h1 :id="titleId" v-reveal class="display">{{ project.title }}</h1>
         <p v-reveal="1" class="lead">{{ project.description }}</p>
         <div v-if="project.links.code || project.links.demo" v-reveal="2" class="links">
-          <BaseButton v-if="project.links.code" :href="project.links.code" icon="arrow-up-right">{{
+          <BaseButton v-if="project.links.code" :href="project.links.code" icon="github">{{
             t('meta.code')
           }}</BaseButton>
           <BaseButton v-if="project.links.demo" :href="project.links.demo" icon="arrow-up-right">{{

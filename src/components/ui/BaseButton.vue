@@ -2,7 +2,7 @@
 import { useLink, type LinkProps } from '../../composables/useLink'
 import BaseIcon from './BaseIcon.vue'
 
-type ButtonIcon = 'arrow-right' | 'download' | 'arrow-up-right'
+type ButtonIcon = 'arrow-right' | 'download' | 'arrow-up-right' | 'github'
 
 const props = withDefaults(
   defineProps<
@@ -80,6 +80,10 @@ const { tag, attrs, newTab } = useLink(props)
 }
 .btn-arrow-up-right:hover .icon {
   transform: translate(var(--hover-nudge), calc(-1 * var(--hover-nudge)));
+}
+/* Un logo ne se déplace pas */
+.btn-github:hover .icon {
+  transform: none;
 }
 .btn:active {
   transform: scale(var(--press-scale));

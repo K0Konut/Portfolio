@@ -396,7 +396,7 @@ export const ENTRIES: Entry[] = [
       { name: 'variant', type: "'primary' | 'outline'", default: 'outline', description: 'Style' },
       {
         name: 'icon',
-        type: "'arrow-right' | 'download' | 'arrow-up-right'",
+        type: "'arrow-right' | 'download' | 'arrow-up-right' | 'github'",
         description: 'Icône à droite, qui avance au survol dans son sens',
       },
       { name: 'to', type: 'RouteLocationRaw', description: 'Page du site (lien du routeur)' },
@@ -423,7 +423,7 @@ export const ENTRIES: Entry[] = [
         label: 'Icône',
         type: 'select',
         initial: 'download',
-        options: ['', 'arrow-right', 'download', 'arrow-up-right'],
+        options: ['', 'arrow-right', 'download', 'arrow-up-right', 'github'],
       },
       { key: 'href', label: 'Lien', type: 'text', initial: '' },
       { key: 'download', label: 'Téléchargement', type: 'boolean', initial: false },
