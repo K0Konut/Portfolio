@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
+import { useSeoMeta } from '@unhead/vue'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -10,6 +10,7 @@ import NextLink from '../components/ui/NextLink.vue'
 import StickyToc from '../components/ui/StickyToc.vue'
 import TextLink from '../components/ui/TextLink.vue'
 import { useLocale } from '../composables/useLocale'
+import { absolute } from '../composables/useSeo'
 import { projectBody, projects } from '../content/projects'
 import { SITE } from '../content/site'
 import EtudeEnTete from './etude-de-cas/EtudeEnTete.vue'
@@ -29,14 +30,15 @@ const next = computed(() =>
   list.value.length > 1 ? list.value[(index.value + 1) % list.value.length] : undefined,
 )
 
-useHead({
-  title: computed(() => project.value && `${project.value.title} · ${SITE.name}`),
-  // Projet introuvable (ou pas encore traduit) : le message de la 404, hors des moteurs de recherche
-  meta: computed(() =>
-    project.value
-      ? [{ name: 'description', content: project.value.description }]
-      : [{ name: 'robots', content: 'noindex' }],
-  ),
+const title = computed(() => project.value && `${project.value.title} · ${SITE.name}`)
+// Précise les balises de useSeo ; projet introuvable (ou pas encore traduit) : la 404, hors des moteurs
+useSeoMeta({
+  title,
+  ogTitle: title,
+  description: computed(() => project.value?.description),
+  ogDescription: computed(() => project.value?.description),
+  ogImage: computed(() => project.value?.capture.src && absolute(project.value.capture.src)),
+  robots: computed(() => (project.value ? undefined : 'noindex')),
 })
 </script>
 

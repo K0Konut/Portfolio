@@ -1,10 +1,22 @@
 {
   "pages": {
-    "accueil": { "title": "Costa Maskulov · Full-stack developer" },
-    "projets": { "title": "Projects · Costa Maskulov" },
+    "accueil": {
+      "title": "Costa Maskulov · Full-stack developer",
+      "description": "Portfolio of Costa Maskulov, an engineering student at ESIEA looking for a full-stack end-of-studies internship: projects, case studies and method."
+    },
+    "projets": {
+      "title": "Projects · Costa Maskulov",
+      "description": "Costa Maskulov’s projects, from the most recent to the oldest, each with its case study: the need, the method and the technical choices."
+    },
     "etude-de-cas": { "title": "Case study · Costa Maskulov" },
-    "a-propos": { "title": "About · Costa Maskulov" },
-    "contact": { "title": "Contact · Costa Maskulov" },
+    "a-propos": {
+      "title": "About · Costa Maskulov",
+      "description": "The path, skills and way of working of Costa Maskulov, an engineering student at ESIEA."
+    },
+    "contact": {
+      "title": "Contact · Costa Maskulov",
+      "description": "Contact Costa Maskulov for a full-stack end-of-studies internship: email, CV, LinkedIn and GitHub."
+    },
     "mentions-legales": { "title": "Legal notice · Costa Maskulov" },
     "confidentialite": { "title": "Privacy · Costa Maskulov" },
     "404": { "title": "Page not found · Costa Maskulov" }
