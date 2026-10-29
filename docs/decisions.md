@@ -104,3 +104,4 @@
 | 28/10/2026 | Une seule étude de cas pour l'instant (« Ce portfolio ») ; les quatre autres projets arrivent avec leur contenu | Choix du propriétaire : pas de fichiers vides |
 | 28/10/2026 | `check-content` bloque la mise en ligne (image Docker), pas le build des PR | Le CI pré-rend le site sur chaque PR : bloquer là rendrait toutes les PR rouges tant que le contenu est provisoire |
 | 29/10/2026 | Accueil : le fond topographique se prolonge dans la vague qui ferme la section d'accueil (`SectionWave` `transparent`) | Demande du propriétaire : les courbes s'arrêtaient net au bord de la section alors que le violet continuait dans la vague |
+| 29/10/2026 | 404 : le retour à l'accueil après la brique attend 0,9 s aussi en mouvement réduit (au lieu de `--duration-reduced`) | Relecture : 0,3 s ne laissait pas au lecteur d'écran le temps d'annoncer « Le mur est complet » ; le mouvement réduit raccourcit les animations, pas le temps de lecture |

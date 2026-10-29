@@ -1,8 +1,12 @@
+<script setup>
+import { SITE } from '../../../src/content/site'
+</script>
+
 ## Éditeur
 
 Ce site est édité par Costa Maskulov, à titre personnel.
 
-Contact : <a href="mailto:maskulov12.pro@gmail.com">maskulov12.pro@gmail.com</a>
+Contact : <a :href="`mailto:${SITE.email}`">{{ SITE.email }}</a>
 
 Directeur de la publication : Costa Maskulov.
 

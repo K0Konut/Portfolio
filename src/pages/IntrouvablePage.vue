@@ -6,14 +6,14 @@ import DragToSnap from '../components/animations/DragToSnap.vue'
 import SectionWave from '../components/fonds/SectionWave.vue'
 import PageIntro from '../components/mise-en-page/PageIntro.vue'
 import BaseButton from '../components/ui/BaseButton.vue'
-import { reducedMotion, seconds } from '../composables/motion'
 import { useLocale } from '../composables/useLocale'
 
 /* Page 404 (design system v1.2 §5) : « Il manque une brique. » La brique tombée (DragToSnap) se glisse dans
    le trou du mur ; une fois logée, la page mène à l'accueil. Le mur, le trou et l'apparence de la brique sont
    propres à la page. */
-/** Délai avant le retour à l'accueil (s) : le temps de voir le mur complet ; --duration-reduced en mouvement réduit */
-const REDIRECT = 0.9
+/** Délai avant le retour à l'accueil (ms) : le temps de voir le mur complet et que l'état soit annoncé.
+    Le même en mouvement réduit, qui raccourcit les animations, pas le temps de lecture */
+const REDIRECT = 900
 
 const { t } = useI18n()
 const { to } = useLocale()
@@ -27,8 +27,7 @@ let timer: ReturnType<typeof setTimeout> | undefined
 // La brique est logée : l'état l'annonce, puis la page mène à l'accueil
 function onSnap() {
   placed.value = true
-  const delay = reducedMotion().matches ? seconds('--duration-reduced') : REDIRECT
-  timer = setTimeout(() => router.push(to('accueil')), delay * 1000)
+  timer = setTimeout(() => router.push(to('accueil')), REDIRECT)
 }
 
 onBeforeUnmount(() => clearTimeout(timer))

@@ -7,23 +7,20 @@ import PageIntro from '../components/mise-en-page/PageIntro.vue'
 import PageSection from '../components/mise-en-page/PageSection.vue'
 import { useLocale } from '../composables/useLocale'
 import { pageText } from '../content/pages'
-import type { PageName } from '../router/pages'
 
 // Mentions légales et confidentialité : le titre, puis le texte en Markdown (content/<langue>/pages/<page>.md)
 const route = useRoute()
 const { t } = useI18n()
 const { locale } = useLocale()
-const TITLES: Partial<Record<PageName, string>> = {
-  'mentions-legales': 'footer.legal',
-  confidentialite: 'footer.privacy',
-}
-const page = computed(() => route.meta.page ?? 'mentions-legales')
+const TITLES = { 'mentions-legales': 'footer.legal', confidentialite: 'footer.privacy' }
+// routes.ts ne monte cette vue que pour ces deux pages
+const page = computed(() => route.meta.page as keyof typeof TITLES)
 const text = computed(() => pageText(locale.value, page.value))
 </script>
 
 <template>
   <main id="contenu" tabindex="-1">
-    <PageIntro :title="t(TITLES[page] ?? 'footer.legal')" />
+    <PageIntro :title="t(TITLES[page])" />
     <SectionWave :seed="1" from="violet" to="nuit" />
     <PageSection>
       <component :is="text" v-if="text" class="prose legal" />

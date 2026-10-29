@@ -1,3 +1,7 @@
+<script setup>
+import { SITE } from '../../../src/content/site'
+</script>
+
 ## En bref
 
 Ce site ne collecte aucune donnée personnelle : pas de cookies, pas de mesure d’audience, pas de formulaire.
@@ -12,4 +16,4 @@ Votre adresse mail et votre message servent uniquement à vous répondre. Ils ne
 
 ## Vos droits
 
-Vous pouvez demander l’accès à vos données, leur correction ou leur suppression en écrivant à <a href="mailto:maskulov12.pro@gmail.com">maskulov12.pro@gmail.com</a>. Vous pouvez aussi saisir la CNIL.
+Vous pouvez demander l’accès à vos données, leur correction ou leur suppression en écrivant à <a :href="`mailto:${SITE.email}`">{{ SITE.email }}</a>. Vous pouvez aussi saisir la CNIL.
