@@ -4,19 +4,25 @@ import { existsSync, readdirSync } from 'node:fs'
 
 // Le HTML brut, sans JavaScript : ce que lit un moteur de recherche (architecture technique §5)
 const pages = [
-  { path: '/fr/', lang: 'fr', title: 'Costa Maskulov · Développeur full-stack' },
+  {
+    path: '/fr/',
+    lang: 'fr',
+    title: 'Costa Maskulov · Développeur full-stack',
+    h1: 'Costa Maskulov',
+  },
   { path: '/en/about/', lang: 'en', title: 'About · Costa Maskulov' },
   { path: '/fr/projets/ce-portfolio/', lang: 'fr', title: 'Étude de cas · Costa Maskulov' },
 ]
 
-for (const { path, lang, title } of pages) {
+for (const { path, lang, title, h1 = title } of pages) {
   test(`${path} est pré-rendue avec sa langue, son titre et ses hreflang`, async ({ request }) => {
     const res = await request.get(path)
     expect(res.status()).toBe(200)
     const html = await res.text()
     expect(html).toContain(`<html lang="${lang}"`)
     expect(html).toContain(`<title>${title}</title>`)
-    expect(html).toMatch(new RegExp(`<h1[^>]*>${title}</h1>`))
+    // Le texte du titre, éventuellement dans un span (le nom en LetterReveal)
+    expect(html).toMatch(new RegExp(`<h1[^>]*>(<span[^>]*>)?${h1}<`))
     expect(html).toMatch(/hreflang="x-default"/)
   })
 }
@@ -33,6 +39,9 @@ test("la vitrine des composants n'est pas dans le build, ni sa page ni son code"
 
 test("l'accueil n'a pas d'erreur d'accessibilité détectable", async ({ page }) => {
   await page.goto('/fr/')
+  // Après l'entrée animée : un texte en plein fondu fausserait le calcul des contrastes
+  await expect(page.locator('.actions')).toHaveCSS('opacity', '1')
+  await page.waitForFunction('document.getAnimations().length === 0')
   const { violations } = await new AxeBuilder({ page }).analyze()
   expect(violations).toEqual([])
 })

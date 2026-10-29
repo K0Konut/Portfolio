@@ -258,11 +258,19 @@ export const ENTRIES: Entry[] = [
         description: 'Fond de la section du dessus (couleur de la vague)',
       },
       { name: 'to', type: 'Fond', description: 'Fond de la section du dessous' },
+      {
+        name: 'transparent',
+        type: 'boolean',
+        default: 'false',
+        description:
+          'Le dessus reste transparent : posée dans la section du dessus, la vague laisse voir son fond animé (TopoBackground)',
+      },
     ],
     controls: [
       { key: 'seed', label: 'Graine', type: 'number', initial: 3, min: 1, max: 40 },
       { key: 'from', label: 'Fond du dessus', type: 'select', initial: 'violet', options: FONDS },
       { key: 'to', label: 'Fond du dessous', type: 'select', initial: 'nuit', options: FONDS },
+      { key: 'transparent', label: 'Dessus transparent', type: 'boolean', initial: false },
     ],
   },
   {

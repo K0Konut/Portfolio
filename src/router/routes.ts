@@ -1,3 +1,4 @@
+import type { Component } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { DEFAULT_LOCALE, LOCALES, PAGES, routeName, type Locale, type PageName } from './pages'
 
@@ -18,13 +19,17 @@ declare module 'vue-router' {
 }
 
 const placeholder = () => import('../pages/PlaceholderPage.vue')
+// Les pages construites ; les autres gardent la page provisoire jusqu'à leur tour (architecture technique §11)
+const views: Partial<Record<PageName, () => Promise<Component>>> = {
+  accueil: () => import('../pages/AccueilPage.vue'),
+}
 
 export function buildRoutes(): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = PAGES.flatMap((page) =>
     LOCALES.map((locale) => ({
       path: page.paths[locale],
       name: routeName(page.name, locale),
-      component: placeholder,
+      component: views[page.name] ?? placeholder,
       meta: {
         page: page.name,
         section: 'section' in page ? page.section : page.name,

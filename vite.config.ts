@@ -28,6 +28,19 @@ export default defineConfig(({ mode }) => {
         }),
       }),
     ],
+    build: {
+      rolldownOptions: {
+        output: {
+          // GSAP dans son propre fichier : l'accueil l'importe directement, les autres pages à la demande
+          codeSplitting: {
+            // Le cœur seulement : ScrollTrigger reste chargé à la demande (rien en mouvement réduit)
+            groups: [
+              { name: 'gsap', test: /node_modules[\\/]gsap[\\/](index|gsap-core|CSSPlugin)\.js/ },
+            ],
+          },
+        },
+      },
+    },
     ssgOptions: {
       script: 'async',
       formatting: 'minify',

@@ -116,5 +116,15 @@
     "done": "Le mur est complet. Retour à l’accueil…",
     "home": "Retour à l’accueil",
     "projects": "Voir les projets"
+  },
+  "home": {
+    "projectsTitle": "Projets",
+    "projectsIntro": "La sélection du moment : trois projets, du besoin au code.",
+    "whoTitle": "Qui je suis",
+    "whoMore": "En savoir plus sur moi",
+    "methodTitle": "Ma façon de travailler",
+    "methodIntro": "Chaque projet passe par les mêmes étapes, du besoin jusqu’à la mise en ligne.",
+    "methodMore": "Voir ma méthode",
+    "contactIntro": "Vous cherchez un développeur full-stack pour un stage de fin d’études ? Écrivez-moi."
   }
 }
