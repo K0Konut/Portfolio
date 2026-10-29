@@ -35,9 +35,9 @@ const path = computed(() =>
   })),
 )
 const skills = computed(() =>
-  allSkills(locale.value).map(({ title, skills }) => ({
+  allSkills(locale.value).map(({ title, skills: list }) => ({
     title,
-    items: skills.map(({ name, site }) => ({ name, highlight: site })),
+    items: list.map(({ name, site }) => ({ name, highlight: site })),
   })),
 )
 const steps = computed(() => tm('method.steps') as { title: string; text: string }[])

@@ -11,6 +11,7 @@ const pages = [
     h1: 'Costa Maskulov',
   },
   { path: '/en/about/', lang: 'en', title: 'About · Costa Maskulov', h1: 'About' },
+  { path: '/fr/a-propos/', lang: 'fr', title: 'À propos · Costa Maskulov', h1: 'À propos' },
   {
     path: '/fr/projets/ce-portfolio/',
     lang: 'fr',
@@ -87,4 +88,10 @@ test('P2 : des projets à une étude de cas, par son sommaire, puis retour à la
   await expect(page.locator('#resultats')).toBeInViewport()
   await page.getByRole('link', { name: 'Tous les projets' }).click()
   await expect(page).toHaveURL(/\/fr\/projets\/?$/)
+})
+
+test("l'à-propos porte l'ancre « methode », cible du bouton « Voir ma méthode » de l'accueil", async ({
+  request,
+}) => {
+  expect(await (await request.get('/fr/a-propos/')).text()).toContain('id="methode"')
 })
