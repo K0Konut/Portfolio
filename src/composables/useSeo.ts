@@ -24,7 +24,8 @@ export function useSeo() {
   const title = computed(() => t(`pages.${page.value}.title`))
   const description = computed(() => {
     const key = `pages.${page.value}.description`
-    return te(key) ? t(key) : undefined
+    // Comme le titre : repli sur la langue par défaut si la traduction manque
+    return te(key) || te(key, DEFAULT_LOCALE) ? t(key) : undefined
   })
 
   useHead({
@@ -51,6 +52,9 @@ export function useSeo() {
     ogLocale: computed(() => (locale.value === 'fr' ? 'fr_FR' : 'en_US')),
     // Image générique : la section d'accueil (public/og.jpg, 1200 × 630)
     ogImage: absolute('/og.jpg'),
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+    ogImageAlt: computed(() => t('pages.accueil.title')),
     twitterCard: 'summary_large_image',
   })
 }

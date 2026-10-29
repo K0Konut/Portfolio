@@ -39,6 +39,11 @@ useSeoMeta({
   description,
   ogDescription: description,
   ogImage: computed(() => project.value?.capture.src && absolute(project.value.capture.src)),
+  ogType: 'article',
+  // Capture 1440 × 900 (navigateur) ou 390 × 844 (téléphone), design system § DeviceFrame
+  ogImageWidth: computed(() => (project.value?.capture.device === 'phone' ? 390 : 1440)),
+  ogImageHeight: computed(() => (project.value?.capture.device === 'phone' ? 844 : 900)),
+  ogImageAlt: computed(() => project.value && t('case.capture', { title: project.value.title })),
   robots: computed(() => (project.value ? undefined : 'noindex')),
 })
 </script>
