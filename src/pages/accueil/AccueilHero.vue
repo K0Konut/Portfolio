@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
+// Importé avec la page : le nom attend GSAP, qui arrive ainsi avec le code de l'accueil, déjà préchargé
+import { gsap } from 'gsap'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { cubicEase, fontReady, number, reducedMotion, seconds } from '../../composables/motion'
@@ -22,26 +24,16 @@ const { locale, to } = useLocale()
 const root = ref<HTMLElement>()
 const name = ref<InstanceType<typeof LetterReveal>>()
 const pending = ref(true)
-useHead({ htmlAttrs: { 'data-intro': computed(() => (pending.value ? 'pending' : undefined)) } })
-
-// GSAP se télécharge pendant l'hydratation (pas d'attente supplémentaire au montage)
-const libraries = import.meta.env.SSR ? undefined : import('gsap')
+// « done » plutôt qu'un attribut retiré : si l'entrée part avant la première mise à jour du head côté
+// navigateur, l'attribut reçu du HTML pré-rendu ne serait jamais enlevé
+useHead({ htmlAttrs: { 'data-intro': computed(() => (pending.value ? 'pending' : 'done')) } })
 
 let ctx: { revert(): void } | undefined
 let gone = false
 
-onMounted(async () => {
+onMounted(() => {
   const el = root.value
-  if (!el || !libraries) return
-  // Sans GSAP (réseau coupé), le contenu s'affiche tel quel
-  const loaded = await libraries.catch(() => undefined)
-  if (gone) return
-  if (!loaded) {
-    pending.value = false
-    name.value?.play()
-    return
-  }
-  const { gsap } = loaded
+  if (!el) return
   const ease = cubicEase('--ease-out')
   const base = seconds('--duration-base')
 
@@ -126,13 +118,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.hero-zone {
-  position: relative;
-  overflow: hidden;
-}
 /* Le violet et le fond topographique s'arrêtent un peu avant le bas, toujours nuit plein sous la vague :
    à 125 ou 150 % de zoom, le bord tombe entre deux pixels et ils y transparaissaient en liseré */
 .hero-zone {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(var(--color-bg) calc(100% - var(--space-2)), transparent 0);
 }
 .hero-zone > .topo-zone {

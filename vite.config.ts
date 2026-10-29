@@ -28,6 +28,14 @@ export default defineConfig(({ mode }) => {
         }),
       }),
     ],
+    build: {
+      rolldownOptions: {
+        output: {
+          // GSAP dans son propre fichier : l'accueil l'importe directement, les autres pages à la demande
+          codeSplitting: { groups: [{ name: 'gsap', test: /node_modules[\\/]gsap/ }] },
+        },
+      },
+    },
     ssgOptions: {
       script: 'async',
       formatting: 'minify',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SectionWave from '../components/fonds/SectionWave.vue'
 import PageSection from '../components/mise-en-page/PageSection.vue'
@@ -20,6 +20,7 @@ const { t, tm } = useI18n()
 const { locale, to } = useLocale()
 const projects = computed(() => featuredProjects(locale.value))
 const who = computed(() => pageText(locale.value, 'qui-je-suis'))
+const whoTitle = useId()
 const steps = computed(() => tm('method.steps') as { title: string; text: string }[])
 </script>
 
@@ -36,10 +37,11 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
       }}</TextLink>
     </PageSection>
     <SectionWave :seed="2" from="nuit" to="creme" />
-    <PageSection fond="creme">
-      <div class="who">
-        <h2 v-reveal class="display">{{ t('home.whoTitle') }}</h2>
-        <div v-reveal="1" class="who-text">
+    <!-- Titre à côté du texte sur bureau : la section porte le sien (labelledby) -->
+    <PageSection fond="creme" :labelledby="whoTitle">
+      <div class="about">
+        <h2 :id="whoTitle" v-reveal class="display">{{ t('home.whoTitle') }}</h2>
+        <div v-reveal="1" class="about-text">
           <component :is="who" v-if="who" class="lead" />
           <BaseButton icon="arrow-right" :to="to('a-propos')">{{ t('home.whoMore') }}</BaseButton>
         </div>
@@ -68,26 +70,25 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
 .start {
   justify-self: start;
 }
-.who {
+.about {
   display: grid;
   gap: var(--space-6);
 }
 @media (min-width: 1024px) {
-  .who {
+  .about {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
     align-items: start;
   }
 }
-.who h2 {
+.about h2 {
   font-size: var(--text-h2);
 }
-.who-text {
+.about-text {
   display: grid;
   gap: var(--space-6);
   justify-items: start;
 }
-.who-text :deep(p) {
+.about-text :deep(p) {
   margin: 0;
-  max-width: var(--measure);
 }
 </style>
