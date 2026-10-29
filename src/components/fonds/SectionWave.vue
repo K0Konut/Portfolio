@@ -4,7 +4,13 @@ import { useViewportWidth } from '../../composables/useViewportWidth'
 import type { Fond } from './fonds'
 import { REFERENCE_WIDTH, wavePath } from './wave'
 
-const props = defineProps<{ seed: number; from: Fond; to: Fond }>()
+const props = defineProps<{
+  seed: number
+  from: Fond
+  to: Fond
+  /** Le dessus de la vague reste transparent : le fond animé de la section du dessus s'y prolonge */
+  transparent?: boolean
+}>()
 
 // Rendu de référence à 1440 px dans le HTML, puis tracé à la largeur réelle (pas de déformation).
 // La hauteur reste celle de la référence : la vague, plus douce sur mobile, n'y fait pas sauter la page.
@@ -17,13 +23,20 @@ const wave = computed(() =>
 
 <template>
   <!-- Décorative et immobile : la vague de la section précédente descend sur le fond de la suivante -->
-  <div :class="['wave', `fond-${to}`]" aria-hidden="true">
+  <div :class="['wave', { [`fond-${to}`]: !transparent }]" aria-hidden="true">
     <svg
       :viewBox="`0 0 ${wave.width} ${reference.height}`"
       :height="reference.height"
       preserveAspectRatio="none"
     >
-      <path :class="`fond-${from}`" :d="wave.d" />
+      <!-- Transparente : seul le dessous est dessiné (le rectangle moins le dessus de la vague) -->
+      <path
+        v-if="transparent"
+        :class="`fond-${to}`"
+        fill-rule="evenodd"
+        :d="`M0,0H${wave.width}V${reference.height}H0Z${wave.d}`"
+      />
+      <path v-else :class="`fond-${from}`" :d="wave.d" />
     </svg>
   </div>
 </template>

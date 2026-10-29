@@ -41,7 +41,7 @@ test("l'accueil n'a pas d'erreur d'accessibilité détectable", async ({ page })
   await page.goto('/fr/')
   // Après l'entrée animée : un texte en plein fondu fausserait le calcul des contrastes
   await expect(page.locator('.actions')).toHaveCSS('opacity', '1')
-  await page.waitForFunction(() => document.getAnimations().length === 0)
+  await page.waitForFunction('document.getAnimations().length === 0')
   const { violations } = await new AxeBuilder({ page }).analyze()
   expect(violations).toEqual([])
 })

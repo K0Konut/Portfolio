@@ -26,7 +26,6 @@ const steps = computed(() => tm('method.steps') as { title: string; text: string
 <template>
   <main id="contenu" tabindex="-1">
     <AccueilHero />
-    <SectionWave :seed="1" from="violet" to="nuit" />
     <PageSection :title="t('home.projectsTitle')">
       <template #intro>{{ t('home.projectsIntro') }}</template>
       <PosterGrid>

@@ -7,6 +7,7 @@ import { useLocale } from '../../composables/useLocale'
 import { SITE } from '../../content/site'
 import ScrollHint from '../../components/animations/ScrollHint.vue'
 import ScrollParallax from '../../components/animations/ScrollParallax.vue'
+import SectionWave from '../../components/fonds/SectionWave.vue'
 import TopoBackground from '../../components/fonds/TopoBackground.vue'
 import LetterReveal from '../../components/textes/LetterReveal.vue'
 import BaseButton from '../../components/ui/BaseButton.vue'
@@ -86,47 +87,59 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="root" class="hero fond-violet" aria-labelledby="nom">
+  <!-- Le fond topographique couvre la section et sa vague : les courbes descendent jusqu'au bord ondulé -->
+  <div class="hero-zone fond-violet">
     <TopoBackground />
-    <div class="inner">
-      <ScrollParallax id="nom" data-intro-hide>
-        <LetterReveal
-          ref="name"
-          as="h1"
-          :text="SITE.name"
-          start="manual"
-          stack
-          class="hero-name display"
-        />
-      </ScrollParallax>
-      <ScrollParallax class="rest" data-intro-hide :speed="0" :until="0.5">
-        <p class="who-lines">
-          <span class="who">{{ t('hero.status') }}</span>
-          <span class="who">{{ t('hero.goal') }}</span>
-        </p>
-        <p class="lead promise">
-          {{ t('hero.promise') }} <span class="hl">{{ t('hero.promiseHighlight') }}</span>
-        </p>
-        <div class="actions">
-          <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
-            t('contact.cv')
-          }}</BaseButton>
-          <BaseButton :to="to('contact')">{{ t('hero.contact') }}</BaseButton>
-        </div>
-      </ScrollParallax>
-    </div>
-    <!-- Après le départ de l'entrée : il apparaît en dernier, son délai compte à partir de là -->
-    <ScrollHint v-if="!pending" />
-  </section>
+    <section ref="root" class="hero" aria-labelledby="nom">
+      <div class="inner">
+        <ScrollParallax id="nom" data-intro-hide>
+          <LetterReveal
+            ref="name"
+            as="h1"
+            :text="SITE.name"
+            start="manual"
+            stack
+            class="hero-name display"
+          />
+        </ScrollParallax>
+        <ScrollParallax class="rest" data-intro-hide :speed="0" :until="0.5">
+          <p class="who-lines">
+            <span class="who">{{ t('hero.status') }}</span>
+            <span class="who">{{ t('hero.goal') }}</span>
+          </p>
+          <p class="lead promise">
+            {{ t('hero.promise') }} <span class="hl">{{ t('hero.promiseHighlight') }}</span>
+          </p>
+          <div class="actions">
+            <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
+              t('contact.cv')
+            }}</BaseButton>
+            <BaseButton :to="to('contact')">{{ t('hero.contact') }}</BaseButton>
+          </div>
+        </ScrollParallax>
+      </div>
+      <!-- Après le départ de l'entrée : il apparaît en dernier, son délai compte à partir de là -->
+      <ScrollHint v-if="!pending" />
+    </section>
+    <SectionWave class="edge" :seed="1" from="violet" to="nuit" transparent />
+  </div>
 </template>
 
 <style scoped>
+.hero-zone {
+  position: relative;
+  overflow: hidden;
+}
 .hero {
   position: relative;
   min-height: 100svh;
   display: grid;
   padding: calc(var(--header-height) + var(--space-6)) var(--gutter) var(--space-9);
-  overflow: hidden;
+}
+/* Au-dessus du fond topographique, comme le contenu */
+.edge {
+  position: relative;
+  z-index: 1;
 }
 .inner {
   position: relative;

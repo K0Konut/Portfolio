@@ -214,7 +214,7 @@ Rangés par famille, comme une bibliothèque de composants (référence : vue-bi
 | Composant | Rôle | Options principales | Vient de |
 |---|---|---|---|
 | `TopoBackground` | Courbes de niveau animées (WebGL), derrière une section | `from`, `to` (teintes), `speed`, `density`, `fade` (estompe au centre) | `TopoBackground` |
-| `SectionWave` | Vague organique entre deux sections de fonds différents | `seed`, `from`, `to` (fonds) | `SectionWave` |
+| `SectionWave` | Vague organique entre deux sections de fonds différents | `seed`, `from`, `to` (fonds), `transparent` (le dessus laisse voir le fond animé de la section du dessus) | `SectionWave` |
 
 ### Textes animés
 
