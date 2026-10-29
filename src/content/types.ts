@@ -7,7 +7,6 @@ export interface ProjectMeta {
   role: string
   duration: string
   team: string
-  stack: string[]
   /** Raison, en une phrase, quand le code n'est pas public (stage) */
   privateCode?: string
 }
@@ -36,6 +35,18 @@ export interface ProjectSummary {
     /** Texte court affiché sur l'écran provisoire */
     label?: string
   }
+}
+
+/** Un projet complet, lu dans content/<langue>/projets/<slug>.md (architecture technique §4) */
+export interface Project extends ProjectSummary {
+  /** Date de sortie, AAAA-MM : trie la page Projets, du plus récent au plus ancien */
+  date: string
+  /** Fait partie des trois projets de l'accueil */
+  featured: boolean
+  meta: ProjectMeta
+  links: { code?: string; demo?: string }
+  /** Les h2 du corps, pour StickyToc */
+  toc: { id: string; label: string }[]
 }
 
 /** Une étape du parcours, du plus ancien au plus récent, montrée en BaseTimeline */

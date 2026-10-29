@@ -2,10 +2,9 @@ import { ViteSSG } from 'vite-ssg'
 import './styles/tokens.css'
 import './styles/base.css'
 import App from './App.vue'
-import { PROJECT_SLUGS } from './content/projects'
 import { vReveal } from './directives/reveal'
 import { createAppI18n } from './i18n'
-import { buildRoutes, localeFromPath, prerenderPaths } from './router/routes'
+import { buildRoutes, localeFromPath } from './router/routes'
 
 const routes = buildRoutes()
 // Vitrine des composants : en développement seulement. La condition est remplacée par « false » au build,
@@ -41,8 +40,3 @@ export const createApp = ViteSSG(
     })
   },
 )
-
-/** Pages pré-rendues : les deux langues de chaque page, une page par projet. */
-export function includedRoutes() {
-  return prerenderPaths({ 'etude-de-cas': PROJECT_SLUGS.map((slug) => ({ slug })) })
-}

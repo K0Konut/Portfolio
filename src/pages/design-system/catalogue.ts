@@ -1,5 +1,5 @@
 import { defineAsyncComponent, type Component } from 'vue'
-import capture from '../../assets/projets/ce-portfolio.png'
+import capture from '../../../content/images/projets/ce-portfolio/capture.png'
 import ScrollHint from '../../components/animations/ScrollHint.vue'
 import TopoBackground from '../../components/fonds/TopoBackground.vue'
 import LetterReveal from '../../components/textes/LetterReveal.vue'

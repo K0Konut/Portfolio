@@ -1,4 +1,4 @@
-import capture from '../../assets/projets/ce-portfolio.png'
+import capture from '../../../content/images/projets/ce-portfolio/capture.png'
 import type { ProjectSummary } from '../../content/types'
 
 const TODO = ['stack à compléter']
