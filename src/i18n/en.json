@@ -1,13 +1,29 @@
 {
   "pages": {
-    "accueil": { "title": "Costa Maskulov · Full-stack developer" },
-    "projets": { "title": "Projects · Costa Maskulov" },
-    "etude-de-cas": { "title": "Case study · Costa Maskulov" },
-    "a-propos": { "title": "About · Costa Maskulov" },
-    "contact": { "title": "Contact · Costa Maskulov" },
-    "mentions-legales": { "title": "Legal notice · Costa Maskulov" },
-    "confidentialite": { "title": "Privacy · Costa Maskulov" },
-    "404": { "title": "Page not found · Costa Maskulov" }
+    "accueil": {
+      "title": "Costa Maskulov · Full-stack developer"
+    },
+    "projets": {
+      "title": "Projects · Costa Maskulov"
+    },
+    "etude-de-cas": {
+      "title": "Case study · Costa Maskulov"
+    },
+    "a-propos": {
+      "title": "About · Costa Maskulov"
+    },
+    "contact": {
+      "title": "Contact · Costa Maskulov"
+    },
+    "mentions-legales": {
+      "title": "Legal notice · Costa Maskulov"
+    },
+    "confidentialite": {
+      "title": "Privacy · Costa Maskulov"
+    },
+    "404": {
+      "title": "Page not found · Costa Maskulov"
+    }
   },
   "placeholder": {
     "text": "Page under construction."
@@ -116,5 +132,15 @@
     "done": "The wall is complete. Back to the home page…",
     "home": "Back to home",
     "projects": "See the projects"
+  },
+  "home": {
+    "projectsTitle": "Projects",
+    "projectsIntro": "Current picks: three projects, from the need to the code.",
+    "whoTitle": "Who I am",
+    "whoMore": "More about me",
+    "methodTitle": "How I work",
+    "methodIntro": "Every project goes through the same steps, from the need to going live.",
+    "methodMore": "See my method",
+    "contactIntro": "Looking for a full-stack developer for an end-of-studies internship? Write to me."
   }
 }
