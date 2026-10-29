@@ -39,6 +39,13 @@ export default [
     text: 'La création d’une boutique eBay et le référencement des produits ; au passage, la réparation du système de caméras.',
   },
   {
+    kind: 'job étudiant',
+    dates: 'depuis avr. 2024',
+    title: 'Barman et serveur',
+    place: 'Bangkok Café',
+    text: 'Au bar et en salle, en parallèle des études.',
+  },
+  {
     kind: 'échange',
     dates: 'sept. – déc. 2024',
     title: 'Semestre à l’étranger, ingénierie électrique et électronique',
