@@ -90,10 +90,6 @@ const fiche = computed(() => {
 h1 {
   font-size: var(--text-h1);
 }
-.lead {
-  margin: 0;
-  max-width: var(--measure);
-}
 .links {
   display: flex;
   flex-wrap: wrap;

@@ -97,15 +97,15 @@ useHead({
   color: var(--color-text-muted);
 }
 .prose :deep(h2) {
-  margin: var(--space-8) 0 0;
+  margin: 0;
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
   font-size: var(--text-h2);
   line-height: var(--leading-display);
   scroll-margin-top: calc(var(--header-height) + var(--space-5));
 }
-.prose :deep(h2:first-child) {
-  margin-top: 0;
+.prose :deep(* + h2) {
+  margin-top: var(--space-8);
 }
 /* La première phrase d'un bloc, en avant */
 .prose :deep(h2 + p) {
@@ -131,6 +131,8 @@ useHead({
   list-style: none;
   padding: 0;
   display: grid;
+}
+.prose :deep(ul) {
   gap: var(--space-4);
 }
 .prose :deep(li strong) {
@@ -139,7 +141,6 @@ useHead({
 }
 /* Liste numérotée : les étapes de la méthode, numéro en grand */
 .prose :deep(ol) {
-  gap: 0;
   counter-reset: step;
 }
 .prose :deep(ol li) {

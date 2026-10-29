@@ -71,8 +71,9 @@ const { tag, attrs, newTab } = useLink(props)
   color: var(--color-bg);
   transform: translateY(calc(-1 * var(--hover-lift)));
 }
-/* L'icône avance dans son sens : à droite, en bas pour le téléchargement, en diagonale vers l'extérieur */
-.btn:hover .icon {
+/* Une flèche avance dans son sens : à droite, en bas pour le téléchargement, en diagonale vers l'extérieur ;
+   un logo ne bouge pas */
+.btn-arrow-right:hover .icon {
   transform: translateX(var(--hover-nudge));
 }
 .btn-download:hover .icon {
@@ -80,10 +81,6 @@ const { tag, attrs, newTab } = useLink(props)
 }
 .btn-arrow-up-right:hover .icon {
   transform: translate(var(--hover-nudge), calc(-1 * var(--hover-nudge)));
-}
-/* Un logo ne se déplace pas */
-.btn-github:hover .icon {
-  transform: none;
 }
 .btn:active {
   transform: scale(var(--press-scale));
