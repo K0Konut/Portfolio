@@ -18,7 +18,6 @@ declare module 'vue-router' {
   }
 }
 
-// La vue de chaque page
 const views: Record<PageName, () => Promise<Component>> = {
   accueil: () => import('../pages/AccueilPage.vue'),
   projets: () => import('../pages/ProjetsPage.vue'),

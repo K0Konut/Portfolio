@@ -46,13 +46,14 @@ const { t } = useI18n()
     aspect-ratio: auto;
   }
 }
+.who {
+  display: grid;
+  gap: var(--space-2);
+}
 .who b {
-  display: block;
   font-size: clamp(2rem, 1.2rem + 3vw, 3.25rem);
 }
 .who span {
-  display: block;
-  margin-top: var(--space-2);
   color: var(--color-text-subtle);
   font-weight: var(--weight-medium);
 }

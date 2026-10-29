@@ -91,14 +91,18 @@ svg {
 .prose :is(p, ul, ol) {
   margin: 0;
   max-width: var(--measure);
+  color: var(--color-text-muted);
 }
-/* Un lien dans le texte : comme TextLink inline */
-.prose a {
+
+/* Lien dans un texte (TextLink inline, liens du Markdown) : toujours souligné, un lien ne se confond jamais
+   avec une mise en valeur (DA §2, règle 1) */
+:is(.link-inline, .prose a) {
   color: var(--color-action);
+  text-decoration: underline;
   text-decoration-thickness: var(--border-thin);
   text-underline-offset: 0.2em;
 }
-.prose a:is(:hover, :focus-visible) {
+:is(.link-inline, .prose a):is(:hover, :focus-visible) {
   text-decoration-thickness: var(--underline);
 }
 
