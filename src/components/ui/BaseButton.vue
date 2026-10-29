@@ -2,7 +2,7 @@
 import { useLink, type LinkProps } from '../../composables/useLink'
 import BaseIcon from './BaseIcon.vue'
 
-type ButtonIcon = 'arrow-right' | 'download' | 'arrow-up-right'
+type ButtonIcon = 'arrow-right' | 'download' | 'arrow-up-right' | 'github'
 
 const props = withDefaults(
   defineProps<
@@ -71,8 +71,9 @@ const { tag, attrs, newTab } = useLink(props)
   color: var(--color-bg);
   transform: translateY(calc(-1 * var(--hover-lift)));
 }
-/* L'icône avance dans son sens : à droite, en bas pour le téléchargement, en diagonale vers l'extérieur */
-.btn:hover .icon {
+/* Une flèche avance dans son sens : à droite, en bas pour le téléchargement, en diagonale vers l'extérieur ;
+   un logo ne bouge pas */
+.btn-arrow-right:hover .icon {
   transform: translateX(var(--hover-nudge));
 }
 .btn-download:hover .icon {

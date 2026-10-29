@@ -14,6 +14,8 @@ withDefaults(
     label?: string
     /** Teinte du fond de capture (DA §5) ; violet foncé par défaut */
     stage?: string
+    /** Chargée tout de suite : la capture principale, visible dès l'arrivée sur la page */
+    eager?: boolean
   }>(),
   { src: undefined, alt: '', label: '', stage: undefined },
 )
@@ -32,7 +34,7 @@ const SIZE = { browser: [1440, 900], phone: [390, 844] } as const
           :alt="alt"
           :width="SIZE[device][0]"
           :height="SIZE[device][1]"
-          loading="lazy"
+          :loading="eager ? 'eager' : 'lazy'"
           decoding="async"
         />
         <span v-else class="placeholder display" aria-hidden="true">{{ label }}</span>
