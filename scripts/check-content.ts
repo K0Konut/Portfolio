@@ -4,6 +4,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { loadEnv } from 'vite'
 
+// Tel quel dans toutes les langues : traduit dans un texte anglais, il ne bloquerait plus la mise en ligne
 const MARKER = 'à compléter'
 const files = [
   'src/content/site.ts',

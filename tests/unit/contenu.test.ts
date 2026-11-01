@@ -3,6 +3,7 @@ import { slugify, tocPlugin } from '../../scripts/markdown'
 import { sitemapXml } from '../../src/router/sitemap'
 import { skills, timeline } from '../../src/content/about'
 import { featuredProjects, parseProject, projectBody, projects } from '../../src/content/projects'
+import type { Project } from '../../src/content/types'
 
 const FILE = '/content/fr/projets/exemple.md'
 const META = {
@@ -64,6 +65,19 @@ describe('études de cas', () => {
     const featured = featuredProjects('fr')
     expect(featured.length).toBeLessThanOrEqual(3)
     expect(featured.every((p) => p.featured)).toBe(true)
+  })
+
+  it('garde dans chaque traduction les champs qui ne se traduisent pas', () => {
+    // Sinon l'ordre des projets et la sélection de l'accueil changent d'une langue à l'autre
+    const shared = ({ slug, date, featured, stack, links, capture }: Project) => ({
+      slug,
+      date,
+      featured,
+      stack,
+      links,
+      capture,
+    })
+    expect(projects('en').map(shared)).toEqual(projects('fr').map(shared))
   })
 
   it('relie chaque étape du parcours à une étude de cas qui existe', () => {
