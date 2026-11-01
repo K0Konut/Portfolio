@@ -268,6 +268,7 @@ Propres à ce site (navigation, coordonnées) : ce ne sont pas des briques gén�
 | Composant | Rôle | Vient de |
 |---|---|---|
 | `AppHeader`, `MobileMenu`, `LangSwitch`, `AppFooter`, `SkipLink` | Navigation, langue, pied de page | existent |
+| `SiteLogo` | Symbole Kokonut et nom du site, dans l'en-tête et le menu mobile | logo du propriétaire (01/11/2026) |
 | `ContactLinks` | Adresse à copier, CV, LinkedIn et GitHub, depuis `SITE` ; option `cvLabel` | blocs de `ContactCard` et `BusinessCard` |
 
 ### Ce qui n'est plus un composant
@@ -285,7 +286,7 @@ Chaque composant : rôle, options, états, accessibilité, motion. Les valeurs v
 Repris du header existant du propriétaire, adapté à la DA.
 
 - **Forme** : barre claire (`--color-header-bg`), fixée en haut et centrée, largeur max `--container`, coins inférieurs arrondis (`--radius-lg`). Elle « pend » du haut de l'écran, au-dessus de tout le contenu.
-- **Contenu** : à gauche, le nom en Bagel (`--text-logo`, logo provisoire, lien vers l'accueil) ; à droite, Projets · À propos · Contact (Manrope 500, `--text-ui`) et `LangSwitch`. Le « / » entre FR et EN est en `--color-header-muted`, avec `aria-hidden="true"`.
+- **Contenu** : à gauche, `SiteLogo` : le symbole Kokonut (couleur du texte, décoratif) puis le nom en Bagel (`--text-logo`), lien vers l'accueil ; à droite, Projets · À propos · Contact (Manrope 500, `--text-ui`) et `LangSwitch`. Le « / » entre FR et EN est en `--color-header-muted`, avec `aria-hidden="true"`.
 - **Zones cliquables** : 44 × 44 px minimum (`--target-min`) pour chaque lien, FR, EN, le bouton « Menu » et le bouton « Fermer », sur bureau comme sur mobile. Le texte garde sa taille ; c'est la zone autour qui grandit.
 - **États des liens**
   - Repos : `--color-header-text`.
