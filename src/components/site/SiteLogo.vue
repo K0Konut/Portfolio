@@ -30,7 +30,8 @@ import { SITE } from '../../content/site'
   gap: var(--space-2);
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
-  font-size: var(--text-logo);
+  /* Un peu plus petit sous 360 px : sinon le bouton « Menu » déborde de l'en-tête à 320 px */
+  font-size: min(var(--text-logo), 5vw);
   line-height: var(--leading-none);
   white-space: nowrap;
 }

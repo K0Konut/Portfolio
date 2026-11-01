@@ -1017,7 +1017,7 @@ export const ENTRIES: Entry[] = [
     name: 'AppHeader',
     family: 'Site',
     description:
-      'En-tête fixe qui « pend » au-dessus du contenu : nom, navigation, langue. Sous 768 px, un bouton « Menu » ouvre `MobileMenu`.',
+      'En-tête fixe qui « pend » au-dessus du contenu : logo (`SiteLogo`, symbole et nom), navigation, langue. Sous 768 px, un bouton « Menu » ouvre `MobileMenu`.',
     component: AppHeader,
     props: [],
     controls: [],
