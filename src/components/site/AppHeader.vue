@@ -6,6 +6,7 @@ import { SITE } from '../../content/site'
 import BaseButton from '../ui/BaseButton.vue'
 import BaseIcon from '../ui/BaseIcon.vue'
 import LangSwitch from './LangSwitch.vue'
+import LogoSymbole from './LogoSymbole.vue'
 import MobileMenu from './MobileMenu.vue'
 import { useNavLinks } from './navigation'
 
@@ -19,7 +20,7 @@ const menuOpen = ref(false)
 <template>
   <header class="site-header">
     <div class="bar" data-intro-hide>
-      <RouterLink class="name" :to="to('accueil')">{{ SITE.name }}</RouterLink>
+      <RouterLink class="name" :to="to('accueil')"><LogoSymbole />{{ SITE.name }}</RouterLink>
       <nav :aria-label="t('nav.label')">
         <RouterLink
           v-for="link in links"
@@ -87,6 +88,7 @@ html.js[data-intro='pending'] .bar {
 .name {
   display: inline-flex;
   align-items: center;
+  gap: var(--space-2);
   min-height: var(--target-min);
   font-family: var(--font-display);
   font-size: var(--text-logo);

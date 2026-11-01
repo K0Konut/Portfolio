@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { SITE } from '../../content/site'
 import BaseButton from '../ui/BaseButton.vue'
 import LangSwitch from './LangSwitch.vue'
+import LogoSymbole from './LogoSymbole.vue'
 import { useNavLinks } from './navigation'
 
 /* Menu plein écran sur mobile (design system § AppHeader), sur l'élément <dialog> natif :
@@ -28,7 +29,7 @@ watch(open, (isOpen) => {
     @close="open = false"
   >
     <div class="top">
-      <b>{{ SITE.name }}</b>
+      <b><LogoSymbole />{{ SITE.name }}</b>
       <BaseButton compact autofocus @click="open = false">{{ t('nav.close') }}</BaseButton>
     </div>
     <ul>
@@ -67,6 +68,9 @@ watch(open, (isOpen) => {
   min-height: var(--header-height);
 }
 .top b {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
   font-size: var(--text-logo);
