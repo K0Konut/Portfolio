@@ -84,7 +84,7 @@ Every page is pre-rendered as full HTML with vite-ssg, for search engines. Bilin
 <div class="stats">
   <StatBlock value="7" label="steps, from PRD to code, each approved before the next" :index="0" />
   <StatBlock value="32" label="generic components, each in the catalogue" :index="1" />
-  <StatBlock value="98" label="written decisions, each with its reason" :index="2" />
+  <StatBlock value="105" label="written decisions, each with its reason" :index="2" />
   <StatBlock value="6" label="section backgrounds, against a single one in the first art direction" :before="1" :after="6" :index="3" />
 </div>
 

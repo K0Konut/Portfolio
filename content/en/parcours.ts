@@ -5,7 +5,7 @@ import type { TimelineStep } from '../../src/content/types'
 export default [
   {
     kind: 'high school',
-    dates: 'Sept 2020 – Jul 2022',
+    dates: 'Sep 2020 – Jul 2022',
     title: 'Baccalauréat STI2D, digital systems (SIN)',
     place: 'Lycée Saint-Nicolas, Paris',
     text: 'The spark: building things with code, from electronics to software.',
@@ -26,7 +26,7 @@ export default [
   },
   {
     kind: 'school',
-    dates: 'Sept 2022 – Jul 2027',
+    dates: 'Sep 2022 – Jul 2027',
     title: 'Engineering degree, computer engineering',
     place: 'ESIEA, Paris · software engineering major',
     text: 'Team software projects, including on-board timing for a soapbox race.',
@@ -47,7 +47,7 @@ export default [
   },
   {
     kind: 'exchange',
-    dates: 'Sept – Dec 2024',
+    dates: 'Sep – Dec 2024',
     title: 'Semester abroad, electrical and electronic engineering',
     place: 'Seoul National University of Science and Technology, South Korea',
     text: 'A semester of study in South Korea.',
