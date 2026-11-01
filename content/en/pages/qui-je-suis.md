@@ -1,0 +1,1 @@
+It all started in high school, in the STI2D digital systems track: that is where I found out I loved building things with code. I went on to engineering school at ESIEA, and every software project proved it to me. What I love is starting from an idea and watching it become a product, <span class="hl">brick by brick.</span>

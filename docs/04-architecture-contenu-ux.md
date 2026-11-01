@@ -1,6 +1,8 @@
 # Architecture de contenu et UX — Portfolio personnel
 
-Version 1.0 — 14/10/2026 — **statut : validé**
+Version 1.1 — 22/10/2026 — **statut : validé**
+
+v1.1 : contenu des pages mis à jour d'après les maquettes validées en phase 6 (`docs/06-maquettes/`, `decisions.md` du 20 au 22/10/2026).
 
 S'appuie sur le PRD v0.2 (personas RH et tech lead, user stories, périmètre V1), le territoire de marque v0.2 et la direction artistique v1.0 « Affiche de nuit ».
 
@@ -66,11 +68,11 @@ graph TD
 
 | # | Section | Rôle | Contenu |
 |---|---|---|---|
-| 1 | Section d'accueil (violette, plein écran) | Marquer les esprits, présenter | Nom, poste, promesse, boutons CV et contact (DA §6) |
-| 2 | Trois projets | Donner envie d'ouvrir une étude de cas | La **sélection du moment** : 3 projets choisis à la main, remplacés quand un nouveau projet est plus pertinent ; lien « Tous les projets » |
+| 1 | Section d'accueil (violette, plein écran, fond topographique animé) | Marquer les esprits, présenter | Nom ; « Étudiant ingénieur à l'ESIEA » et « Je cherche un stage de fin d'études full-stack » ; promesse ; boutons CV et contact (DA §6) |
+| 2 | Trois projets | Donner envie d'ouvrir une étude de cas | La **sélection du moment** : 3 projets choisis à la main, remplacés quand un nouveau projet est plus pertinent, en « affiches collées » ; lien « Tous les projets », à droite sous les cartes |
 | 3 | Qui je suis | Faire sentir la personnalité | Quelques lignes ; lien vers **À propos** |
-| 4 | Ma façon de travailler | Montrer la méthode d'ingénieur | Les grandes étapes (besoin, méthode, code…) ; lien vers **À propos** |
-| 5 | Prise de contact | Convertir | Appel au contact, bouton vers **Contact**, mail |
+| 4 | Ma façon de travailler | Montrer la méthode d'ingénieur | Les 6 étapes, formulées côté technique (besoin, conception, architecture, développement, tests, déploiement), en cycle : « Les retours relancent un tour. » ; lien vers **À propos** |
+| 5 | Prise de contact (« Parlons-en », lime) | Convertir | Titre et phrase ; carte avec l'adresse et « Copier », « Télécharger le CV », LinkedIn, GitHub. La disponibilité n'est pas affichée (PRD) |
 
 La sélection du moment est un réglage dans les fichiers de contenu (par exemple un champ `featured` sur chaque projet).
 
@@ -79,7 +81,10 @@ La sélection du moment est un réglage dans les fichiers de contenu (par exempl
 | # | Section | Contenu |
 |---|---|---|
 | 1 | En-tête | Titre, une phrase d'introduction |
-| 2 | Liste des projets | Cartes : capture mise en scène, titre, type, stack, une phrase. **Triée par date de sortie**, du plus récent au plus ancien |
+| 2 | Liste des projets | **Bento** : capture mise en scène, titre, type, stack, une phrase ; le plus récent en grand. **Triée par date de sortie**, du plus récent au plus ancien |
+| 3 | Prise de contact (« Parlons-en », lime) | Comme sur l'accueil, avec « Un projet vous a parlé ? Écrivez-moi. » ; elle sépare aussi la liste du pied de page |
+
+Chaque projet fournit **une capture** : 1440 × 900 px (ordinateur) ou 390 × 844 px (téléphone), voir DA §5.
 
 Filtrage (par type ou par techno) : **V2**, conformément au PRD.
 
@@ -87,7 +92,7 @@ Filtrage (par type ou par techno) : **V2**, conformément au PRD.
 
 | # | Bloc | Contenu |
 |---|---|---|
-| 1 | En-tête | Titre, type de projet, rôle, durée, stack, liens (code, démo) |
+| 1 | En-tête | Type de projet, titre, une phrase, liens (code, démo) ; métadonnées en **fiche** (type, rôle, durée, équipe, stack) à droite du titre ; capture principale |
 | 2 | Contexte | Le cadre du projet |
 | 3 | Besoin | Le problème de départ |
 | 4 | Contraintes | Techniques, temps, matériel, équipe |
@@ -95,9 +100,11 @@ Filtrage (par type ou par techno) : **V2**, conformément au PRD.
 | 6 | Choix techniques | Décisions et compromis, argumentés |
 | 7 | Résultats | Ce qui a été obtenu, chiffré quand c'est possible |
 | 8 | Enseignements | Ce qui n'a pas marché et ce qui a été appris |
-| 9 | Liens et suite | Code, démo ; projet suivant ; retour à la liste |
+| 9 | Liens et suite | Projet suivant en grand et retour à la liste, sur fond rose |
 
-Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plus.
+Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plus. Sur bureau, un sommaire collant à gauche suit le bloc en cours de lecture.
+
+Exemple maquetté : l'étude de cas du portfolio lui-même (textes validés).
 
 ### À propos (fusion du parcours et de l'à-propos)
 
@@ -105,10 +112,11 @@ Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plu
 |---|---|---|
 | 1 | En-tête | Titre, accroche personnelle |
 | 2 | Mon histoire | Le déclic au lycée (bac STI2D, spécialité SIN), puis l'école d'ingénieur (ESIEA) ; les projets software qui ont confirmé le choix |
-| 3 | Timeline | Parcours scolaire et professionnel : lycée, école, stages, jobs étudiants (dates, lieu, rôle, une ou deux lignes ; lien vers l'étude de cas si elle existe) |
-| 4 | Compétences | **Bandeau défilant** des technologies, par catégorie (liste ci-dessous) |
-| 5 | Façon de travailler | La méthode d'ingénieur, étape par étape : PRD → territoire de marque → direction artistique → architecture et UX → design system → maquettes → code |
-| 6 | En équipe | Pilotage en sprints, réunions quotidiennes (daily) pour suivre l'avancement et garder le contact humain |
+| 3 | Timeline | Parcours scolaire et professionnel : lycée, école, stages, jobs étudiants (dates, lieu, rôle, une ou deux lignes ; lien vers l'étude de cas si elle existe). Frise centrée alternée sur bureau. **À compléter** : dates, nom du lycée, durée du stage au CNAM, jobs étudiants |
+| 4 | Compétences | **Affiches collées** : une carte inclinée par catégorie (liste ci-dessous) ; remplacent le mur de briques le 22/10/2026, qui remplaçait lui-même le bandeau défilant |
+| 5 | Façon de travailler | Les 6 étapes de l'accueil, en version détaillée : besoin → conception → architecture → développement → tests → déploiement, puis « les retours relancent un tour » |
+| 6 | En équipe | Pilotage en sprints, réunions quotidiennes (daily) pour suivre l'avancement et garder le contact humain ; encadré à côté de la méthode sur bureau |
+| 7 | Prise de contact (« Parlons-en », lime) | Comme sur l'accueil, avec « Envie d'en savoir plus ? Écrivez-moi. » |
 
 - Pas de photo (DA §5). Centres d'intérêt : on reste neutre pour l'instant.
 - **Technologies du bandeau**
@@ -122,7 +130,7 @@ Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plu
 | Méthode | Sprints, daily |
 
   Liste validée par le propriétaire le 14/10/2026. Node.js est classé en back (environnement serveur). Règle : n'afficher que ce que le propriétaire peut défendre en entretien.
-- **Bandeau de compétences et accessibilité** : le défilement s'arrête au survol, au focus et avec `prefers-reduced-motion` (la liste devient alors statique) ; les technologies sont aussi présentes sous forme de liste lisible par les lecteurs d'écran.
+- **Compétences et accessibilité** : immobiles une fois posées (pas de défilement, donc pas de pause à prévoir) ; une vraie liste par catégorie pour les lecteurs d'écran ; une pastille violette marque les technologies qui ont servi à construire ce site.
 - La section « Ma façon de travailler » de l'accueil en est un résumé, avec un lien vers cette page.
 
 **Brouillon de « Mon histoire »** (à retoucher) :
@@ -132,8 +140,8 @@ Temps forts animés au scroll (DA §6) : 1 ou 2 blocs par étude de cas, pas plu
 
 | # | Section | Contenu |
 |---|---|---|
-| 1 | En-tête | Titre, une phrase d'invitation |
-| 2 | Liens | Mail (affiché en clair, bouton « copier »), LinkedIn, GitHub |
+| 1 | En-tête | Titre, une phrase d'invitation (« Un stage à proposer, une question sur un projet ? Écrivez-moi. ») |
+| 2 | Carte de visite | Nom, statut, mail (affiché en clair, bouton « Copier »), CV, LinkedIn, GitHub. **À compléter** : adresse LinkedIn, vraie adresse mail |
 
 Formulaire de contact : **V2**, conformément au PRD.
 
@@ -144,7 +152,7 @@ Formulaire de contact : **V2**, conformément au PRD.
 
 ### Page 404
 
-- Message court dans le ton du site, liens vers l'accueil et les projets.
+- « Il manque une brique. » : on glisse la brique tombée dans le trou du mur pour revenir à l'accueil (au clavier : un bouton). Liens vers l'accueil et les projets toujours affichés.
 
 ---
 
@@ -167,6 +175,8 @@ Balises meta et Open Graph sur chaque page ; sitemap ; pages légales et 404 en 
 Wireframes basse fidélité de toutes les pages (Accueil, Projets, Étude de cas, À propos, Contact, 404, en-tête et pied de page), en version bureau et mobile : publiés en artifact « Wireframes du portfolio », validés le 14/10/2026.
 
 Ajout validé : **sommaire collant** à gauche dans les études de cas sur bureau (masqué sur mobile), pour sauter directement à un bloc.
+
+Les **maquettes haute fidélité** (phase 6, `docs/06-maquettes/`) prennent le relais des wireframes : elles font foi pour la mise en page de chaque écran.
 
 ## 7. Questions ouvertes
 

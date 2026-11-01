@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "accueil": {
+      "title": "Costa Maskulov · Full-stack developer",
+      "description": "Portfolio of Costa Maskulov, an engineering student at ESIEA looking for a full-stack end-of-studies internship: projects, case studies and method."
+    },
+    "projets": {
+      "title": "Projects · Costa Maskulov",
+      "description": "Costa Maskulov’s projects, from the most recent to the oldest, each with its case study: the need, the method and the technical choices."
+    },
+    "etude-de-cas": { "title": "Case study · Costa Maskulov" },
+    "a-propos": {
+      "title": "About · Costa Maskulov",
+      "description": "The path, skills and way of working of Costa Maskulov, an engineering student at ESIEA."
+    },
+    "contact": {
+      "title": "Contact · Costa Maskulov",
+      "description": "Contact Costa Maskulov for a full-stack end-of-studies internship: email, CV, LinkedIn and GitHub."
+    },
+    "mentions-legales": { "title": "Legal notice · Costa Maskulov" },
+    "confidentialite": { "title": "Privacy · Costa Maskulov" },
+    "404": { "title": "Page not found · Costa Maskulov" }
+  },
+  "ui": {
+    "toc": "Contents",
+    "skip": "Skip to content",
+    "newTab": "(new tab)",
+    "copy": "Copy",
+    "copied": "Address copied",
+    "selected": "Selected: Ctrl + C"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "projets": "Projects",
+    "a-propos": "About",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language"
+  },
+  "footer": {
+    "cv": "Résumé",
+    "cvFr": "Résumé in French",
+    "cvEn": "Résumé in English",
+    "contact": "Contact",
+    "site": "This site",
+    "code": "Site source code",
+    "legal": "Legal notice",
+    "privacy": "Privacy"
+  },
+  "contact": {
+    "title": "Let’s talk",
+    "address": "My email",
+    "cv": "Download my résumé"
+  },
+  "hero": {
+    "status": "Engineering student at ESIEA",
+    "goal": "Looking for a full-stack end-of-studies internship",
+    "promise": "Creative in the interface,",
+    "promiseHighlight": "rigorous in the method.",
+    "contact": "Contact me"
+  },
+  "method": {
+    "loop": "Feedback starts a new round.",
+    "steps": [
+      {
+        "title": "Need",
+        "text": "Understand the problem and the users before choosing a technology."
+      },
+      {
+        "title": "Design",
+        "text": "Brand, interface and journeys, approved before the first line of code."
+      },
+      {
+        "title": "Architecture",
+        "text": "Choose the stack, model the data, define the API."
+      },
+      {
+        "title": "Development",
+        "text": "Front and back, in small steps, versioned with Git."
+      },
+      {
+        "title": "Testing",
+        "text": "Automated tests, measured accessibility and performance."
+      },
+      {
+        "title": "Deployment",
+        "text": "Online in Docker containers, on my own server."
+      }
+    ]
+  },
+  "case": {
+    "next": "Next project",
+    "all": "All projects",
+    "after": "What next",
+    "demo": "Demo",
+    "capture": "Screenshot of {title}"
+  },
+  "meta": {
+    "type": "Type",
+    "role": "Role",
+    "duration": "Duration",
+    "team": "Team",
+    "stack": "Stack",
+    "code": "Code",
+    "private": "Private code"
+  },
+  "stat": {
+    "before": "before",
+    "after": "after"
+  },
+  "about": {
+    "caseStudy": "See the case study",
+    "legend": "Purple dot: the tech behind this site.",
+    "legendLink": "See how it is built",
+    "intro": "An engineering student at ESIEA, I like to start from a need and turn it into a product that works, from the first sketch to going live.",
+    "storyTitle": "My story",
+    "pathTitle": "My path",
+    "pathIntro": "From high school to engineering school, with student jobs, a semester in Seoul and an internship along the way.",
+    "skillsTitle": "Skills",
+    "skillsIntro": "What I can do, and can defend in an interview.",
+    "methodLoop": "Then the feedback from each release starts a new round.",
+    "teamTitle": "In a team",
+    "teamText": "I work in sprints, with a short meeting every day (the daily): we follow progress, raise blockers early, and keep the human contact.",
+    "contactIntro": "Want to know more? Write to me."
+  },
+  "business": {
+    "title": "Contact",
+    "intro": "An internship to offer, a question about a project? Write to me.",
+    "role": "Engineering student · final-year full-stack internship",
+    "cv": "My résumé"
+  },
+  "notFound": {
+    "title": "A brick is missing.",
+    "text": "Error 404: this page does not exist, or no longer does. Put the brick back to return home.",
+    "brick": "Put the brick back and return home",
+    "done": "The wall is complete. Back to the home page…",
+    "home": "Back to home",
+    "projects": "See the projects"
+  },
+  "home": {
+    "projectsTitle": "Projects",
+    "projectsIntro": "Current picks: three projects, from the need to the code.",
+    "whoTitle": "Who I am",
+    "whoMore": "More about me",
+    "methodTitle": "How I work",
+    "methodIntro": "Every project goes through the same steps, from the need to going live.",
+    "methodMore": "See my method",
+    "contactIntro": "Looking for a full-stack developer for an end-of-studies internship? Write to me."
+  },
+  "projects": {
+    "intro": "Everything I have built, from the most recent to the oldest. Each project has its case study: the need, the method and the technical choices.",
+    "contactIntro": "Did a project speak to you? Write to me."
+  }
+}

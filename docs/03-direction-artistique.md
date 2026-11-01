@@ -1,6 +1,8 @@
 # Direction artistique — Portfolio personnel
 
-Version 1.0 — 14/10/2026 — **statut : validé** (logo et terminal mis de côté ; section d'accueil à confirmer en maquettes)
+Version 1.3 — 22/10/2026 — **statut : validé** (logo et terminal mis de côté ; section d'accueil confirmée en maquettes)
+
+v1.3 : choix validés en maquette (phase 6) : section d'accueil avec statut sous le nom et fond topographique ; motif des affiches collées ; fonds et formats de capture ; rythme des fonds de chaque page ; règles du mouvement complétées (lueur du bento, interaction de la 404).
 
 S'appuie sur le territoire de marque v0.2 : identité forte et reconnaissable, base sérieuse et structurée, quelques prises de risque bien placées, jamais ludique pour le plaisir. Promesse : « Créatif dans l'interface, rigoureux dans la méthode. »
 
@@ -10,7 +12,7 @@ S'appuie sur le territoire de marque v0.2 : identité forte et reconnaissable, b
 
 **Affiche de nuit.**
 
-Un site gris sombre rythmé de sections de couleur, dont la section d'accueil est construite comme une affiche : le nom géant en Bagel au centre, la promesse en relais. Les mises en valeur en Fraunces italique et les touches de lime et de rose apportent la prise de risque ; Manrope et la règle des rôles de couleur gardent l'ensemble sérieux.
+Un site gris sombre rythmé de sections de couleur (violet, violet vif, crème, et une section vive en lime ou en rose), séparées par des vagues organiques, dont la section d'accueil est construite comme une affiche : le nom géant en Bagel au centre, la promesse en relais. Les mises en valeur en Fraunces italique et les touches de lime et de rose apportent la prise de risque ; Manrope et la règle des rôles de couleur gardent l'ensemble sérieux.
 
 ---
 
@@ -42,10 +44,10 @@ Le fond de page n'est plus le violet profond : le site est gris sombre, rythmé 
 | Rôle | Teinte | Usage | Contraste sur le fond |
 |---|---|---|---|
 | **Fond** | neutral/950 | Fond de page par défaut | — |
-| **Sections de couleur** | à préciser (candidats : violet/700, violet/500) | Sections pleines qui rythment les pages | — |
-| **Surface** | gris un peu plus clair que le fond, à définir en design system | Cartes et blocs posés sur le fond | — |
-| **Action** | lime/500 | Uniquement l'action : boutons principaux, liens, mots clés. Texte sur lime : neutral/950 | 16:1 |
-| **Détail** | pink/500 | Touche rare : étiquettes, petits marqueurs | 7,5:1 |
+| **Sections de couleur** | six fonds, voir « Fonds de section » ci-dessous | Sections pleines qui rythment les pages | — |
+| **Surface** | neutral/900 (design system) | Cartes et blocs posés sur le fond | — |
+| **Action et mise en valeur** | lime/500 | L'action (boutons principaux, liens, mots clés) et la mise en valeur ponctuelle (quelques mots en Fraunces italique). Texte sur lime : neutral/950 | 16:1 |
+| **Détail** | pink/500 | Étiquettes et petits marqueurs sur fond sombre | 7,5:1 |
 | **Bloc / trait** | violet/500 | Contours, formes, grands titres décoratifs | 3:1 (jamais en texte courant) |
 | **Texte** | neutral/50 | Texte principal | 16,8:1 |
 | **Texte secondaire** | neutral/100 | Sous-titres, métadonnées | 14,5:1 |
@@ -53,16 +55,36 @@ Le fond de page n'est plus le violet profond : le site est gris sombre, rythmé 
 
 Contrastes sur les sections violet/700 (pour mémoire) : lime 14,1:1, rose 6,6:1, neutral/50 14,8:1.
 
+### Fonds de section (ajout v1.2)
+
+Six fonds possibles. Sur chacun, les rôles changent de teinte pour rester lisibles ; les composants, eux, ne changent pas.
+
+| Fond | Teinte | Texte | Bouton principal | Étiquette | Mise en valeur | Usage |
+|---|---|---|---|---|---|---|
+| **Nuit** | neutral/950 | neutral/50 (16,8:1) | lime, texte noir | rose (7,5:1) | lime | Fond du site, lecture longue |
+| **Violet** | violet/700 | neutral/50 (14,8:1) | lime, texte noir | rose (6,6:1) | lime | L'affiche : section d'accueil |
+| **Violet vif** | violet/500 | neutral/50 (5,5:1) | lime, texte noir | crème (5,5:1) | lime (5,2:1) | Sections courtes seulement |
+| **Lime** | lime/500 | neutral/950 (16:1) | noir, texte lime | violet/500 (5,2:1) | violet/500 | Section vive |
+| **Rose** | pink/500 | neutral/950 (7,5:1) | noir, texte rose | violet/700 (6,6:1) | violet/700 | Section vive |
+| **Crème** | neutral/50 | neutral/950 (16,8:1) | noir, texte lime | violet/500 (5,5:1) | violet/500 | Respiration claire |
+
+**Rythme de l'accueil** : violet (section d'accueil) → nuit (projets) → crème (qui je suis) → violet vif (ma façon de travailler) → lime (prise de contact) → nuit (pied de page).
+
+**Rythme des autres pages** (validé en maquette) : Projets violet → nuit → lime (« Parlons-en ») ; étude de cas violet → nuit → rose (projet suivant) ; À propos violet → crème → nuit → violet → nuit → lime ; Contact et 404 violet. Chaque page finit sur une section d'une autre couleur que le pied de page.
+
+**Ruptures entre sections** : jamais une frontière droite. Entre deux fonds différents, la section du dessus se termine par une **vague organique** : trois ondulations de longueurs et d'amplitudes différentes, superposées, tirées au sort pour chaque frontière. Le dessin est stable d'une visite à l'autre, différent d'une frontière à l'autre, et recalculé à la largeur de l'écran. La vague est immobile (pas d'animation). Pistes explorées et non retenues : vaguelette régulière, coulure de peinture, briques.
+
 ### Règles
 
-1. **Le lime est réservé à l'action.** S'il apparaît partout, il ne guide plus l'œil vers le CV et le contact.
-2. **Le rose reste rare** : c'est la prise de risque, pas une couleur de fond.
+1. **Le lime sert à l'action et à la mise en valeur** sur les fonds sombres. Action : boutons principaux, liens, mots clés. Mise en valeur : quelques mots en Fraunces italique, une touche par section au plus. Pour ne pas confondre les deux, un lien est toujours souligné, une mise en valeur jamais. Sur les fonds clairs, l'action passe en noir.
+2. **Une seule section vive par page** : le lime ou le rose en fond, une fois, pour que ce soit un événement (sur l'accueil : la prise de contact). Le rose garde aussi son rôle d'étiquette sur les fonds sombres.
 3. **Pas de texte violet/500 ni neutral/700** sur fond sombre : contraste insuffisant (WCAG AA exige 4,5:1 pour le texte courant, 3:1 pour le grand texte et les éléments graphiques).
 4. Texte clair posé sur un bloc violet/500 : autorisé (neutral/50 à 5,5:1).
+5. **Deux sections qui se suivent n'ont jamais le même fond**, et une vague organique marque chaque changement.
 
 ### Point de vigilance
 
-Un fond violet sur tout le site peut fatiguer sur les études de cas longues. À tester en maquette ; parade possible : zones de lecture longue sur la surface neutral/950.
+Le violet vif ne tient que 5,5:1 avec le texte clair : il est réservé aux sections courtes. Les lectures longues (études de cas) restent sur le fond nuit.
 
 ---
 
@@ -83,7 +105,7 @@ Le contraste entre une grotesque ronde et grasse (Bagel) et une italique à empa
 
 ### Règles d'usage
 
-1. **Bagel uniquement pour les grands titres** : nom, titres de pages, titres de sections. Jamais pour le texte courant, les boutons, la navigation ni les formulaires (Manrope).
+1. **Bagel uniquement pour les grands titres** : nom, titres de pages, titres de sections. Jamais pour le texte courant, les boutons, la navigation de l'en-tête ni les formulaires (Manrope). Exception : les liens du menu mobile plein écran, en Bagel très grand, qui rappellent l'affiche de la section d'accueil (design system §4).
 2. **Une seule graisse pour Bagel** : la hiérarchie des titres se fait par la taille.
 3. **Fraunces reste rare** : quelques mots ou une phrase par section, jamais une information essentielle (le visiteur doit pouvoir s'en passer).
 4. **Le texte courant est toujours en Manrope**, à 16 px minimum.
@@ -104,8 +126,9 @@ Tailles fluides (`clamp()`) entre mobile et desktop. Interlignage : ~0,95 pour B
 
 ### Points techniques à vérifier
 
-- **Accents et majuscules accentuées** dans Bagel (À, É) : à tester en maquette.
+- **Accents et majuscules accentuées** dans Bagel (À, É) : vérifié le 14/10/2026 avec les fichiers auto-hébergés ; À, É, ç et Œ sont présents.
 - **Poids des fichiers** : Fraunces est une police variable lourde. Ne charger que l'italique et le sous-ensemble latin ; `font-display: swap` partout.
+- **Emplacement** : les fichiers `woff2` sont rangés dans `public/fonts/`, avec leurs licences (détail dans le design system §2).
 
 ## 4. Logo
 
@@ -116,6 +139,10 @@ Pistes explorées le 14/10/2026, sans choix : bloc lime, « Signature » (C en B
 ## 5. Imagerie et iconographie
 
 - **Captures de projets : mises en scène.** Chaque capture est posée dans un cadre d'appareil (navigateur, écran ou téléphone selon le projet) sur un fond de la palette. Pour le stage au CNAM, captures autorisées, code privé.
+  - **Formats** : une seule capture par projet, 1440 × 900 px (ordinateur) ou 390 × 844 px (téléphone). Le cadre garde ses proportions et monte du bas de sa zone ; seule la zone de fond prend la forme de la carte ou de la tuile. Rien n'est jamais déformé.
+  - **Fonds de capture** : lime, violet foncé (violet/700) ou rose ; jamais le violet vif, qui se confond avec les captures et la charte. Dans une grille, la teinte suit la place de la carte, pour que deux voisines n'aient jamais la même. Si une quatrième teinte devient nécessaire : crème ou fond sombre, plutôt qu'une nouvelle couleur.
+- **Motif « affiches collées »** : des cartes légèrement inclinées (de -2° à 2°) et décalées, comme des affiches collées sur un mur, qui se redressent au survol. C'est la signature de l'Affiche de nuit dans les pages : projets de l'accueil, carte « Parlons-en », compétences de la page À propos. Toujours droites sur mobile. La carte de visite de la page Contact, elle, reste droite.
+- **Motif « brique »** : écho à la promesse « brique par brique » (mise en valeur de « Mon histoire », page 404 où l'on replace la brique manquante).
 - **Photo du propriétaire : aucune.** La personnalité passe par le texte, le ton et le design, y compris sur la page À propos.
 - **Icônes : contour épais et arrondi**, d'après la référence fournie par le propriétaire (icône GitHub au trait). Caractéristiques : trait seul, sans remplissage ; épaisseur régulière et généreuse ; extrémités et angles arrondis. Ce style répond à la rondeur de Bagel.
   - Bibliothèques gratuites dans ce style : Lucide (référence la plus proche) ou Tabler Icons, toutes deux avec un paquet Vue.
@@ -131,13 +158,15 @@ Pistes explorées le 14/10/2026, sans choix : bloc lime, « Signature » (C en B
 - **Sensation : fluide.** Des mouvements doux, glissés, qui ralentissent en arrivant.
 - **Zones animées** : section d'accueil, apparition au scroll, survol et clic.
 - **Pas d'animation** : transitions entre les pages, réaction au curseur (pas de curseur personnalisé, pas de boutons magnétiques, pas d'éléments qui suivent la souris).
+- **Exceptions validées en maquette** : sur la page Projets, la lueur du bento suit le pointeur (la lumière bouge, les tuiles ne s'inclinent que de 3° au plus) ; sur la 404, on glisse la brique manquante dans le mur (interaction voulue, avec une alternative au clavier).
 
 ### Règle du scroll (selon la situation)
 
 | Situation | Type d'animation |
 |---|---|
 | Par défaut (sections, blocs de texte) | Apparition simple : le bloc glisse et apparaît en entrant dans l'écran, puis ne bouge plus |
-| Section d'accueil, parcours, temps forts des études de cas | Pilotée par le scroll : parallaxe, sections fixées le temps d'une animation |
+| Section d'accueil, parcours, temps forts des études de cas | Pilotée par le scroll : parallaxe, fil de la frise du parcours qui se trace, barres de résultats qui se remplissent |
+| Compétences (À propos) | Les cartes se posent une à une à l'arrivée à l'écran, puis ne bougent plus |
 | Projets sur la page d'accueil | 3 projets seulement, avec une apparition simple ; pas de défilement horizontal. Les autres projets sont sur une page dédiée |
 
 ### Durées et courbes de référence
@@ -154,11 +183,12 @@ Valeurs indicatives, à ajuster en maquette.
 
 **Intention** : marquer les esprits. Le nom est la star, la promesse le relais.
 
-**Contenu (minimal)** : nom, poste, promesse, deux boutons (CV, contact). Rien d'autre.
+**Contenu (minimal)** : nom ; sous le nom, deux lignes, « Étudiant ingénieur à l'ESIEA » puis « Je cherche un stage de fin d'études full-stack » (la RH comprend tout de suite le statut et le poste visé) ; promesse ; deux boutons (CV, contact). Plus d'étiquette « développeur full-stack » au-dessus du nom.
 
 **Mise en page**
 - Plein écran.
 - Section de couleur violette (violet/700), qui tranche avec le gris sombre du reste du site.
+- **Fond topographique animé** : des courbes de niveau qui ondulent lentement (WebGL), du violet vif vers le rose, estompées derrière le nom et la promesse ; pas de réaction au curseur ; image fixe en mouvement réduit ; pause hors de l'écran. Choisi en maquette parmi violet, crème et couleurs de la DA.
 - Composition centrée.
 - Nom géant en Bagel, sur presque toute la largeur ; promesse forte juste en dessous (Manrope + Fraunces italique) ; boutons sous la promesse.
 
@@ -167,7 +197,7 @@ Valeurs indicatives, à ajuster en maquette.
 | Moment | Ce qui se passe |
 |---|---|
 | 0 → ~1,1 s | Le nom apparaît **lettre par lettre**, en décalé : chaque lettre monte légèrement et se pose, de façon fluide (~600 ms par lettre, ~40 ms d'écart) |
-| ~0,4 s | La promesse glisse et apparaît, la partie en Fraunces juste après |
+| ~0,4 s | Les deux lignes de statut puis la promesse glissent et apparaissent, la partie en Fraunces juste après |
 | ~0,6 s | Les boutons apparaissent : CV et contact sont utilisables en moins d'une seconde |
 | ~1,5 s | Dernières lettres posées, entrée terminée |
 

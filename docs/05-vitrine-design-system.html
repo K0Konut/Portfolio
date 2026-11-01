@@ -1,0 +1,940 @@
+<title>Vitrine du design system</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,400,100,1&family=JetBrains+Mono:wght@400..500&family=Manrope:wght@400..700&display=swap">
+<style>
+/* Vitrine du design system v0.2 : une colonne de planches (header, couleurs, typo, boutons) sur le fond du site. Look sombre unique, assumé. Aucune valeur en dur : tout passe par les tokens du design system, plus quelques tokens --vitrine-* propres à la mise en page de cette vitrine. */
+:root{
+  color-scheme:dark;
+  /* Teintes de base */
+  --violet-500:#4b3cff;--violet-700:#17105b;--lime-500:#c7ff00;--pink-500:#ff6bd6;
+  --neutral-50:#f5f1e8;--neutral-100:#e8e1d4;--neutral-400:#a39e94;--neutral-700:#474747;--neutral-850:#232428;--neutral-900:#1a1b1e;--neutral-950:#101113;
+  /* Rôles */
+  --color-bg:var(--neutral-950);--color-section:var(--violet-700);--color-surface:var(--neutral-900);--color-surface-hover:var(--neutral-850);
+  --color-text:var(--neutral-50);--color-text-muted:var(--neutral-100);--color-text-subtle:var(--neutral-400);
+  --color-action:var(--lime-500);--color-highlight:var(--lime-500);--color-on-action:var(--neutral-950);--color-detail:var(--pink-500);--color-block:var(--violet-500);--color-border:var(--neutral-700);
+  --color-header-bg:var(--neutral-50);--color-header-text:var(--neutral-950);--color-header-accent:var(--violet-500);--color-header-muted:var(--neutral-400);--color-focus:var(--lime-500);
+  /* Typographie */
+  --font-display:'Bagel Fat One','Arial Rounded MT Bold',system-ui,sans-serif;--font-accent:'Fraunces',Georgia,serif;--font-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--font-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --text-display:clamp(3.5rem,1.5rem + 9vw,6rem);--text-h1:clamp(2.5rem,1.6rem + 4vw,4rem);--text-h2:clamp(1.875rem,1.4rem + 2vw,2.5rem);--text-h3:clamp(1.5rem,1.3rem + 1vw,1.75rem);--text-body:clamp(1rem,.95rem + .25vw,1.125rem);--text-sm:.875rem;
+  --text-hero:clamp(5.5rem,12vw,9.5rem);--text-hero-stacked:19vw;--text-ui:1rem;--text-lead:clamp(1.25rem,1.1rem + .6vw,1.5rem);--text-logo:clamp(1.125rem,1rem + .5vw,1.375rem);--text-menu:3.25rem;
+  --leading-none:1;--leading-display:.95;--leading-snug:1.3;--leading-body:1.6;
+  --weight-regular:400;--weight-medium:500;--weight-bold:700;--tracking-label:.05em;
+  /* Espacements, rayons, bordures, tailles */
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;--space-8:64px;--space-9:96px;--space-10:128px;
+  --space-section:clamp(4rem,10vw,8rem);--gutter:clamp(1rem,4vw,3rem);--container:1240px;--measure:52ch;--header-height:60px;--toc-width:13rem;--stat-bar:12px;
+  --radius-sm:8px;--radius-md:16px;--radius-lg:28px;--radius-pill:999px;
+  --border-thin:1px;--border-strong:1.5px;--underline:2px;--focus-width:2px;--focus-offset:3px;
+  --target-min:44px;--tag-tint:14%;--icon-sm:1.125rem;--icon-md:1.5rem;--icon-stroke:2.5;
+  /* Motion */
+  --ease-out:cubic-bezier(.22,1,.36,1);--duration-fast:250ms;--duration-base:700ms;--duration-reduced:300ms;--hover-lift:3px;--hover-nudge:4px;
+  --duration-press:120ms;--press-scale:.98;--feedback-hold:2s;
+  --duration-letter:600ms;--letter-rise:.4em;--hero-parallax:.35;--stagger-brick:60ms;--hint-travel:12px;--duration-hint:1200ms;--stagger-wall:30ms;--duration-bar:900ms;--timeline-dot:14px;
+  /* Mise en page de la vitrine uniquement (pas des tokens du site) */
+  --vitrine-stage-h:16rem;--vitrine-phone-w:22.5rem;--vitrine-phone-h:35rem;--vitrine-phone-display:3.5rem;--vitrine-phone-logo:1.125rem;
+  --vitrine-swatch-min:9.5rem;--vitrine-swatch-h:4rem;--vitrine-chip:.875rem;--vitrine-label-col:10.5rem;--vitrine-table-min:40rem;--vitrine-state-min:14rem;--vitrine-duo-min:19rem;--vitrine-measure:var(--measure);--vitrine-icon-min:7.5rem;--vitrine-foot-min:14rem;--vitrine-hero-h:min(100svh,48rem);--vitrine-brick-min:8.5rem;--vitrine-step-col:3.5rem;--vitrine-meta-min:9rem;--vitrine-stat-min:16rem;--vitrine-hint-h:40px;--vitrine-hint-seg:12px;
+}
+@media (prefers-reduced-motion:reduce){:root{--hover-lift:0px;--hover-nudge:0px;--press-scale:1}}
+html,body{background:var(--color-bg);color:var(--color-text)}
+body{font-family:var(--font-body);font-size:var(--text-body);line-height:var(--leading-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:var(--space-6) var(--space-8)}
+*{box-sizing:border-box}
+.page{max-width:var(--container);margin:0 auto;display:grid;gap:var(--space-8)}
+.intro h1{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h1);line-height:var(--leading-display);margin:0 0 var(--space-3)}
+.intro p{margin:0;color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.hl{font-family:var(--font-accent);font-style:italic;font-weight:var(--weight-regular);font-variation-settings:"SOFT" 100,"WONK" 1;color:var(--color-highlight)}
+.plate{display:grid;gap:var(--space-5)}
+.plate>header{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--space-2) var(--space-4);border-bottom:var(--border-thin) solid var(--color-border);padding-bottom:var(--space-3)}
+.plate h2{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-none);margin:0}
+.plate>header span{font:var(--weight-regular) var(--text-sm)/var(--leading-snug) var(--font-mono);color:var(--color-text-subtle)}
+.cap{font:var(--weight-regular) var(--text-sm)/var(--leading-body) var(--font-mono);color:var(--color-text-subtle);margin:0;max-width:var(--vitrine-measure)}
+:focus-visible{outline:var(--focus-width) solid var(--color-focus);outline-offset:var(--focus-offset)}
+svg{stroke-width:var(--icon-stroke)}
+
+/* ---- AppHeader ---- */
+.stage{position:relative;background:var(--color-section);border-radius:var(--radius-md);overflow:hidden;min-height:var(--vitrine-stage-h);padding-inline:var(--gutter)}
+.stage .ghost{position:absolute;inset:auto 0 var(--space-4);text-align:center;font-family:var(--font-display);font-size:var(--text-display);line-height:var(--leading-display);color:var(--color-text)}
+.hdr{position:relative;z-index:2;max-width:var(--container);margin:0 auto;background:var(--color-header-bg);color:var(--color-header-text);border-radius:0 0 var(--radius-lg) var(--radius-lg);display:flex;align-items:center;gap:var(--space-4);padding:var(--space-2) var(--gutter)}
+.hdr .name{display:inline-flex;align-items:center;min-height:var(--target-min);font-family:var(--font-display);font-size:var(--text-logo);line-height:var(--leading-none);color:inherit;text-decoration:none;white-space:nowrap}
+.hdr nav{margin-left:auto;display:flex;align-items:center;gap:var(--space-5)}
+.hdr nav a,.lang a{display:inline-flex;align-items:center;justify-content:center;min-height:var(--target-min);min-width:var(--target-min);color:var(--color-header-text);text-decoration:none;font-weight:var(--weight-medium);font-size:var(--text-ui)}
+.hdr nav a span,.lang a span{position:relative}
+.hdr nav a span::after,.lang a span::after{content:"";position:absolute;left:0;right:0;bottom:calc(-1 * var(--space-1));height:var(--underline);background:var(--color-header-accent);transform:scaleX(0);transform-origin:left;transition:transform var(--duration-fast) var(--ease-out)}
+.hdr nav a:hover span::after,.hdr nav a[aria-current="page"] span::after,.lang a:hover span::after,.lang a[aria-current="true"] span::after{transform:scaleX(1)}
+.hdr :focus-visible{outline-color:var(--color-header-accent)}
+.lang{display:flex;align-items:center;margin-left:var(--space-2)}
+.lang .sep{color:var(--color-header-muted)}
+.menuBtn{display:none;margin-left:auto;align-items:center;gap:var(--space-2);min-height:var(--target-min);background:transparent;border:var(--border-strong) solid var(--color-header-text);color:var(--color-header-text);border-radius:var(--radius-pill);padding:0 var(--space-4);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body);cursor:pointer}
+.menuBtn svg{width:var(--icon-sm);height:var(--icon-sm)}
+.mobileView .hdr nav,.mobileView .lang{display:none}
+.mobileView .menuBtn{display:inline-flex}
+@media (max-width:767px){.stage .hdr nav,.stage .hdr .lang{display:none}}
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-duo-min)),1fr));gap:var(--space-4)}
+.phone{max-width:var(--vitrine-phone-w);border-radius:var(--radius-lg);overflow:hidden;border:var(--border-thin) solid var(--color-border);min-height:var(--vitrine-phone-h);background:var(--color-section);position:relative}
+.phone .hdr{border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:var(--space-2) var(--space-3)}
+.phone .hdr .name{font-size:var(--vitrine-phone-logo)}
+.phone .ghost{position:absolute;left:0;right:0;bottom:var(--space-5);text-align:center;font-family:var(--font-display);font-size:var(--vitrine-phone-display);line-height:var(--leading-display)}
+.mm{position:absolute;inset:0;background:var(--color-section);display:flex;flex-direction:column;padding:var(--space-3) var(--space-4) var(--space-4);gap:var(--space-6)}
+.mm[hidden]{display:none}
+.mm .top{display:flex;justify-content:space-between;align-items:center}
+.mm .top b{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--vitrine-phone-logo)}
+.mm .close{min-height:var(--target-min);background:transparent;border:var(--border-strong) solid var(--color-text);color:var(--color-text);border-radius:var(--radius-pill);padding:0 var(--space-4);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body);cursor:pointer}
+.mm ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-1)}
+.mm ul a{display:inline-flex;align-items:center;min-height:var(--target-min);font-family:var(--font-display);font-size:var(--text-menu);line-height:var(--leading-display);color:var(--color-text);text-decoration:none}
+.mm ul a[aria-current="page"]{color:var(--color-action)}
+.mm .mlang{margin-top:auto;display:flex;gap:var(--space-2);font-weight:var(--weight-bold)}
+.mm .mlang a{display:inline-flex;align-items:center;justify-content:center;min-width:var(--target-min);min-height:var(--target-min);color:var(--color-text-muted);text-decoration:none}
+.mm .mlang a[aria-current="true"]{color:var(--color-action)}
+
+/* ---- Couleurs ---- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-swatch-min)),1fr));gap:var(--space-3)}
+.sw{background:var(--color-surface);border-radius:var(--radius-sm);overflow:hidden;min-width:0}
+.sw i{display:block;height:var(--vitrine-swatch-h);border-bottom:var(--border-thin) solid var(--color-border)}
+.sw div{padding:var(--space-3);display:grid;gap:var(--space-1)}
+.sw b{font:var(--weight-medium) var(--text-sm)/var(--leading-snug) var(--font-mono)}
+.sw small{font:var(--weight-regular) var(--text-sm)/var(--leading-snug) var(--font-mono);color:var(--color-text-subtle)}
+.sw .add{color:var(--color-detail)}
+.roles{width:100%;border-collapse:collapse;font-size:var(--text-ui);min-width:var(--vitrine-table-min)}
+.roles th,.roles td{text-align:left;padding:var(--space-3);border-bottom:var(--border-thin) solid var(--color-border);vertical-align:middle}
+.roles th{font:var(--weight-medium) var(--text-sm)/var(--leading-snug) var(--font-mono);color:var(--color-text-subtle);text-transform:uppercase;letter-spacing:var(--tracking-label)}
+.roles code{font:var(--weight-regular) var(--text-sm) var(--font-mono)}
+.chip{display:inline-block;width:var(--vitrine-chip);height:var(--vitrine-chip);border-radius:var(--space-1);vertical-align:middle;margin-right:var(--space-2);border:var(--border-thin) solid var(--color-border)}
+.ratio{font:var(--weight-medium) var(--text-sm) var(--font-mono);color:var(--color-text-muted);font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+
+/* ---- Typo ---- */
+.type{display:grid;gap:var(--space-5)}
+.trow{display:grid;grid-template-columns:minmax(0,var(--vitrine-label-col)) minmax(0,1fr);gap:var(--space-4);align-items:baseline;border-bottom:var(--border-thin) solid var(--color-border);padding-bottom:var(--space-4)}
+.d{font-family:var(--font-display);font-weight:var(--weight-regular);line-height:var(--leading-display);margin:0}
+.lead{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug)}
+.body{margin:0;max-width:var(--vitrine-measure);color:var(--color-text-muted)}
+.mono{margin:0;font:var(--weight-regular) var(--text-sm) var(--font-mono);color:var(--color-text-muted)}
+@media (max-width:640px){.trow{grid-template-columns:minmax(0,1fr)}}
+
+/* ---- Boutons ---- */
+.btn{display:inline-flex;align-items:center;gap:var(--space-3);min-height:var(--target-min);font:var(--weight-bold) var(--text-ui)/var(--leading-none) var(--font-body);text-decoration:none;border-radius:var(--radius-pill);padding:var(--space-4) var(--space-5);border:var(--border-strong) solid transparent;cursor:pointer;transition:transform var(--duration-fast) var(--ease-out),background-color var(--duration-fast) var(--ease-out),color var(--duration-fast) var(--ease-out)}
+.btn svg{width:var(--icon-sm);height:var(--icon-sm);transition:transform var(--duration-fast) var(--ease-out)}
+.btn-primary{background:var(--color-action);color:var(--color-on-action)}
+.btn-primary:hover,.btn-primary.is-hover{background:var(--color-text);transform:translateY(calc(-1 * var(--hover-lift)))}
+.btn-primary:hover svg,.btn-primary.is-hover svg{transform:translateX(var(--hover-nudge))}
+.btn-outline{background:transparent;color:var(--color-text);border-color:var(--color-text)}
+.btn-outline:hover,.btn-outline.is-hover{background:var(--color-text);color:var(--color-bg);transform:translateY(calc(-1 * var(--hover-lift)))}
+.btn.is-focus{outline:var(--focus-width) solid var(--color-focus);outline-offset:var(--focus-offset)}
+.states{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-state-min)),1fr));gap:var(--space-4)}
+.state{background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-5);display:grid;gap:var(--space-4);justify-items:start;min-width:0}
+.state.onColor{background:var(--color-section)}
+.state.onColor .cap{color:var(--color-text-muted)}
+.btn:active{transform:scale(var(--press-scale));transition-duration:var(--duration-press)}
+.btn[data-icon="download"]:hover svg,.btn[data-icon="download"].is-hover svg{transform:translateY(var(--hover-nudge))}
+.btn[data-icon="external"]:hover svg,.btn[data-icon="external"].is-hover svg{transform:translate(var(--hover-nudge),calc(-1 * var(--hover-nudge)))}
+
+/* ---- Utilitaires ---- */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.ico{width:var(--icon-sm);height:var(--icon-sm);flex:none;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.ico.md{width:var(--icon-md);height:var(--icon-md)}
+
+/* ---- SkipLink ---- */
+.skip{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + var(--space-3));left:max(16px,env(safe-area-inset-left,0px));display:inline-flex;align-items:center;min-height:var(--target-min);padding:0 var(--space-5);border-radius:var(--radius-pill);background:var(--color-action);color:var(--color-on-action);font:var(--weight-bold) var(--text-ui)/var(--leading-none) var(--font-body);text-decoration:none;transform:translateY(calc(-100% - var(--space-6)));transition:transform var(--duration-fast) var(--ease-out)}
+.skip:focus{transform:none}
+.skip:focus-visible{outline-color:var(--color-text)}
+
+/* ---- TextLink ---- */
+.tl-inline{color:var(--color-action);text-decoration:underline;text-decoration-thickness:var(--border-thin);text-underline-offset:.2em}
+.tl-inline:hover,.tl-inline:focus-visible{text-decoration-thickness:var(--underline)}
+.tl-stand{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--target-min);color:var(--color-text);text-decoration:none;transition:color var(--duration-fast) var(--ease-out)}
+.tl-stand span{position:relative}
+.tl-stand span::before,.tl-stand span::after{content:"";position:absolute;left:0;right:0;bottom:calc(-1 * var(--space-1))}
+.tl-stand span::before{height:var(--border-thin);background:currentColor}
+.tl-stand span::after{height:var(--underline);background:var(--color-action);transform:scaleX(0);transform-origin:left;transition:transform var(--duration-fast) var(--ease-out)}
+.tl-stand:hover,.tl-stand:focus-visible{color:var(--color-action)}
+.tl-stand:hover span::after,.tl-stand:focus-visible span::after{transform:scaleX(1)}
+.linkdemo{display:grid;gap:var(--space-4)}
+.linkdemo p{margin:0;max-width:var(--vitrine-measure);color:var(--color-text-muted)}
+.linklist{display:flex;flex-wrap:wrap;gap:0 var(--space-5);list-style:none;margin:0;padding:0}
+
+/* ---- Tag ---- */
+.tag{display:inline-flex;align-items:center;font:var(--weight-medium) var(--text-sm)/var(--leading-none) var(--font-body);padding:var(--space-2) var(--space-3);border-radius:var(--radius-pill);white-space:nowrap}
+.tag-a{border:var(--border-strong) solid var(--color-detail);color:var(--color-detail);background:color-mix(in srgb,var(--color-detail) var(--tag-tint),transparent)}
+.tagrow{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.minicard{display:grid;gap:var(--space-3);justify-items:start}
+.minicard h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:0}
+.minicard p{margin:0;font-size:var(--text-sm);color:var(--color-text-subtle)}
+
+/* ---- Icon ---- */
+.icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--vitrine-icon-min)),1fr));gap:var(--space-3)}
+.icons figure{margin:0;background:var(--color-surface);border-radius:var(--radius-sm);padding:var(--space-4) var(--space-3);display:grid;gap:var(--space-3);justify-items:center}
+.icons figcaption{font:var(--weight-regular) var(--text-sm)/var(--leading-snug) var(--font-mono);color:var(--color-text-subtle)}
+
+/* ---- CopyButton ---- */
+.copy{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3)}
+.copy .addr{font-size:var(--text-lead);font-weight:var(--weight-medium);user-select:all;overflow-wrap:anywhere}
+.copy button{position:relative;display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--target-min);padding:0 var(--space-4);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--color-text);background:transparent;color:var(--color-text);font:var(--weight-bold) var(--text-sm)/var(--leading-none) var(--font-body);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-out),color var(--duration-fast) var(--ease-out),transform var(--duration-press) var(--ease-out)}
+.copy button:hover{background:var(--color-text);color:var(--color-bg)}
+.copy button:active{transform:scale(var(--press-scale))}
+.copy .icwrap{position:relative;display:inline-grid;width:var(--icon-sm);height:var(--icon-sm)}
+.copy .icwrap .ico{grid-area:1/1;transition:opacity var(--duration-fast) var(--ease-out),transform var(--duration-fast) var(--ease-out)}
+.copy .ic-check{opacity:0;transform:scale(.6)}
+.copy.done .ic-copy{opacity:0}
+.copy.done .ic-check{opacity:1;transform:scale(1)}
+
+
+
+/* ---- Fonds de section : chaque fond réaffecte les rôles ---- */
+.fond-nuit,.fond-violet{--color-text:var(--neutral-50);--color-text-muted:var(--neutral-100);--color-text-subtle:var(--neutral-400);--tag-tint:14%;--color-action:var(--lime-500);--color-on-action:var(--neutral-950);--color-highlight:var(--lime-500);--color-detail:var(--pink-500);--color-focus:var(--lime-500)}
+.fond-nuit{--color-bg:var(--neutral-950)} .fond-violet{--color-bg:var(--violet-700);--color-text-subtle:var(--neutral-100)}
+.fond-vif{--tag-tint:0%;--color-bg:var(--violet-500);--color-text:var(--neutral-50);--color-text-muted:var(--neutral-50);--color-text-subtle:var(--neutral-50);--color-action:var(--lime-500);--color-on-action:var(--neutral-950);--color-highlight:var(--lime-500);--color-detail:var(--neutral-50);--color-focus:var(--lime-500)}
+.fond-lime{--tag-tint:0%;--color-bg:var(--lime-500);--color-text:var(--neutral-950);--color-text-muted:var(--neutral-950);--color-text-subtle:var(--neutral-700);--color-action:var(--neutral-950);--color-on-action:var(--lime-500);--color-highlight:var(--violet-500);--color-detail:var(--violet-500);--color-focus:var(--neutral-950)}
+.fond-rose{--tag-tint:0%;--color-bg:var(--pink-500);--color-text:var(--neutral-950);--color-text-muted:var(--neutral-950);--color-text-subtle:var(--neutral-950);--color-action:var(--neutral-950);--color-on-action:var(--pink-500);--color-highlight:var(--violet-700);--color-detail:var(--violet-700);--color-focus:var(--neutral-950)}
+.fond-creme{--tag-tint:0%;--color-bg:var(--neutral-50);--color-text:var(--neutral-950);--color-text-muted:var(--neutral-950);--color-text-subtle:var(--neutral-700);--color-action:var(--neutral-950);--color-on-action:var(--lime-500);--color-highlight:var(--violet-500);--color-detail:var(--violet-500);--color-focus:var(--neutral-950)}
+[class*="fond-"]{background:var(--color-bg);color:var(--color-text)}
+.fonds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-duo-min)),1fr));gap:var(--space-4)}
+.fonds>div{border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border);padding:var(--space-5);display:grid;gap:var(--space-4);justify-items:start}
+.fonds h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:0}
+.fonds p{margin:0;color:var(--color-text-muted)}
+.fonds .meta{font:var(--weight-regular) var(--text-sm)/var(--leading-snug) var(--font-mono);color:var(--color-text-subtle)}
+.fonds .row,.rythme .row{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+.rythme{border-radius:var(--radius-md);overflow:hidden;border:var(--border-thin) solid var(--color-border)}
+.rythme section{padding:var(--space-7) var(--gutter);display:grid;gap:var(--space-3);justify-items:start}
+.rythme h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.rythme p{margin:0;color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.wave{line-height:0;background:var(--next);color:var(--prev)}
+.wave svg{display:block;width:100%;fill:currentColor}
+
+/* ---- Section ---- */
+
+/* ---- PageIntro ---- */
+.pintro{display:grid;gap:var(--space-4);justify-items:start;padding:var(--space-7) var(--gutter);background:var(--color-bg);border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border)}
+.pintro.center{justify-items:center;text-align:center}
+.pintro h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h1);line-height:var(--leading-display);margin:0}
+.pintro p{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.pintro .row{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:center}
+
+/* ---- ProjectCard + DeviceFrame ---- */
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-5)}
+@media (min-width:768px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1024px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pcard{position:relative;display:grid;gap:var(--space-3);align-content:start;background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-5);transition:background-color var(--duration-fast) var(--ease-out)}
+.pcard:hover{background:var(--color-surface-hover)}
+.pcard:has(a:focus-visible){outline:var(--focus-width) solid var(--color-focus);outline-offset:var(--focus-offset)}
+.pcard h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h3);line-height:var(--leading-display);margin:var(--space-1) 0 0}
+.pcard h3 a{color:inherit;text-decoration:none}
+.pcard h3 a:focus-visible{outline:none}
+.pcard h3 a::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.pcard .desc{margin:0;color:var(--color-text-muted)}
+.pcard .stack{margin:0;font-size:var(--text-sm);color:var(--color-text-subtle)}
+.frame{position:relative;aspect-ratio:16/10;max-width:100%;background:var(--color-section);border-radius:var(--radius-sm);overflow:hidden;display:flex;justify-content:center;align-items:flex-end;padding:var(--space-5) var(--space-5) 0}
+.dev{transform-origin:50% 100%;transition:transform var(--duration-base) var(--ease-out);background:var(--color-surface);border:var(--border-thin) solid var(--color-border);display:flex;flex-direction:column;overflow:hidden}
+.pcard:hover .dev{transform:scale(var(--card-hover-scale))}
+.dev-browser{width:100%;height:100%;border-bottom:0;border-radius:var(--radius-md) var(--radius-md) 0 0}
+.dev-browser .bar{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-2) var(--space-3);border-bottom:var(--border-thin) solid var(--color-border)}
+.dev-browser .bar i{width:var(--space-2);height:var(--space-2);border-radius:var(--radius-pill);background:var(--color-border)}
+.dev-browser .bar span{margin-left:var(--space-2);flex:1;height:var(--space-3);border-radius:var(--radius-pill);background:var(--color-surface-hover)}
+.dev-phone{width:42%;height:100%;border-bottom:0;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding-top:var(--space-3)}
+.dev .screen{flex:1;display:grid;place-items:center;padding:var(--space-3);text-align:center;font-family:var(--font-display);font-size:var(--text-h3);line-height:var(--leading-display);background:var(--color-block);color:var(--color-text)}
+
+/* ---- AppFooter ---- */
+.foot{border-top:var(--border-thin) solid var(--color-border);padding-top:var(--space-7);display:grid;gap:var(--space-7)}
+.foot .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-foot-min)),1fr));gap:var(--space-6)}
+.foot h3{margin:0 0 var(--space-2);font:var(--weight-bold) var(--text-sm)/var(--leading-snug) var(--font-body);color:var(--color-text-subtle)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid}
+.foot .copy .addr{font-size:var(--text-ui)}
+.foot small{font-size:var(--text-sm);color:var(--color-text-subtle)}
+
+/* ---- Apparition au scroll (Section) ---- */
+.js .reveal.is-pending{opacity:0;transform:translateY(var(--reveal-distance))}
+.reveal{transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i,0) * var(--stagger-block))}
+
+
+/* ---- Section d'accueil, HeroName, ScrollHint ---- */
+.herowrap{border-radius:var(--radius-md);overflow:hidden;border:var(--border-thin) solid var(--color-border)}
+.hero{position:relative;min-height:var(--vitrine-hero-h);display:grid;grid-template-rows:auto 1fr;padding-inline:var(--gutter)}
+.hero .hdr{width:100%}
+.hero-inner{display:grid;justify-items:center;align-content:center;text-align:center;gap:var(--space-5);padding-block:var(--space-8) var(--space-9)}
+.hero-name{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-hero);line-height:var(--leading-display);margin:0;white-space:nowrap}
+.hero-name .word{display:inline-block}
+.hero-name .l{display:inline-block}
+@media (max-width:767px){.hero-name{font-size:var(--text-hero-stacked)} .hero-name .word{display:block} .hero .hdr nav,.hero .hdr .lang{display:none}}
+.hero-promise{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+.hero-promise .hl{display:inline-block}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:center}
+.hint{position:absolute;left:50%;bottom:calc(var(--space-6) + env(safe-area-inset-bottom,0px));width:var(--border-strong);height:var(--vitrine-hint-h);background:color-mix(in srgb,var(--color-text-muted) 45%,transparent);overflow:hidden}
+.hint i{position:absolute;left:0;top:0;width:100%;height:var(--vitrine-hint-seg);background:var(--color-highlight)}
+.replay{display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap}
+
+/* ---- ProcessSteps ---- */
+.steps-c{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-brick-min)),1fr));gap:var(--space-3);width:100%}
+@media (min-width:1024px){.steps-c{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.steps-c li{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-sm);padding:var(--space-4) var(--space-3);display:grid;gap:var(--space-2);align-content:start}
+.steps-c .n{font-size:var(--text-sm);color:var(--color-text-subtle);font-variant-numeric:tabular-nums}
+.steps-c .t{font-weight:var(--weight-bold);line-height:var(--leading-snug);overflow-wrap:anywhere;hyphens:auto}
+.blocks .steps-c{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:768px){.blocks .steps-c{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.steps-c li:last-child{background:var(--color-action);border-color:var(--color-action);color:var(--color-on-action)}
+.steps-c li:last-child .n{color:var(--color-on-action)}
+.steps-d{position:relative;list-style:none;margin:0;padding:0;display:grid;gap:var(--space-5)}
+.steps-d::before{content:"";position:absolute;left:calc(var(--vitrine-step-col) / 2);top:var(--space-4);bottom:var(--space-4);width:var(--border-thin);background:var(--color-border)}
+.steps-d li{position:relative;display:grid;grid-template-columns:var(--vitrine-step-col) minmax(0,1fr);gap:var(--space-4);align-items:start}
+.steps-d .n{font-family:var(--font-display);font-size:var(--text-h3);line-height:var(--leading-none);color:var(--color-block);background:var(--color-bg);text-align:center;padding-block:var(--space-1)}
+.steps-d b{display:block;font-size:var(--text-lead);line-height:var(--leading-snug)}
+.steps-d p{margin:var(--space-1) 0 0;color:var(--color-text-muted)}
+.stepbox{padding:var(--space-7) var(--gutter);display:grid;gap:var(--space-5);justify-items:start;border-radius:var(--radius-md);border:var(--border-thin) solid var(--color-border)}
+.stepbox h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.reveal-brick{transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i,0) * var(--stagger-brick))}
+.js .reveal-brick.is-pending{opacity:0;transform:translateY(var(--reveal-distance))}
+
+
+/* ---- Timeline ---- */
+.tline-wrap{position:relative}
+.tline{list-style:none;margin:0;padding:0 0 0 calc(var(--timeline-dot) + var(--space-5));display:grid;gap:var(--space-7)}
+.tline-wrap::before,.tline-wrap .fill{content:"";position:absolute;left:calc(var(--timeline-dot) / 2 - var(--border-strong) / 2);top:var(--space-2);bottom:var(--space-2);width:var(--border-strong);background:var(--color-border)}
+.tline-wrap .fill{background:var(--color-highlight);transform-origin:50% 0;transform:scaleY(1)}
+.tline li{position:relative;display:grid;gap:var(--space-2);justify-items:start}
+.tline li::before{content:"";position:absolute;left:calc(-1 * (var(--timeline-dot) + var(--space-5)));top:var(--space-1);width:var(--timeline-dot);height:var(--timeline-dot);border-radius:var(--radius-pill);border:var(--border-strong) solid var(--color-highlight);background:var(--color-highlight);transition:background-color var(--duration-fast) var(--ease-out)}
+.js-tl .tline li:not(.on)::before{background:var(--color-bg)}
+.tline time{font-size:var(--text-sm);color:var(--color-text-subtle)}
+.tline b{font-size:var(--text-lead);line-height:var(--leading-snug)}
+.tline .where{color:var(--color-text)}
+.tline p{margin:0;color:var(--color-text-muted);max-width:var(--vitrine-measure)}
+
+
+/* ---- SkillsWall ---- */
+.wall{display:grid;gap:var(--space-3);width:100%}
+.course{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2)}
+.course:nth-child(even){padding-left:var(--space-6)}
+@media (max-width:767px){.course:nth-child(even){padding-left:var(--space-4)}}
+.course .hl{font-size:var(--text-lead);margin-right:var(--space-2)}
+.course ul{display:flex;flex-wrap:wrap;gap:var(--space-2);list-style:none;margin:0;padding:0}
+.brick{display:inline-flex;align-items:center;padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);background:var(--neutral-50);color:var(--neutral-950);font:var(--weight-bold) var(--text-ui)/var(--leading-none) var(--font-body);transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out);transition-delay:calc(var(--i) * var(--stagger-wall))}
+.brick.site{background:var(--violet-500);color:var(--neutral-50)}
+.js .wall.is-pending .brick{opacity:0;transform:translateY(calc(-1 * var(--reveal-distance)))}
+.wall-legend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);font-size:var(--text-sm);color:var(--color-text-muted)}
+.wall-legend i{width:var(--space-4);height:var(--space-4);border-radius:var(--space-1);background:var(--violet-500);border:var(--border-thin) solid var(--neutral-50)}
+
+
+.apropos .pagetitle{font-family:var(--font-display);font-size:var(--text-h1);line-height:var(--leading-display);margin:0}
+.apropos .lead{font-size:var(--text-lead);line-height:var(--leading-snug)}
+.apropos .tline{padding-left:calc(var(--timeline-dot) + var(--space-5));position:relative}
+.apropos .tline::before{content:"";position:absolute;left:calc(var(--timeline-dot) / 2 - var(--border-strong) / 2);top:var(--space-2);bottom:var(--space-2);width:var(--border-strong);background:var(--color-highlight)}
+.js-tl .apropos .tline li::before,.apropos .tline li::before{background:var(--color-highlight)}
+.duo2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-duo-min)),1fr));gap:var(--space-5);width:100%}
+.duo2>div{border:var(--border-strong) solid var(--color-text);border-radius:var(--radius-md);padding:var(--space-5)}
+.duo2 b{font-size:var(--text-lead)}
+
+
+/* ---- Étude de cas : MetaList, CaseToc, StatBlock, CaseNav ---- */
+.case section{padding:var(--space-7) var(--gutter);justify-items:stretch}
+.case-head{display:grid;gap:var(--space-5);justify-items:start}
+.case-title{font-family:var(--font-display);font-size:var(--text-h1);line-height:var(--leading-display);margin:0}
+.case-lead{margin:0;font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--color-text-muted);max-width:var(--measure)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-meta-min)),1fr));margin:0;width:100%;border-block:var(--border-thin) solid color-mix(in srgb,var(--color-text) 25%,transparent)}
+.meta>div{padding:var(--space-3) var(--space-4) var(--space-3) 0}
+.meta dt{font-size:var(--text-sm);color:var(--color-text-subtle)}
+.meta dd{margin:0;font-weight:var(--weight-bold)}
+.case-head .frame{width:100%;aspect-ratio:16/8}
+.case-body{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-7)}
+@media (min-width:1024px){.case-body{grid-template-columns:var(--toc-width) minmax(0,1fr)}}
+.toc{display:none}
+@media (min-width:1024px){.toc{display:block;position:sticky;top:calc(var(--header-height) + var(--space-5));align-self:start}}
+.toc ol{list-style:none;margin:0;padding:0;display:grid}
+.toc a{display:flex;align-items:center;min-height:var(--target-min);padding-left:var(--space-4);border-left:var(--underline) solid var(--color-border);color:var(--color-text-subtle);text-decoration:none;transition:color var(--duration-fast) var(--ease-out),border-color var(--duration-fast) var(--ease-out)}
+.toc a:hover{color:var(--color-text)}
+.toc a[aria-current="location"]{color:var(--color-text);font-weight:var(--weight-bold);border-left-color:var(--color-highlight)}
+.blocks{display:grid;gap:var(--space-8);min-width:0}
+.blocks>div{display:grid;gap:var(--space-4);scroll-margin-top:calc(var(--header-height) + var(--space-5))}
+.blocks h3{font-family:var(--font-display);font-weight:var(--weight-regular);font-size:var(--text-h2);line-height:var(--leading-display);margin:0}
+.blocks p,.blocks li{color:var(--color-text-muted);max-width:var(--measure);margin:0}
+.blocks ul{margin:0;padding-left:var(--space-5);display:grid;gap:var(--space-2)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--vitrine-stat-min)),1fr));gap:var(--space-6)}
+.stat{display:grid;gap:var(--space-2);align-content:start}
+.stat .v{font-family:var(--font-display);font-size:var(--text-h1);line-height:var(--leading-display)}
+.stat .l{font-size:var(--text-sm);color:var(--color-text-muted)}
+.bars{display:grid;gap:var(--space-2);margin-top:var(--space-2)}
+.bars>div{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:var(--space-3);align-items:center;font-size:var(--text-sm);color:var(--color-text-subtle)}
+.sbar{height:var(--stat-bar);width:calc(var(--w) * 1%);border-radius:var(--radius-pill);background:var(--color-border);transform-origin:left;transition:transform var(--duration-bar) var(--ease-out)}
+.sbar.after{background:var(--color-highlight);transition-delay:150ms}
+.js .stat.is-pending .sbar{transform:scaleX(0)}
+.casenav{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:var(--space-5)}
+.next{display:grid;gap:var(--space-2);color:var(--color-text);text-decoration:none}
+.next small{font-size:var(--text-sm)}
+.next span{display:inline-flex;align-items:center;gap:var(--space-3);font-family:var(--font-display);font-size:var(--text-h2);line-height:var(--leading-display)}
+.next .ico{width:var(--icon-md);height:var(--icon-md);transition:transform var(--duration-fast) var(--ease-out)}
+.next:hover span{text-decoration:underline;text-decoration-thickness:var(--underline);text-underline-offset:.15em}
+.next:hover .ico{transform:translateX(var(--hover-nudge))}
+
+/* Animations réduites : plus aucun déplacement (tracé, glissement, grossissement) ; les changements de couleur et les fondus restent. */
+@media (prefers-reduced-motion:reduce){
+  .hdr nav a span::after,.lang a span::after,.tl-stand span::after{transform:scaleX(1);opacity:0;transition:opacity var(--duration-fast) var(--ease-out)}
+  .hdr nav a:hover span::after,.hdr nav a[aria-current="page"] span::after,.lang a:hover span::after,.lang a[aria-current="true"] span::after,.tl-stand:hover span::after,.tl-stand:focus-visible span::after{opacity:1}
+  .skip{transform:none;opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-out)}
+  .skip:focus{opacity:1;pointer-events:auto}
+  .copy .ic-check,.copy.done .ic-check{transform:none}
+  .pcard:hover .dev{transform:none}
+  .js .reveal.is-pending{transform:none}
+  .reveal{transition:opacity var(--duration-reduced) var(--ease-out)}
+  .js .reveal-brick.is-pending{transform:none}
+  .js .wall.is-pending .brick{transform:none}
+  .js .stat.is-pending .sbar{transform:none}
+  .next:hover .ico{transform:none}
+  .brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
+  .reveal-brick{transition:opacity var(--duration-reduced) var(--ease-out);transition-delay:0ms}
+}
+</style>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<!-- Icônes Lucide (licence ISC), copiées en SVG local -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+</svg>
+
+<div class="page">
+  <div class="intro">
+    <h1>Design system · v1.0</h1>
+    <p>Les briques du portfolio, construites avec les tokens de la direction artistique « Affiche de nuit ». <span class="hl">Survolez et tabulez</span> : les états sont réels. Appuyez sur Tab dès l'ouverture pour voir le lien d'évitement.</p>
+  </div>
+  <main id="contenu" tabindex="-1" style="display:grid;gap:var(--space-8)">
+
+  <!-- AppHeader -->
+  <section class="plate" aria-labelledby="t-header">
+    <header><h2 id="t-header">AppHeader</h2><span>repris du header existant · fixe en haut</span></header>
+    <div class="stage">
+      <div class="hdr">
+        <a class="name" href="#t-header">Costa Maskulov</a>
+        <nav aria-label="Navigation principale (exemple)">
+          <a href="#t-header" aria-current="page"><span>Projets</span></a>
+          <a href="#t-header"><span>À propos</span></a>
+          <a href="#t-header"><span>Contact</span></a>
+        </nav>
+        <div class="lang"><a href="#t-header" aria-current="true" lang="fr"><span>FR</span></a><span class="sep" aria-hidden="true">/</span><a href="#t-header" lang="en"><span>EN</span></a></div>
+      </div>
+      <div class="ghost" aria-hidden="true">Costa Maskulov</div>
+    </div>
+    <p class="cap">Bureau · page active « Projets » soulignée en violet · survol : le soulignement se trace de gauche à droite · focus : anneau violet (le lime serait invisible sur fond clair) · chaque lien, FR et EN occupent une zone de 44 × 44 px.</p>
+
+    <div class="duo">
+      <div>
+        <div class="phone mobileView" id="phone">
+          <div class="hdr">
+            <a class="name" href="#t-header">Costa Maskulov</a>
+            <button class="menuBtn" id="openMenu" type="button" aria-expanded="false" aria-controls="mm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu
+            </button>
+          </div>
+          <div class="ghost" aria-hidden="true">Costa<br>Maskulov</div>
+          <div class="mm" id="mm" hidden role="dialog" aria-modal="true" aria-label="Menu">
+            <div class="top"><b>Costa Maskulov</b><button class="close" id="closeMenu" type="button">Fermer</button></div>
+            <ul>
+              <li><a href="#t-header" aria-current="page">Projets</a></li>
+              <li><a href="#t-header">À propos</a></li>
+              <li><a href="#t-header">Contact</a></li>
+            </ul>
+            <div class="mlang"><a href="#t-header" aria-current="true" lang="fr">FR</a><a href="#t-header" lang="en">EN</a></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;gap:var(--space-3);align-content:start">
+        <p class="cap">Mobile · cliquez sur « Menu » : le menu s'ouvre en plein écran sur le violet de la section d'accueil, liens en Bagel très grands (seule exception à la règle « pas de Bagel dans la navigation »). « Échap » ou « Fermer » le referme et rend le focus au bouton.</p>
+        <p class="cap">Menu, Fermer, FR et EN : 44 px de haut au minimum.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Couleurs -->
+  <section class="plate" aria-labelledby="t-colors">
+    <header><h2 id="t-colors">Couleurs</h2><span>teintes de base → rôles</span></header>
+    <div class="swatches">
+      <div class="sw"><i style="background:var(--violet-500)"></i><div><b>violet-500</b><small>#4B3CFF</small></div></div>
+      <div class="sw"><i style="background:var(--violet-700)"></i><div><b>violet-700</b><small>#17105B</small></div></div>
+      <div class="sw"><i style="background:var(--lime-500)"></i><div><b>lime-500</b><small>#C7FF00</small></div></div>
+      <div class="sw"><i style="background:var(--pink-500)"></i><div><b>pink-500</b><small>#FF6BD6</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-50)"></i><div><b>neutral-50</b><small>#F5F1E8</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-100)"></i><div><b>neutral-100</b><small>#E8E1D4</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-400)"></i><div><b>neutral-400</b><small class="add">#A39E94 · ajout</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-700)"></i><div><b>neutral-700</b><small>#474747</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-850)"></i><div><b>neutral-850</b><small class="add">#232428 · ajout</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-900)"></i><div><b>neutral-900</b><small class="add">#1A1B1E · ajout</small></div></div>
+      <div class="sw"><i style="background:var(--neutral-950)"></i><div><b>neutral-950</b><small>#101113</small></div></div>
+    </div>
+    <div class="scroll">
+      <table class="roles">
+        <thead><tr><th>Rôle</th><th>Teinte</th><th>Usage</th><th>Contraste</th></tr></thead>
+        <tbody>
+          <tr><td><code>--color-bg</code></td><td><span class="chip" style="background:var(--neutral-950)"></span>neutral-950</td><td>Fond de page</td><td></td></tr>
+          <tr><td><code>--color-section</code></td><td><span class="chip" style="background:var(--violet-700)"></span>violet-700</td><td>Sections de couleur, accueil</td><td></td></tr>
+          <tr><td><code>--color-surface</code></td><td><span class="chip" style="background:var(--neutral-900)"></span>neutral-900</td><td>Cartes</td><td class="ratio">texte 15,3:1</td></tr>
+          <tr><td><code>--color-text</code></td><td><span class="chip" style="background:var(--neutral-50)"></span>neutral-50</td><td>Texte principal</td><td class="ratio">16,8:1</td></tr>
+          <tr><td><code>--color-text-subtle</code></td><td><span class="chip" style="background:var(--neutral-400)"></span>neutral-400</td><td>Métadonnées</td><td class="ratio">7,1:1</td></tr>
+          <tr><td><code>--color-action</code></td><td><span class="chip" style="background:var(--lime-500)"></span>lime-500</td><td>Boutons, liens (toujours soulignés)</td><td class="ratio">16:1</td></tr>
+          <tr><td><code>--color-highlight</code></td><td><span class="chip" style="background:var(--lime-500)"></span>lime-500</td><td>Mise en valeur en Fraunces (jamais soulignée)</td><td class="ratio">16:1</td></tr>
+          <tr><td><code>--color-detail</code></td><td><span class="chip" style="background:var(--pink-500)"></span>pink-500</td><td>Étiquettes, marqueurs</td><td class="ratio">7,5:1</td></tr>
+          <tr><td><code>--color-block</code></td><td><span class="chip" style="background:var(--violet-500)"></span>violet-500</td><td>Formes, contours</td><td>pas de texte</td></tr>
+          <tr><td><code>--color-header-bg</code></td><td><span class="chip" style="background:var(--neutral-50)"></span>neutral-50</td><td>Fond du header</td><td class="ratio">texte 16,8:1</td></tr>
+          <tr><td><code>--color-header-accent</code></td><td><span class="chip" style="background:var(--violet-500)"></span>violet-500</td><td>Actif et focus du header</td><td class="ratio">5,5:1</td></tr>
+          <tr><td><code>--color-header-muted</code></td><td><span class="chip" style="background:var(--neutral-400)"></span>neutral-400</td><td>Séparateurs décoratifs du header</td><td>décoratif</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Typo -->
+  <section class="plate" aria-labelledby="t-type">
+    <header><h2 id="t-type">Typographie</h2><span>tailles fluides · mobile → bureau</span></header>
+    <div class="type">
+      <div class="trow"><p class="cap">display · Bagel<br>56 → 96 px</p><p class="d" style="font-size:var(--text-display)">Costa Maskulov</p></div>
+      <div class="trow"><p class="cap">h1 · Bagel<br>40 → 64 px</p><p class="d" style="font-size:var(--text-h1)">Projets</p></div>
+      <div class="trow"><p class="cap">h2 · Bagel<br>30 → 40 px</p><p class="d" style="font-size:var(--text-h2)">Ma façon de travailler</p></div>
+      <div class="trow"><p class="cap">h3 · Bagel<br>24 → 28 px · titres de cartes</p><p class="d" style="font-size:var(--text-h3)">Chronométrage PST</p></div>
+      <div class="trow"><p class="cap">lead · Manrope + Fraunces<br>20 → 24 px</p><p class="lead">Créatif dans l'interface, <span class="hl">rigoureux dans la méthode.</span></p></div>
+      <div class="trow"><p class="cap">texte · Manrope 400<br>16 → 18 px</p><p class="body">Partir du besoin, poser les contraintes, choisir la méthode, puis construire brique par brique. Chaque choix est argumenté et chaque étape documentée.</p></div>
+      <div class="trow"><p class="cap">code · JetBrains Mono<br>14 px</p><p class="mono">npm run build &amp;&amp; npm run preview</p></div>
+    </div>
+  </section>
+
+  <!-- Boutons -->
+  <section class="plate" aria-labelledby="t-btn">
+    <header><h2 id="t-btn">BaseButton</h2><span>primary · outline · repos / survol / clic / focus</span></header>
+    <div class="states">
+      <div class="state"><p class="cap">repos · cliquez pour sentir l'appui</p>
+        <a class="btn btn-primary" data-icon="download" href="#t-btn">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a>
+        <a class="btn btn-outline" href="#t-btn">Me contacter</a>
+      </div>
+      <div class="state"><p class="cap">survol · l'icône avance dans son sens</p>
+        <span class="btn btn-primary is-hover" data-icon="download">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></span>
+        <span class="btn btn-outline is-hover">Tous les projets <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+      </div>
+      <div class="state"><p class="cap">focus clavier</p>
+        <span class="btn btn-primary is-focus" data-icon="download">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></span>
+        <span class="btn btn-outline is-focus">Me contacter</span>
+      </div>
+      <div class="state onColor"><p class="cap">sur section violette</p>
+        <a class="btn btn-primary" data-icon="download" href="#t-btn">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a>
+        <a class="btn btn-outline" data-icon="external" href="#t-btn">Voir la démo <svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+      </div>
+    </div>
+    <p class="cap">Une seule variante primary par écran visible. Icônes : arrow-right vers une page, download pour le CV, arrow-up-right vers un site externe. Pas d'état désactivé ni de chargement en V1.</p>
+  </section>
+
+  <!-- TextLink -->
+  <section class="plate" aria-labelledby="t-link">
+    <header><h2 id="t-link">TextLink</h2><span>inline · standalone · toujours souligné</span></header>
+    <div class="state linkdemo">
+      <p class="cap">inline, dans un paragraphe</p>
+      <p>Le code de ce portfolio est public : vous pouvez <a class="tl-inline" href="#t-link">lire le dépôt sur GitHub</a> et voir comment chaque choix a été documenté. <span class="hl">Ceci est une mise en valeur</span>, jamais soulignée.</p>
+      <p class="cap">standalone, liens isolés (pied de page, listes)</p>
+      <ul class="linklist">
+        <li><a class="tl-stand" href="#t-link"><span>Mentions légales</span></a></li>
+        <li><a class="tl-stand" href="#t-link"><span>Confidentialité</span></a></li>
+        <li><a class="tl-stand" href="#t-link" target="_blank" rel="noopener"><span>Code du site</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+      </ul>
+    </div>
+    <p class="cap">Inline : le trait s'épaissit au survol, sans animation, pour rester juste sur un lien qui passe à la ligne. Standalone : le texte passe en lime et un trait se trace de gauche à droite.</p>
+  </section>
+
+  <!-- Tag -->
+  <section class="plate" aria-labelledby="t-tag">
+    <header><h2 id="t-tag">Tag</h2><span>étiquette rose · contour</span></header>
+    <div class="states">
+      <div class="state"><p class="cap">sur une carte</p>
+        <div class="minicard"><div class="tagrow"><span class="tag tag-a">site web</span><span class="tag tag-a">projet personnel</span></div><h3>Ce portfolio</h3><p>Vue.js · Vite · Docker</p></div>
+      </div>
+      <div class="state onColor"><p class="cap">sur section violette</p>
+        <div class="tagrow"><span class="tag tag-a">développeur full-stack</span></div>
+      </div>
+    </div>
+    <p class="cap">Non cliquables en V1. Une ou deux par carte au plus ; la stack reste en texte discret sous le titre.</p>
+  </section>
+
+  <!-- Icon -->
+  <section class="plate" aria-labelledby="t-icon">
+    <header><h2 id="t-icon">Icon</h2><span>Lucide · trait 2,5 · 24 px</span></header>
+    <div class="icons">
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-arrow-right"/></svg><figcaption>arrow-right</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-arrow-left"/></svg><figcaption>arrow-left</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><figcaption>arrow-up-right</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-download"/></svg><figcaption>download</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-copy"/></svg><figcaption>copy</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-check"/></svg><figcaption>check</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-menu"/></svg><figcaption>menu</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-x"/></svg><figcaption>x</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-mail"/></svg><figcaption>mail</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-github"/></svg><figcaption>github</figcaption></figure>
+      <figure><svg class="ico md" aria-hidden="true"><use href="#i-linkedin"/></svg><figcaption>linkedin</figcaption></figure>
+    </div>
+    <p class="cap">Les onze icônes de la V1, copiées en SVG local. Décoratives par défaut ; seule dans un bouton, c'est le bouton qui porte le nom accessible.</p>
+  </section>
+
+  <!-- CopyButton -->
+  <section class="plate" aria-labelledby="t-copy">
+    <header><h2 id="t-copy">CopyButton</h2><span>copie du mail · confirmation annoncée</span></header>
+    <div class="state">
+      <div class="copy" id="copy">
+        <span class="addr" id="addr">adresse@exemple.fr</span>
+        <button type="button" id="copyBtn"><span class="icwrap"><svg class="ico ic-copy" aria-hidden="true"><use href="#i-copy"/></svg><svg class="ico ic-check" aria-hidden="true"><use href="#i-check"/></svg></span><span id="copyLabel">Copier</span></button>
+        <span class="sr-only" aria-live="polite" id="copyLive"></span>
+      </div>
+    </div>
+    <p class="cap">Adresse provisoire. Cliquez : l'icône devient une coche, le texte « Adresse copiée », puis tout revient après 2 s. Si le navigateur refuse, l'adresse est sélectionnée.</p>
+  </section>
+
+  <!-- SkipLink -->
+  <section class="plate" aria-labelledby="t-skip">
+    <header><h2 id="t-skip">SkipLink</h2><span>« Aller au contenu » · visible au focus</span></header>
+    <p class="cap">Présent en haut de cette page : rechargez-la et appuyez sur Tab. Il glisse depuis le haut, en lime, au-dessus du header, et mène au contenu principal.</p>
+  </section>
+
+  <!-- Section -->
+  <section class="plate" aria-labelledby="t-section">
+    <header><h2 id="t-section">Section</h2><span>six fonds · rôles réaffectés · apparition au scroll</span></header>
+    <div class="fonds">
+      <div class="fond-nuit"><p class="meta">nuit · fond du site</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 16,8:1 · étiquette 7,5:1</p></div>
+      <div class="fond-violet"><p class="meta">violet · l’affiche</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 14,8:1 · étiquette 6,6:1</p></div>
+      <div class="fond-vif"><p class="meta">violet vif · sections courtes</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 5,5:1 · étiquette 5,5:1</p></div>
+      <div class="fond-lime"><p class="meta">lime · section vive</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 16:1 · étiquette 5,2:1</p></div>
+      <div class="fond-rose"><p class="meta">rose · section vive</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 7,5:1 · étiquette 6,6:1</p></div>
+      <div class="fond-creme"><p class="meta">crème · respiration</p><h3>Parlons-en</h3><p>Une phrase avec une <span class="hl">mise en valeur</span> et un <a class="tl-inline" href="#t-section">lien</a>.</p><div class="row"><span class="tag tag-a">stage</span></div><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-section">Le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-section">Contact</a></div><p class="meta">texte 16,8:1 · étiquette 5,5:1</p></div>
+    </div>
+    <p class="cap">Mêmes composants partout : c'est le fond qui réaffecte les rôles. Sur les fonds clairs, l'action passe en noir. Tabulez pour voir le focus adapté à chaque fond.</p>
+  </section>
+
+  <!-- SectionWave -->
+  <section class="plate" aria-labelledby="t-wave">
+    <header><h2 id="t-wave">SectionWave</h2><span>rythme de l'accueil · une vague par frontière</span></header>
+    <div class="rythme">
+      <section class="fond-violet"><h3>Costa Maskulov</h3><p>Créatif dans l’interface, <span class="hl">rigoureux dans la méthode.</span></p><div class="row"><a class="btn btn-primary" data-icon="download" href="#t-wave">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-wave">Me contacter</a></div></section>
+      <div class="wave" data-seed="1" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Projets</h3><p>La sélection du moment.</p><div class="row"><span class="tag tag-a">stage</span><span class="tag tag-a">application</span><span class="tag tag-a">site web</span></div></section>
+      <div class="wave" data-seed="2" style="--prev:var(--neutral-950);--next:var(--neutral-50)" aria-hidden="true"></div>
+      <section class="fond-creme"><h3>Qui je suis</h3><p>Quelques lignes pour faire sentir la personne, avec une <span class="hl">touche</span>.</p><a class="btn btn-outline" href="#t-wave">En savoir plus</a></section>
+      <div class="wave" data-seed="3" style="--prev:var(--neutral-50);--next:var(--violet-500)" aria-hidden="true"></div>
+      <section class="fond-vif"><h3>Ma façon de travailler</h3><p>PRD, marque, DA, UX, design system, maquettes, code.</p></section>
+      <div class="wave" data-seed="4" style="--prev:var(--violet-500);--next:var(--lime-500)" aria-hidden="true"></div>
+      <section class="fond-lime"><h3>Parlons-en</h3><p>Vous cherchez un développeur full-stack ? <a class="tl-inline" href="#t-wave">Écrivez-moi</a>.</p><a class="btn btn-primary" href="#t-wave">Me contacter</a></section>
+      <div class="wave" data-seed="5" style="--prev:var(--lime-500);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Pied de page</h3><p>CV · contact · ce site</p></section>
+    </div>
+    <p class="cap">Chaque frontière a sa graine : vague stable d'une visite à l'autre, différente d'une frontière à l'autre, recalculée à la largeur de l'écran. Immobile.</p>
+  </section>
+
+  <!-- PageIntro -->
+  <section class="plate" aria-labelledby="t-pintro">
+    <header><h2 id="t-pintro">PageIntro</h2><span>haut de page · à gauche · variante center pour la 404</span></header>
+    <div class="pintro reveal"><h3>Projets</h3><p>Ce que j'ai construit, du plus récent au plus ancien.</p></div>
+    <div class="pintro center reveal" style="--i:1"><h3>404</h3><p>Cette brique n'existe pas, ou plus.</p>
+      <div class="row"><a class="btn btn-primary" href="#t-pintro">Retour à l'accueil</a><a class="btn btn-outline" href="#t-pintro">Voir les projets <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></div>
+    </div>
+    <p class="cap">Sur le site, le titre est un h1 et la marge haute laisse passer le header fixe.</p>
+  </section>
+
+  <!-- ProjectCard + DeviceFrame -->
+  <section class="plate" aria-labelledby="t-card">
+    <header><h2 id="t-card">ProjectCard + DeviceFrame</h2><span>carte entière cliquable · capture mise en scène</span></header>
+    <div class="cards">
+      <article class="pcard reveal">
+        <div class="frame"><div class="dev dev-browser" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="screen">Stage au CNAM</div></div></div>
+        <div class="tagrow"><span class="tag tag-a">stage</span></div>
+        <h3><a href="#t-card">Stage au CNAM</a></h3>
+        <p class="desc">Stage de développement au CNAM, code privé.</p>
+        <p class="stack">stack à compléter</p>
+      </article>
+      <article class="pcard reveal" style="--i:1">
+        <div class="frame"><div class="dev dev-phone" aria-hidden="true"><div class="screen">Mangas &amp; BD</div></div></div>
+        <div class="tagrow"><span class="tag tag-a">application</span></div>
+        <h3><a href="#t-card">Lecteur de mangas et BD</a></h3>
+        <p class="desc">Une application pour lire ses mangas et ses BD.</p>
+        <p class="stack">stack à compléter</p>
+      </article>
+      <article class="pcard reveal" style="--i:2">
+        <div class="frame"><div class="dev dev-browser" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="screen">Ce portfolio</div></div></div>
+        <div class="tagrow"><span class="tag tag-a">site web</span><span class="tag tag-a">projet personnel</span></div>
+        <h3><a href="#t-card">Ce portfolio</a></h3>
+        <p class="desc">Le site que vous lisez, conçu du PRD au code.</p>
+        <p class="stack">Vue.js · Vite · Docker</p>
+      </article>
+    </div>
+    <p class="cap">Survolez une carte : le fond s'éclaircit et l'appareil grossit légèrement. Sans capture, l'écran affiche le nom du projet en Bagel sur un aplat violet. Textes provisoires tirés du PRD ; les vraies phrases et stacks viendront avec les études de cas.</p>
+  </section>
+
+  <!-- AppFooter -->
+  <section class="plate" aria-labelledby="t-footer">
+    <header><h2 id="t-footer">AppFooter</h2><span>CV · contact · ce site</span></header>
+    <footer class="foot">
+      <div class="cols">
+        <div><h3>CV</h3><ul>
+          <li><a class="tl-stand" href="#t-footer"><span>CV en français</span><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a></li>
+          <li><a class="tl-stand" href="#t-footer" hreflang="en"><span>CV en anglais</span><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a></li>
+        </ul></div>
+        <div><h3>Contact</h3>
+          <div class="copy" id="copy2"><span class="addr" id="addr2">adresse@exemple.fr</span><button type="button" id="copyBtn2"><span class="icwrap"><svg class="ico ic-copy" aria-hidden="true"><use href="#i-copy"/></svg><svg class="ico ic-check" aria-hidden="true"><use href="#i-check"/></svg></span><span id="copyLabel2">Copier</span></button><span class="sr-only" aria-live="polite" id="copyLive2"></span></div>
+          <ul>
+            <li><a class="tl-stand" href="#t-footer" target="_blank" rel="noopener"><span>LinkedIn</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+            <li><a class="tl-stand" href="https://github.com/K0Konut" target="_blank" rel="noopener"><span>GitHub</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+          </ul></div>
+        <div><h3>Ce site</h3><ul>
+          <li><a class="tl-stand" href="https://github.com/K0Konut/Portfolio" target="_blank" rel="noopener"><span>Code du site</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></li>
+          <li><a class="tl-stand" href="#t-footer"><span>Mentions légales</span></a></li>
+          <li><a class="tl-stand" href="#t-footer"><span>Confidentialité</span></a></li>
+        </ul></div>
+      </div>
+      <small>© 2026 Costa Maskulov</small>
+    </footer>
+    <p class="cap">Trois colonnes sur bureau, empilées sur mobile. Pas d'animation : le pied de page reste calme. Adresse provisoire.</p>
+  </section>
+
+  <!-- Section d'accueil -->
+  <section class="plate" aria-labelledby="t-hero">
+    <header><h2 id="t-hero">Section d'accueil · HeroName · ScrollHint</h2><span>entrée en 1,5 s · effacement au scroll</span></header>
+    <div class="herowrap">
+      <div class="hero fond-violet" id="hero">
+        <div class="hdr">
+          <a class="name" href="#t-hero">Costa Maskulov</a>
+          <nav aria-label="Navigation principale (exemple)"><a href="#t-hero"><span>Projets</span></a><a href="#t-hero"><span>À propos</span></a><a href="#t-hero"><span>Contact</span></a></nav>
+          <div class="lang"><a href="#t-hero" aria-current="true" lang="fr"><span>FR</span></a><span class="sep" aria-hidden="true">/</span><a href="#t-hero" lang="en"><span>EN</span></a></div>
+        </div>
+        <div class="hero-inner">
+          <div class="hero-top"><span class="tag tag-a">développeur full-stack</span></div>
+          <div class="hero-namewrap"><p class="hero-name" role="heading" aria-level="1"><span class="sr-only">Costa Maskulov</span><span aria-hidden="true" id="heroLetters"><span class="word">Costa</span> <span class="word">Maskulov</span></span></p></div>
+          <div class="hero-rest" style="display:grid;gap:var(--space-5);justify-items:center">
+            <p class="hero-promise">Créatif dans l’interface, <span class="hl">rigoureux dans la méthode.</span></p>
+            <div class="hero-actions"><a class="btn btn-primary" data-icon="download" href="#t-hero">Télécharger le CV <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></a><a class="btn btn-outline" href="#t-hero">Me contacter</a></div>
+          </div>
+        </div>
+        <div class="hint" aria-hidden="true"><i></i></div>
+      </div>
+      <div class="wave" data-seed="7" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <div class="fond-nuit" style="padding:var(--space-7) var(--gutter)"><p class="cap">Section suivante : faites défiler la page, la section d'accueil s'efface et le nom ralentit.</p></div>
+    </div>
+    <div class="replay"><button type="button" class="btn btn-outline" id="replay">Rejouer l'entrée</button></div>
+    <p class="cap">Lettre par lettre (600 ms chacune, 40 ms d'écart), promesse à 0,4 s, boutons à 0,6 s : CV et contact lisibles avant 1 s. Dans la vitrine, le nom est un faux titre pour garder un seul h1 sur la page.</p>
+  </section>
+
+  <!-- ProcessSteps -->
+  <section class="plate" aria-labelledby="t-steps">
+    <header><h2 id="t-steps">ProcessSteps</h2><span>compact (accueil) · detail (À propos) · brique par brique</span></header>
+    <div class="stepbox fond-vif"><h3>Ma façon de travailler</h3><ol class="steps-c"><li class="reveal-brick" style="--i:0"><span class="n">1</span><span class="t">PRD</span></li><li class="reveal-brick" style="--i:1"><span class="n">2</span><span class="t">Marque</span></li><li class="reveal-brick" style="--i:2"><span class="n">3</span><span class="t">Direction artistique</span></li><li class="reveal-brick" style="--i:3"><span class="n">4</span><span class="t">Architecture et UX</span></li><li class="reveal-brick" style="--i:4"><span class="n">5</span><span class="t">Design system</span></li><li class="reveal-brick" style="--i:5"><span class="n">6</span><span class="t">Maquettes</span></li><li class="reveal-brick" style="--i:6"><span class="n">7</span><span class="t">Code</span></li></ol><a class="btn btn-outline" href="#t-steps">Voir ma méthode <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></div>
+    <div class="stepbox fond-nuit"><h3>Façon de travailler</h3><ol class="steps-d"><li class="reveal-brick" style="--i:0"><span class="n" aria-hidden="true">1</span><div><b>PRD</b><p>Ce qu’on construit, et pourquoi.</p></div></li><li class="reveal-brick" style="--i:1"><span class="n" aria-hidden="true">2</span><div><b>Marque</b><p>Comment se positionner.</p></div></li><li class="reveal-brick" style="--i:2"><span class="n" aria-hidden="true">3</span><div><b>Direction artistique</b><p>À quoi ça ressemble, et comment ça bouge.</p></div></li><li class="reveal-brick" style="--i:3"><span class="n" aria-hidden="true">4</span><div><b>Architecture et UX</b><p>Comment c’est organisé et parcouru.</p></div></li><li class="reveal-brick" style="--i:4"><span class="n" aria-hidden="true">5</span><div><b>Design system</b><p>Avec quelles briques.</p></div></li><li class="reveal-brick" style="--i:5"><span class="n" aria-hidden="true">6</span><div><b>Maquettes</b><p>À quoi ressemblent les écrans clés.</p></div></li><li class="reveal-brick" style="--i:6"><span class="n" aria-hidden="true">7</span><div><b>Code</b><p>Comment c’est construit.</p></div></li></ol></div>
+    <p class="cap">Faites défiler : les briques se posent une à une, à 60 ms d'écart. La dernière, « Code », est pleine : c'est le produit fini.</p>
+  </section>
+
+  <!-- Timeline -->
+  <section class="plate" aria-labelledby="t-timeline">
+    <header><h2 id="t-timeline">Timeline</h2><span>du plus ancien au plus récent · fil tracé au scroll</span></header>
+    <div class="stepbox fond-nuit" id="tlbox"><h3>Mon parcours</h3><div class="tline-wrap"><span class="fill" aria-hidden="true"></span><ol class="tline"><li><span class="tag tag-a">école</span><time>dates à compléter</time><b>Lycée · bac STI2D, spécialité SIN</b><span class="where">lieu à compléter</span><p>Le déclic : construire des choses avec du code.</p></li><li><span class="tag tag-a">école</span><time>dates à compléter</time><b>ESIEA · cycle ingénieur</b><span class="where">Paris · génie informatique, spécialité génie logiciel</span><p>Chaque projet logiciel confirme le choix.</p></li><li><span class="tag tag-a">job étudiant</span><time>dates à compléter</time><b>Job étudiant</b><span class="where">à compléter</span><p>Une ou deux lignes à rédiger.</p></li><li><span class="tag tag-a">stage</span><time>dates à compléter</time><b>Stage · CNAM</b><span class="where">rôle à compléter</span><p>Une ou deux lignes à rédiger.</p><a class="tl-stand" href="#t-timeline"><span>Lire l’étude de cas</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li></ol></div></div>
+    <p class="cap">Faites défiler : le fil lime se trace et chaque repère se remplit quand il l'atteint. Dates, lieux et textes à compléter : rien n'est inventé.</p>
+  </section>
+
+
+  <!-- SkillsWall -->
+  <section class="plate" aria-labelledby="t-wall">
+    <header><h2 id="t-wall">SkillsWall</h2><span>mur de briques · posé une fois</span></header>
+    <div class="stepbox fond-violet" style="justify-items:stretch"><h3>Compétences</h3><div class="wall" id="wall1"><div class="course"><span class="hl">front</span><ul aria-label="front"><li class="brick site" style="--i:0">Vue.js</li><li class="brick" style="--i:1">Nuxt</li><li class="brick site" style="--i:2">TypeScript</li><li class="brick" style="--i:3">JavaScript</li><li class="brick site" style="--i:4">HTML</li><li class="brick site" style="--i:5">CSS</li><li class="brick site" style="--i:6">Vite</li></ul></div><div class="course"><span class="hl">back</span><ul aria-label="back"><li class="brick" style="--i:7">Node.js</li><li class="brick" style="--i:8">Express</li><li class="brick" style="--i:9">Python</li><li class="brick" style="--i:10">API REST</li><li class="brick" style="--i:11">MongoDB</li><li class="brick" style="--i:12">SQL</li></ul></div><div class="course"><span class="hl">UI / UX</span><ul aria-label="UI / UX"><li class="brick" style="--i:13">Figma</li><li class="brick site" style="--i:14">responsive</li><li class="brick site" style="--i:15">accessibilité</li></ul></div><div class="course"><span class="hl">outils et déploiement</span><ul aria-label="outils et déploiement"><li class="brick site" style="--i:16">Git</li><li class="brick site" style="--i:17">GitHub</li><li class="brick site" style="--i:18">npm</li><li class="brick site" style="--i:19">Docker</li><li class="brick" style="--i:20">Linux</li><li class="brick site" style="--i:21">Proxmox</li><li class="brick site" style="--i:22">Nginx Proxy Manager</li></ul></div><div class="course"><span class="hl">méthode</span><ul aria-label="méthode"><li class="brick" style="--i:23">sprints</li><li class="brick" style="--i:24">daily</li></ul></div></div><p class="wall-legend"><i aria-hidden="true"></i>En violet : les briques de ce site. <a class="tl-stand" href="#t-wall"><span>Voir comment il est construit</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p></div>
+    <p class="cap">Une rangée par catégorie, une sur deux décalée. En violet clair, les technologies qui ont servi à construire ce site (d'après le PRD et le dépôt) : la couleur porte une information. Jamais de lime, réservé à l'action.</p>
+  </section>
+
+  <!-- Mise en situation -->
+  <section class="plate" aria-labelledby="t-apropos">
+    <header><h2 id="t-apropos">Mise en situation · À propos</h2><span>vrais composants · rythme des fonds · vagues</span></header>
+    <div class="rythme apropos">
+      <section class="fond-nuit"><p class="pagetitle">À propos</p><p class="lead">Étudiant ingénieur à l’ESIEA, je construis des projets <span class="hl">brique par brique.</span></p></section>
+      <div class="wave" data-seed="41" style="--prev:var(--neutral-950);--next:var(--neutral-50)" aria-hidden="true"></div>
+      <section class="fond-creme"><h3>Mon histoire</h3><p>Tout a commencé au lycée, en STI2D, spécialité SIN : c’est là que j’ai découvert que j’aimais construire des choses avec du code. J’ai poursuivi en école d’ingénieur, à l’ESIEA, et chaque projet logiciel m’a confirmé que c’était ce que je voulais faire : partir d’une idée et la voir devenir un produit, <span class="hl">brique par brique.</span></p></section>
+      <div class="wave" data-seed="42" style="--prev:var(--neutral-50);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Mon parcours</h3><ol class="tline"><li><span class="tag tag-a">école</span><time>dates à compléter</time><b>Lycée · bac STI2D, spécialité SIN</b><span class="where">lieu à compléter</span><p>Le déclic : construire des choses avec du code.</p></li><li><span class="tag tag-a">école</span><time>dates à compléter</time><b>ESIEA · cycle ingénieur</b><span class="where">Paris · génie logiciel</span><p>Chaque projet logiciel confirme le choix.</p></li><li><span class="tag tag-a">stage</span><time>dates à compléter</time><b>Stage · CNAM</b><span class="where">rôle à compléter</span><p>Une ou deux lignes à rédiger.</p></li></ol></section>
+      <div class="wave" data-seed="43" style="--prev:var(--neutral-950);--next:var(--violet-700)" aria-hidden="true"></div>
+      <section class="fond-violet" style="justify-items:stretch"><h3>Compétences</h3><div class="wall" id="wall2"><div class="course"><span class="hl">front</span><ul aria-label="front"><li class="brick site" style="--i:0">Vue.js</li><li class="brick" style="--i:1">Nuxt</li><li class="brick site" style="--i:2">TypeScript</li><li class="brick" style="--i:3">JavaScript</li><li class="brick site" style="--i:4">HTML</li><li class="brick site" style="--i:5">CSS</li><li class="brick site" style="--i:6">Vite</li></ul></div><div class="course"><span class="hl">back</span><ul aria-label="back"><li class="brick" style="--i:7">Node.js</li><li class="brick" style="--i:8">Express</li><li class="brick" style="--i:9">Python</li><li class="brick" style="--i:10">API REST</li><li class="brick" style="--i:11">MongoDB</li><li class="brick" style="--i:12">SQL</li></ul></div><div class="course"><span class="hl">UI / UX</span><ul aria-label="UI / UX"><li class="brick" style="--i:13">Figma</li><li class="brick site" style="--i:14">responsive</li><li class="brick site" style="--i:15">accessibilité</li></ul></div><div class="course"><span class="hl">outils et déploiement</span><ul aria-label="outils et déploiement"><li class="brick site" style="--i:16">Git</li><li class="brick site" style="--i:17">GitHub</li><li class="brick site" style="--i:18">npm</li><li class="brick site" style="--i:19">Docker</li><li class="brick" style="--i:20">Linux</li><li class="brick site" style="--i:21">Proxmox</li><li class="brick site" style="--i:22">Nginx Proxy Manager</li></ul></div><div class="course"><span class="hl">méthode</span><ul aria-label="méthode"><li class="brick" style="--i:23">sprints</li><li class="brick" style="--i:24">daily</li></ul></div></div><p class="wall-legend"><i aria-hidden="true"></i>En violet : les briques de ce site. <a class="tl-stand" href="#t-wall"><span>Voir comment il est construit</span><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p></section>
+      <div class="wave" data-seed="44" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><h3>Façon de travailler</h3><ol class="steps-d"><li><span class="n" aria-hidden="true">1</span><div><b>PRD</b><p>Ce qu’on construit, et pourquoi.</p></div></li><li><span class="n" aria-hidden="true">2</span><div><b>Marque</b><p>Comment se positionner.</p></div></li><li><span class="n" aria-hidden="true">3</span><div><b>Direction artistique</b><p>À quoi ça ressemble, et comment ça bouge.</p></div></li><li><span class="n" aria-hidden="true">4</span><div><b>Architecture et UX</b><p>Comment c’est organisé et parcouru.</p></div></li><li><span class="n" aria-hidden="true">5</span><div><b>Design system</b><p>Avec quelles briques.</p></div></li><li><span class="n" aria-hidden="true">6</span><div><b>Maquettes</b><p>À quoi ressemblent les écrans clés.</p></div></li><li><span class="n" aria-hidden="true">7</span><div><b>Code</b><p>Comment c’est construit.</p></div></li></ol></section>
+      <div class="wave" data-seed="45" style="--prev:var(--neutral-950);--next:var(--neutral-50)" aria-hidden="true"></div>
+      <section class="fond-creme"><h3>En équipe</h3><div class="duo2"><div><b>Sprints</b><p>Des cycles courts, un objectif clair à chaque fois.</p></div><div><b>Daily</b><p>Un point quotidien pour suivre l’avancement et garder le contact humain.</p></div></div></section>
+      <div class="wave" data-seed="46" style="--prev:var(--neutral-50);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><p class="cap">Pied de page</p></section>
+    </div>
+    <p class="cap">Brouillon de « Mon histoire » repris de l'architecture ; textes « En équipe » à retoucher ; parcours à compléter. Une seule section animée au scroll ici : le mur. La frise garde son fil (temps fort prévu par la DA).</p>
+  </section>
+
+  <!-- Lot 5 : étude de cas en situation -->
+  <section class="plate" aria-labelledby="t-case">
+    <header><h2 id="t-case">Mise en situation · Étude de cas</h2><span>MetaList · CaseToc · StatBlock · CaseNav</span></header>
+    <div class="rythme case">
+      <section class="fond-violet"><div class="case-head">
+        <div class="tagrow"><span class="tag tag-a">site web</span><span class="tag tag-a">projet personnel</span></div>
+        <p class="case-title">Ce portfolio</p>
+        <p class="case-lead">Un portfolio conçu comme un produit de marque, du PRD au code, et documenté à chaque étape.</p>
+        <dl class="meta">
+          <div><dt>Type</dt><dd>Site web personnel</dd></div>
+          <div><dt>Rôle</dt><dd>Conception, design, code</dd></div>
+          <div><dt>Durée</dt><dd>En cours, depuis octobre 2026</dd></div>
+          <div><dt>Équipe</dt><dd>Seul</dd></div>
+          <div><dt>Stack</dt><dd>Vue.js · Vite · TypeScript · Docker</dd></div>
+        </dl>
+        <div class="row" style="display:flex;gap:var(--space-3);flex-wrap:wrap"><a class="btn btn-outline" data-icon="external" href="https://github.com/K0Konut/Portfolio" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-github"/></svg>Code <svg class="ico" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only">(nouvel onglet)</span></a></div>
+        <div class="frame"><div class="dev dev-browser" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="screen">Ce portfolio</div></div></div>
+      </div></section>
+      <div class="wave" data-seed="51" style="--prev:var(--violet-700);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><div class="case-body">
+        <nav class="toc" aria-label="Sommaire"><ol><li><a href="#c-contexte">Contexte</a></li><li><a href="#c-besoin">Besoin</a></li><li><a href="#c-contraintes">Contraintes</a></li><li><a href="#c-methode">Méthode</a></li><li><a href="#c-choix">Choix techniques</a></li><li><a href="#c-resultats">Résultats</a></li><li><a href="#c-enseignements">Enseignements</a></li></ol></nav>
+        <div class="blocks">
+          <div id="c-contexte"><h3>Contexte</h3><p>Étudiant ingénieur à l’ESIEA, je cherche un stage de fin d’études, puis un premier CDI, en développement full-stack. Un CV, LinkedIn et GitHub listent des compétences, mais ne montrent ni la méthode ni la personnalité.</p></div>
+          <div id="c-besoin"><h3>Besoin</h3><p>Rendre visibles, dans un même support, la rigueur d’un ingénieur, la créativité d’un développeur web et la personne derrière.</p></div>
+          <div id="c-contraintes"><h3>Contraintes</h3><ul><li>Budget de 0 € : aucun service payant.</li><li>Auto-hébergé sur mon serveur : Proxmox, Docker, Nginx Proxy Manager.</li><li>Accessibilité WCAG 2.2 niveau AA, Lighthouse ≥ 95 sur les quatre axes.</li><li>Bilingue français et anglais.</li></ul></div>
+          <div id="c-methode"><h3>Méthode</h3><p>Sept étapes, chacune validée avant la suivante, chacune sur sa branche Git et sa pull request.</p><ol class="steps-c"><li><span class="n">1</span><span class="t">PRD</span></li><li><span class="n">2</span><span class="t">Marque</span></li><li><span class="n">3</span><span class="t">Direction artistique</span></li><li><span class="n">4</span><span class="t">Architecture et UX</span></li><li><span class="n">5</span><span class="t">Design system</span></li><li><span class="n">6</span><span class="t">Maquettes</span></li><li><span class="n">7</span><span class="t">Code</span></li></ol></div>
+          <div id="c-choix"><h3>Choix techniques</h3><ul><li>Couleurs organisées par rôles : chaque fond de section réaffecte les rôles, les composants ne changent jamais.</li><li>Polices auto-hébergées, réduites au sous-ensemble latin.</li><li>Une vague tirée au sort pour chaque frontière de section, stable d’une visite à l’autre.</li><li>Nuxt en génération statique, ou Vue et Vite avec pré-rendu : choix en phase 7.</li></ul></div>
+          <div id="c-resultats"><h3>Résultats</h3>
+            <div class="stats">
+              <div class="stat"><span class="v">19/20</span><span class="l">au premier audit Impeccable, après corrections</span><div class="bars" aria-hidden="true"><div>avant 15<span class="sbar" style="--w:75"></span></div><div>après 19<span class="sbar after" style="--w:95"></span></div></div></div>
+              <div class="stat"><span class="v">117 Ko</span><span class="l">pour les quatre polices, auto-hébergées</span></div>
+              <div class="stat"><span class="v">22/22</span><span class="l">contrastes vérifiés, tous conformes AA</span></div>
+            </div>
+          </div>
+          <div id="c-enseignements"><h3>Enseignements</h3><ul><li>Le bandeau défilant de compétences, c’était du vu et revu : je l’ai remplacé par un mur de briques, posé une fois.</li><li>Le contour fin des étiquettes disparaissait sur le violet : contour épais et fond teinté.</li><li>Des frontières droites trop franches, puis des vagues trop régulières : chaque frontière a maintenant sa propre vague.</li></ul></div>
+        </div>
+      </div></section>
+      <div class="wave" data-seed="52" style="--prev:var(--neutral-950);--next:var(--pink-500)" aria-hidden="true"></div>
+      <section class="fond-rose"><div class="casenav">
+        <a class="next" href="#t-case"><small>Projet suivant</small><span>Stage au CNAM <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></span></a>
+        <a class="tl-stand" href="#t-case"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Tous les projets</span></a>
+      </div></section>
+      <div class="wave" data-seed="53" style="--prev:var(--pink-500);--next:var(--neutral-950)" aria-hidden="true"></div>
+      <section class="fond-nuit"><p class="cap">Pied de page</p></section>
+    </div>
+    <p class="cap">Contenu réel, tiré des documents du projet : contexte et contraintes du PRD, choix et enseignements de nos décisions, résultats vérifiés en séance. Faites défiler : le sommaire suit la lecture et les barres se remplissent une fois.</p>
+  </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var open=document.getElementById('openMenu'),close=document.getElementById('closeMenu'),mm=document.getElementById('mm');
+  function show(){mm.hidden=false;open.setAttribute('aria-expanded','true');close.focus()}
+  function hide(){mm.hidden=true;open.setAttribute('aria-expanded','false');open.focus()}
+  open.addEventListener('click',show);close.addEventListener('click',hide);
+  mm.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){hide();return}
+    if(e.key==='Tab'){var f=mm.querySelectorAll('a,button');var first=f[0],last=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
+  });
+
+  // CopyButton : copie, confirmation, retour à l'état initial après --feedback-hold
+  var hold=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--feedback-hold'))*1000||2000;
+  function wireCopy(sfx){
+    var box=document.getElementById('copy'+sfx),btn=document.getElementById('copyBtn'+sfx),label=document.getElementById('copyLabel'+sfx),live=document.getElementById('copyLive'+sfx),addr=document.getElementById('addr'+sfx),timer;
+    function settle(text,done){
+      label.textContent=text;live.textContent=text;box.classList.toggle('done',done);
+      clearTimeout(timer);timer=setTimeout(function(){label.textContent='Copier';live.textContent='';box.classList.remove('done')},hold);
+    }
+    function selectAddr(){var r=document.createRange();r.selectNodeContents(addr);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    btn.addEventListener('click',function(){
+      var t=addr.textContent.trim();
+      try{navigator.clipboard.writeText(t).then(function(){settle('Adresse copiée',true)},function(){selectAddr();settle('Sélectionnée : Ctrl + C',false)})}
+      catch(e){selectAddr();settle('Sélectionnée : Ctrl + C',false)}
+    });
+  }
+  wireCopy('');wireCopy('2');
+
+  // SectionWave : bord organique à graine (trois ondulations superposées), recalculé à la largeur réelle
+  function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  function drawWave(el){
+    var W=Math.max(1,Math.round(el.getBoundingClientRect().width)),r=rng(+el.dataset.seed),s=Math.min(1,Math.max(.6,W/1000));
+    var amp=(12+r()*9)*s,y0=amp*1.6+6,H=Math.ceil(3.2*amp+14);
+    var oc=[[300+r()*260,.6+r()*.4],[130+r()*90,.22+r()*.18],[60+r()*30,.04+r()*.05]].map(function(o){return{wl:o[0],a:amp*o[1],ph:r()*6.283}});
+    var pts=[],step=Math.max(8,W/120);
+    for(var x=0;x<=W+.1;x+=step){var y=y0;oc.forEach(function(o){y+=o.a*Math.sin(6.283*x/o.wl+o.ph)});pts.push([x,y])}
+    var p=pts.reverse(),d='M0,0H'+W+'V'+p[0][1].toFixed(1);
+    for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;
+      d+='C'+(b[0]+(c[0]-a[0])/6).toFixed(1)+','+(b[1]+(c[1]-a[1])/6).toFixed(1)+' '+(c[0]-(e[0]-b[0])/6).toFixed(1)+','+(c[1]-(e[1]-b[1])/6).toFixed(1)+' '+c[0].toFixed(1)+','+c[1].toFixed(1)}
+    el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" height="'+H+'" preserveAspectRatio="none"><path d="'+d+'Z"/></svg>';
+  }
+  function drawWaves(){document.querySelectorAll('.wave').forEach(drawWave)}
+  drawWaves();
+  // Apparition brique par brique (ProcessSteps)
+  if('IntersectionObserver' in window){
+    var iob=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('is-pending');iob.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px'});
+    document.querySelectorAll('.reveal-brick').forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add('is-pending');iob.observe(el)}});
+  }
+
+  // Section d'accueil : une timeline pour l'entrée, ScrollTrigger pour l'effacement
+  var hero=document.getElementById('hero');
+  if(hero&&window.gsap){
+    var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ease='power4.out'; // équivalent de cubic-bezier(.22,1,.36,1)
+    var letters=[];
+    hero.querySelectorAll('#heroLetters .word').forEach(function(w){
+      var t=w.textContent;w.textContent='';
+      t.split('').forEach(function(c){var s=document.createElement('span');s.className='l';s.textContent=c;w.appendChild(s);letters.push(s)});
+    });
+    var hdr=hero.querySelector('.hdr'),tag=hero.querySelector('.hero-top'),prom=hero.querySelector('.hero-promise'),hl=prom.querySelector('.hl'),acts=hero.querySelector('.hero-actions'),hint=hero.querySelector('.hint'),seg=hint.querySelector('i');
+    var tl=gsap.timeline({paused:true,defaults:{ease:ease}});
+    if(reduce){
+      tl.fromTo([hdr,tag,hero.querySelector('.hero-namewrap'),hero.querySelector('.hero-rest'),hint],{opacity:0},{opacity:1,duration:.3,ease:'none'});
+    }else{
+      tl.fromTo(hdr,{y:-20,opacity:0},{y:0,opacity:1,duration:.7},0)
+        .fromTo(tag,{opacity:0},{opacity:1,duration:.7},0)
+        .fromTo(letters,{y:'0.4em',opacity:0},{y:0,opacity:1,duration:.6,stagger:.04},0)
+        .fromTo(prom,{y:24,opacity:0},{y:0,opacity:1,duration:.7},.4)
+        .fromTo(hl,{opacity:0},{opacity:1,duration:.5},.5)
+        .fromTo(acts,{y:16,opacity:0},{y:0,opacity:1,duration:.5},.6)
+        .fromTo(hint,{opacity:0},{opacity:1,duration:.4},1.5)
+        .fromTo(seg,{y:-12,opacity:0},{keyframes:[{opacity:1,duration:.25},{y:28,duration:.8,ease:'sine.inOut'},{opacity:0,duration:.15}],repeat:1},1.6)
+        .set(seg,{y:0,opacity:1});
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.to(hero.querySelector('.hero-namewrap'),{y:function(){return hero.offsetHeight*.35},opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'bottom top',scrub:true}});
+      gsap.to([tag,hero.querySelector('.hero-rest')],{opacity:0,ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'center top',scrub:true}});
+      ScrollTrigger.create({trigger:hero,start:'top+=10 top',once:true,onEnter:function(){gsap.to(hint,{opacity:0,duration:.3})}});
+    }
+    var q=new URLSearchParams(location.search).get('t');
+    var go=function(){if(q!==null){tl.pause(parseFloat(q))}else{tl.play(0)}};
+    var font=document.fonts&&document.fonts.load?document.fonts.load('1em "Bagel Fat One"'):Promise.resolve();
+    Promise.race([font,new Promise(function(r){setTimeout(r,300)})]).then(go);
+    document.getElementById('replay').addEventListener('click',function(){gsap.set(hint,{opacity:0});tl.play(0)});
+  }
+
+
+  // SkillsWall : les briques se posent une fois en arrivant à l'écran
+  if('IntersectionObserver' in window){
+    var iow=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var w=e.target;setTimeout(function(){w.classList.remove('is-pending')},30);iow.unobserve(w)}})},{threshold:.25});
+    document.querySelectorAll('.wall').forEach(function(w){if(w.getBoundingClientRect().top>innerHeight*.75){w.classList.add('is-pending');iow.observe(w)}});
+  }
+
+  // CaseToc : suit le bloc en cours de lecture
+  var tocLinks=document.querySelectorAll('.toc a');
+  if(tocLinks.length&&'IntersectionObserver' in window){
+    var byId={};tocLinks.forEach(function(a){byId[a.getAttribute('href').slice(1)]=a});
+    var iot=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){tocLinks.forEach(function(a){a.removeAttribute('aria-current')});byId[e.target.id].setAttribute('aria-current','location')}})},{rootMargin:'-30% 0px -60% 0px'});
+    Object.keys(byId).forEach(function(id){var el=document.getElementById(id);if(el)iot.observe(el)});
+  }
+  // StatBlock : barres remplies une fois
+  if('IntersectionObserver' in window){
+    var ios=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var s=e.target;setTimeout(function(){s.classList.remove('is-pending')},30);ios.unobserve(s)}})},{threshold:.5});
+    document.querySelectorAll('.stat').forEach(function(s){if(s.querySelector('.bars')&&s.getBoundingClientRect().top>innerHeight*.7){s.classList.add('is-pending');ios.observe(s)}});
+  }
+  // Timeline : fil tracé au scroll, repères remplis quand le fil les atteint
+  var tlbox=document.getElementById('tlbox');
+  if(tlbox&&window.gsap&&window.ScrollTrigger&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    gsap.registerPlugin(ScrollTrigger);document.documentElement.classList.add('js-tl');
+    var line=tlbox.querySelector('.tline-wrap'),fill=line.querySelector('.fill');
+    gsap.fromTo(fill,{scaleY:0},{scaleY:1,ease:'none',scrollTrigger:{trigger:line,start:'top 65%',end:'bottom 65%',scrub:.4}});
+    line.querySelectorAll('li').forEach(function(li){ScrollTrigger.create({trigger:li,start:'top 65%',onEnter:function(){li.classList.add('on')},onLeaveBack:function(){li.classList.remove('on')}})});
+  }
+  var wt;addEventListener('resize',function(){clearTimeout(wt);wt=setTimeout(drawWaves,150)});
+
+
+  // Apparition au scroll : seuls les blocs sous la ligne de flottaison sont cachés, et seulement si le script tourne
+  if('IntersectionObserver' in window){
+    document.documentElement.classList.add('js');
+    var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('is-pending');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add('is-pending');io.observe(el)}});
+  }
+})();
+</script>

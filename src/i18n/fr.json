@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "accueil": {
+      "title": "Costa Maskulov · Développeur full-stack",
+      "description": "Portfolio de Costa Maskulov, étudiant ingénieur à l’ESIEA qui cherche un stage de fin d’études en développement full-stack : projets, études de cas et méthode."
+    },
+    "projets": {
+      "title": "Projets · Costa Maskulov",
+      "description": "Les projets de Costa Maskulov, du plus récent au plus ancien, chacun avec son étude de cas : le besoin, la méthode et les choix techniques."
+    },
+    "etude-de-cas": { "title": "Étude de cas · Costa Maskulov" },
+    "a-propos": {
+      "title": "À propos · Costa Maskulov",
+      "description": "Le parcours, les compétences et la façon de travailler de Costa Maskulov, étudiant ingénieur à l’ESIEA."
+    },
+    "contact": {
+      "title": "Contact · Costa Maskulov",
+      "description": "Contacter Costa Maskulov pour un stage de fin d’études full-stack : adresse mail, CV, LinkedIn et GitHub."
+    },
+    "mentions-legales": { "title": "Mentions légales · Costa Maskulov" },
+    "confidentialite": { "title": "Confidentialité · Costa Maskulov" },
+    "404": { "title": "Page introuvable · Costa Maskulov" }
+  },
+  "ui": {
+    "toc": "Sommaire",
+    "skip": "Aller au contenu",
+    "newTab": "(nouvel onglet)",
+    "copy": "Copier",
+    "copied": "Adresse copiée",
+    "selected": "Sélectionnée : Ctrl + C"
+  },
+  "nav": {
+    "label": "Navigation principale",
+    "projets": "Projets",
+    "a-propos": "À propos",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Fermer",
+    "language": "Langue"
+  },
+  "footer": {
+    "cv": "CV",
+    "cvFr": "CV en français",
+    "cvEn": "CV en anglais",
+    "contact": "Contact",
+    "site": "Ce site",
+    "code": "Code du site",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité"
+  },
+  "contact": {
+    "title": "Parlons-en",
+    "address": "Mon adresse",
+    "cv": "Télécharger le CV"
+  },
+  "hero": {
+    "status": "Étudiant ingénieur à l'ESIEA",
+    "goal": "Je cherche un stage de fin d'études full-stack",
+    "promise": "Créatif dans l’interface,",
+    "promiseHighlight": "rigoureux dans la méthode.",
+    "contact": "Me contacter"
+  },
+  "method": {
+    "loop": "Les retours relancent un tour.",
+    "steps": [
+      {
+        "title": "Besoin",
+        "text": "Comprendre le problème et les utilisateurs avant de choisir une techno."
+      },
+      {
+        "title": "Conception",
+        "text": "Marque, interface et parcours, validés avant la première ligne de code."
+      },
+      {
+        "title": "Architecture",
+        "text": "Choisir la stack, modéliser les données, définir l’API."
+      },
+      {
+        "title": "Développement",
+        "text": "Front et back, par petites étapes, versionnées sur Git."
+      },
+      {
+        "title": "Tests",
+        "text": "Tests automatisés, accessibilité et performance mesurées."
+      },
+      {
+        "title": "Déploiement",
+        "text": "En ligne dans des conteneurs Docker, sur mon propre serveur."
+      }
+    ]
+  },
+  "case": {
+    "next": "Projet suivant",
+    "all": "Tous les projets",
+    "after": "Suite",
+    "demo": "Démo",
+    "capture": "Capture de {title}"
+  },
+  "meta": {
+    "type": "Type",
+    "role": "Rôle",
+    "duration": "Durée",
+    "team": "Équipe",
+    "stack": "Stack",
+    "code": "Code",
+    "private": "Code privé"
+  },
+  "stat": {
+    "before": "avant",
+    "after": "après"
+  },
+  "about": {
+    "caseStudy": "Voir l’étude de cas",
+    "legend": "Pastille violette : les technos de ce site.",
+    "legendLink": "Voir comment il est construit",
+    "intro": "Étudiant ingénieur à l’ESIEA, j’aime partir d’un besoin et le transformer en produit qui marche, du premier croquis à la mise en ligne.",
+    "storyTitle": "Mon histoire",
+    "pathTitle": "Mon parcours",
+    "pathIntro": "Du lycée à l’école d’ingénieur, avec des jobs étudiants, un semestre à Séoul et un stage en chemin.",
+    "skillsTitle": "Compétences",
+    "skillsIntro": "Ce que je sais faire, et que je peux défendre en entretien.",
+    "methodLoop": "Puis les retours de chaque mise en ligne relancent un tour.",
+    "teamTitle": "En équipe",
+    "teamText": "Je travaille en sprints, avec une courte réunion chaque jour (le daily) : on suit l’avancement, on lève les blocages tôt, et on garde le contact humain.",
+    "contactIntro": "Envie d’en savoir plus ? Écrivez-moi."
+  },
+  "business": {
+    "title": "Contact",
+    "intro": "Un stage à proposer, une question sur un projet ? Écrivez-moi.",
+    "role": "Étudiant ingénieur · stage de fin d’études full-stack",
+    "cv": "Le CV"
+  },
+  "notFound": {
+    "title": "Il manque une brique.",
+    "text": "Erreur 404 : cette page n’existe pas, ou plus. Replacez la brique pour revenir à l’accueil.",
+    "brick": "Replacer la brique et revenir à l’accueil",
+    "done": "Le mur est complet. Retour à l’accueil…",
+    "home": "Retour à l’accueil",
+    "projects": "Voir les projets"
+  },
+  "home": {
+    "projectsTitle": "Projets",
+    "projectsIntro": "La sélection du moment : trois projets, du besoin au code.",
+    "whoTitle": "Qui je suis",
+    "whoMore": "En savoir plus sur moi",
+    "methodTitle": "Ma façon de travailler",
+    "methodIntro": "Chaque projet passe par les mêmes étapes, du besoin jusqu’à la mise en ligne.",
+    "methodMore": "Voir ma méthode",
+    "contactIntro": "Vous cherchez un développeur full-stack pour un stage de fin d’études ? Écrivez-moi."
+  },
+  "projects": {
+    "intro": "Tout ce que j’ai construit, du plus récent au plus ancien. Chaque projet a son étude de cas : le besoin, la méthode et les choix techniques.",
+    "contactIntro": "Un projet vous a parlé ? Écrivez-moi."
+  }
+}

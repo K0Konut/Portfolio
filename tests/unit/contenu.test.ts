@@ -1,0 +1,131 @@
+import { describe, expect, it } from 'vitest'
+import { slugify, tocPlugin } from '../../scripts/markdown'
+import { sitemapXml } from '../../src/router/sitemap'
+import { skills, timeline } from '../../src/content/about'
+import { featuredProjects, parseProject, projectBody, projects } from '../../src/content/projects'
+import type { Project } from '../../src/content/types'
+import { LOCALES, type Locale } from '../../src/router/pages'
+
+const FILE = '/content/fr/projets/exemple.md'
+const META = {
+  title: 'Exemple',
+  description: 'Un projet',
+  date: '2025-03',
+  tags: ['projet d’école'],
+  type: 'Projet d’école',
+  role: 'Développeur',
+  duration: '3 mois',
+  team: '4 personnes',
+  stack: ['Vue 3'],
+  capture: { device: 'phone', image: 'capture.png' },
+}
+const IMAGES = { '/content/images/projets/exemple/capture.png': '/assets/capture.png' }
+
+describe('parseProject', () => {
+  it('met l’en-tête en forme, le slug venant du nom de fichier', () => {
+    const p = parseProject(FILE, META, IMAGES)
+    expect(p).toMatchObject({ slug: 'exemple', featured: false, links: {}, toc: [] })
+    expect(p.capture).toEqual({ device: 'phone', src: '/assets/capture.png', label: undefined })
+    expect(p.meta).toMatchObject({ type: 'Projet d’école', team: '4 personnes' })
+  })
+
+  it.each([
+    ['title', { title: undefined }],
+    ['stack', { stack: [] }],
+    ['date', { date: '2025' }],
+    ['date', { date: '2025-13' }],
+    ['featured', { featured: 'oui' }],
+    ['capture.device', { capture: { device: 'tablet' } }],
+    ['capture.image', { capture: { device: 'phone', image: 'absente.png' } }],
+  ])('refuse un champ « %s » manquant ou invalide, avec le nom du fichier', (field, patch) => {
+    expect(() => parseProject(FILE, { ...META, ...patch }, IMAGES)).toThrow(
+      `${FILE} : champ « ${field} »`,
+    )
+  })
+})
+
+describe('études de cas', () => {
+  it('lit les projets, avec leur capture et le sommaire tiré des h2', () => {
+    const portfolio = projects('fr').find((p) => p.slug === 'ce-portfolio')
+    expect(portfolio?.capture.src).toBeTruthy()
+    expect(portfolio?.toc.map((t) => t.id)).toEqual([
+      'contexte',
+      'besoin',
+      'contraintes',
+      'methode',
+      'choix-techniques',
+      'resultats',
+      'enseignements',
+    ])
+    expect(projectBody('fr', 'ce-portfolio')).toBeDefined()
+  })
+
+  it('trie du plus récent au plus ancien et met en avant trois projets au plus', () => {
+    const dates = projects('fr').map((p) => p.date)
+    expect(dates).toEqual([...dates].sort().reverse())
+    const featured = featuredProjects('fr')
+    expect(featured.length).toBeLessThanOrEqual(3)
+    expect(featured.every((p) => p.featured)).toBe(true)
+  })
+
+  it('garde dans chaque traduction les champs qui ne se traduisent pas', () => {
+    // Sinon l'ordre des projets et la sélection de l'accueil changent d'une langue à l'autre
+    const shared = ({ slug, date, featured, stack, links, capture }: Project) => ({
+      slug,
+      date,
+      featured,
+      stack,
+      links,
+      capture,
+    })
+    expect(projects('en').map(shared)).toEqual(projects('fr').map(shared))
+    // Même parcours (étapes, liens vers les études de cas) et mêmes technos mises en avant
+    const steps = (l: Locale) => timeline(l).map((step) => step.caseStudy)
+    const sites = (l: Locale) => skills(l).map((c) => c.skills.map((s) => s.site))
+    expect(steps('en')).toEqual(steps('fr'))
+    expect(sites('en')).toEqual(sites('fr'))
+  })
+
+  it.each(LOCALES)('relie chaque étape du parcours à une étude de cas qui existe (%s)', (l) => {
+    const slugs = projects(l).map((p) => p.slug)
+    for (const step of timeline(l)) if (step.caseStudy) expect(slugs).toContain(step.caseStudy)
+    expect(skills(l).length).toBeGreaterThan(0)
+  })
+})
+
+describe('slugify', () => {
+  it('retire accents et ponctuation', () => {
+    expect(slugify('Choix techniques')).toBe('choix-techniques')
+    expect(slugify('Méthode : l’essentiel !')).toBe('methode-l-essentiel')
+  })
+})
+
+describe('sommaire des études de cas', () => {
+  it('prend le texte affiché des h2, sans la syntaxe Markdown', async () => {
+    const { default: markdown } = await import('markdown-exit')
+    const md = markdown()
+    tocPlugin(md)
+    const env: { frontmatter?: { toc?: unknown } } = {}
+    const html = md.render('## Choix `techniques`\n\n## Voir [la démo](https://x.fr)', env)
+    expect(env.frontmatter?.toc).toEqual([
+      { id: 'choix-techniques', label: 'Choix techniques' },
+      { id: 'voir-la-demo', label: 'Voir la démo' },
+    ])
+    expect(html).toContain('<h2 id="choix-techniques">')
+  })
+})
+
+describe('sitemap', () => {
+  const xml = sitemapXml('https://exemple.fr', { 'etude-de-cas': [{ slug: 'ce-portfolio' }] })
+
+  it('liste chaque page indexable dans les deux langues, liée à ses équivalents', () => {
+    expect(xml).toContain('<loc>https://exemple.fr/fr/a-propos</loc>')
+    expect(xml).toContain('<loc>https://exemple.fr/en/projects/ce-portfolio</loc>')
+    expect(xml).toContain('hreflang="en" href="https://exemple.fr/en/about"')
+    expect(xml).toContain('hreflang="x-default" href="https://exemple.fr/fr/a-propos"')
+  })
+
+  it('laisse de côté les pages noindex', () => {
+    expect(xml).not.toMatch(/404|mentions-legales|legal-notice|confidentialite|privacy/)
+  })
+})

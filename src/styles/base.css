@@ -1,0 +1,285 @@
+/* Styles de base et fonds de section (design system §2 « Fonds de section », DA §2) */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: calc(var(--header-height) + var(--space-5));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+/* Texte lu par les lecteurs d'écran, caché à l'écran */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mise en valeur : quelques mots en Fraunces italique, jamais soulignés (DA §2, règle 1) */
+.hl {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: var(--weight-regular);
+  font-variation-settings:
+    'SOFT' 100,
+    'WONK' 1;
+  color: var(--color-highlight);
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+/* Conteneur de page : largeur max et marges latérales (sections, en-tête de page, pied de page) */
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+}
+
+/* Paragraphe d'introduction d'une section ou d'une page */
+.lead {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: var(--text-lead);
+  line-height: var(--leading-snug);
+  color: var(--color-text-muted);
+}
+
+/* Texte en Markdown (content/) : blocs serrés, lignes limitées à --measure ; chaque page en précise le reste */
+.prose {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.prose :is(p, ul, ol) {
+  margin: 0;
+  max-width: var(--measure);
+  color: var(--color-text-muted);
+}
+
+/* Lien dans un texte (TextLink inline, liens du Markdown) : toujours souligné, un lien ne se confond jamais
+   avec une mise en valeur (DA §2, règle 1) */
+.link-inline,
+.prose a {
+  color: var(--color-action);
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-thin);
+  text-underline-offset: 0.2em;
+}
+.link-inline:is(:hover, :focus-visible),
+.prose a:is(:hover, :focus-visible) {
+  text-decoration-thickness: var(--underline);
+}
+
+/* Lien de l'en-tête (navigation, langues) : un trait se trace au survol, il reste sur l'élément en cours */
+.trace {
+  position: relative;
+}
+.trace::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * var(--space-1));
+  height: var(--underline);
+  background: var(--trace-color, var(--color-action));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-move) var(--ease-out);
+}
+:hover > .trace::after,
+[aria-current] > .trace::after {
+  transform: scaleX(1);
+}
+
+/* Fonds de section : chaque fond réaffecte les rôles ; les composants n'utilisent que les rôles */
+.fond-nuit,
+.fond-violet {
+  --color-text: var(--neutral-50);
+  --color-text-muted: var(--neutral-100);
+  --color-text-subtle: var(--neutral-400);
+  --tag-tint: 14%;
+  --color-action: var(--lime-500);
+  --color-on-action: var(--neutral-950);
+  --color-highlight: var(--lime-500);
+  --color-detail: var(--pink-500);
+  --color-focus: var(--lime-500);
+}
+.fond-nuit {
+  --color-bg: var(--neutral-950);
+}
+.fond-violet {
+  --color-bg: var(--violet-700);
+  --color-text-subtle: var(--neutral-100);
+}
+.fond-vif {
+  --tag-tint: 0%;
+  --color-bg: var(--violet-500);
+  --color-text: var(--neutral-50);
+  --color-text-muted: var(--neutral-50);
+  --color-text-subtle: var(--neutral-50);
+  --color-action: var(--lime-500);
+  --color-on-action: var(--neutral-950);
+  --color-highlight: var(--lime-500);
+  --color-detail: var(--neutral-50);
+  --color-focus: var(--lime-500);
+}
+.fond-lime {
+  --tag-tint: 0%;
+  --color-bg: var(--lime-500);
+  --color-text: var(--neutral-950);
+  --color-text-muted: var(--neutral-950);
+  --color-text-subtle: var(--neutral-700);
+  --color-action: var(--neutral-950);
+  --color-on-action: var(--lime-500);
+  --color-highlight: var(--violet-500);
+  --color-detail: var(--violet-500);
+  --color-focus: var(--neutral-950);
+}
+.fond-rose {
+  --tag-tint: 0%;
+  --color-bg: var(--pink-500);
+  --color-text: var(--neutral-950);
+  --color-text-muted: var(--neutral-950);
+  --color-text-subtle: var(--neutral-950);
+  --color-action: var(--neutral-950);
+  --color-on-action: var(--pink-500);
+  --color-highlight: var(--violet-700);
+  --color-detail: var(--violet-700);
+  --color-focus: var(--neutral-950);
+}
+.fond-creme {
+  --tag-tint: 0%;
+  --color-bg: var(--neutral-50);
+  --color-text: var(--neutral-950);
+  --color-text-muted: var(--neutral-950);
+  --color-text-subtle: var(--neutral-700);
+  --color-action: var(--neutral-950);
+  --color-on-action: var(--lime-500);
+  --color-highlight: var(--violet-500);
+  --color-detail: var(--violet-500);
+  --color-focus: var(--neutral-950);
+}
+.fond-nuit,
+.fond-violet,
+.fond-vif,
+.fond-lime,
+.fond-rose,
+.fond-creme {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Apparition au scroll (directive v-reveal) : la propriété « translate », séparée de « transform »,
+   se cumule avec les inclinaisons et les positionnements des composants */
+.reveal {
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * var(--stagger-block));
+}
+.reveal.is-pending {
+  opacity: 0;
+  translate: 0 var(--reveal-distance);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition-duration: var(--duration-reduced);
+    transition-delay: 0ms;
+  }
+}
+
+/* Entrée en attente (section d'accueil) : avec JavaScript, les éléments [data-intro-hide] restent cachés
+   tant que la page porte data-intro="pending" ; en secours, ils apparaissent au bout de 3 s */
+@keyframes intro-fallback {
+  to {
+    opacity: 1;
+  }
+}
+.js[data-intro='pending'] [data-intro-hide] {
+  opacity: 0;
+  animation: intro-fallback 0s 3s forwards;
+}
+
+/* Grand titre en Bagel Fat One (chaque composant fixe sa taille) */
+.display {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-display);
+}
+
+/* Pastille de DotList et de sa légende : grise, ou violet vif cernée de crème (.on). La couleur porte une information */
+.skill-dot {
+  flex: none;
+  width: var(--skill-dot);
+  height: var(--skill-dot);
+  border-radius: var(--radius-pill);
+  background: var(--neutral-700);
+}
+.skill-dot.on {
+  background: var(--violet-500);
+  box-shadow: 0 0 0 var(--underline) var(--neutral-50);
+}
+
+/* Affiche collée (DA §5) : inclinée de --tilt, elle se redresse et se soulève au survol ou au focus */
+.poster {
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.poster:hover,
+.poster:focus-within {
+  transform: translateY(calc(-1 * var(--card-lift))) rotate(0deg);
+}
+/* Affiche qui apparaît au scroll (v-reveal) : les deux transitions se cumulent, seule l'apparition est décalée */
+.poster.reveal {
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out);
+  transition-delay:
+    0ms, calc(var(--i, 0) * var(--stagger-block)), calc(var(--i, 0) * var(--stagger-block));
+}
+@media (prefers-reduced-motion: reduce) {
+  .poster.reveal {
+    transition-duration: var(--duration-fast), var(--duration-reduced), var(--duration-reduced);
+    transition-delay: 0ms;
+  }
+}

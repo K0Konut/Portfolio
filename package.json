@@ -5,18 +5,46 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "build": "vue-tsc -b && vite-ssg build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc -b",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check-content": "node scripts/check-content.ts"
   },
   "dependencies": {
-    "vue": "^3.5.42"
+    "@unhead/vue": "^2.1.17",
+    "gsap": "^3.15.0",
+    "vite-ssg": "^28.3.0",
+    "vue": "^3.5.42",
+    "vue-i18n": "^11.4.16",
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
     "@types/node": "^24.13.3",
     "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.11.1",
+    "happy-dom": "^21.0.4",
+    "prettier": "^3.9.10",
     "typescript": "~6.0.2",
+    "typescript-eslint": "^8.72.0",
+    "unplugin-vue-markdown": "^32.1.1",
     "vite": "^8.3.0",
+    "vitest": "^5.0.5",
+    "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.11"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

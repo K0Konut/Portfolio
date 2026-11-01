@@ -1,0 +1,55 @@
+# Vérifications de chaque PR vers dev ou main (architecture technique §7) ; le lint est dans lint.yml
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+  # Après chaque merge, pour que le badge du README reflète l'état de dev
+  push:
+    branches: [dev, main]
+
+# Un nouveau push sur la PR annule la vérification précédente, devenue inutile
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Types
+        run: npm run type-check
+      - name: Tests unitaires
+        run: npm test
+      # Les types sont déjà vérifiés : on pré-rend directement
+      - name: Build (pré-rendu)
+        run: npx vite-ssg build
+      - name: Version de Playwright
+        id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache du navigateur de test
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - name: Navigateur de test
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Dépendances système du navigateur
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - name: Tests de bout en bout et accessibilité
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: rapport-playwright
+          path: playwright-report/
+          retention-days: 7
