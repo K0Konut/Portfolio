@@ -3,6 +3,8 @@ import { slugify, tocPlugin } from '../../scripts/markdown'
 import { sitemapXml } from '../../src/router/sitemap'
 import { skills, timeline } from '../../src/content/about'
 import { featuredProjects, parseProject, projectBody, projects } from '../../src/content/projects'
+import type { Project } from '../../src/content/types'
+import { LOCALES, type Locale } from '../../src/router/pages'
 
 const FILE = '/content/fr/projets/exemple.md'
 const META = {
@@ -66,10 +68,28 @@ describe('études de cas', () => {
     expect(featured.every((p) => p.featured)).toBe(true)
   })
 
-  it('relie chaque étape du parcours à une étude de cas qui existe', () => {
-    const slugs = projects('fr').map((p) => p.slug)
-    for (const step of timeline('fr')) if (step.caseStudy) expect(slugs).toContain(step.caseStudy)
-    expect(skills('fr').length).toBeGreaterThan(0)
+  it('garde dans chaque traduction les champs qui ne se traduisent pas', () => {
+    // Sinon l'ordre des projets et la sélection de l'accueil changent d'une langue à l'autre
+    const shared = ({ slug, date, featured, stack, links, capture }: Project) => ({
+      slug,
+      date,
+      featured,
+      stack,
+      links,
+      capture,
+    })
+    expect(projects('en').map(shared)).toEqual(projects('fr').map(shared))
+    // Même parcours (étapes, liens vers les études de cas) et mêmes technos mises en avant
+    const steps = (l: Locale) => timeline(l).map((step) => step.caseStudy)
+    const sites = (l: Locale) => skills(l).map((c) => c.skills.map((s) => s.site))
+    expect(steps('en')).toEqual(steps('fr'))
+    expect(sites('en')).toEqual(sites('fr'))
+  })
+
+  it.each(LOCALES)('relie chaque étape du parcours à une étude de cas qui existe (%s)', (l) => {
+    const slugs = projects(l).map((p) => p.slug)
+    for (const step of timeline(l)) if (step.caseStudy) expect(slugs).toContain(step.caseStudy)
+    expect(skills(l).length).toBeGreaterThan(0)
   })
 })
 

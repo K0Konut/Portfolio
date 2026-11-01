@@ -84,7 +84,7 @@ Chaque page est pré-rendue en HTML complet avec vite-ssg, pour le référenceme
 <div class="stats">
   <StatBlock value="7" label="étapes, du PRD au code, chacune validée avant la suivante" :index="0" />
   <StatBlock value="32" label="composants génériques, chacun dans le catalogue" :index="1" />
-  <StatBlock value="98" label="décisions écrites, chacune avec sa raison" :index="2" />
+  <StatBlock value="105" label="décisions écrites, chacune avec sa raison" :index="2" />
   <StatBlock value="6" label="fonds de section, contre un seul dans la première direction artistique" :before="1" :after="6" :index="3" />
 </div>
 
