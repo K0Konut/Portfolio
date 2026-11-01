@@ -2,11 +2,11 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocale } from '../../composables/useLocale'
-import { SITE } from '../../content/site'
 import BaseButton from '../ui/BaseButton.vue'
 import BaseIcon from '../ui/BaseIcon.vue'
 import LangSwitch from './LangSwitch.vue'
 import MobileMenu from './MobileMenu.vue'
+import SiteLogo from './SiteLogo.vue'
 import { useNavLinks } from './navigation'
 
 // En-tête fixe qui « pend » au-dessus du contenu (design system § AppHeader)
@@ -19,7 +19,7 @@ const menuOpen = ref(false)
 <template>
   <header class="site-header">
     <div class="bar" data-intro-hide>
-      <RouterLink class="name" :to="to('accueil')">{{ SITE.name }}</RouterLink>
+      <RouterLink class="name" :to="to('accueil')"><SiteLogo /></RouterLink>
       <nav :aria-label="t('nav.label')">
         <RouterLink
           v-for="link in links"
@@ -88,12 +88,8 @@ html.js[data-intro='pending'] .bar {
   display: inline-flex;
   align-items: center;
   min-height: var(--target-min);
-  font-family: var(--font-display);
-  font-size: var(--text-logo);
-  line-height: var(--leading-none);
   color: inherit;
   text-decoration: none;
-  white-space: nowrap;
 }
 nav {
   margin-left: auto;

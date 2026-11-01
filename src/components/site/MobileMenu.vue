@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SITE } from '../../content/site'
 import BaseButton from '../ui/BaseButton.vue'
 import LangSwitch from './LangSwitch.vue'
+import SiteLogo from './SiteLogo.vue'
 import { useNavLinks } from './navigation'
 
 /* Menu plein écran sur mobile (design system § AppHeader), sur l'élément <dialog> natif :
@@ -28,7 +28,7 @@ watch(open, (isOpen) => {
     @close="open = false"
   >
     <div class="top">
-      <b>{{ SITE.name }}</b>
+      <SiteLogo />
       <BaseButton compact autofocus @click="open = false">{{ t('nav.close') }}</BaseButton>
     </div>
     <ul>
@@ -65,11 +65,6 @@ watch(open, (isOpen) => {
   justify-content: space-between;
   align-items: center;
   min-height: var(--header-height);
-}
-.top b {
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
-  font-size: var(--text-logo);
 }
 ul {
   list-style: none;
