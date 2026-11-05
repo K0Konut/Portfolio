@@ -3,6 +3,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { loadEnv } from 'vite'
+import { SITE } from '../src/content/site.ts'
 
 // Tel quel dans toutes les langues : traduit dans un texte anglais, il ne bloquerait plus la mise en ligne
 const MARKER = 'à compléter'
@@ -23,6 +24,9 @@ for (const file of files.filter((f) => f.startsWith(join('content', 'fr')))) {
   const en = file.replace(join('content', 'fr'), join('content', 'en'))
   if (!existsSync(en)) problems.push(`${en} manquant : traduction de ${file}`)
 }
+// Le CV est l'action principale de l'accueil (PRD, parcours P1) : un lien mort ne part pas en ligne
+for (const cv of Object.values(SITE.cv))
+  if (!existsSync(join('public', cv))) problems.push(`public${cv} manquant : le CV à télécharger`)
 // Lu comme le build le lit (.env, .env.production, .env.production.local…)
 if (!loadEnv('production', process.cwd()).VITE_SITE_URL)
   problems.push('VITE_SITE_URL manquant : le domaine du site')
