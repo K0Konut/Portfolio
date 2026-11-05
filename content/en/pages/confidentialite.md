@@ -8,7 +8,7 @@ This site collects no personal data: no cookies, no audience measurement, no for
 
 ## Server logs
 
-Like any web server, the one hosting this site records technical logs: IP address, date and time, requested page. They are used only for the security and proper running of the site, and are kept for à compléter (duration).
+Like any web server, the one hosting this site records technical logs: IP address, date and time, requested page. They are used only for the security and proper running of the site, and are kept for six months.
 
 ## If you write to me
 

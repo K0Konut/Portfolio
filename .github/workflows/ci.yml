@@ -4,9 +4,10 @@ name: CI
 on:
   pull_request:
     branches: [dev, main]
-  # Après chaque merge, pour que le badge du README reflète l'état de dev
+  # Après chaque merge, pour que le badge du README reflète l'état de dev ; sur main, deploiement.yml l'appelle
   push:
-    branches: [dev, main]
+    branches: [dev]
+  workflow_call:
 
 # Un nouveau push sur la PR annule la vérification précédente, devenue inutile
 concurrency:
