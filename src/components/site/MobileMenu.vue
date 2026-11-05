@@ -47,6 +47,8 @@ watch(open, (isOpen) => {
 
 <style scoped>
 .menu {
+  /* Placé dans l'en-tête, qui laisse passer les clics (pointer-events: none) : le menu les reprend */
+  pointer-events: auto;
   width: 100%;
   max-width: none;
   height: 100%;
