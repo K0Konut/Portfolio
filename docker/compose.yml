@@ -1,0 +1,15 @@
+# Lancé sur le serveur par le job « deploy » de .github/workflows/deploiement.yml (architecture technique §7).
+# Retour arrière à la main : IMAGE_TAG=<empreinte du commit> docker compose up -d, dans /srv/docker/Projects/costamask
+name: costamask
+
+services:
+  site:
+    image: ghcr.io/k0konut/portfolio:${IMAGE_TAG:-latest}
+    container_name: costamask-site
+    restart: unless-stopped
+    # Le réseau de Nginx Proxy Manager, qui joint le conteneur par son nom
+    networks: [npm]
+
+networks:
+  npm:
+    external: true
