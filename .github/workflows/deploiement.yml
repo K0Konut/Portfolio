@@ -1,0 +1,82 @@
+# Mise en ligne de chaque release (architecture technique §7) : merge sur main → vérifications → image → serveur.
+# Retour arrière : relancer le job « deploy » d'une exécution précédente (Re-run), qui remet l'image de son commit.
+name: Déploiement
+
+on:
+  push:
+    branches: [main]
+
+# Une mise en ligne à la fois, jamais annulée en cours de route
+concurrency:
+  group: deploiement
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  image:
+    needs: [ci, lint]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/k0konut/portfolio:latest
+            ghcr.io/k0konut/portfolio:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Sur le runner installé sur la VM : rien à ouvrir côté réseau, aucune clé SSH dans GitHub
+  deploy:
+    needs: image
+    runs-on: [self-hosted, vm-web]
+    permissions:
+      contents: read
+      packages: read
+    environment:
+      name: production
+      url: https://www.costamask.dev
+    env:
+      DIR: /srv/docker/Projects/costamask
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: docker/compose.yml
+          sparse-checkout-cone-mode: false
+      - name: Fichier compose dans un dossier fixe (retour arrière à la main possible)
+        run: |
+          mkdir -p "$DIR"
+          cp docker/compose.yml "$DIR/compose.yml"
+          echo "IMAGE_TAG=${{ github.sha }}" > "$DIR/.env"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Mise en ligne
+        working-directory: ${{ env.DIR }}
+        run: docker compose pull && docker compose up -d
+      # Directement dans le conteneur : depuis la VM, l'adresse publique peut ne pas répondre (NAT de la box)
+      - name: Le site répond
+        run: |
+          for i in $(seq 10); do
+            docker exec costamask-site wget -q --spider http://localhost/fr && exit 0
+            sleep 3
+          done
+          echo "Le conteneur ne sert pas /fr" && exit 1
