@@ -8,7 +8,7 @@ Ce site ne collecte aucune donnée personnelle : pas de cookies, pas de mesure d
 
 ## Journaux du serveur
 
-Comme tout serveur web, celui qui héberge ce site enregistre des journaux techniques : adresse IP, date et heure, page demandée. Ils servent uniquement à la sécurité et au bon fonctionnement du site, et sont conservés à compléter (durée).
+Comme tout serveur web, celui qui héberge ce site enregistre des journaux techniques : adresse IP, date et heure, page demandée. Ils servent uniquement à la sécurité et au bon fonctionnement du site, et sont conservés six mois.
 
 ## Si vous m’écrivez
 

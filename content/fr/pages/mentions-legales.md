@@ -12,7 +12,7 @@ Directeur de la publication : Costa Maskulov.
 
 ## Hébergement
 
-Hébergeur : à compléter (nom, adresse et téléphone).
+Hébergeur : Costa Maskulov (serveur personnel), 59 rue Hoche, 94200 Ivry-sur-Seine, France. Téléphone : 06 35 79 99 51.
 
 ## Propriété intellectuelle
 
