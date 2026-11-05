@@ -71,12 +71,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Mise en ligne
         working-directory: ${{ env.DIR }}
-        run: docker compose pull && docker compose up -d
+        run: docker compose pull && docker compose up -d --wait
       # Directement dans le conteneur : depuis la VM, l'adresse publique peut ne pas répondre (NAT de la box)
       - name: Le site répond
-        run: |
-          for i in $(seq 10); do
-            docker exec costamask-site wget -q --spider http://localhost/fr && exit 0
-            sleep 3
-          done
-          echo "Le conteneur ne sert pas /fr" && exit 1
+        run: docker exec costamask-site wget -q --spider http://localhost/fr

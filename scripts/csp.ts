@@ -11,7 +11,8 @@ const hashes = new Set<string>()
 for (const file of readdirSync('dist', { recursive: true, encoding: 'utf8' })) {
   if (!file.endsWith('.html')) continue
   for (const [, body] of readFileSync(join('dist', file), 'utf8').matchAll(
-    /<script>([\s\S]*?)<\/script>/g,
+    // Tout script sans src, quels que soient ses attributs : un oubli serait bloqué en production seulement
+    /<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g,
   ))
     hashes.add(`'sha256-${createHash('sha256').update(body!).digest('base64')}'`)
 }
