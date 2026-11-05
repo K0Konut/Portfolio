@@ -8,5 +8,7 @@ COPY . .
 RUN npm run check-content && npx vite-ssg build && node scripts/csp.ts > nginx.conf
 
 FROM nginx:1.29-alpine
+# Relie l'image au dépôt sur GHCR (visibilité et page du paquet)
+LABEL org.opencontainers.image.source=https://github.com/K0Konut/Portfolio
 COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
