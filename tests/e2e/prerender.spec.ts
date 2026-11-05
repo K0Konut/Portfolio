@@ -82,6 +82,28 @@ test('le menu mobile se ferme avec Échap et rend le focus au bouton', async ({ 
   await expect(page.getByRole('button', { name: 'Menu' })).toBeFocused()
 })
 
+// Au clic, pas seulement au clavier : l'en-tête laisse passer les clics (pointer-events: none) et le menu y est rangé
+test('le menu mobile se ferme et mène aux pages au clic', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/fr/')
+  const menu = page.getByRole('button', { name: 'Menu' })
+  await menu.click()
+  await page.getByRole('button', { name: 'Fermer' }).click()
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await menu.click()
+  await page.getByRole('dialog').getByRole('link', { name: 'Contact' }).click()
+  await expect(page).toHaveURL(/\/fr\/contact\/?$/)
+  await expect(page.getByRole('dialog')).toBeHidden()
+})
+
+// La feuille de BaseButton peut se charger après celle de l'en-tête (version construite seulement)
+test("le bouton Menu n'apparaît pas sur ordinateur", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto('/fr/')
+  await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden()
+  await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toBeVisible()
+})
+
 test('P2 : des projets à une étude de cas, par son sommaire, puis retour à la liste', async ({
   page,
 }) => {
