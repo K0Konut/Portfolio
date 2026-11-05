@@ -1,5 +1,6 @@
 # Lancé sur le serveur par le job « deploy » de .github/workflows/deploiement.yml (architecture technique §7).
-# Retour arrière à la main : IMAGE_TAG=<empreinte du commit> docker compose up -d, dans /srv/docker/Projects/costamask
+# Retour arrière : relancer le job « deploy » d'une exécution précédente. À la main, seulement si l'image est encore sur le serveur
+# (le dépôt GHCR est privé) : IMAGE_TAG=<empreinte du commit> docker compose up -d, dans /srv/docker/Projects/costamask
 name: costamask
 
 services:

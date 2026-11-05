@@ -4,9 +4,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-# Types et tests déjà vérifiés par le CI avant l'image : pré-rendu direct. check-content refuse le contenu provisoire, csp.ts complète docker/nginx.conf
-RUN npm run check-content && npx vite-ssg build && node scripts/csp.ts
+# Types et tests déjà vérifiés par le CI avant l'image : pré-rendu direct. check-content refuse le contenu provisoire, csp.ts écrit la configuration Nginx avec la CSP complète
+RUN npm run check-content && npx vite-ssg build && node scripts/csp.ts > nginx.conf
 
 FROM nginx:1.29-alpine
-COPY --from=build /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html

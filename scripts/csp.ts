@@ -1,7 +1,7 @@
-/* Ajoute à la CSP de docker/nginx.conf l'empreinte SHA-256 de chaque <script> en ligne du site pré-rendu
+/* Écrit sur la sortie standard docker/nginx.conf, sa CSP complétée par l'empreinte SHA-256 de chaque <script> en ligne du site pré-rendu
    (architecture technique §7) : pas de 'unsafe-inline' pour les scripts. Lancé après le build, dans l'image Docker. */
 import { createHash } from 'node:crypto'
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const CONF = 'docker/nginx.conf'
@@ -19,5 +19,5 @@ for (const file of readdirSync('dist', { recursive: true, encoding: 'utf8' })) {
 
 const conf = readFileSync(CONF, 'utf8')
 if (!conf.includes(PLACEHOLDER)) throw new Error(`${CONF} : ${PLACEHOLDER} introuvable`)
-writeFileSync(CONF, conf.replace(PLACEHOLDER, [...hashes].join(' ')))
-console.log(`CSP : ${hashes.size} script(s) en ligne autorisé(s) par empreinte.`)
+process.stdout.write(conf.replace(PLACEHOLDER, [...hashes].join(' ')))
+console.error(`CSP : ${hashes.size} script(s) en ligne autorisé(s) par empreinte.`)
