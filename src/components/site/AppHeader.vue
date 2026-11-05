@@ -108,7 +108,8 @@ nav a {
   font-weight: var(--weight-medium);
   font-size: var(--text-ui);
 }
-.menu-button {
+/* `.bar` en plus : la feuille de BaseButton (display: inline-flex, même poids) peut se charger après celle-ci */
+.bar .menu-button {
   display: none;
   margin-left: auto;
 }
@@ -117,7 +118,7 @@ nav a {
   .langs {
     display: none;
   }
-  .menu-button {
+  .bar .menu-button {
     display: inline-flex;
   }
 }
