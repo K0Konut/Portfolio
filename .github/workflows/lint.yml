@@ -5,7 +5,9 @@ on:
   pull_request:
     branches: [dev, main]
   push:
-    branches: [dev, main]
+    branches: [dev]
+  # Appelé par deploiement.yml avant chaque mise en ligne
+  workflow_call:
 
 concurrency:
   group: lint-${{ github.ref }}

@@ -1,0 +1,17 @@
+# Sur le serveur, dans /srv/docker/Projects/costamask (architecture technique §7). Une tâche cron toutes les 5 minutes :
+#   cd /srv/docker/Projects/costamask && docker compose up -d --pull always --quiet-pull
+# ne recrée le conteneur que si une nouvelle image `latest` est sur GHCR.
+# Retour arrière : IMAGE_TAG=<empreinte du commit> dans .env (même dossier), puis la même commande ; retirer la ligne pour revenir à latest.
+name: costamask
+
+services:
+  site:
+    image: ghcr.io/k0konut/portfolio:${IMAGE_TAG:-latest}
+    container_name: costamask-site
+    restart: unless-stopped
+    # Le réseau de Nginx Proxy Manager, qui joint le conteneur par son nom
+    networks: [npm]
+
+networks:
+  npm:
+    external: true

@@ -12,7 +12,7 @@ Publication director: Costa Maskulov.
 
 ## Hosting
 
-Host: à compléter (name, address and phone number).
+Host: Costa Maskulov (personal server), 59 rue Hoche, 94200 Ivry-sur-Seine, France. Phone: +33 6 35 79 99 51.
 
 ## Intellectual property
 

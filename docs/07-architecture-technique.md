@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.2 — 28/10/2026 — **statut : validé** (v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
+Version 1.3 — 05/11/2026 — **statut : validé** (v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1, déploiement par GitHub Actions et image Docker.
 
@@ -66,7 +66,7 @@ tests/
   unit/                      Vitest + Vue Test Utils
   e2e/                       Playwright (+ contrôle d'accessibilité axe)
 scripts/                     plugin Markdown (sommaire), vérification du contenu
-docker/  nginx.conf          image de production (§7)
+docker/  nginx.conf, compose.yml   image de production et lancement sur le serveur (§7)
 .github/workflows/           intégration continue et image (§7)
 ```
 
@@ -126,19 +126,19 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 | Aperçu | `npm run build && npm run preview` | Vérifier la version pré-rendue, comme en production |
 | Production | Conteneur Docker sur le serveur | Le site en ligne |
 
-**Image Docker** (multi-étapes) : une étape Node construit le site (`npm ci`, `npm run build`), une étape `nginx:alpine` ne contient que les fichiers statiques et `docker/nginx.conf`. Nginx sert :
+**Image Docker** (multi-étapes) : une étape Node construit le site (`npm ci`, `check-content`, pré-rendu, puis `scripts/csp.ts` qui écrit la configuration Nginx avec les empreintes des scripts en ligne dans la CSP), une étape `nginx:alpine` ne contient que les fichiers statiques et `docker/nginx.conf`. Nginx sert :
 - la redirection de `/` selon la langue, les 404 par langue ;
 - des en-têtes de cache : fichiers à empreinte (JS, CSS, polices, images) en cache d'un an, HTML sans cache ;
-- des en-têtes de sécurité : `Content-Security-Policy` (scripts et styles du site seulement, aucune ressource tierce). Si le pré-rendu laisse des `<script>` ou `<style>` en ligne dans le HTML (état initial de vite-ssg, balises de @unhead/vue), un script de build calcule leur empreinte SHA-256 et l'ajoute à la politique écrite dans la configuration Nginx, sans `unsafe-inline` pour les scripts. Les composants posent des variables CSS dans l'attribut `style` (décalages d'apparition, inclinaisons), d'où `style-src-attr 'unsafe-inline'`, sans risque d'exécution de code. Les tests de bout en bout tournent avec la même politique et échouent à la moindre violation signalée dans la console ; `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. Le HTTPS et HSTS restent gérés par Nginx Proxy Manager, devant le conteneur.
+- des en-têtes de sécurité : `Content-Security-Policy` (scripts et styles du site seulement, aucune ressource tierce). Si le pré-rendu laisse des `<script>` ou `<style>` en ligne dans le HTML (état initial de vite-ssg, balises de @unhead/vue), un script de build calcule leur empreinte SHA-256 et l'ajoute à la politique écrite dans la configuration Nginx, sans `unsafe-inline` pour les scripts. Les composants posent des variables CSS dans l'attribut `style` (décalages d'apparition, inclinaisons), d'où `style-src-attr 'unsafe-inline'`, sans risque d'exécution de code. Les tests de bout en bout tournent sur `vite preview`, sans cette politique : elle a été vérifiée à la main dans Chromium sur l'image (05/11/2026, aucune violation sur les 14 pages) et reste à vérifier ainsi quand le HTML change de forme ; `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. Le HTTPS et HSTS restent gérés par Nginx Proxy Manager, devant le conteneur.
 
 **GitHub Actions**
 
 | Déclencheur | Étapes |
 |---|---|
 | PR vers `dev` ou `main` | Installation, lint, vérification des types (`vue-tsc`), tests unitaires, build, tests de bout en bout et d'accessibilité sur la version construite, Lighthouse CI (seuil 95 sur les quatre axes, PRD §3) |
-| Merge sur `main` (release) | Les mêmes vérifications, puis construction de l'image et publication sur GitHub Container Registry (`ghcr.io/k0konut/portfolio`), étiquetée `latest` et avec l'empreinte du commit |
+| Merge sur `main` (release), `deploiement.yml` | Les mêmes vérifications (`ci.yml` et `lint.yml` appelés), puis construction de l'image et publication sur GitHub Container Registry (`ghcr.io/k0konut/portfolio`), étiquetée `latest` et avec l'empreinte du commit, puis mise en ligne |
 
-**Mise en ligne** : sur le serveur, un `docker-compose.yml` lance l'image sur le réseau de Nginx Proxy Manager. Pour publier une nouvelle version : `docker compose pull && docker compose up -d`. Pour revenir en arrière : relancer l'étiquette du commit précédent. Le déploiement reste déclenché à la main, à la demande du propriétaire (git-workflow : jamais de déploiement sans confirmation).
+**Mise en ligne** : automatique à chaque release mergée sur `main` (le merge de la PR de release par le propriétaire vaut confirmation). `deploiement.yml` publie l'image sur GHCR (paquet public) ; le serveur vient la chercher lui-même : une tâche cron de l'utilisateur `costa`, toutes les 5 minutes, lance `docker compose up -d --pull always --quiet-pull` dans `/srv/docker/Projects/costamask`, ce qui ne recrée le conteneur `costamask-site` que si l'image `latest` a changé. GitHub n'a donc aucun accès au serveur (pas de runner, pas de clé SSH) et le dépôt peut être public. Le conteneur tourne sur le réseau `npm` de Nginx Proxy Manager, qui sert `www.costamask.dev` (HTTPS, HSTS) et redirige `costamask.dev` vers `www`. Journal : `journalctl -t costamask-deploy`. Retour arrière : `IMAGE_TAG=<commit>` dans le `.env` de ce dossier (retirer la ligne pour revenir à `latest`). `docker/compose.yml` est copié à la main dans ce dossier quand il change.
 
 ## 8. Qualité
 
