@@ -1,4 +1,4 @@
-import { initAnalytics } from 'dashility'
+import { initAnalytics } from '@dashility/client'
 import { ViteSSG } from 'vite-ssg'
 import './styles/tokens.css'
 import './styles/base.css'
