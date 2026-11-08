@@ -152,7 +152,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 
 ## 9. Analytics : Dashility
 
-- **Script** : le paquet `@dashility/client` (moins de 2 Ko compressé), appelé dans `main.ts` côté navigateur seulement, jamais pendant le pré-rendu. L'identifiant public de l'espace (`pk_…`) et l'adresse de collecte (`https://dashility.costamask.dev/api/e`) sont dans `SITE` (`src/content/site.ts`) : ils sont publics, ce ne sont pas des secrets.
+- **Script** : le paquet npm `dashility` (moins de 2 Ko compressé), appelé dans `main.ts` côté navigateur seulement, jamais pendant le pré-rendu. L'identifiant public de l'espace (`pk_…`) et l'adresse de collecte (`https://dashility.costamask.dev/api/e`) sont dans `SITE` (`src/content/site.ts`) : ils sont publics, ce ne sont pas des secrets.
 - **Mesures** : une vue au chargement puis à chaque navigation (le chemin et, à la première vue, le domaine de provenance s'il est externe) ; un téléchargement de CV à chaque clic sur un lien qui porte `data-dashility-cv` (accueil, page Contact, pied de page). Indicateurs du PRD couverts : téléchargements du CV, études de cas ouvertes. Les prises de contact et le temps passé ne sont pas mesurés.
 - **Vie privée** : aucun cookie, aucune adresse IP ni navigateur enregistrés, conservation 6 mois ; page Confidentialité mise à jour dans les deux langues. Rien n'est envoyé en local (`localhost`), pendant les tests (`navigator.webdriver`) ni depuis un navigateur marqué par le lien `?dashility-ignore=1` (les visites du propriétaire).
 - **Panne** : si Dashility est hors ligne, l'envoi échoue en silence ; le site n'en dépend pas pour s'afficher.
