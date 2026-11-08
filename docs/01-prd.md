@@ -1,6 +1,6 @@
 # PRD — Portfolio personnel
 
-Version 0.2 — 13/10/2026 — **statut : validé** (seule question ouverte : les références)
+Version 0.3 — 09/11/2026 — **statut : validé** (seule question ouverte : les références ; v0.3 : contenu et analytics fournis par Dashility, le CMS auto-hébergé du propriétaire)
 
 ---
 
@@ -133,7 +133,9 @@ Le stage recherché est un **stage de fin d'études (Bac+5) de 6 mois, à partir
 
 **Légal** : mentions légales, politique de confidentialité, analytics conformes au RGPD.
 
-**Contenu** : projets et parcours stockés en fichiers (Markdown/JSON), séparés du code.
+**Contenu** : projets, parcours, pages et CV saisis dans Dashility, le CMS auto-hébergé du propriétaire (projet séparé), et lus au build : le site reste statique.
+
+**Analytics** : Dashility, sans cookies (vues des pages et téléchargements du CV).
 
 ### Plus tard (V2+)
 - **Formulaire de contact** : anti-spam, conforme au RGPD.
@@ -144,7 +146,7 @@ Le stage recherché est un **stage de fin d'études (Bac+5) de 6 mois, à partir
 ### Hors périmètre
 - Un template ou un thème générique. Exigence clé : le site doit être immédiatement identifiable, « comme on reconnaît un site Apple ».
 - Un blog ou des notes techniques.
-- Un back-office ou un CMS : le contenu est géré en fichiers.
+- Un back-office propre au portfolio : le contenu est géré dans Dashility, un projet séparé.
 
 ---
 
@@ -159,7 +161,7 @@ Le stage recherché est un **stage de fin d'études (Bac+5) de 6 mois, à partir
 
 **Hébergement** : auto-hébergé, avec le nom de domaine existant.
 - Serveur personnel à domicile sous Proxmox ; services déployés en conteneurs Docker, exposés via Nginx Proxy Manager.
-- Le site statique tourne dans un conteneur dédié ; les analytics auto-hébergées peuvent tourner dans un autre conteneur.
+- Le site statique tourne dans un conteneur dédié ; les analytics et le contenu (Dashility) tournent dans d'autres conteneurs, sur le même serveur.
 - Disponibilité : le serveur tourne en continu et se relance rapidement en cas d'arrêt. Le risque est jugé faible par le propriétaire. La stratégie de déploiement sera définie en phase 7.
 
 **Budget** : 0 €, donc aucun service payant.
