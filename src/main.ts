@@ -1,8 +1,10 @@
+import { initAnalytics } from 'dashility'
 import { ViteSSG } from 'vite-ssg'
 import './styles/tokens.css'
 import './styles/base.css'
 import App from './App.vue'
 import { vReveal } from './directives/reveal'
+import { SITE } from './content/site'
 import { createAppI18n } from './i18n'
 import { buildRoutes, localeFromPath } from './router/routes'
 
@@ -39,7 +41,9 @@ export const createApp = ViteSSG(
           }
         : { top: 0 }),
   },
-  ({ app, router }) => {
+  ({ app, router, isClient }) => {
+    // Navigateur seulement : rien n'est mesuré pendant le pré-rendu (architecture technique §9)
+    if (isClient) initAnalytics(SITE.analytics)
     const i18n = createAppI18n()
     app.use(i18n)
     app.directive('reveal', vReveal)

@@ -40,6 +40,14 @@ for (const { path, lang, title, h1 = title } of pages) {
   })
 }
 
+test('chaque lien vers un CV est compté par les analytics', async ({ request }) => {
+  for (const path of ['/fr/', '/en/contact/']) {
+    const links = (await (await request.get(path)).text()).match(/<a[^>]*href="\/cv\/[^>]*>/g) ?? []
+    expect(links.length).toBeGreaterThan(0)
+    for (const link of links) expect(link).toContain('data-dashility-cv')
+  }
+})
+
 test('les pages légales sont en noindex', async ({ request }) => {
   const html = await (await request.get('/en/privacy/')).text()
   expect(html).toContain('name="robots" content="noindex"')
