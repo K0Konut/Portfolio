@@ -1,13 +1,13 @@
 [
   {
     "slug": "ce-portfolio",
-    "publishedAt": "2026-11-09T17:38:45.374Z",
+    "publishedAt": "2026-11-09T18:36:13.383Z",
     "fields": {
       "type": {
         "key": "perso",
         "label": "projet perso"
       },
-      "titre": "Ce Portfolio",
+      "titre": "Ce portfolio",
       "accroche": "Ce site, de la méthode au code : PRD, direction artistique, design system, maquettes, puis intégration en Vue.",
       "code": "https://github.com/K0Konut/Portfolio",
       "demo": null,
