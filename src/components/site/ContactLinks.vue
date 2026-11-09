@@ -20,9 +20,14 @@ const { locale } = useLocale()
       <CopyButton :value="SITE.email" />
     </div>
     <div class="links">
-      <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
-        cvLabel ?? t('contact.cv')
-      }}</BaseButton>
+      <BaseButton
+        variant="primary"
+        :href="SITE.cv[locale]"
+        download
+        data-dashility-cv
+        icon="download"
+        >{{ cvLabel ?? t('contact.cv') }}</BaseButton
+      >
       <TextLink variant="standalone" :href="SITE.linkedin">LinkedIn</TextLink>
       <TextLink variant="standalone" :href="SITE.github">GitHub</TextLink>
     </div>

@@ -4,7 +4,11 @@ import { SITE } from '../../../src/content/site'
 
 ## En bref
 
-Ce site ne collecte aucune donnée personnelle : pas de cookies, pas de mesure d’audience, pas de formulaire.
+Ce site ne dépose aucun cookie et n’a pas de formulaire. Il mesure son audience de façon anonyme : il est impossible de vous reconnaître d’une visite à l’autre.
+
+## Mesure d’audience
+
+Pour savoir quelles pages sont lues et combien de CV sont téléchargés, le site envoie, à chaque page vue ou CV téléchargé, l’adresse de la page et, à votre arrivée, le nom du site d’où vous venez. Ces informations vont à Dashility, un outil de mesure que j’héberge moi-même, sur le même serveur que ce site. Il n’enregistre ni votre adresse IP, ni identifiant, ni information sur votre navigateur. Les données sont conservées six mois, puis supprimées.
 
 ## Journaux du serveur
 

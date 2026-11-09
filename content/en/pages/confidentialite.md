@@ -4,7 +4,11 @@ import { SITE } from '../../../src/content/site'
 
 ## In short
 
-This site collects no personal data: no cookies, no audience measurement, no form.
+This site sets no cookies and has no form. It measures its audience anonymously: there is no way to recognise you from one visit to the next.
+
+## Audience measurement
+
+To know which pages are read and how many CVs are downloaded, the site sends, for each page view or CV download, the page address and, when you arrive, the name of the site you came from. This information goes to Dashility, a measurement tool I host myself, on the same server as this site. It records neither your IP address, nor any identifier, nor any information about your browser. The data is kept for six months, then deleted.
 
 ## Server logs
 
