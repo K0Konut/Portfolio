@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.4 — 09/11/2026 — **statut : validé** (v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
+Version 1.5 — 09/11/2026 — **statut : validé** (v1.5 : contenu lu dans Dashility au build, §4 réécrite ; v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1 (remplacé le 09/11/2026 par Dashility, §9), déploiement par GitHub Actions et image Docker.
 
@@ -17,7 +17,7 @@ S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le d
 | Pré-rendu | **vite-ssg** | Chaque page devient un fichier HTML complet au build : le SEO lit le contenu sans JavaScript (PRD). Compatible Vite 8 et vue-router 5 |
 | Balises `head` | **@unhead/vue** | Titre, description, Open Graph, `hreflang`, `noindex`, page par page, écrits dans le HTML pré-rendu |
 | Textes de l'interface FR / EN | **vue-i18n** | Boutons, libellés, messages ; le contenu long vit dans les fichiers de contenu (§4) |
-| Contenu | **Markdown + en-tête YAML**, lu au build (`unplugin-vue-markdown`, `import.meta.glob`) | Contenu séparé du code, sans CMS (PRD) ; une étude de cas peut utiliser les composants du design system (`StatBlock`, `DeviceFrame`) |
+| Contenu | **Dashility** (CMS du propriétaire), lu au build par son API publique, copié dans le dépôt en JSON (§4) | Ajouter un projet sans ouvrir l'éditeur de code (PRD v0.3) ; le site reste statique |
 | Animations | **GSAP + ScrollTrigger** pour la section d'accueil et la frise ; **CSS + `IntersectionObserver`** pour le reste ; **WebGL 2 natif** pour le fond topographique | Repris tels quels des maquettes validées ; GSAP chargé à la demande, uniquement dans le navigateur |
 | Images | Captures optimisées au build (AVIF et WebP, plusieurs tailles), via `vite-imagetools` | Une seule capture par projet à fournir (DA §5), le site sert la bonne taille |
 | Styles | **CSS natif** : tokens du design system en variables CSS, CSS `scoped` par composant | Les tokens existent déjà ; pas de framework CSS à apprendre ni à surcharger |
@@ -28,16 +28,11 @@ Pas de Nuxt : choix du propriétaire. Le routage, le pré-rendu, l'i18n, le site
 ## 2. Structure des dossiers
 
 ```
-content/                     contenu, séparé du code (§4)
-  fr/  en/
-    projets/<slug>.md        une étude de cas par fichier
-    parcours.ts              frise (dates, lieux, rôles)
-    competences.ts           catégories et technos (+ marque « ce site »)
-    pages/                   textes longs des pages (accueil, à propos, mentions légales, confidentialité)
-  images/projets/<slug>/     capture 1440 × 900 ou 390 × 844
+content/<langue>/<type>.json copie du contenu de Dashility (§4), écrite par `npm run contenu`
 public/
   fonts/                     polices auto-hébergées (déjà en place)
-  cv/                        CV FR et EN (PDF)
+  medias/<id>/               images du contenu, téléchargées avec la copie (§4)
+  cv/                        CV FR et EN (PDF), téléchargés avec la copie
   favicon.svg                (robots.txt est écrit au build, §5)
 src/
   main.ts                    point d'entrée vite-ssg
@@ -65,7 +60,7 @@ src/
 tests/
   unit/                      Vitest + Vue Test Utils
   e2e/                       Playwright (+ contrôle d'accessibilité axe)
-scripts/                     plugin Markdown (sommaire), vérification du contenu
+scripts/                     copie du contenu (contenu.ts), vérification du contenu, CSP
 docker/  nginx.conf, compose.yml   image de production et lancement sur le serveur (§7)
 .github/workflows/           intégration continue et image (§7)
 ```
@@ -87,19 +82,42 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 
 - **Une table de routes** décrit chaque page une fois, avec son chemin dans les deux langues ; `LangSwitch` et les balises `hreflang` s'en servent pour mener à la page équivalente (architecture §2).
 - **Racine `/`** : Nginx redirige (302) vers `/fr` ou `/en` selon la langue du navigateur (`Accept-Language`), `/fr` par défaut. La réponse porte `Vary: Accept-Language` et `Cache-Control: no-store`, pour qu'aucun cache (navigateur, Nginx Proxy Manager) ne renvoie un visiteur vers la langue d'un autre. Fonctionne sans JavaScript ; `hreflang="x-default"` pointe vers `/fr`. (Question laissée ouverte par l'architecture §2, tranchée ici.)
-- **Pages de projet** : vite-ssg génère une page par fichier de `content/<langue>/projets/` (liste des routes calculée au build).
+- **Pages de projet** : vite-ssg génère une page par projet et par langue où il existe (copie du contenu, §4). Un projet sans version anglaise n'a que sa page française : `LangSwitch` mène alors à la page Projets anglaise, et la page n'a pas de `hreflang` anglais.
 - **404** : Nginx sert `/fr/404.html` pour une adresse inconnue sous `/fr`, `/en/404.html` sous `/en`, avec le code HTTP 404.
 
-## 4. Contenu en fichiers
+## 4. Contenu : Dashility
 
-> Le contenu passera dans Dashility (décision du 09/11/2026) : lu au build par son API publique, images téléchargées au build. Cette section sera réécrite au lot contenu, avant le code.
+Le contenu est saisi dans Dashility (PRD v0.3), l'espace « Portfolio » de `https://dashility.costamask.dev`. Le site le lit **au build**, jamais pendant une visite : il reste statique, et une panne de Dashility n'a aucun effet sur le site en ligne. Les libellés courts de l'interface (menus, boutons, titres de sections) restent dans `src/i18n/`.
 
-- **Étude de cas** : un fichier Markdown par projet et par langue. L'en-tête YAML porte les données de la carte et de la fiche (titre, description, étiquettes, date de sortie `AAAA-MM`, type, rôle, durée, équipe, stack, liens `code` et `demo`, capture et son appareil, `featured` pour la sélection de l'accueil, `privateCode`) ; le slug est le nom du fichier. Le corps suit le gabarit commun (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) ; les `h2` alimentent le sommaire (`StickyToc`).
-- **Pages** : les textes longs (section d'accueil, « Mon histoire »…) dans `content/<langue>/pages/` ; les libellés courts dans `src/i18n/`.
-- **Données** : parcours et compétences en TypeScript (`satisfies TimelineStep[]`), un fichier par langue comme les études de cas : le compilateur vérifie chaque champ, sans dépendance YAML ni validateur.
-- **Typage** : le chargeur (`src/content/`) valide l'en-tête de chaque fichier au build ; un champ manquant ou mal typé fait échouer le build, avec le nom du fichier.
-- **Ordre** : la page Projets trie par date de sortie, du plus récent au plus ancien ; l'accueil prend les trois projets `featured`.
-- **Contenu provisoire** : les maquettes marquent « à compléter » ce qui manque (mail, LinkedIn, dates, stacks, captures). Un script (`npm run check-content`) refuse la mise en ligne s'il reste un de ces marqueurs ou si `VITE_SITE_URL` manque. Il tourne à la construction de l'image Docker, pas sur chaque PR : le contenu reste provisoire pendant le développement.
+**Les types de contenu** (à créer dans Structure ; la clé de chaque champ est figée dans Dashility et lue par le site, elle doit être saisie telle quelle) :
+
+| Type (clé) | Sorte | Champs : clé, type, obligatoire, traduisible |
+|---|---|---|
+| Projets (`projets`) | collection | `type` choix `perso` `ecole` `entreprise` `client`, obl. · `titre` texte, obl., trad. · `accroche` texte, obl., trad. · `code`, `demo` liens · `code_prive` texte, trad. (raison quand le code n'est pas public) · `role`, `equipe` textes, obl., trad. · `periode` période au mois, avec « en cours », obl. · `stack` liste de valeurs, obl. · `a_la_une` oui / non · `capture` image, obl. (alt. trad.) · `cadre` choix `navigateur` `telephone`, obl. · `contexte`, `besoin` textes riches, obl., trad. · `contraintes` groupe (`titre` texte, `description` texte riche), trad. · `methode_intro` texte, trad. · `methode` groupe (`titre`, `description` textes), trad. · `choix` groupe (`titre` texte, `description` texte riche, `compromis` texte), trad. · `resultats` groupe (`valeur`, `libelle` textes, trad. ; `avant`, `apres` nombres) · `conclusion` texte riche, trad. · `enseignements` groupe (`titre` texte, `description` texte riche), trad. |
+| Parcours (`parcours`) | collection | `etiquette` choix `lycee` `ecole` `echange` `stage` `job`, obl. · `periode` période au mois, obl. · `titre`, `lieu`, `texte` textes, obl., trad. · `etude_de_cas` texte (slug d'un projet) |
+| Compétences (`competences`) | page unique | `categories` groupe (`titre` texte, trad. ; `competences` liste de valeurs) |
+| Qui je suis, Mon histoire, Mentions légales, Confidentialité (`qui-je-suis`, `mon-histoire`, `mentions-legales`, `confidentialite`) | pages uniques | `texte` texte riche, obl., trad. |
+| Coordonnées (`coordonnees`) | page unique | `email` texte, obl. · `linkedin`, `github`, `depot` liens, obl. |
+| CV (`cv`) | page unique | `fichier` PDF, obl., trad. |
+
+Le slug d'un projet donne son adresse (`/fr/projets/<slug>`), commun aux deux langues. Les libellés des choix (« projet perso », « stage »…) se saisissent dans Dashility, dans les deux langues.
+
+**La copie du contenu** (`scripts/contenu.ts`, `npm run contenu`) :
+- lit chaque type dans chaque langue (`GET /api/v1/content/:type?locale=fr|en`, clé `dly_…` dans `DASHILITY_KEY`) et l'écrit tel quel dans `content/<langue>/<type>.json` ;
+- télécharge les images (variantes WebP et AVIF) dans `public/medias/<id>/` et les CV dans `public/cv/cv-<langue>.pdf`, puis remplace leurs adresses par ces chemins locaux : la CSP `img-src 'self'` ne change pas, et les adresses du CV restent celles d'aujourd'hui ;
+- supprime les médias qui ne servent plus.
+
+La copie est **versionnée dans le dépôt** : le développement et le CI des PR la lisent, sans clé ni réseau. Elle se rafraîchit à la main (`npm run contenu`, clé dans `.env.local`, ignoré par Git) et part dans une PR comme le reste. La mise en ligne, elle, lit toujours Dashility en direct (§7).
+
+**Le chargement** (`src/content/`) : les chargeurs lisent ces JSON et les convertissent dans les types du site (`Project`, `TimelineStep`, `SkillCategory`), en vérifiant leur forme : un champ manquant ou renommé dans Structure fait échouer le build, avec le type et le champ en cause, au lieu de publier une page vide.
+- **Étude de cas** : une section par champ rempli, dans l'ordre du gabarit (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements), avec les mêmes briques qu'aujourd'hui (`NumberedSteps`, `StatBlock`…). Les titres des sections viennent de `src/i18n/` ; le sommaire (`StickyToc`) liste les sections présentes.
+- **Texte riche** : Dashility le renvoie en HTML, construit à partir d'une liste fermée de balises, texte échappé et liens en `http(s)` ou `mailto` seulement ; le site l'insère tel quel (`v-html`) dans `.prose`. La mise en avant arrive en `<mark>`, stylée comme l'actuel `.hl`.
+- **Périodes** : mises en forme dans la langue de la page (« oct. 2026 – en cours », « sept. 2020 – juil. 2022 »). Les projets sont triés du plus récent au plus ancien (fin de période, « en cours » d'abord), le parcours du plus ancien au plus récent.
+- **Accueil** : les trois premiers projets marqués « À la une ».
+- **Compétences** : la mise en avant des technos utilisées par ce site reste une liste dans le code (elle décrit le code du site, pas son contenu).
+- **Anglais** : Dashility ne renvoie en anglais que les entrées dont la version anglaise est complète. Ce qui manque n'apparaît pas sur le site anglais (choix du propriétaire, 09/11/2026), sans bloquer la mise en ligne.
+
+**Vérification à la mise en ligne** (`check-content`) : `VITE_SITE_URL` présent, les deux CV présents, et chaque type de contenu non vide en français.
 
 ## 5. SEO et balises `head`
 
@@ -138,9 +156,12 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 | Déclencheur | Étapes |
 |---|---|
 | PR vers `dev` ou `main` | Installation, lint, vérification des types (`vue-tsc`), tests unitaires, build, tests de bout en bout et d'accessibilité sur la version construite, Lighthouse CI (seuil 95 sur les quatre axes, PRD §3) |
-| Merge sur `main` (release), `deploiement.yml` | Les mêmes vérifications (`ci.yml` et `lint.yml` appelés), puis construction de l'image et publication sur GitHub Container Registry (`ghcr.io/k0konut/portfolio`), étiquetée `latest` et avec l'empreinte du commit, puis mise en ligne |
+| Merge sur `main` (release), `deploiement.yml` | Les mêmes vérifications (`ci.yml` et `lint.yml` appelés), puis copie du contenu depuis Dashility (`npm run contenu`), construction de l'image et publication sur GitHub Container Registry (`ghcr.io/k0konut/portfolio`), étiquetée `latest` et avec l'empreinte du commit, puis mise en ligne |
+| Publication dans Dashility (`repository_dispatch`, `dashility-publish`), même fichier | Copie du contenu, image et publication, **sans relancer les tests** : le code de `main` les a déjà passés. Objectif : en ligne moins de 5 minutes après « Publier » |
 
-**Mise en ligne** : automatique à chaque release mergée sur `main` (le merge de la PR de release par le propriétaire vaut confirmation). `deploiement.yml` publie l'image sur GHCR (paquet public) ; le serveur vient la chercher lui-même : une tâche cron de l'utilisateur `costa`, toutes les 5 minutes, lance `docker compose up -d --pull always --quiet-pull` dans `/srv/docker/Projects/costamask`, ce qui ne recrée le conteneur `costamask-site` que si l'image `latest` a changé. GitHub n'a donc aucun accès au serveur (pas de runner, pas de clé SSH) et le dépôt peut être public. Le conteneur tourne sur le réseau `npm` de Nginx Proxy Manager, qui sert `www.costamask.dev` (HTTPS, HSTS) et redirige `costamask.dev` vers `www`. Journal : `journalctl -t costamask-deploy`. Retour arrière : `IMAGE_TAG=<commit>` dans le `.env` de ce dossier (retirer la ligne pour revenir à `latest`). `docker/compose.yml` est copié à la main dans ce dossier quand il change.
+**Secrets GitHub** : `DASHILITY_KEY` (clé de lecture de l'espace Portfolio), lu seulement par l'étape de copie du contenu, hors de l'image Docker. Dans Dashility, l'URL de déploiement de l'espace est `https://api.github.com/repos/K0Konut/Portfolio/dispatches`, avec un jeton GitHub à grain fin limité à ce dépôt (permission « Contents » en écriture, la seule qui autorise `repository_dispatch`).
+
+**Mise en ligne** : automatique à chaque release mergée sur `main` et à chaque publication dans Dashility (le merge de la PR de release par le propriétaire vaut confirmation). `deploiement.yml` publie l'image sur GHCR (paquet public) ; le serveur vient la chercher lui-même : une tâche cron de l'utilisateur `costa`, toutes les minutes (5 minutes jusqu'au 09/11/2026 ; une minute pour tenir les 5 minutes entre « Publier » et la mise en ligne), lance `docker compose up -d --pull always --quiet-pull` dans `/srv/docker/Projects/costamask`, ce qui ne recrée le conteneur `costamask-site` que si l'image `latest` a changé. GitHub n'a donc aucun accès au serveur (pas de runner, pas de clé SSH) et le dépôt peut être public. Le conteneur tourne sur le réseau `npm` de Nginx Proxy Manager, qui sert `www.costamask.dev` (HTTPS, HSTS) et redirige `costamask.dev` vers `www`. Journal : `journalctl -t costamask-deploy`. Retour arrière : `IMAGE_TAG=<commit>` dans le `.env` de ce dossier (retirer la ligne pour revenir à `latest`). `docker/compose.yml` est copié à la main dans ce dossier quand il change.
 
 ## 8. Qualité
 
@@ -168,7 +189,9 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 | vite-ssg et vue-router 5 (version majeure récente) | Pré-rendu ou routes dynamiques qui cassent | Premier chantier : un squelette qui pré-rend une page FR, une EN et une étude de cas, avant tout le reste |
 | Assemblage maison (i18n, sitemap, `head`) | Oublis (une page sans `hreflang`, une route absente du sitemap) | Tout part d'une seule table de routes ; tests unitaires sur cette table |
 | WebGL sur des appareils faibles | Saccades, batterie | Démarrage différé, pause hors écran, image fixe en repli ; mesure dans Lighthouse |
-| Contenu incomplet à la mise en ligne | Marqueurs « à compléter » publiés | `check-content` bloque le build de production |
+| Contenu incomplet à la mise en ligne | Page vide ou CV manquant | Dashility exige les champs obligatoires à la publication ; `check-content` bloque le build de production |
+| Champ renommé ou supprimé dans Structure | Section absente ou build cassé | Les chargeurs vérifient la forme du JSON et font échouer le build en nommant le champ ; le site en ligne garde la version précédente |
+| Dashility hors ligne au moment d'un build | Pas de mise en ligne | Le site en ligne n'est pas touché ; relancer le déploiement depuis Dashility |
 | Serveur personnel | Indisponibilité | Risque accepté par le propriétaire (PRD) ; retour arrière par étiquette d'image |
 | Analytics par Dashility, projet du propriétaire | Mesures perdues si Dashility est hors ligne | Le site s'affiche sans lui ; pertes acceptées au volume d'un portfolio |
 
