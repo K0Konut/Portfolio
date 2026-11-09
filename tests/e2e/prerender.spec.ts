@@ -144,3 +144,14 @@ test("chaque page porte sa description et son aperçu de partage (Open Graph), l
   expect(study.match(/<meta name="description"/g)).toHaveLength(1)
   expect((await request.get('/og.jpg')).status()).toBe(200)
 })
+
+test('changer de langue sur une étude de cas traduit aussi son corps (même page, même projet)', async ({
+  page,
+}) => {
+  await page.goto('/fr/projets/ce-portfolio/')
+  await page.getByRole('link', { name: 'EN', exact: true }).first().click()
+  await expect(page).toHaveURL(/\/en\/projects\/ce-portfolio\/?$/)
+  await expect(page.getByRole('heading', { level: 2, name: 'Context' })).toBeVisible()
+  await expect(page.locator('#contexte')).not.toContainText('Étudiant')
+  await expect(page.getByText(/engineering student at ESIEA/)).toBeVisible()
+})

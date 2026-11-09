@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import StatBlock from '../../components/ui/StatBlock.vue'
 import { caseSections } from '../../content/projects'
@@ -9,7 +10,8 @@ import type { Project } from '../../content/types'
    balises, texte échappé) : ils sont insérés tels quels. Mise en forme : EtudeDeCasPage (.prose). */
 const props = defineProps<{ project: Project }>()
 const { t } = useI18n()
-const body = props.project.body
+// Calculé : en changeant de langue, la page garde la même instance (même slug)
+const body = computed(() => props.project.body)
 </script>
 
 <template>

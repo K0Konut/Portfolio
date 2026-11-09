@@ -15,7 +15,9 @@ export default defineConfig(({ mode }) => {
     const slugs = (l: Locale): string[] => {
       const file = `content/${l}/projets.json`
       if (!existsSync(file)) return []
-      return (JSON.parse(readFileSync(file, 'utf8')) as { slug: string }[]).map((e) => e.slug)
+      // null : type pas encore publié ; le chargeur des projets refuse le reste
+      const data = JSON.parse(readFileSync(file, 'utf8')) as { slug: string }[] | null
+      return (data ?? []).map((e) => e.slug)
     }
     const byLocale = LOCALES.map((l) => [l, slugs(l)] as const)
     return {

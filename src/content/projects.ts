@@ -51,7 +51,7 @@ export function parseProject(entry: unknown, where: string): Project {
   const p = f.periode
   if (!isObject(p) || !isText(p.start) || !MONTH.test(p.start)) fail('periode')
   const period = p as unknown as Period
-  if (period.end !== undefined && !MONTH.test(period.end)) fail('periode')
+  if (period.end != null && !MONTH.test(period.end)) fail('periode')
   const capture = f.capture
   if (!isObject(capture) || !isText(capture.src) || !isObject(capture.srcset)) fail('capture')
   const c = capture as Json & { srcset: Json }
@@ -73,7 +73,7 @@ export function parseProject(entry: unknown, where: string): Project {
       srcset: typeof c.srcset.webp === 'string' ? c.srcset.webp : undefined,
       alt: text('capture.alt', c.alt),
     },
-    period: { start: period.start, end: period.end, ongoing: period.ongoing === true },
+    period: { start: period.start, end: period.end ?? undefined, ongoing: period.ongoing === true },
     featured,
     meta: {
       type: choice('type').label,

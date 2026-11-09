@@ -17,6 +17,7 @@ const { to } = useLocale()
       :device="project.capture.device"
       :src="project.capture.src"
       :srcset="project.capture.srcset"
+      sizes="(min-width: 768px) 50vw, 100vw"
       :label="project.capture.label ?? project.title"
     />
     <div class="body">
