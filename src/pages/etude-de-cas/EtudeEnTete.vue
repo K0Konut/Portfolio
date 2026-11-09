@@ -5,12 +5,15 @@ import BaseButton from '../../components/ui/BaseButton.vue'
 import BaseTag from '../../components/ui/BaseTag.vue'
 import DefinitionList from '../../components/ui/DefinitionList.vue'
 import DeviceFrame from '../../components/ui/DeviceFrame.vue'
+import { formatPeriod } from '../../content/projects'
 import type { Project } from '../../content/types'
+import { useLocale } from '../../composables/useLocale'
 
 /* En-tête d'une étude de cas (design system §5), en violet : étiquettes, titre, phrase, liens ; la fiche
    à droite du titre sur bureau (colonnes 7/5) ; la capture principale en grand dessous. */
 const props = defineProps<{ project: Project }>()
 const { t } = useI18n()
+const { locale } = useLocale()
 const titleId = useId()
 
 // Code privé : la mention et sa raison, jamais un bouton désactivé
@@ -19,7 +22,10 @@ const fiche = computed(() => {
   return [
     { label: t('meta.type'), value: meta.type },
     { label: t('meta.role'), value: meta.role },
-    { label: t('meta.duration'), value: meta.duration },
+    {
+      label: t('meta.duration'),
+      value: formatPeriod(props.project.period, locale.value, t('case.ongoing')),
+    },
     { label: t('meta.team'), value: meta.team },
     { label: t('meta.stack'), value: stack.join(' · ') },
     ...(meta.privateCode
@@ -53,7 +59,8 @@ const fiche = computed(() => {
         class="shot"
         :device="project.capture.device"
         :src="project.capture.src"
-        :alt="t('case.capture', { title: project.title })"
+        :srcset="project.capture.srcset"
+        :alt="project.capture.alt"
         :label="project.capture.label ?? project.title"
         stage="var(--lime-500)"
         eager

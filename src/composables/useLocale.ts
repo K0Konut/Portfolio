@@ -1,6 +1,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { projects } from '../content/projects'
 import { routeName, type Locale, type PageName } from '../router/routes'
 
 /** Langue courante et liens vers les pages, dans cette langue ou une autre (architecture technique §3).
@@ -17,11 +18,15 @@ export function useLocale() {
     params,
   })
 
-  /** Adresse de la page courante dans une langue, ou `undefined` si elle n'y a pas d'équivalent */
-  const alternate = (l: Locale) =>
-    route.meta.alternates && route.meta.page
-      ? router.resolve({ name: routeName(route.meta.page, l), params: route.params }).href
-      : undefined
+  /** Adresse de la page courante dans une langue, ou `undefined` si elle n'y a pas d'équivalent (adresse
+      inconnue, projet sans version dans cette langue) */
+  const alternate = (l: Locale) => {
+    const page = route.meta.alternates ? route.meta.page : undefined
+    if (!page) return undefined
+    if (page === 'etude-de-cas' && !projects(l).some((p) => p.slug === route.params.slug))
+      return undefined
+    return router.resolve({ name: routeName(page, l), params: route.params }).href
+  }
 
   return { locale, to, alternate }
 }

@@ -40,8 +40,14 @@ export const PAGES = [
 
 export type PageName = (typeof PAGES)[number]['name']
 
-/** Paramètres des pages à paramètres (`:slug`), un jeu par déclinaison */
-export type PageParams = Partial<Record<PageName, readonly Record<string, string>[]>>
+/** Une déclinaison d'une page à paramètres (`:slug`) et les langues où elle existe */
+export interface ParamSet {
+  params: Record<string, string>
+  locales: readonly Locale[]
+}
+
+/** Paramètres des pages à paramètres, un jeu par déclinaison */
+export type PageParams = Partial<Record<PageName, readonly ParamSet[]>>
 
 export function routeName(page: PageName, locale: Locale): string {
   return `${page}-${locale}`
@@ -61,18 +67,19 @@ export function localeFromPath(path: string): Locale {
   return LOCALES.find((l) => path === `/${l}` || path.startsWith(`/${l}/`)) ?? DEFAULT_LOCALE
 }
 
-/** Chaque déclinaison d'une page : son chemin dans chaque langue. Une page à paramètres (`:slug`)
-    est déclinée pour chaque jeu de paramètres fourni, et n'existe pas sans. */
+/** Chaque déclinaison d'une page : son chemin dans chaque langue où elle existe. Une page à paramètres
+    (`:slug`) est déclinée pour chaque jeu de paramètres fourni, dans ses langues, et n'existe pas sans. */
 export function pageInstances(
   page: (typeof PAGES)[number],
   params: PageParams,
-): Record<Locale, string>[] {
-  const sets = page.paths[DEFAULT_LOCALE].includes(':') ? (params[page.name] ?? []) : [{}]
-  return sets.map(
-    (set) =>
-      Object.fromEntries(
-        LOCALES.map((l) => [l, fillParams(page.paths[l], set, page.name)]),
-      ) as Record<Locale, string>,
+): Partial<Record<Locale, string>>[] {
+  const sets = page.paths[DEFAULT_LOCALE].includes(':')
+    ? (params[page.name] ?? [])
+    : [{ params: {}, locales: LOCALES }]
+  return sets.map((set) =>
+    Object.fromEntries(
+      set.locales.map((l) => [l, fillParams(page.paths[l], set.params, page.name)]),
+    ),
   )
 }
 

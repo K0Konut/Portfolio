@@ -6,11 +6,13 @@ import { DEFAULT_LOCALE, LOCALES, PAGES, pageInstances, type PageParams } from '
 export function sitemapXml(siteUrl: string, params: PageParams): string {
   const urls = PAGES.filter((page) => !('noindex' in page)).flatMap((page) =>
     pageInstances(page, params).flatMap((paths) => {
+      // Seulement les langues où la page existe (un projet sans version anglaise n'est qu'en français)
+      const locales = LOCALES.filter((l) => paths[l])
       const links = [
-        ...LOCALES.map((l) => link(l, siteUrl + paths[l])),
-        link('x-default', siteUrl + paths[DEFAULT_LOCALE]),
+        ...locales.map((l) => link(l, siteUrl + paths[l])),
+        ...(paths[DEFAULT_LOCALE] ? [link('x-default', siteUrl + paths[DEFAULT_LOCALE])] : []),
       ]
-      return LOCALES.map((l) => `<url><loc>${siteUrl + paths[l]}</loc>${links.join('')}</url>`)
+      return locales.map((l) => `<url><loc>${siteUrl + paths[l]}</loc>${links.join('')}</url>`)
     }),
   )
   return [

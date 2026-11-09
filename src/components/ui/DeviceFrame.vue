@@ -8,6 +8,8 @@ withDefaults(
   defineProps<{
     device: Device
     src?: string
+    /** Variantes de l'image (attribut srcset) : le navigateur prend la plus petite qui suffit */
+    srcset?: string
     /** Description de l'écran ; vide dans une carte (le titre suffit) */
     alt?: string
     /** Nom affiché sur l'écran provisoire, sans capture */
@@ -17,7 +19,7 @@ withDefaults(
     /** Chargée tout de suite : la capture principale, visible dès l'arrivée sur la page */
     eager?: boolean
   }>(),
-  { src: undefined, alt: '', label: '', stage: undefined },
+  { src: undefined, srcset: undefined, alt: '', label: '', stage: undefined },
 )
 /** Taille des captures, par appareil */
 const SIZE = { browser: [1440, 900], phone: [390, 844] } as const
@@ -31,6 +33,8 @@ const SIZE = { browser: [1440, 900], phone: [390, 844] } as const
         <img
           v-if="src"
           :src="src"
+          :srcset="srcset"
+          :sizes="srcset ? '100vw' : undefined"
           :alt="alt"
           :width="SIZE[device][0]"
           :height="SIZE[device][1]"

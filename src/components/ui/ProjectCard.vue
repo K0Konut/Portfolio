@@ -16,6 +16,7 @@ const { to } = useLocale()
     <DeviceFrame
       :device="project.capture.device"
       :src="project.capture.src"
+      :srcset="project.capture.srcset"
       :label="project.capture.label ?? project.title"
     />
     <div class="body">

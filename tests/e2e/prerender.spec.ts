@@ -116,8 +116,8 @@ test('P2 : des projets à une étude de cas, par son sommaire, puis retour à la
   page,
 }) => {
   await page.goto('/fr/projets/')
-  await page.getByRole('link', { name: 'Ce portfolio' }).click()
-  await expect(page.getByRole('heading', { level: 1, name: 'Ce portfolio' })).toBeVisible()
+  await page.getByRole('link', { name: /ce portfolio/i }).click()
+  await expect(page.getByRole('heading', { level: 1, name: /ce portfolio/i })).toBeVisible()
   await page
     .getByRole('navigation', { name: 'Sommaire' })
     .getByRole('link', { name: 'Résultats' })
@@ -140,7 +140,7 @@ test("chaque page porte sa description et son aperçu de partage (Open Graph), l
   expect(home).toMatch(/<meta name="description" content="Portfolio de Costa Maskulov/)
   expect(home).toMatch(/<meta property="og:image" content="[^"]*\/og\.jpg"/)
   const study = await (await request.get('/fr/projets/ce-portfolio/')).text()
-  expect(study).toMatch(/<meta property="og:image" content="[^"]*\/assets\/capture-[^"]+\.png"/)
+  expect(study).toMatch(/<meta property="og:image" content="[^"]*\/medias\/[^"]+\.webp"/)
   expect(study.match(/<meta name="description"/g)).toHaveLength(1)
   expect((await request.get('/og.jpg')).status()).toBe(200)
 })

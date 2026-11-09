@@ -1,32 +1,35 @@
-import { readdirSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import vue from '@vitejs/plugin-vue'
 import Markdown from 'unplugin-vue-markdown/vite'
 import { defineConfig, loadEnv } from 'vite'
 import type {} from 'vite-ssg'
-import { tocPlugin } from './scripts/markdown.ts'
-import { prerenderPaths } from './src/router/pages.ts'
+import { LOCALES, prerenderPaths, type Locale } from './src/router/pages.ts'
 import { sitemapXml } from './src/router/sitemap.ts'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const siteUrl = (loadEnv(mode, process.cwd()).VITE_SITE_URL ?? '').replace(/\/$/, '')
-  // Une étude de cas par fichier de la langue par défaut : pages pré-rendues et sitemap partent de la même liste
-  const params = () => ({
-    'etude-de-cas': readdirSync('content/fr/projets')
-      .filter((file) => file.endsWith('.md'))
-      .map((file) => ({ slug: file.slice(0, -'.md'.length) })),
-  })
+  // Une étude de cas par projet copié, dans les langues où il existe (architecture technique §3) : pages
+  // pré-rendues et sitemap partent de la même liste. La forme des fichiers est vérifiée par leur chargeur
+  const params = () => {
+    const slugs = (l: Locale): string[] => {
+      const file = `content/${l}/projets.json`
+      if (!existsSync(file)) return []
+      return (JSON.parse(readFileSync(file, 'utf8')) as { slug: string }[]).map((e) => e.slug)
+    }
+    const byLocale = LOCALES.map((l) => [l, slugs(l)] as const)
+    return {
+      'etude-de-cas': [...new Set(byLocale.flatMap(([, s]) => s))].map((slug) => ({
+        params: { slug },
+        locales: byLocale.filter(([, s]) => s.includes(slug)).map(([l]) => l),
+      })),
+    }
+  }
   return {
     plugins: [
       vue({ include: [/\.vue$/, /\.md$/] }),
-      Markdown({
-        markdownSetup: tocPlugin,
-        // Tout l'en-tête sous un seul export, `data`, que lit le chargeur (src/content/projects.ts)
-        frontmatterPreprocess: (frontmatter, options, _id, defaults) => ({
-          head: defaults(frontmatter, options),
-          frontmatter: { data: frontmatter },
-        }),
-      }),
+      // Textes des pages (content/<langue>/pages/*.md), en attendant leur passage dans Dashility
+      Markdown({}),
     ],
     build: {
       rolldownOptions: {
