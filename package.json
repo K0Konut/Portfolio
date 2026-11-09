@@ -16,6 +16,7 @@
     "check-content": "node scripts/check-content.ts"
   },
   "dependencies": {
+    "@dashility/client": "^0.1.0",
     "@unhead/vue": "^2.1.17",
     "gsap": "^3.15.0",
     "vite-ssg": "^28.3.0",
