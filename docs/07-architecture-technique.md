@@ -1,8 +1,8 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.3 — 05/11/2026 — **statut : validé** (v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
+Version 1.4 — 09/11/2026 — **statut : validé** (v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
 
-S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1, déploiement par GitHub Actions et image Docker.
+S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1 (remplacé le 09/11/2026 par Dashility, §9), déploiement par GitHub Actions et image Docker.
 
 ---
 
@@ -92,6 +92,8 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 
 ## 4. Contenu en fichiers
 
+> Le contenu passera dans Dashility (décision du 09/11/2026) : lu au build par son API publique, images téléchargées au build. Cette section sera réécrite au lot contenu, avant le code.
+
 - **Étude de cas** : un fichier Markdown par projet et par langue. L'en-tête YAML porte les données de la carte et de la fiche (titre, description, étiquettes, date de sortie `AAAA-MM`, type, rôle, durée, équipe, stack, liens `code` et `demo`, capture et son appareil, `featured` pour la sélection de l'accueil, `privateCode`) ; le slug est le nom du fichier. Le corps suit le gabarit commun (contexte, besoin, contraintes, méthode, choix techniques, résultats, enseignements) ; les `h2` alimentent le sommaire (`StickyToc`).
 - **Pages** : les textes longs (section d'accueil, « Mon histoire »…) dans `content/<langue>/pages/` ; les libellés courts dans `src/i18n/`.
 - **Données** : parcours et compétences en TypeScript (`satisfies TimelineStep[]`), un fichier par langue comme les études de cas : le compilateur vérifie chaque champ, sans dépendance YAML ni validateur.
@@ -129,7 +131,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 **Image Docker** (multi-étapes) : une étape Node construit le site (`npm ci`, `check-content`, pré-rendu, puis `scripts/csp.ts` qui écrit la configuration Nginx avec les empreintes des scripts en ligne dans la CSP), une étape `nginx:alpine` ne contient que les fichiers statiques et `docker/nginx.conf`. Nginx sert :
 - la redirection de `/` selon la langue, les 404 par langue ;
 - des en-têtes de cache : fichiers à empreinte (JS, CSS, polices, images) en cache d'un an, HTML sans cache ;
-- des en-têtes de sécurité : `Content-Security-Policy` (scripts et styles du site seulement, aucune ressource tierce). Si le pré-rendu laisse des `<script>` ou `<style>` en ligne dans le HTML (état initial de vite-ssg, balises de @unhead/vue), un script de build calcule leur empreinte SHA-256 et l'ajoute à la politique écrite dans la configuration Nginx, sans `unsafe-inline` pour les scripts. Les composants posent des variables CSS dans l'attribut `style` (décalages d'apparition, inclinaisons), d'où `style-src-attr 'unsafe-inline'`, sans risque d'exécution de code. Les tests de bout en bout tournent sur `vite preview`, sans cette politique : elle a été vérifiée à la main dans Chromium sur l'image (05/11/2026, aucune violation sur les 14 pages) et reste à vérifier ainsi quand le HTML change de forme ; `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. Le HTTPS et HSTS restent gérés par Nginx Proxy Manager, devant le conteneur.
+- des en-têtes de sécurité : `Content-Security-Policy` (scripts et styles du site seulement, aucune ressource tierce ; `connect-src` autorise en plus `https://dashility.costamask.dev`, où partent les analytics, §9). Si le pré-rendu laisse des `<script>` ou `<style>` en ligne dans le HTML (état initial de vite-ssg, balises de @unhead/vue), un script de build calcule leur empreinte SHA-256 et l'ajoute à la politique écrite dans la configuration Nginx, sans `unsafe-inline` pour les scripts. Les composants posent des variables CSS dans l'attribut `style` (décalages d'apparition, inclinaisons), d'où `style-src-attr 'unsafe-inline'`, sans risque d'exécution de code. Les tests de bout en bout tournent sur `vite preview`, sans cette politique : elle a été vérifiée à la main dans Chromium sur l'image (05/11/2026, aucune violation sur les 14 pages) et reste à vérifier ainsi quand le HTML change de forme ; `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`. Le HTTPS et HSTS restent gérés par Nginx Proxy Manager, devant le conteneur.
 
 **GitHub Actions**
 
@@ -148,9 +150,15 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 - **Accessibilité** : contrôle axe sur chaque page dans les tests de bout en bout ; WCAG 2.2 AA (PRD) ; vérification manuelle du clavier et du lecteur d'écran avant chaque release.
 - **Performance** : Lighthouse CI ≥ 95 sur les quatre axes ; polices préchargées (Bagel Fat One, Manrope) en `font-display: swap` ; images aux dimensions déclarées ; JavaScript découpé par page ; GSAP et WebGL chargés après le premier affichage.
 
-## 9. Ce qui n'est pas en V1
+## 9. Analytics : Dashility
 
-- **Analytics** : aucun en V1 (choix du propriétaire). Les indicateurs du PRD (prises de contact, téléchargements du CV, études de cas ouvertes) ne sont pas mesurés au lancement ; une solution auto-hébergée sans cookies (Umami) pourra s'ajouter plus tard, avec une mise à jour de la page Confidentialité.
+- **Script** : le paquet npm `@dashility/client` (moins de 2 Ko compressé), appelé dans `main.ts` côté navigateur seulement, jamais pendant le pré-rendu. L'identifiant public de l'espace (`pk_…`) et l'adresse de collecte (`https://dashility.costamask.dev/api/e`) sont dans `SITE` (`src/content/site.ts`) : ils sont publics, ce ne sont pas des secrets.
+- **Mesures** : une vue au chargement puis à chaque navigation (le chemin et, à la première vue, le domaine de provenance s'il est externe) ; un téléchargement de CV à chaque clic sur un lien qui porte `data-dashility-cv` (accueil, page Contact, pied de page). Indicateurs du PRD couverts : téléchargements du CV, études de cas ouvertes. Les prises de contact et le temps passé ne sont pas mesurés.
+- **Vie privée** : aucun cookie, aucune adresse IP ni navigateur enregistrés, conservation 6 mois ; page Confidentialité mise à jour dans les deux langues. Rien n'est envoyé en local (`localhost`), pendant les tests (`navigator.webdriver`) ni depuis un navigateur marqué par le lien `?dashility-ignore=1` (les visites du propriétaire).
+- **Panne** : si Dashility est hors ligne, l'envoi échoue en silence ; le site n'en dépend pas pour s'afficher.
+
+## 9 bis. Ce qui n'est pas en V1
+
 - **Formulaire de contact**, filtres de projets, terminal interactif : V2 (PRD).
 
 ## 10. Risques
@@ -162,7 +170,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 | WebGL sur des appareils faibles | Saccades, batterie | Démarrage différé, pause hors écran, image fixe en repli ; mesure dans Lighthouse |
 | Contenu incomplet à la mise en ligne | Marqueurs « à compléter » publiés | `check-content` bloque le build de production |
 | Serveur personnel | Indisponibilité | Risque accepté par le propriétaire (PRD) ; retour arrière par étiquette d'image |
-| Pas d'analytics | Indicateurs du PRD non mesurés | Assumé pour la V1 ; ajout possible sans toucher au reste |
+| Analytics par Dashility, projet du propriétaire | Mesures perdues si Dashility est hors ligne | Le site s'affiche sans lui ; pertes acceptées au volume d'un portfolio |
 
 ## 11. Ordre de construction
 

@@ -107,9 +107,14 @@ onBeforeUnmount(() => {
             {{ t('hero.promise') }} <span class="hl">{{ t('hero.promiseHighlight') }}</span>
           </p>
           <div class="actions">
-            <BaseButton variant="primary" :href="SITE.cv[locale]" download icon="download">{{
-              t('contact.cv')
-            }}</BaseButton>
+            <BaseButton
+              variant="primary"
+              :href="SITE.cv[locale]"
+              download
+              data-dashility-cv
+              icon="download"
+              >{{ t('contact.cv') }}</BaseButton
+            >
             <BaseButton :to="to('contact')">{{ t('hero.contact') }}</BaseButton>
           </div>
         </ScrollParallax>

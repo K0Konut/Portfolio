@@ -19,14 +19,24 @@ const year = new Date().getFullYear()
           <h2>{{ t('footer.cv') }}</h2>
           <ul>
             <li>
-              <TextLink variant="standalone" :href="SITE.cv.fr" download icon="download">{{
-                t('footer.cvFr')
-              }}</TextLink>
+              <TextLink
+                variant="standalone"
+                :href="SITE.cv.fr"
+                download
+                data-dashility-cv
+                icon="download"
+                >{{ t('footer.cvFr') }}</TextLink
+              >
             </li>
             <li>
-              <TextLink variant="standalone" :href="SITE.cv.en" download icon="download">{{
-                t('footer.cvEn')
-              }}</TextLink>
+              <TextLink
+                variant="standalone"
+                :href="SITE.cv.en"
+                download
+                data-dashility-cv
+                icon="download"
+                >{{ t('footer.cvEn') }}</TextLink
+              >
             </li>
           </ul>
         </div>
