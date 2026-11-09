@@ -1,0 +1,207 @@
+[
+  {
+    "slug": "ce-portfolio",
+    "publishedAt": "2026-11-09T17:38:45.374Z",
+    "fields": {
+      "type": {
+        "key": "perso",
+        "label": "projet perso"
+      },
+      "titre": "Ce Portfolio",
+      "accroche": "Ce site, de la méthode au code : PRD, direction artistique, design system, maquettes, puis intégration en Vue.",
+      "code": "https://github.com/K0Konut/Portfolio",
+      "demo": null,
+      "code_prive": null,
+      "role": "Conception, design et développement",
+      "equipe": "Seul",
+      "periode": {
+        "start": "2026-10",
+        "ongoing": true
+      },
+      "stack": [
+        "Vue 3",
+        "TypeScript",
+        "Vite",
+        "GSAP",
+        "Docker"
+      ],
+      "a_la_une": true,
+      "capture": {
+        "alt": "Page d'accueil du portfolio : le nom, l'accroche et les courbes de niveau animées en fond.",
+        "width": 1440,
+        "height": 900,
+        "src": "/medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1440.webp",
+        "srcset": {
+          "webp": "/medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/640.webp 640w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1280.webp 1280w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1440.webp 1440w",
+          "avif": "/medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/640.avif 640w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1280.avif 1280w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1440.avif 1440w"
+        }
+      },
+      "cadre": {
+        "key": "navigateur",
+        "label": "navigateur"
+      },
+      "contexte": {
+        "html": "<p>Étudiant ingénieur à l’ESIEA, je cherche un stage de fin d’études en développement full-stack.</p><p>Jusqu’ici, je me présentais avec un CV, LinkedIn et GitHub. Ces supports listent des compétences, mais ne montrent ni ma méthode, ni ma créativité, ni qui je suis : rien ne permet à un recruteur de me reconnaître.</p>"
+      },
+      "besoin": {
+        "html": "<p>Un seul support qui rende visibles la rigueur d’un ingénieur, la créativité d’un développeur web et ma personnalité.</p><p>Deux lecteurs à servir. La recruteuse RH, qui trie vite et sans bagage technique, doit comprendre le profil et récupérer le CV en un clic. Le tech lead veut lire une étude de cas, comprendre les choix et ouvrir le code.</p>"
+      },
+      "contraintes": [
+        {
+          "titre": "Budget.",
+          "description": {
+            "html": "<p><strong>0 €.</strong> Aucun service payant.</p>"
+          }
+        },
+        {
+          "titre": "Auto-hébergé.",
+          "description": {
+            "html": "<p>Sur mon serveur personnel (Proxmox), dans un conteneur Docker, derrière Nginx Proxy Manager.</p>"
+          }
+        },
+        {
+          "titre": "Référencement.",
+          "description": {
+            "html": "<p>Des pages pré-rendues, en français et en anglais.</p>"
+          }
+        },
+        {
+          "titre": "Accessibilité.",
+          "description": {
+            "html": "<p>WCAG 2.2 niveau AA ; toutes les animations respectent « réduire les animations ».</p>"
+          }
+        },
+        {
+          "titre": "Temps variable.",
+          "description": {
+            "html": "<p>Ma disponibilité change d’une semaine à l’autre : le travail est découpé en petites étapes livrables.</p>"
+          }
+        }
+      ],
+      "methode_intro": "Sept phases, dans l’ordre, chacune avec son livrable, sa branche Git et sa validation avant de passer à la suivante.",
+      "methode": [
+        {
+          "titre": "PRD.",
+          "description": {
+            "html": "<p>Ce qu’on construit et pourquoi.</p>"
+          }
+        },
+        {
+          "titre": "Territoire de marque.",
+          "description": {
+            "html": "<p>Positionnement, valeurs, ton de voix.</p>"
+          }
+        },
+        {
+          "titre": "Direction artistique.",
+          "description": {
+            "html": "<p>Couleurs, typographie, mouvement.</p>"
+          }
+        },
+        {
+          "titre": "Architecture et UX.",
+          "description": {
+            "html": "<p>Arborescence, parcours, wireframes.</p>"
+          }
+        },
+        {
+          "titre": "Design system.",
+          "description": {
+            "html": "<p>Tokens et composants, avec leurs états.</p>"
+          }
+        },
+        {
+          "titre": "Maquettes.",
+          "description": {
+            "html": "<p>Les écrans clés, construits en code.</p>"
+          }
+        },
+        {
+          "titre": "Code.",
+          "description": {
+            "html": "<p>L’intégration en Vue.</p>"
+          }
+        }
+      ],
+      "choix": [
+        {
+          "titre": "Un design system avant les écrans",
+          "description": {
+            "html": "<p>Des composants génériques, des « briques », tous construits sur des tokens : aucune valeur en dur. Chacun a sa page dans un catalogue de développement, avec ses réglages en direct, ses états et le mode « mouvement réduit ».</p>"
+          },
+          "compromis": "plus de temps avant le premier écran, moins de retouches ensuite."
+        },
+        {
+          "titre": "Le fond animé en WebGL natif",
+          "description": {
+            "html": "<p>Les courbes de niveau de l’accueil reprennent un composant écrit pour une bibliothèque 3D, réécrit en WebGL 2 sans elle : une dépendance de moins. Image fixe en mouvement réduit, pause hors de l’écran.</p>"
+          },
+          "compromis": "un shader à maintenir soi-même."
+        },
+        {
+          "titre": "Tout auto-hébergé",
+          "description": {
+            "html": "<p>Polices servies par le site, conteneur Docker sur mon serveur, mesure d'audience avec mon propre outil, Dashility : aucun service tiers, pas de bandeau de consentement.</p>"
+          },
+          "compromis": "la disponibilité dépend de mon serveur."
+        },
+        {
+          "titre": "Vue 3, Vite et TypeScript, sans Nuxt",
+          "description": {
+            "html": "<p>Chaque page est pré-rendue en HTML complet avec vite-ssg, pour le référencement. Le routage bilingue, les balises head et le sitemap sont assemblés à la main, en petits morceaux lisibles.</p>"
+          },
+          "compromis": "plus de code maison qu’avec Nuxt."
+        }
+      ],
+      "resultats": [
+        {
+          "valeur": "7",
+          "libelle": "étapes, du PRD au code, chacune validée avant la suivante",
+          "avant": null,
+          "apres": null
+        },
+        {
+          "valeur": "32",
+          "libelle": "composants génériques, chacun dans le catalogue",
+          "avant": null,
+          "apres": null
+        },
+        {
+          "valeur": "105",
+          "libelle": "décisions écrites, chacune avec sa raison",
+          "avant": null,
+          "apres": null
+        },
+        {
+          "valeur": "6",
+          "libelle": "fonds de section, contre un seul dans la première direction artistique",
+          "avant": 1,
+          "apres": 6
+        }
+      ],
+      "conclusion": {
+        "html": "<p>Lighthouse : 100 en performance, accessibilité, bonnes pratiques et référencement.</p>"
+      },
+      "enseignements": [
+        {
+          "titre": "Comparer plutôt que décrire.",
+          "description": {
+            "html": "<p>Décider devant deux à six versions affichées va plus vite que débattre sur un document.</p>"
+          }
+        },
+        {
+          "titre": "Garder sa méthode.",
+          "description": {
+            "html": "<p>Un assistant de design automatique a été essayé deux fois, puis retiré : il imposait son propre déroulé à un projet qui avait déjà le sien.</p>"
+          }
+        },
+        {
+          "titre": "Écrire les décisions.",
+          "description": {
+            "html": "<p>Une ligne et une raison par décision : on ne revient pas deux fois sur le même choix.</p>"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,207 @@
+[
+  {
+    "slug": "ce-portfolio",
+    "publishedAt": "2026-11-09T17:38:45.374Z",
+    "fields": {
+      "type": {
+        "key": "perso",
+        "label": "personal project"
+      },
+      "titre": "This Portfolio",
+      "accroche": "This site, from methodology to code: PRD, art direction, design system, mockups, and finally implementation in Vue.",
+      "code": "https://github.com/K0Konut/Portfolio",
+      "demo": null,
+      "code_prive": null,
+      "role": "Conception, design, and development",
+      "equipe": "Alone",
+      "periode": {
+        "start": "2026-10",
+        "ongoing": true
+      },
+      "stack": [
+        "Vue 3",
+        "TypeScript",
+        "Vite",
+        "GSAP",
+        "Docker"
+      ],
+      "a_la_une": true,
+      "capture": {
+        "alt": "Portfolio homepage: the name, the tagline, and animated contour lines in the background.",
+        "width": 1440,
+        "height": 900,
+        "src": "/medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1440.webp",
+        "srcset": {
+          "webp": "/medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/640.webp 640w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1280.webp 1280w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1440.webp 1440w",
+          "avif": "/medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/640.avif 640w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1280.avif 1280w, /medias/2fbe3cff-a236-4fbd-83cf-e6260955f566/1440.avif 1440w"
+        }
+      },
+      "cadre": {
+        "key": "navigateur",
+        "label": "browser"
+      },
+      "contexte": {
+        "html": "<p>As an engineering student at ESIEA, I am looking for a final-year internship in full-stack development.</p><p>Until now, I have presented myself using a CV, LinkedIn, and GitHub. While these resources list my skills, they fail to showcase my methodology, my creativity, or who I am—leaving recruiters with no real way to get a sense of my unique identity.</p>"
+      },
+      "besoin": {
+        "html": "<p>A single platform that showcases the rigor of an engineer, the creativity of a web developer, and my own personality.</p><p>Two types of readers to cater to. The HR recruiter—who screens quickly and lacks a technical background—needs to grasp my profile and be able to download my CV in one click. The tech lead, meanwhile, wants to read a case study, understand the rationale behind my choices, and access the code.</p>"
+      },
+      "contraintes": [
+        {
+          "titre": "Budget.",
+          "description": {
+            "html": "<p>€0. No paid services.</p>"
+          }
+        },
+        {
+          "titre": "Self-hosted.",
+          "description": {
+            "html": "<p>On my personal server (Proxmox), inside a Docker container, behind Nginx Proxy Manager.</p>"
+          }
+        },
+        {
+          "titre": "Search engine optimization.",
+          "description": {
+            "html": "<p>Pre-rendered pages, in French and English.</p>"
+          }
+        },
+        {
+          "titre": "Accessibility.",
+          "description": {
+            "html": "<p>WCAG 2.2 Level AA; all animations respect the \"reduce motion\" setting.</p>"
+          }
+        },
+        {
+          "titre": "Variable time.",
+          "description": {
+            "html": "<p>My availability changes from one week to the next: the work is broken down into small, deliverable stages.</p>"
+          }
+        }
+      ],
+      "methode_intro": "Seven phases, in sequence, each with its own deliverable, Git branch, and validation step before moving on to the next.",
+      "methode": [
+        {
+          "titre": "PRD.",
+          "description": {
+            "html": "<p>Ce qu’on construit et pourquoi.</p>"
+          }
+        },
+        {
+          "titre": "Territoire de marque.",
+          "description": {
+            "html": "<p>Positionnement, valeurs, ton de voix.</p>"
+          }
+        },
+        {
+          "titre": "Direction artistique.",
+          "description": {
+            "html": "<p>Couleurs, typographie, mouvement.</p>"
+          }
+        },
+        {
+          "titre": "Architecture et UX.",
+          "description": {
+            "html": "<p>Arborescence, parcours, wireframes.</p>"
+          }
+        },
+        {
+          "titre": "Design system.",
+          "description": {
+            "html": "<p>Tokens et composants, avec leurs états.</p>"
+          }
+        },
+        {
+          "titre": "Maquettes.",
+          "description": {
+            "html": "<p>Les écrans clés, construits en code.</p>"
+          }
+        },
+        {
+          "titre": "Code.",
+          "description": {
+            "html": "<p>L’intégration en Vue.</p>"
+          }
+        }
+      ],
+      "choix": [
+        {
+          "titre": "A design system before screens",
+          "description": {
+            "html": "<p>Generic components, “bricks”, all built on tokens: no hard value. Each has its own page in a development catalog, with its live settings, states and “reduced movement” mode.</p>"
+          },
+          "compromis": "More time before the first screen, fewer revisions afterward."
+        },
+        {
+          "titre": "The background is animated using native WebGL.",
+          "description": {
+            "html": "<p>The contour lines on the landing page are based on a component originally written for a 3D library, now rewritten in WebGL 2 without that dependency—one less dependency to manage. It is a static image with subtle motion, which pauses when moved off-screen.</p>"
+          },
+          "compromis": "a shader to maintain yourself."
+        },
+        {
+          "titre": "All self-hosted",
+          "description": {
+            "html": "<p>Fonts served by the site, a Docker container on my own server, audience measurement using my own tool—Dashility: no third-party services, no consent banner.</p>"
+          },
+          "compromis": "Availability depends on my server."
+        },
+        {
+          "titre": "Vue 3, Vite, and TypeScript, without Nuxt",
+          "description": {
+            "html": "<p>Each page is pre-rendered as full HTML using vite-ssg, for SEO purposes. Bilingual routing, head tags, and the sitemap are assembled by hand, in small, readable segments.</p>"
+          },
+          "compromis": "more custom code than with Nuxt."
+        }
+      ],
+      "resultats": [
+        {
+          "valeur": "7",
+          "libelle": "stages, from PRD to code, with each one validated before the next",
+          "avant": null,
+          "apres": null
+        },
+        {
+          "valeur": "32",
+          "libelle": "generic components, each in the catalog",
+          "avant": null,
+          "apres": null
+        },
+        {
+          "valeur": "105",
+          "libelle": "written decisions, each with its reasoning",
+          "avant": null,
+          "apres": null
+        },
+        {
+          "valeur": "6",
+          "libelle": "section funds, as opposed to just one in the first artistic direction",
+          "avant": 1,
+          "apres": 6
+        }
+      ],
+      "conclusion": {
+        "html": "<p>Lighthouse: 100 in performance, accessibility, best practices, and SEO.</p>"
+      },
+      "enseignements": [
+        {
+          "titre": "Compare rather than describe.",
+          "description": {
+            "html": "<p>Making a decision when presented with two to six displayed versions is faster than debating over a document.</p>"
+          }
+        },
+        {
+          "titre": "Stick to one's method.",
+          "description": {
+            "html": "<p>An automated design assistant was tested twice and subsequently removed: it imposed its own workflow on a project that already had one of its own.</p>"
+          }
+        },
+        {
+          "titre": "Write the decisions.",
+          "description": {
+            "html": "<p>One line and one reason per decision: a choice, once made, is not revisited.</p>"
+          }
+        }
+      ]
+    }
+  }
+]
