@@ -151,6 +151,10 @@ describe('parcours et compétences', () => {
     expect(() => parseTimeline([step('a', '2020-09', { lieu: '' })], 'parcours.json')).toThrow(
       '« lieu »',
     )
+    // Une fin avant le début
+    expect(() =>
+      parseTimeline([step('a', '2022-09', { periode: { start: '2022-09', end: '2021-07' } })], 'p'),
+    ).toThrow('« periode »')
   })
 
   it('met en avant les technos de ce site, quelle que soit la casse', () => {

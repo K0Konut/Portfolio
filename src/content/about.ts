@@ -1,6 +1,6 @@
 import { LOCALES, type Locale } from '../router/pages'
-import { isObject, isText, MONTH, type Json } from './check'
-import type { Period, SkillCategory, TimelineStep } from './types'
+import { isObject, isText, parsePeriod, type Json } from './check'
+import type { SkillCategory, TimelineStep } from './types'
 
 /* Parcours et compétences : la copie du contenu de Dashility, content/<langue>/parcours.json et
    competences.json (architecture technique §4). La forme est vérifiée au chargement : un champ manquant ou
@@ -36,26 +36,20 @@ export function parseTimeline(data: unknown, where: string): TimelineStep[] {
     .map((entry): TimelineStep => {
       const e = isObject(entry) ? entry : {}
       const f: Json = isObject(e.fields) ? e.fields : {}
+      const slug = isText(e.slug) ? e.slug : '?'
       const fail = (field: string): never => {
-        throw new Error(
-          `${where}, étape « ${String(e.slug)} » : champ « ${field} » manquant ou invalide`,
-        )
+        throw new Error(`${where}, étape « ${slug} » : champ « ${field} » manquant ou invalide`)
       }
+      if (slug === '?') fail('slug')
       const text = (key: string) => (isText(f[key]) ? f[key].trim() : fail(key))
       const kind = f.etiquette
-      const p = f.periode
       if (!isObject(kind) || !isText(kind.label)) fail('etiquette')
-      if (!isObject(p) || !isText(p.start) || !MONTH.test(p.start)) fail('periode')
-      const period = p as unknown as Period
-      if (period.end != null && !MONTH.test(period.end)) fail('periode')
+      const period = parsePeriod(f.periode) ?? fail('periode')
       const caseStudy = f.etude_de_cas
+      if (caseStudy != null && typeof caseStudy !== 'string') fail('etude_de_cas')
       return {
         kind: (kind as Json & { label: string }).label,
-        period: {
-          start: period.start,
-          end: period.end ?? undefined,
-          ongoing: period.ongoing === true,
-        },
+        period,
         title: text('titre'),
         place: text('lieu'),
         text: text('texte'),

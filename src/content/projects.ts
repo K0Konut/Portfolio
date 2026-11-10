@@ -1,5 +1,5 @@
 import { LOCALES, type Locale } from '../router/pages'
-import { isObject, isText, MONTH, type Json } from './check'
+import { isObject, isText, parsePeriod, type Json } from './check'
 import type { CaseItem, Device, Period, Project, Stat } from './types'
 
 /* Chargeur des études de cas : la copie du contenu de Dashility, content/<langue>/projets.json
@@ -45,10 +45,7 @@ export function parseProject(entry: unknown, where: string): Project {
     v === null || v === undefined ? undefined : typeof v === 'number' ? v : fail(key)
 
   if (slug === '?') fail('slug')
-  const p = f.periode
-  if (!isObject(p) || !isText(p.start) || !MONTH.test(p.start)) fail('periode')
-  const period = p as unknown as Period
-  if (period.end != null && !MONTH.test(period.end)) fail('periode')
+  const period = parsePeriod(f.periode) ?? fail('periode')
   const capture = f.capture
   if (!isObject(capture) || !isText(capture.src) || !isObject(capture.srcset)) fail('capture')
   const c = capture as Json & { srcset: Json }
@@ -70,7 +67,7 @@ export function parseProject(entry: unknown, where: string): Project {
       srcset: typeof c.srcset.webp === 'string' ? c.srcset.webp : undefined,
       alt: text('capture.alt', c.alt),
     },
-    period: { start: period.start, end: period.end ?? undefined, ongoing: period.ongoing === true },
+    period,
     featured,
     meta: {
       type: choice('type').label,

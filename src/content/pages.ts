@@ -1,4 +1,4 @@
-import type { Locale } from '../router/pages'
+import { LOCALES, type Locale } from '../router/pages'
 import { isObject } from './check'
 
 /* Textes longs des pages (« Qui je suis », « Mon histoire », mentions légales, confidentialité) : la copie du
@@ -9,15 +9,23 @@ const files = import.meta.glob<unknown>(
   { eager: true, import: 'default' },
 )
 
-export type PageTextName = 'qui-je-suis' | 'mon-histoire' | 'mentions-legales' | 'confidentialite'
+const NAMES = ['qui-je-suis', 'mon-histoire', 'mentions-legales', 'confidentialite'] as const
+export type PageTextName = (typeof NAMES)[number]
 
-/** Le texte d'une page, en HTML déjà filtré par Dashility ; absent tant qu'il n'est pas publié dans la langue */
-export function pageText(locale: Locale, name: PageTextName): string | undefined {
-  const file = `/content/${locale}/${name}.json`
+function parse(file: string): string | undefined {
   const data = files[file]
+  // Pas encore publié (null), ou pas complet en anglais : rien ; check-content exige le français
   if (data == null) return undefined
   const texte = isObject(data) && isObject(data.fields) ? data.fields.texte : undefined
   if (!isObject(texte) || typeof texte.html !== 'string')
     throw new Error(`${file} : champ « texte » manquant ou invalide`)
   return texte.html
 }
+// Vérifiés au chargement, comme les autres contenus : une copie invalide fait échouer le build
+const TEXTS = Object.fromEntries(
+  LOCALES.flatMap((l) => NAMES.map((n) => [`${l}/${n}`, parse(`/content/${l}/${n}.json`)])),
+)
+
+/** Le texte d'une page, en HTML déjà filtré par Dashility ; absent tant qu'il n'est pas publié dans la langue */
+export const pageText = (locale: Locale, name: PageTextName): string | undefined =>
+  TEXTS[`${locale}/${name}`]
