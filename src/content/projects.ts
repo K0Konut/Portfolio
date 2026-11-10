@@ -1,4 +1,5 @@
 import { LOCALES, type Locale } from '../router/pages'
+import { isObject, isText, MONTH, type Json } from './check'
 import type { CaseItem, Device, Period, Project, Stat } from './types'
 
 /* Chargeur des études de cas : la copie du contenu de Dashility, content/<langue>/projets.json
@@ -9,10 +10,6 @@ const files = import.meta.glob<unknown>('/content/*/projets.json', {
   import: 'default',
 })
 
-type Json = Record<string, unknown>
-const isText = (v: unknown): v is string => typeof v === 'string' && v.trim() !== ''
-const isObject = (v: unknown): v is Json => typeof v === 'object' && v !== null && !Array.isArray(v)
-const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
 const DEVICES: Record<string, Device> = { navigateur: 'browser', telephone: 'phone' }
 
 /** Vérifie une entrée de Dashility (type `projets`) et la met en forme ; `where` nomme le fichier */

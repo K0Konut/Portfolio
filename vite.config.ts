@@ -1,6 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import vue from '@vitejs/plugin-vue'
-import Markdown from 'unplugin-vue-markdown/vite'
 import { defineConfig, loadEnv } from 'vite'
 import type {} from 'vite-ssg'
 import { LOCALES, prerenderPaths, type Locale } from './src/router/pages.ts'
@@ -28,11 +27,7 @@ export default defineConfig(({ mode }) => {
     }
   }
   return {
-    plugins: [
-      vue({ include: [/\.vue$/, /\.md$/] }),
-      // Textes des pages (content/<langue>/pages/*.md), en attendant leur passage dans Dashility
-      Markdown({}),
-    ],
+    plugins: [vue()],
     build: {
       rolldownOptions: {
         output: {

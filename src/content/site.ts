@@ -1,11 +1,22 @@
-/* Coordonnées et liens du site, en un seul endroit (pied de page, « Parlons-en », page Contact).
-   Les valeurs marquées en commentaire sont provisoires : scripts/check-content.ts bloque la mise en ligne. */
+import { isObject, isText, type Json } from './check'
+import coordonnees from '../../content/fr/coordonnees.json'
+
+/* Coordonnées et liens du site, en un seul endroit (pied de page, « Parlons-en », page Contact). Les
+   coordonnées viennent de Dashility (type `coordonnees`, copie en français : elles ne se traduisent pas). */
+const FILE = 'content/fr/coordonnees.json'
+const fields: Json = isObject(coordonnees) && isObject(coordonnees.fields) ? coordonnees.fields : {}
+const field = (key: string): string => {
+  const value = fields[key]
+  if (!isText(value)) throw new Error(`${FILE} : champ « ${key} » manquant ou invalide`)
+  return value.trim()
+}
+
 export const SITE = {
   name: 'Costa Maskulov',
-  email: 'maskulov12.pro@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/costa-maskulov/',
-  github: 'https://github.com/K0Konut',
-  repository: 'https://github.com/K0Konut/Portfolio',
+  email: field('email'),
+  linkedin: field('linkedin'),
+  github: field('github'),
+  repository: field('depot'),
   cv: { fr: '/cv/cv-fr.pdf', en: '/cv/cv-en.pdf' },
   // Mesure d'audience Dashility (architecture technique §9) : identifiant public de l'espace, pas un secret
   analytics: {

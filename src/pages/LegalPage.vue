@@ -8,7 +8,7 @@ import PageSection from '../components/mise-en-page/PageSection.vue'
 import { useLocale } from '../composables/useLocale'
 import { pageText } from '../content/pages'
 
-// Mentions légales et confidentialité : le titre, puis le texte en Markdown (content/<langue>/pages/<page>.md)
+// Mentions légales et confidentialité : le titre, puis le texte saisi dans Dashility (src/content/pages.ts)
 const route = useRoute()
 const { t } = useI18n()
 const { locale } = useLocale()
@@ -23,7 +23,8 @@ const text = computed(() => pageText(locale.value, page.value))
     <PageIntro :title="t(TITLES[page])" />
     <SectionWave :seed="1" from="violet" to="nuit" />
     <PageSection>
-      <component :is="text" v-if="text" class="prose legal" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-if="text" class="prose legal" v-html="text" />
     </PageSection>
   </main>
 </template>

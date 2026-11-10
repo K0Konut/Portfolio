@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { sitemapXml } from '../../src/router/sitemap'
-import { skills, timeline } from '../../src/content/about'
+import { parseSkills, parseTimeline, skills, timeline } from '../../src/content/about'
 import {
   caseSections,
   featuredProjects,
@@ -121,6 +121,50 @@ describe('parseProjects', () => {
 
   it('refuse autre chose qu’une liste', () => {
     expect(() => parseProjects(null, FILE)).toThrow(FILE)
+  })
+})
+
+describe('parcours et compétences', () => {
+  const step = (slug: string, start: string, fields: Record<string, unknown> = {}) => ({
+    slug,
+    fields: {
+      etiquette: { key: 'stage', label: 'stage' },
+      periode: { start, end: null },
+      titre: ' Un stage ',
+      lieu: 'Paris',
+      texte: 'Du code.',
+      etude_de_cas: null,
+      ...fields,
+    },
+  })
+
+  it('trie le parcours du plus ancien au plus récent, sans espaces en trop', () => {
+    const list = parseTimeline([step('b', '2024-04'), step('a', '2020-09')], 'parcours.json')
+    expect(list.map((s) => s.period.start)).toEqual(['2020-09', '2024-04'])
+    expect(list[0]).toMatchObject({ kind: 'stage', title: 'Un stage', caseStudy: undefined })
+  })
+
+  it('refuse une étape incomplète, avec le fichier et l’étape', () => {
+    expect(() => parseTimeline([step('a', '2020')], 'parcours.json')).toThrow(
+      'parcours.json, étape « a » : champ « periode »',
+    )
+    expect(() => parseTimeline([step('a', '2020-09', { lieu: '' })], 'parcours.json')).toThrow(
+      '« lieu »',
+    )
+  })
+
+  it('met en avant les technos de ce site, quelle que soit la casse', () => {
+    const data = { fields: { categories: [{ titre: ' front', competences: ['vue.js', 'Nuxt'] }] } }
+    expect(parseSkills(data, 'competences.json')).toEqual([
+      {
+        title: 'front',
+        skills: [
+          { name: 'vue.js', site: true },
+          { name: 'Nuxt', site: undefined },
+        ],
+      },
+    ])
+    expect(() => parseSkills({ fields: {} }, 'competences.json')).toThrow('« categories »')
   })
 })
 
