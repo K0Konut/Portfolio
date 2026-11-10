@@ -1,0 +1,57 @@
+{
+  "publishedAt": "2026-11-10T14:52:22.452Z",
+  "fields": {
+    "categories": [
+      {
+        "titre": "front",
+        "competences": [
+          "Vue.js",
+          "Nuxt.js",
+          "TypeScript",
+          "JavaScript",
+          "HTML",
+          "CSS",
+          "Vite"
+        ]
+      },
+      {
+        "titre": "back",
+        "competences": [
+          "Node.js",
+          "Express",
+          "Python",
+          "REST API",
+          "MongoDB",
+          "SQL"
+        ]
+      },
+      {
+        "titre": "UI/UX",
+        "competences": [
+          "Figma",
+          "Responsive",
+          "Accessibility"
+        ]
+      },
+      {
+        "titre": "tools and deployment",
+        "competences": [
+          "Git",
+          "GitHub",
+          "npm",
+          "Docker",
+          "Linux",
+          "Proxmox",
+          "Nginx Proxy Manager"
+        ]
+      },
+      {
+        "titre": "method",
+        "competences": [
+          "Sprints",
+          "Daily"
+        ]
+      }
+    ]
+  }
+}

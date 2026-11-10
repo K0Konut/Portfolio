@@ -1,10 +1,15 @@
-# Mise en ligne de chaque release (architecture technique §7) : merge sur main → vérifications → image sur GHCR.
-# Le serveur vient chercher l'image lui-même (tâche cron) : GitHub n'a aucun accès au serveur, le dépôt peut être public.
+# Mise en ligne (architecture technique §7) : à chaque release (merge sur main → vérifications) et à chaque
+# publication dans Dashility (repository_dispatch, sans tests : le code de main les a déjà passés). Le contenu est
+# copié depuis Dashility, puis l'image part sur GHCR. Le serveur vient la chercher lui-même (tâche cron) :
+# GitHub n'a aucun accès au serveur, le dépôt peut être public.
 name: Déploiement
 
 on:
   push:
     branches: [main]
+  # Envoyé par Dashility quelques secondes après la dernière publication ; il porte toujours sur main
+  repository_dispatch:
+    types: [dashility-publish]
 
 # Une mise en ligne à la fois, jamais annulée en cours de route
 concurrency:
@@ -13,19 +18,33 @@ concurrency:
 
 jobs:
   ci:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/ci.yml
 
   lint:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/lint.yml
 
   image:
     needs: [ci, lint]
+    # Vérifications passées (release) ou sautées (publication dans Dashility), jamais en échec
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
+      # Le contenu publié, copié avant l'image : la clé reste dans cette étape, hors de l'image Docker
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Contenu de Dashility
+        run: npm run contenu
+        env:
+          DASHILITY_KEY: ${{ secrets.DASHILITY_KEY }}
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:

@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "ebay",
+    "publishedAt": "2026-11-10T14:18:51.995Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "job étudiant"
+      },
+      "periode": {
+        "end": "2023-07",
+        "start": "2023-07"
+      },
+      "titre": "Boutique eBay",
+      "lieu": "McPrice (réparation Apple), Paris",
+      "texte": "La création d’une boutique eBay et le référencement des produits ; au passage, la réparation du système de caméras.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "bangkok-cafe",
+    "publishedAt": "2026-11-10T14:15:25.284Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "job étudiant"
+      },
+      "periode": {
+        "start": "2024-04",
+        "ongoing": true
+      },
+      "titre": "Barman et serveur",
+      "lieu": "Bangkok Café",
+      "texte": "Au bar et en salle, en parallèle des études.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "bac",
+    "publishedAt": "2026-11-10T14:15:13.191Z",
+    "fields": {
+      "etiquette": {
+        "key": "lycee",
+        "label": "lycée"
+      },
+      "periode": {
+        "end": "2022-07",
+        "start": "2020-09"
+      },
+      "titre": "Bac STI2D, spécialité SIN",
+      "lieu": "Lycée Saint-Nicolas, Paris",
+      "texte": "Le déclic : construire des choses avec du code, de l’électronique au logiciel.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "stage-cnam",
+    "publishedAt": "2026-11-10T14:08:27.337Z",
+    "fields": {
+      "etiquette": {
+        "key": "stage",
+        "label": "stage"
+      },
+      "periode": {
+        "end": "2026-08",
+        "start": "2026-04"
+      },
+      "titre": "Stage de développement web front-end",
+      "lieu": "Assurance Maladie (Cnam), Montreuil",
+      "texte": "Le front-end de l’interface du compte ameli. Le code est privé.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "coree",
+    "publishedAt": "2026-11-10T14:05:04.019Z",
+    "fields": {
+      "etiquette": {
+        "key": "echange",
+        "label": "échange"
+      },
+      "periode": {
+        "end": "2024-12",
+        "start": "2024-09"
+      },
+      "titre": "Semestre à l’étranger, ingénierie électrique et électronique",
+      "lieu": "Seoul National University of Science and Technology, Corée du Sud",
+      "texte": "Un semestre d’études en Corée du Sud.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "esiea",
+    "publishedAt": "2026-11-10T13:51:34.550Z",
+    "fields": {
+      "etiquette": {
+        "key": "ecole",
+        "label": "école"
+      },
+      "periode": {
+        "start": "2022-09",
+        "ongoing": true
+      },
+      "titre": "Cycle ingénieur, génie informatique",
+      "lieu": "ESIEA, Paris · spécialité génie logiciel",
+      "texte": "Projets logiciels en équipe, dont le chronométrage embarqué d’une course de caisses à savon.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "mcprice-02",
+    "publishedAt": "2026-11-10T13:39:53.381Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "job étudiant"
+      },
+      "periode": {
+        "end": "2022-07",
+        "start": "2022-07"
+      },
+      "titre": "Responsable stocks",
+      "lieu": "McPrice (réparation Apple), Paris",
+      "texte": "L’inventaire et le stock du site internet, et un système pour scanner les produits à l’achat.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "mcprice-01",
+    "publishedAt": "2026-11-10T13:36:58.381Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "job étudiant"
+      },
+      "periode": {
+        "end": "2021-07",
+        "start": "2021-07"
+      },
+      "titre": "Mise en place d’un SI logistique",
+      "lieu": "McPrice (réparation Apple), Paris",
+      "texte": "Premier job : un système d’envoi des colis plus efficace, avec l’installation d’une étiqueteuse.",
+      "etude_de_cas": null
+    }
+  }
+]

@@ -1,38 +1,39 @@
-/* Refuse la mise en ligne tant qu'il reste du contenu provisoire (architecture technique §4).
-   Lancé à la release (image Docker), pas sur chaque PR : le contenu est provisoire pendant le développement. */
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+/* Refuse une mise en ligne au contenu incomplet (architecture technique §4) : chaque type de Dashility
+   copié et non vide en français, les deux CV, le domaine du site. Lancé à la release (image Docker).
+   L'anglais peut manquer : ce qui n'est pas traduit n'apparaît pas sur le site anglais. */
+import { existsSync, readFileSync } from 'node:fs'
 import { loadEnv } from 'vite'
-import { SITE } from '../src/content/site.ts'
+import { LOCALES } from '../src/router/pages.ts'
+import { TYPES } from './medias.ts'
 
 // Tel quel dans toutes les langues : traduit dans un texte anglais, il ne bloquerait plus la mise en ligne
 const MARKER = 'à compléter'
-const files = [
-  'src/content/site.ts',
-  ...readdirSync('content', { recursive: true, encoding: 'utf8' })
-    .filter((f) => /\.(md|ts)$/.test(f))
-    .map((f) => join('content', f)),
-]
+const problems: string[] = []
 
-const problems = files.flatMap((file) =>
-  readFileSync(file, 'utf8')
-    .split('\n')
-    .flatMap((line, i) => (line.includes(MARKER) ? [`${file}:${i + 1}  ${line.trim()}`] : [])),
-)
-// Chaque contenu français a sa traduction (même chemin sous content/en/)
-for (const file of files.filter((f) => f.startsWith(join('content', 'fr')))) {
-  const en = file.replace(join('content', 'fr'), join('content', 'en'))
-  if (!existsSync(en)) problems.push(`${en} manquant : traduction de ${file}`)
+for (const type of TYPES) {
+  const file = `content/fr/${type}.json`
+  const text = existsSync(file) ? readFileSync(file, 'utf8') : 'null'
+  const data = JSON.parse(text) as unknown
+  if (data === null || (Array.isArray(data) && !data.length))
+    problems.push(
+      `${file} vide ou manquant : publier « ${type} » dans Dashility, puis npm run contenu`,
+    )
+  for (const locale of LOCALES) {
+    const copy = `content/${locale}/${type}.json`
+    if (existsSync(copy) && readFileSync(copy, 'utf8').includes(MARKER))
+      problems.push(`${copy} : « ${MARKER} » dans le texte`)
+  }
 }
 // Le CV est l'action principale de l'accueil (PRD, parcours P1) : un lien mort ne part pas en ligne
-for (const cv of Object.values(SITE.cv))
-  if (!existsSync(join('public', cv))) problems.push(`public${cv} manquant : le CV à télécharger`)
+for (const locale of LOCALES)
+  if (!existsSync(`public/cv/cv-${locale}.pdf`))
+    problems.push(`public/cv/cv-${locale}.pdf manquant : le CV à télécharger`)
 // Lu comme le build le lit (.env, .env.production, .env.production.local…)
 if (!loadEnv('production', process.cwd()).VITE_SITE_URL)
   problems.push('VITE_SITE_URL manquant : le domaine du site')
 
 if (problems.length) {
-  console.error(`Contenu provisoire, mise en ligne refusée :\n${problems.join('\n')}`)
+  console.error(`Contenu incomplet, mise en ligne refusée :\n${problems.join('\n')}`)
   process.exit(1)
 }
 console.log('Contenu complet.')

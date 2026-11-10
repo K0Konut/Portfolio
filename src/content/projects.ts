@@ -1,91 +1,124 @@
-import type { Component } from 'vue'
 import { LOCALES, type Locale } from '../router/pages'
-import type { Device, Project, ProjectMeta } from './types'
+import { isObject, isText, parsePeriod, type Json } from './check'
+import type { CaseItem, Device, Period, Project, Stat } from './types'
 
-/* Chargeur des études de cas : un fichier Markdown par projet et par langue, content/<langue>/projets/<slug>.md
-   (architecture technique §4). L'en-tête est validé au chargement : au build, un champ manquant ou mal typé
-   fait échouer le pré-rendu, avec le nom du fichier.
-   shortcut: le corps de chaque étude de cas part avec le chargeur (quelques Ko par projet) ; passer à un
-   module d'en-têtes séparé si le nombre de projets grossit. */
-const files = import.meta.glob<{ data: Record<string, unknown>; default: Component }>(
-  '/content/*/projets/*.md',
-  { eager: true },
-)
-const images = import.meta.glob<string>('/content/images/projets/*/*.{png,jpg,webp}', {
+/* Chargeur des études de cas : la copie du contenu de Dashility, content/<langue>/projets.json
+   (architecture technique §4). La forme de chaque entrée est vérifiée au chargement : un champ manquant ou
+   renommé dans Structure fait échouer le build, avec le projet et le champ en cause. */
+const files = import.meta.glob<unknown>('/content/*/projets.json', {
   eager: true,
   import: 'default',
 })
 
-const isText = (v: unknown): v is string => typeof v === 'string' && v.trim() !== ''
-const isTextList = (v: unknown): v is string[] =>
-  Array.isArray(v) && v.length > 0 && v.every(isText)
-const isOptionalText = (v: unknown) => v === undefined || isText(v)
-const DEVICES: readonly unknown[] = ['browser', 'phone'] satisfies Device[]
+const DEVICES: Record<string, Device> = { navigateur: 'browser', telephone: 'phone' }
 
-/** L'en-tête d'une étude de cas, une fois validé */
-type ProjectFile = ProjectMeta &
-  Pick<Project, 'title' | 'description' | 'date' | 'tags' | 'stack'> &
-  Partial<Pick<Project, 'featured' | 'toc'>> &
-  Project['links'] & { capture: Project['capture'] & { image?: string } }
-
-/** Valide l'en-tête d'une étude de cas et la met en forme ; `file` : /content/<langue>/projets/<slug>.md */
-export function parseProject(
-  file: string,
-  meta: Record<string, unknown>,
-  imageUrls: Record<string, string> = images,
-): Project {
-  const check = (field: string, ok: boolean) => {
-    if (!ok) throw new Error(`${file} : champ « ${field} » manquant ou invalide`)
+/** Vérifie une entrée de Dashility (type `projets`) et la met en forme ; `where` nomme le fichier */
+export function parseProject(entry: unknown, where: string): Project {
+  const e = isObject(entry) ? entry : {}
+  const f = isObject(e.fields) ? e.fields : {}
+  const slug = isText(e.slug) ? e.slug : '?'
+  const fail = (field: string): never => {
+    throw new Error(`${where}, projet « ${slug} » : champ « ${field} » manquant ou invalide`)
   }
-  const slug = file.slice(file.lastIndexOf('/') + 1, -'.md'.length)
-  for (const field of ['title', 'description', 'type', 'role', 'duration', 'team'])
-    check(field, isText(meta[field]))
-  for (const field of ['tags', 'stack']) check(field, isTextList(meta[field]))
-  for (const field of ['code', 'demo', 'privateCode']) check(field, isOptionalText(meta[field]))
-  check('date', isText(meta.date) && /^\d{4}-(0[1-9]|1[0-2])$/.test(meta.date))
-  check('featured', meta.featured === undefined || typeof meta.featured === 'boolean')
-  const capture = (meta.capture ?? {}) as Record<string, unknown>
-  check('capture.device', DEVICES.includes(capture.device))
-  check('capture.label', isOptionalText(capture.label))
-  const image = isText(capture.image)
-    ? `/content/images/projets/${slug}/${capture.image}`
-    : undefined
-  check('capture.image', capture.image === undefined || (image !== undefined && image in imageUrls))
+  const text = (key: string, v: unknown = f[key]) => (isText(v) ? v : fail(key))
+  const optional = (key: string, v: unknown = f[key]) =>
+    v === null || v === undefined ? undefined : text(key, v)
+  const rich = (key: string, v: unknown = f[key]) =>
+    isObject(v) && typeof v.html === 'string' ? v.html : fail(key)
+  const list = (key: string) => (Array.isArray(f[key]) ? (f[key] as unknown[]) : fail(key))
+  const choice = (key: string) => {
+    const v = f[key]
+    return isObject(v) && isText(v.key) && isText(v.label)
+      ? { key: v.key, label: v.label }
+      : fail(key)
+  }
+  const items = (key: string): CaseItem[] =>
+    list(key).map((item) => {
+      const i = isObject(item) ? item : {}
+      return {
+        title: text(`${key}.titre`, i.titre),
+        html: rich(`${key}.description`, i.description),
+        tradeOff: key === 'choix' ? optional('choix.compromis', i.compromis) : undefined,
+      }
+    })
+  const number = (key: string, v: unknown) =>
+    v === null || v === undefined ? undefined : typeof v === 'number' ? v : fail(key)
 
-  // Tout est vérifié : l'en-tête a la forme attendue
-  const m = meta as unknown as ProjectFile
+  if (slug === '?') fail('slug')
+  const period = parsePeriod(f.periode) ?? fail('periode')
+  const capture = f.capture
+  if (!isObject(capture) || !isText(capture.src) || !isObject(capture.srcset)) fail('capture')
+  const c = capture as Json & { srcset: Json }
+  const device = DEVICES[choice('cadre').key] ?? fail('cadre')
+  const stack = list('stack')
+  if (!stack.length || !stack.every(isText)) fail('stack')
+  const featured =
+    typeof f.a_la_une === 'boolean' ? f.a_la_une : f.a_la_une == null ? false : fail('a_la_une')
+
   return {
     slug,
-    title: m.title,
-    description: m.description,
-    tags: m.tags,
-    stack: m.stack,
-    capture: { device: m.capture.device, src: image && imageUrls[image], label: m.capture.label },
-    date: m.date,
-    featured: m.featured ?? false,
-    meta: {
-      type: m.type,
-      role: m.role,
-      duration: m.duration,
-      team: m.team,
-      privateCode: m.privateCode,
+    title: text('titre'),
+    description: text('accroche'),
+    tags: [choice('type').label],
+    stack: stack as string[],
+    capture: {
+      device,
+      src: c.src as string,
+      srcset: typeof c.srcset.webp === 'string' ? c.srcset.webp : undefined,
+      alt: text('capture.alt', c.alt),
     },
-    links: { code: m.code, demo: m.demo },
-    toc: m.toc ?? [],
+    period,
+    featured,
+    meta: {
+      type: choice('type').label,
+      role: text('role'),
+      team: text('equipe'),
+      privateCode: optional('code_prive'),
+    },
+    links: { code: optional('code'), demo: optional('demo') },
+    body: {
+      contexte: rich('contexte'),
+      besoin: rich('besoin'),
+      contraintes: items('contraintes'),
+      methodeIntro: optional('methode_intro'),
+      methode: items('methode'),
+      choix: items('choix'),
+      resultats: list('resultats').map((item): Stat => {
+        const i = isObject(item) ? item : {}
+        return {
+          value: text('resultats.valeur', i.valeur),
+          label: text('resultats.libelle', i.libelle),
+          before: number('resultats.avant', i.avant),
+          after: number('resultats.apres', i.apres),
+        }
+      }),
+      conclusion: f.conclusion == null ? undefined : rich('conclusion'),
+      enseignements: items('enseignements'),
+    },
   }
 }
 
+/** Clé de tri : la fin de la période, « en cours » d'abord, puis le début */
+const recency = ({ period }: Project) =>
+  `${period.ongoing ? '9999-99' : (period.end ?? period.start)} ${period.start}`
+
+/** Les projets d'un fichier copié, du plus récent au plus ancien */
+export function parseProjects(data: unknown, where: string): Project[] {
+  if (!Array.isArray(data)) throw new Error(`${where} : une liste de projets est attendue`)
+  return data
+    .map((entry) => parseProject(entry, where))
+    .sort((a, b) => recency(b).localeCompare(recency(a)))
+}
+
 const PROJECTS = Object.fromEntries(
-  LOCALES.map((locale) => [
-    locale,
-    Object.entries(files)
-      .filter(([file]) => file.startsWith(`/content/${locale}/`))
-      .map(([file, mod]) => parseProject(file, mod.data))
-      .sort((a, b) => b.date.localeCompare(a.date)),
-  ]),
+  LOCALES.map((l) => {
+    const file = `/content/${l}/projets.json`
+    // Pas de copie dans une langue (dépôt neuf) : aucun projet ; check-content exige le français à la mise en ligne
+    return [l, file in files ? parseProjects(files[file], file) : []]
+  }),
 ) as Record<Locale, Project[]>
 
-/** Les projets d'une langue, du plus récent au plus ancien */
+/** Les projets d'une langue, du plus récent au plus ancien ; un projet sans version anglaise n'est qu'en français */
 export const projects = (locale: Locale): Project[] => PROJECTS[locale]
 
 /** Les trois projets mis en avant sur l'accueil */
@@ -94,6 +127,35 @@ export const featuredProjects = (locale: Locale): Project[] =>
     .filter((p) => p.featured)
     .slice(0, 3)
 
-/** Le corps d'une étude de cas : le composant Vue issu du Markdown */
-export const projectBody = (locale: Locale, slug: string): Component | undefined =>
-  files[`/content/${locale}/projets/${slug}.md`]?.default
+/** La période dans la langue de la page : « oct. 2026 – en cours », « sept. 2020 – juil. 2022 » */
+export function formatPeriod(period: Period, locale: Locale, ongoing: string): string {
+  const month = new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+  const date = (m: string) => month.format(new Date(`${m}-01T00:00:00Z`))
+  const end = period.ongoing
+    ? ongoing
+    : period.end && period.end !== period.start
+      ? date(period.end)
+      : ''
+  return end ? `${date(period.start)} – ${end}` : date(period.start)
+}
+
+/** Les sections d'une étude de cas, dans l'ordre du gabarit ; une section vide n'est ni affichée ni au sommaire */
+export const CASE_SECTIONS = [
+  'contexte',
+  'besoin',
+  'contraintes',
+  'methode',
+  'choix',
+  'resultats',
+  'enseignements',
+] as const
+export type CaseSection = (typeof CASE_SECTIONS)[number]
+
+export const caseSections = ({ body }: Project): CaseSection[] =>
+  CASE_SECTIONS.filter((key) =>
+    key === 'resultats' ? body.resultats.length > 0 || !!body.conclusion : body[key].length > 0,
+  )

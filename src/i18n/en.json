@@ -94,12 +94,22 @@
     "all": "All projects",
     "after": "What next",
     "demo": "Demo",
-    "capture": "Screenshot of {title}"
+    "ongoing": "ongoing",
+    "tradeOff": "Trade-off: {text}",
+    "sections": {
+      "contexte": "Context",
+      "besoin": "Need",
+      "contraintes": "Constraints",
+      "methode": "Method",
+      "choix": "Technical choices",
+      "resultats": "Results",
+      "enseignements": "Lessons"
+    }
   },
   "meta": {
     "type": "Type",
     "role": "Role",
-    "duration": "Duration",
+    "duration": "Period",
     "team": "Team",
     "stack": "Stack",
     "code": "Code",

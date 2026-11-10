@@ -13,6 +13,7 @@ import TextLink from '../components/ui/TextLink.vue'
 import { useLocale } from '../composables/useLocale'
 import { skills as allSkills, timeline } from '../content/about'
 import { pageText } from '../content/pages'
+import { formatPeriod } from '../content/projects'
 import ParlonsEn from './blocs/ParlonsEn.vue'
 import TitreEtTexte from './blocs/TitreEtTexte.vue'
 
@@ -25,7 +26,7 @@ const story = computed(() => pageText(locale.value, 'mon-histoire'))
 const path = computed(() =>
   timeline(locale.value).map((step) => ({
     tag: step.kind,
-    date: step.dates,
+    date: formatPeriod(step.period, locale.value, t('case.ongoing')),
     title: step.title,
     subtitle: step.place,
     text: step.text,

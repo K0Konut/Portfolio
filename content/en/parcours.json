@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "ebay",
+    "publishedAt": "2026-11-10T14:18:51.995Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "student job"
+      },
+      "periode": {
+        "end": "2023-07",
+        "start": "2023-07"
+      },
+      "titre": "eBay store",
+      "lieu": "McPrice (Apple repair), Paris",
+      "texte": "Creating an eBay store and listing the products; along the way, repairing the camera system.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "bangkok-cafe",
+    "publishedAt": "2026-11-10T14:15:25.284Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "student job"
+      },
+      "periode": {
+        "start": "2024-04",
+        "ongoing": true
+      },
+      "titre": "Bartender and waiter",
+      "lieu": "Bangkok Café",
+      "texte": "Behind the bar and on the floor, alongside my studies.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "bac",
+    "publishedAt": "2026-11-10T14:15:13.191Z",
+    "fields": {
+      "etiquette": {
+        "key": "lycee",
+        "label": "high school"
+      },
+      "periode": {
+        "end": "2022-07",
+        "start": "2020-09"
+      },
+      "titre": "Baccalauréat STI2D, digital systems (SIN)",
+      "lieu": "Lycée Saint-Nicolas, Paris",
+      "texte": "The spark: building things with code, from electronics to software.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "stage-cnam",
+    "publishedAt": "2026-11-10T14:08:27.337Z",
+    "fields": {
+      "etiquette": {
+        "key": "stage",
+        "label": "internship"
+      },
+      "periode": {
+        "end": "2026-08",
+        "start": "2026-04"
+      },
+      "titre": "Front-end web development internship",
+      "lieu": "Assurance Maladie (Cnam, French national health insurance), Montreuil",
+      "texte": "The front end of the ameli account interface. The code is private.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "coree",
+    "publishedAt": "2026-11-10T14:05:04.019Z",
+    "fields": {
+      "etiquette": {
+        "key": "echange",
+        "label": "exchange"
+      },
+      "periode": {
+        "end": "2024-12",
+        "start": "2024-09"
+      },
+      "titre": "Semester abroad, electrical and electronic engineering",
+      "lieu": "Seoul National University of Science and Technology, South Korea",
+      "texte": "A semester of study in South Korea.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "esiea",
+    "publishedAt": "2026-11-10T13:51:34.550Z",
+    "fields": {
+      "etiquette": {
+        "key": "ecole",
+        "label": "school"
+      },
+      "periode": {
+        "start": "2022-09",
+        "ongoing": true
+      },
+      "titre": "Engineering degree, computer engineering",
+      "lieu": "ESIEA, Paris · software engineering major",
+      "texte": "Team software projects, including on-board timing for a soapbox race.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "mcprice-02",
+    "publishedAt": "2026-11-10T13:39:53.381Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "student job"
+      },
+      "periode": {
+        "end": "2022-07",
+        "start": "2022-07"
+      },
+      "titre": "Stock manager",
+      "lieu": "McPrice (Apple repair), Paris",
+      "texte": "Inventory and stock for the website, and a system to scan products when they are bought.",
+      "etude_de_cas": null
+    }
+  },
+  {
+    "slug": "mcprice-01",
+    "publishedAt": "2026-11-10T13:36:58.381Z",
+    "fields": {
+      "etiquette": {
+        "key": "job",
+        "label": "student job"
+      },
+      "periode": {
+        "end": "2021-07",
+        "start": "2021-07"
+      },
+      "titre": "Setting up a logistics system",
+      "lieu": "McPrice (Apple repair), Paris",
+      "texte": "First job: a more efficient parcel shipping system, including installing a label printer.",
+      "etude_de_cas": null
+    }
+  }
+]

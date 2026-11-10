@@ -1,1 +1,0 @@
-Tout a commencé au lycée, en STI2D option SIN : j'y ai découvert que j'aimais construire des choses avec du code. J'ai continué en école d'ingénieur, à l'ESIEA, et chaque projet logiciel me l'a confirmé. Ce que j'aime, c'est partir d'une idée et la voir devenir un produit, <span class="hl">brique par brique.</span>

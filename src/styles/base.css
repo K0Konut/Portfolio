@@ -54,8 +54,11 @@ svg {
   border: 0;
 }
 
-/* Mise en valeur : quelques mots en Fraunces italique, jamais soulignés (DA §2, règle 1) */
-.hl {
+/* Mise en valeur : quelques mots en Fraunces italique, jamais soulignés (DA §2, règle 1). Dans un texte de
+   Dashility, elle arrive en <mark> */
+.hl,
+.prose mark {
+  background: none;
   font-family: var(--font-accent);
   font-style: italic;
   font-weight: var(--weight-regular);

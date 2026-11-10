@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useLocale } from '../../composables/useLocale'
 import { LOCALES, routeName } from '../../router/routes'
 
-// Mène à la page équivalente dans l'autre langue (architecture §2) ; depuis une adresse inconnue, à l'accueil
+// Mène à la page équivalente dans l'autre langue (architecture §2). Sans équivalent, à sa rubrique (un projet
+// pas encore traduit : la page Projets, architecture technique §3) ; depuis une adresse inconnue, à l'accueil
 defineProps<{ variant: 'header' | 'menu' }>()
+const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const { locale, alternate } = useLocale()
@@ -14,7 +16,8 @@ const { locale, alternate } = useLocale()
 const links = computed(() =>
   LOCALES.map((l) => ({
     locale: l,
-    href: alternate(l) ?? router.resolve({ name: routeName('accueil', l) }).href,
+    href:
+      alternate(l) ?? router.resolve({ name: routeName(route.meta.section ?? 'accueil', l) }).href,
     current: l === locale.value,
   })),
 )

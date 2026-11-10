@@ -11,12 +11,13 @@ import StickyToc from '../components/ui/StickyToc.vue'
 import TextLink from '../components/ui/TextLink.vue'
 import { useLocale } from '../composables/useLocale'
 import { absolute } from '../composables/useSeo'
-import { projectBody, projects } from '../content/projects'
+import { caseSections, projects } from '../content/projects'
 import { SITE } from '../content/site'
+import EtudeCorps from './etude-de-cas/EtudeCorps.vue'
 import EtudeEnTete from './etude-de-cas/EtudeEnTete.vue'
 
-/* Étude de cas (design system §5) : violet → nuit → rose. Le corps vient du Markdown du projet ;
-   ses h2 alimentent le sommaire. Seuls les projets existants sont pré-rendus (vite.config.ts). */
+/* Étude de cas (design system §5) : violet → nuit → rose. Le corps est construit à partir des champs du
+   projet (EtudeCorps) ; ses sections remplies alimentent le sommaire. Seuls les projets existants sont pré-rendus (vite.config.ts). */
 const route = useRoute()
 const { t } = useI18n()
 const { locale, to } = useLocale()
@@ -24,7 +25,11 @@ const { locale, to } = useLocale()
 const list = computed(() => projects(locale.value))
 const index = computed(() => list.value.findIndex((p) => p.slug === route.params.slug))
 const project = computed(() => list.value[index.value])
-const body = computed(() => project.value && projectBody(locale.value, project.value.slug))
+const toc = computed(() =>
+  project.value
+    ? caseSections(project.value).map((id) => ({ id, label: t(`case.sections.${id}`) }))
+    : [],
+)
 // Le projet suivant ; après le dernier, le premier. Aucun s'il n'y a qu'un projet
 const next = computed(() =>
   list.value.length > 1 ? list.value[(index.value + 1) % list.value.length] : undefined,
@@ -43,7 +48,7 @@ useSeoMeta({
   // Capture 1440 × 900 (navigateur) ou 390 × 844 (téléphone), design system § DeviceFrame
   ogImageWidth: computed(() => (project.value?.capture.device === 'phone' ? 390 : 1440)),
   ogImageHeight: computed(() => (project.value?.capture.device === 'phone' ? 844 : 900)),
-  ogImageAlt: computed(() => project.value && t('case.capture', { title: project.value.title })),
+  ogImageAlt: computed(() => project.value?.capture.alt),
   robots: computed(() => (project.value ? undefined : 'noindex')),
 })
 </script>
@@ -55,8 +60,8 @@ useSeoMeta({
       <SectionWave :seed="2" from="violet" to="nuit" />
       <PageSection>
         <div class="case">
-          <StickyToc :items="project.toc" />
-          <component :is="body" class="prose" />
+          <StickyToc :items="toc" />
+          <EtudeCorps :key="project.slug" :project="project" />
         </div>
       </PageSection>
       <SectionWave :seed="6" from="nuit" to="rose" />
@@ -101,7 +106,11 @@ useSeoMeta({
   gap: var(--space-6);
 }
 
-/* Le corps en Markdown (base : .prose, base.css) : un h2 par bloc du gabarit (contexte, besoin…) */
+/* Le corps (EtudeCorps ; base : .prose, base.css) : un h2 par section du gabarit (contexte, besoin…).
+   Les textes riches de Dashility arrivent dans un .rich sans boîte : leurs paragraphes suivent la grille. */
+.prose :deep(.rich) {
+  display: contents;
+}
 .prose :deep(h2) {
   margin: 0;
   font-family: var(--font-display);
@@ -113,7 +122,7 @@ useSeoMeta({
   margin-top: var(--space-8);
 }
 /* La première phrase d'un bloc, en avant */
-.prose :deep(h2 + p) {
+.prose :deep(:is(h2 + p, h2 + .rich > p:first-child)) {
   font-size: var(--text-lead);
   line-height: var(--leading-snug);
   color: var(--color-text);
@@ -123,12 +132,12 @@ useSeoMeta({
   font-size: var(--text-lead);
   line-height: var(--leading-snug);
 }
-/* Le compromis d'un choix technique, écrit <small> dans le Markdown */
+/* Le compromis d'un choix technique */
 .prose :deep(small) {
   font-size: var(--text-sm);
   color: var(--color-text-subtle);
 }
-/* Listes : le titre de chaque élément en gras, sur sa ligne */
+/* Listes : le titre de chaque élément en gras, sur sa ligne (pas le gras de sa description) */
 .prose :deep(:is(ul, ol)) {
   /* Une puce invisible plutôt que « none » : Safari garderait sinon la liste muette pour VoiceOver */
   list-style-type: '\200B';
@@ -138,7 +147,7 @@ useSeoMeta({
 .prose :deep(ul) {
   gap: var(--space-4);
 }
-.prose :deep(li strong) {
+.prose :deep(li > strong) {
   display: block;
   color: var(--color-text);
 }
