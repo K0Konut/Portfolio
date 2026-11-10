@@ -32,11 +32,18 @@ export function useSeo() {
     htmlAttrs: { lang: locale },
     title,
     link: computed(() =>
-      route.meta.alternates
+      route.meta.alternates && alternate(locale.value)
         ? [
             { rel: 'canonical', href: url(locale.value) },
-            ...LOCALES.map((l) => ({ rel: 'alternate', hreflang: l, href: url(l) })),
-            { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LOCALE) },
+            // Seulement les langues où la page existe (un projet pas encore traduit)
+            ...LOCALES.filter((l) => alternate(l)).map((l) => ({
+              rel: 'alternate',
+              hreflang: l,
+              href: url(l),
+            })),
+            ...(alternate(DEFAULT_LOCALE)
+              ? [{ rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LOCALE) }]
+              : []),
           ]
         : [],
     ),
@@ -48,7 +55,9 @@ export function useSeo() {
     ogSiteName: SITE.name,
     ogTitle: title,
     ogDescription: description,
-    ogUrl: computed(() => (route.meta.alternates ? url(locale.value) : undefined)),
+    ogUrl: computed(() =>
+      route.meta.alternates && alternate(locale.value) ? url(locale.value) : undefined,
+    ),
     ogLocale: computed(() => (locale.value === 'fr' ? 'fr_FR' : 'en_US')),
     // Image générique : la section d'accueil (public/og.jpg, 1200 × 630)
     ogImage: absolute('/og.jpg'),

@@ -4,3 +4,5 @@ public/
 playwright-report/
 test-results/
 package-lock.json
+# Copie du contenu de Dashility, écrite par scripts/contenu.ts
+content/*/*.json

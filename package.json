@@ -13,7 +13,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check-content": "node scripts/check-content.ts"
+    "check-content": "node scripts/check-content.ts",
+    "contenu": "node scripts/contenu.ts"
   },
   "dependencies": {
     "@dashility/client": "^0.1.0",

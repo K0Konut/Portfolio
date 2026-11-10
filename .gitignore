@@ -26,3 +26,6 @@ dist-ssr
 # Tests
 playwright-report
 test-results
+
+# Clé de Dashility (npm run contenu) : jamais dans Git
+.env*.local

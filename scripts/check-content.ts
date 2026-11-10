@@ -10,7 +10,7 @@ const MARKER = 'à compléter'
 const files = [
   'src/content/site.ts',
   ...readdirSync('content', { recursive: true, encoding: 'utf8' })
-    .filter((f) => /\.(md|ts)$/.test(f))
+    .filter((f) => /\.(md|ts|json)$/.test(f))
     .map((f) => join('content', f)),
 ]
 
@@ -24,6 +24,10 @@ for (const file of files.filter((f) => f.startsWith(join('content', 'fr')))) {
   const en = file.replace(join('content', 'fr'), join('content', 'en'))
   if (!existsSync(en)) problems.push(`${en} manquant : traduction de ${file}`)
 }
+// La copie de Dashility (architecture technique §4) : au moins un projet en français
+const fr = join('content', 'fr', 'projets.json')
+if (!existsSync(fr) || !(JSON.parse(readFileSync(fr, 'utf8')) as unknown[] | null)?.length)
+  problems.push(`${fr} vide ou manquant : lancer npm run contenu`)
 // Le CV est l'action principale de l'accueil (PRD, parcours P1) : un lien mort ne part pas en ligne
 for (const cv of Object.values(SITE.cv))
   if (!existsSync(join('public', cv))) problems.push(`public${cv} manquant : le CV à télécharger`)

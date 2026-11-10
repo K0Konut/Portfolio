@@ -54,15 +54,22 @@ describe('localeFromPath', () => {
 })
 
 describe('pré-rendu', () => {
-  const paths = prerenderPaths({ 'etude-de-cas': [{ slug: 'ce-portfolio' }, { slug: 'chrono' }] })
+  const paths = prerenderPaths({
+    'etude-de-cas': [
+      { params: { slug: 'ce-portfolio' }, locales: LOCALES },
+      { params: { slug: 'chrono' }, locales: ['fr'] },
+    ],
+  })
 
-  it('pré-rend chaque page dans les deux langues et une page par projet', () => {
+  it('pré-rend chaque page dans les deux langues et une page par projet, dans ses langues', () => {
     expect(paths).toContain('/fr')
     expect(paths).toContain('/en/legal-notice')
     expect(paths).toContain('/fr/projets/chrono')
     expect(paths).toContain('/en/projects/ce-portfolio')
+    // Un projet sans version anglaise n'a que sa page française
+    expect(paths).not.toContain('/en/projects/chrono')
     const withParams = PAGES.filter((p) => p.paths.fr.includes(':')).length
-    expect(paths).toHaveLength((PAGES.length - withParams + 2 * withParams) * LOCALES.length)
+    expect(paths).toHaveLength((PAGES.length - withParams) * LOCALES.length + 3)
   })
 
   it('ne pré-rend pas une page à paramètres sans paramètres fournis', () => {
