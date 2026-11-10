@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.5 — 09/11/2026 — **statut : validé** (v1.5 : contenu lu dans Dashility au build, §4 réécrite ; v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
+Version 1.6 — 10/11/2026 — **statut : validé** (v1.6 : §4 alignée sur la structure créée dans Dashility ; v1.5 : contenu lu dans Dashility au build, §4 réécrite ; v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1 (remplacé le 09/11/2026 par Dashility, §9), déploiement par GitHub Actions et image Docker.
 
@@ -93,9 +93,9 @@ Le contenu est saisi dans Dashility (PRD v0.3), l'espace « Portfolio » de `htt
 
 | Type (clé) | Sorte | Champs : clé, type, obligatoire, traduisible |
 |---|---|---|
-| Projets (`projets`) | collection | `type` choix `perso` `ecole` `entreprise` `client`, obl. · `titre` texte, obl., trad. · `accroche` texte, obl., trad. · `code`, `demo` liens · `code_prive` texte, trad. (raison quand le code n'est pas public) · `role`, `equipe` textes, obl., trad. · `periode` période au mois, avec « en cours », obl. · `stack` liste de valeurs, obl. · `a_la_une` oui / non · `capture` image, obl. (alt. trad.) · `cadre` choix `navigateur` `telephone`, obl. · `contexte`, `besoin` textes riches, obl., trad. · `contraintes` groupe (`titre` texte, `description` texte riche), trad. · `methode_intro` texte, trad. · `methode` groupe (`titre`, `description` textes), trad. · `choix` groupe (`titre` texte, `description` texte riche, `compromis` texte), trad. · `resultats` groupe (`valeur`, `libelle` textes, trad. ; `avant`, `apres` nombres) · `conclusion` texte riche, trad. · `enseignements` groupe (`titre` texte, `description` texte riche), trad. |
+| Projets (`projets`) | collection | `type` choix `perso` `ecole` `entreprise` `client`, obl. · `titre` texte, obl., trad. · `accroche` texte, obl., trad. · `code`, `demo` liens · `code_prive` texte, trad. (raison quand le code n'est pas public) · `role`, `equipe` textes, obl., trad. · `periode` période au mois, avec « en cours », obl. · `stack` liste de valeurs, obl. · `a_la_une` oui / non · `capture` image, obl. (alt. trad.) · `cadre` choix `navigateur` `telephone`, obl. · `contexte`, `besoin` textes riches, obl., trad. · `contraintes` groupe (`titre` texte, `description` texte riche), trad. · `methode_intro` texte, trad. · `methode` groupe (`titre` texte, `description` texte riche), trad. · `choix` groupe (`titre` texte, `description` texte riche, `compromis` texte), trad. · `resultats` groupe (`valeur`, `libelle` textes, trad. ; `avant`, `apres` nombres) · `conclusion` texte riche, trad. · `enseignements` groupe (`titre` texte, `description` texte riche), trad. |
 | Parcours (`parcours`) | collection | `etiquette` choix `lycee` `ecole` `echange` `stage` `job`, obl. · `periode` période au mois, obl. · `titre`, `lieu`, `texte` textes, obl., trad. · `etude_de_cas` texte (slug d'un projet) |
-| Compétences (`competences`) | page unique | `categories` groupe (`titre` texte, trad. ; `competences` liste de valeurs) |
+| Compétences (`competences`) | page unique | `categories` groupe (`titre` texte, trad. ; `competences` liste de valeurs, trad.) |
 | Qui je suis, Mon histoire, Mentions légales, Confidentialité (`qui-je-suis`, `mon-histoire`, `mentions-legales`, `confidentialite`) | pages uniques | `texte` texte riche, obl., trad. |
 | Coordonnées (`coordonnees`) | page unique | `email` texte, obl. · `linkedin`, `github`, `depot` liens, obl. |
 | CV (`cv`) | page unique | `fichier` PDF, obl., trad. |
@@ -117,7 +117,7 @@ La copie est **versionnée dans le dépôt** : le développement et le CI des PR
 - **Compétences** : la mise en avant des technos utilisées par ce site reste une liste dans le code (elle décrit le code du site, pas son contenu).
 - **Anglais** : Dashility ne renvoie en anglais que les entrées dont la version anglaise est complète. Ce qui manque n'apparaît pas sur le site anglais (choix du propriétaire, 09/11/2026), sans bloquer la mise en ligne.
 
-**Vérification à la mise en ligne** (`check-content`) : `VITE_SITE_URL` présent, les deux CV présents, et chaque type de contenu non vide en français.
+**Vérification à la mise en ligne** (`check-content`) : `VITE_SITE_URL` présent, les deux CV présents, chaque type de contenu non vide en français, et aucun « à compléter » dans la copie.
 
 ## 5. SEO et balises `head`
 
