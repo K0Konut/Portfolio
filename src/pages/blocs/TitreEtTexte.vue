@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useId, type Component } from 'vue'
+import { useId } from 'vue'
 import PageSection from '../../components/mise-en-page/PageSection.vue'
 
 /* Bloc titre et texte (accueil « Qui je suis », À propos « Mon histoire ») : le titre à gauche, le texte
-   en Markdown à droite sur bureau, puis ce que la page ajoute dessous (un bouton). */
-defineProps<{ title: string; text?: Component }>()
+   (HTML de Dashility, déjà filtré) à droite sur bureau, puis ce que la page ajoute dessous (un bouton). */
+defineProps<{ title: string; text?: string }>()
 const titleId = useId()
 </script>
 
@@ -13,7 +13,8 @@ const titleId = useId()
     <div class="split">
       <h2 :id="titleId" v-reveal class="display">{{ title }}</h2>
       <div v-reveal="1" class="text">
-        <component :is="text" v-if="text" class="lead prose" />
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div v-if="text" class="lead prose" v-html="text" />
         <slot />
       </div>
     </div>

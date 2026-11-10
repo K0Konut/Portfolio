@@ -1,4 +1,5 @@
 import { LOCALES, type Locale } from '../router/pages'
+import { isObject, isText, parsePeriod, type Json } from './check'
 import type { CaseItem, Device, Period, Project, Stat } from './types'
 
 /* Chargeur des études de cas : la copie du contenu de Dashility, content/<langue>/projets.json
@@ -9,10 +10,6 @@ const files = import.meta.glob<unknown>('/content/*/projets.json', {
   import: 'default',
 })
 
-type Json = Record<string, unknown>
-const isText = (v: unknown): v is string => typeof v === 'string' && v.trim() !== ''
-const isObject = (v: unknown): v is Json => typeof v === 'object' && v !== null && !Array.isArray(v)
-const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
 const DEVICES: Record<string, Device> = { navigateur: 'browser', telephone: 'phone' }
 
 /** Vérifie une entrée de Dashility (type `projets`) et la met en forme ; `where` nomme le fichier */
@@ -48,10 +45,7 @@ export function parseProject(entry: unknown, where: string): Project {
     v === null || v === undefined ? undefined : typeof v === 'number' ? v : fail(key)
 
   if (slug === '?') fail('slug')
-  const p = f.periode
-  if (!isObject(p) || !isText(p.start) || !MONTH.test(p.start)) fail('periode')
-  const period = p as unknown as Period
-  if (period.end != null && !MONTH.test(period.end)) fail('periode')
+  const period = parsePeriod(f.periode) ?? fail('periode')
   const capture = f.capture
   if (!isObject(capture) || !isText(capture.src) || !isObject(capture.srcset)) fail('capture')
   const c = capture as Json & { srcset: Json }
@@ -73,7 +67,7 @@ export function parseProject(entry: unknown, where: string): Project {
       srcset: typeof c.srcset.webp === 'string' ? c.srcset.webp : undefined,
       alt: text('capture.alt', c.alt),
     },
-    period: { start: period.start, end: period.end ?? undefined, ongoing: period.ongoing === true },
+    period,
     featured,
     meta: {
       type: choice('type').label,

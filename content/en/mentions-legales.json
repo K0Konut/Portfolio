@@ -1,1 +1,8 @@
-null
+{
+  "publishedAt": "2026-11-10T14:18:32.327Z",
+  "fields": {
+    "texte": {
+      "html": "<h2>Publisher</h2><p>This site is published by Costa Maskulov, in a personal capacity.</p><p>Contact: <a href=\"mailto:maskulov12.pro@gmail.com\">maskulov12.pro@gmail.com</a></p><p>Publication director: Costa Maskulov.</p><h2>Hosting</h2><p>Host: Costa Maskulov (personal server), 59 rue Hoche, 94200 Ivry-sur-Seine, France. Phone: +33 6 35 79 99 51.</p><h2>Intellectual property</h2><p>The texts, visuals and code of this site belong to Costa Maskulov, unless stated otherwise. The source code is available on GitHub.</p><h2>Credits</h2><p>Fonts: Bagel Fat One, Fraunces and Manrope, under the SIL Open Font License, served by the site.</p>"
+    }
+  }
+}
