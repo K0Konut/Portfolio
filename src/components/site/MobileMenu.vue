@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import LangSwitch from './LangSwitch.vue'
 import SiteLogo from './SiteLogo.vue'
@@ -12,6 +13,13 @@ const open = defineModel<boolean>({ required: true })
 const { t } = useI18n()
 const links = useNavLinks()
 const dialog = ref<HTMLDialogElement>()
+const route = useRoute()
+// Toute navigation ferme le menu, changement de langue compris (LangSwitch) ; un lien vers la page en cours
+// ne change pas la route : les liens le ferment aussi au clic
+watch(
+  () => route.fullPath,
+  () => (open.value = false),
+)
 
 watch(open, (isOpen) => {
   if (isOpen) dialog.value?.showModal()

@@ -104,6 +104,15 @@ test('le menu mobile se ferme et mène aux pages au clic', async ({ page }) => {
   await expect(page.getByRole('dialog')).toBeHidden()
 })
 
+test('changer de langue depuis le menu mobile le ferme', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/fr/contact/')
+  await page.getByRole('button', { name: 'Menu' }).click()
+  await page.getByRole('dialog').getByRole('link', { name: 'EN', exact: true }).click()
+  await expect(page).toHaveURL(/\/en\/contact\/?$/)
+  await expect(page.getByRole('dialog')).toBeHidden()
+})
+
 // La feuille de BaseButton peut se charger après celle de l'en-tête (version construite seulement)
 test("le bouton Menu n'apparaît pas sur ordinateur", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })

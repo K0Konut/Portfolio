@@ -1,13 +1,13 @@
 [
   {
     "slug": "ce-portfolio",
-    "publishedAt": "2026-11-09T18:36:13.383Z",
+    "publishedAt": "2026-11-10T16:25:48.037Z",
     "fields": {
       "type": {
         "key": "perso",
         "label": "personal project"
       },
-      "titre": "This Portfolio",
+      "titre": "This portfolio",
       "accroche": "This site, from methodology to code: PRD, art direction, design system, mockups, and finally implementation in Vue.",
       "code": "https://github.com/K0Konut/Portfolio",
       "demo": null,
@@ -83,43 +83,43 @@
         {
           "titre": "PRD.",
           "description": {
-            "html": "<p>Ce qu’on construit et pourquoi.</p>"
+            "html": "<p>What we build and why.</p>"
           }
         },
         {
-          "titre": "Territoire de marque.",
+          "titre": "Brand territory.",
           "description": {
-            "html": "<p>Positionnement, valeurs, ton de voix.</p>"
+            "html": "<p>Positioning, values, tone of voice.</p>"
           }
         },
         {
-          "titre": "Direction artistique.",
+          "titre": "Art direction.",
           "description": {
-            "html": "<p>Couleurs, typographie, mouvement.</p>"
+            "html": "<p>Colours, typography, motion.</p>"
           }
         },
         {
-          "titre": "Architecture et UX.",
+          "titre": "Architecture and UX.",
           "description": {
-            "html": "<p>Arborescence, parcours, wireframes.</p>"
+            "html": "<p>Site map, journeys, wireframes.</p>"
           }
         },
         {
           "titre": "Design system.",
           "description": {
-            "html": "<p>Tokens et composants, avec leurs états.</p>"
+            "html": "<p>Tokens and components, with their states.</p>"
           }
         },
         {
-          "titre": "Maquettes.",
+          "titre": "Mockups.",
           "description": {
-            "html": "<p>Les écrans clés, construits en code.</p>"
+            "html": "<p>The key screens, built in code.</p>"
           }
         },
         {
           "titre": "Code.",
           "description": {
-            "html": "<p>L’intégration en Vue.</p>"
+            "html": "<p>The build in Vue.</p>"
           }
         }
       ],
