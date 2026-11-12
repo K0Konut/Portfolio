@@ -17,8 +17,12 @@ export function parseProject(entry: unknown, where: string): Project {
   const e = isObject(entry) ? entry : {}
   const f = isObject(e.fields) ? e.fields : {}
   const slug = isText(e.slug) ? e.slug : '?'
+  // `field` : la page d'aperçu nomme le champ en cause
   const fail = (field: string): never => {
-    throw new Error(`${where}, projet « ${slug} » : champ « ${field} » manquant ou invalide`)
+    throw Object.assign(
+      new Error(`${where}, projet « ${slug} » : champ « ${field} » manquant ou invalide`),
+      { field },
+    )
   }
   const text = (key: string, v: unknown = f[key]) => (isText(v) ? v : fail(key))
   const optional = (key: string, v: unknown = f[key]) =>

@@ -19,7 +19,8 @@
     },
     "mentions-legales": { "title": "Mentions légales · Costa Maskulov" },
     "confidentialite": { "title": "Confidentialité · Costa Maskulov" },
-    "404": { "title": "Page introuvable · Costa Maskulov" }
+    "404": { "title": "Page introuvable · Costa Maskulov" },
+    "apercu": { "title": "Aperçu · Costa Maskulov" }
   },
   "ui": {
     "toc": "Sommaire",
@@ -161,5 +162,22 @@
   "projects": {
     "intro": "Tout ce que j’ai construit, du plus récent au plus ancien. Chaque projet a son étude de cas : le besoin, la méthode et les choix techniques.",
     "contactIntro": "Un projet vous a parlé ? Écrivez-moi."
+  },
+  "preview": {
+    "label": "Aperçu",
+    "status": {
+      "draft": "Brouillon, non publié.",
+      "modified": "Modifications non publiées.",
+      "published": "Version en ligne, sans modification."
+    },
+    "until": "Lien valable jusqu’au {date}.",
+    "enIncomplete": "Version anglaise incomplète : masquée sur le site en anglais tant qu’elle n’est pas complète.",
+    "loading": "Chargement de l’aperçu…",
+    "unavailable": "Aperçu indisponible",
+    "expired": "Ce lien d’aperçu a expiré. Demandez-en un nouveau depuis Dashility.",
+    "deleted": "Cette entrée n’existe plus.",
+    "missing": "Aperçu impossible : le champ « {field} » est vide.",
+    "type": "Aperçu impossible : le site n’affiche pas encore les entrées du type « {type} ».",
+    "offline": "Dashility ne répond pas. Rechargez la page dans un instant."
   }
 }

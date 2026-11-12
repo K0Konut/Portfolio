@@ -23,9 +23,9 @@ describe('table des pages', () => {
     expect(new Set(paths).size).toBe(paths.length)
   })
 
-  it('marque les pages légales et la 404 en noindex', () => {
+  it('marque les pages légales, la 404 et l’aperçu en noindex', () => {
     const noindex = PAGES.filter((p) => 'noindex' in p).map((p) => p.name)
-    expect(noindex.sort()).toEqual(['404', 'confidentialite', 'mentions-legales'])
+    expect(noindex.sort()).toEqual(['404', 'apercu', 'confidentialite', 'mentions-legales'])
   })
 })
 

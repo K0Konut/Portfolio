@@ -25,7 +25,9 @@ export function useLocale() {
     if (!page) return undefined
     if (page === 'etude-de-cas' && !projects(l).some((p) => p.slug === route.params.slug))
       return undefined
-    return router.resolve({ name: routeName(page, l), params: route.params }).href
+    // L'aperçu garde son jeton (?dashility-preview=…) d'une langue à l'autre
+    const query = page === 'apercu' ? route.query : undefined
+    return router.resolve({ name: routeName(page, l), params: route.params, query }).href
   }
 
   return { locale, to, alternate }
