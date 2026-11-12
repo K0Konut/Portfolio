@@ -1,5 +1,6 @@
-# Mise en ligne (architecture technique §7) : à chaque release (merge sur main → vérifications) et à chaque
-# publication dans Dashility (repository_dispatch, sans tests : le code de main les a déjà passés). Le contenu est
+# Mise en ligne (architecture technique §7) : à chaque release (merge sur main → vérifications), à chaque
+# publication dans Dashility (repository_dispatch) et chaque nuit (schedule), ces deux-là sans tests : le code de
+# main les a déjà passés. Le contenu est
 # copié depuis Dashility, puis l'image part sur GHCR. Le serveur vient la chercher lui-même (tâche cron) :
 # GitHub n'a aucun accès au serveur, le dépôt peut être public.
 name: Déploiement
@@ -10,6 +11,10 @@ on:
   # Envoyé par Dashility quelques secondes après la dernière publication ; il porte toujours sur main
   repository_dispatch:
     types: [dashility-publish]
+  # Chaque jour vers 4 h à Paris (3 h UTC : 4 h l'hiver, 5 h l'été) : les projets mis en avant suivent les scores
+  # et le tirage du jour de Dashility sans attendre une publication. Lancé sur main, la branche par défaut
+  schedule:
+    - cron: '0 3 * * *'
 
 # Une mise en ligne à la fois, jamais annulée en cours de route
 concurrency:
@@ -27,7 +32,7 @@ jobs:
 
   image:
     needs: [ci, lint]
-    # Vérifications passées (release) ou sautées (publication dans Dashility), jamais en échec
+    # Vérifications passées (release) ou sautées (publication dans Dashility, nuit), jamais en échec
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-latest
     permissions:
