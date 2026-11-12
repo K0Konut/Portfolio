@@ -26,7 +26,9 @@ const { t } = useI18n()
 const { locale, to } = useLocale()
 
 const list = computed(() => projects(locale.value))
-const index = computed(() => list.value.findIndex((p) => p.slug === route.params.slug))
+const index = computed(() =>
+  list.value.findIndex((p) => p.slug === (props.preview?.slug ?? route.params.slug)),
+)
 const project = computed(() => props.preview ?? list.value[index.value])
 const toc = computed(() =>
   project.value

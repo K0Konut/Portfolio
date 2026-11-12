@@ -20,7 +20,8 @@ export function useSeo() {
   const { locale, alternate } = useLocale()
 
   const page = computed(() => route.meta.page ?? '404')
-  const url = (l: Locale) => absolute(alternate(l) ?? '')
+  // Sans paramètres : le jeton de l'aperçu n'a rien à faire dans canonical ni og:url
+  const url = (l: Locale) => absolute((alternate(l) ?? '').split('?')[0]!)
   const title = computed(() => t(`pages.${page.value}.title`))
   const description = computed(() => {
     const key = `pages.${page.value}.description`

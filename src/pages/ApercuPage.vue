@@ -31,7 +31,8 @@ async function read(
   token: unknown,
   l: Locale,
 ): Promise<{ preview: Preview; project: Project } | string> {
-  if (typeof token !== 'string' || !token) return t('preview.expired')
+  // Un jeton de Dashility n'a que lettres, chiffres, « - » et « _ » : « .. » mènerait à une autre adresse de l'API
+  if (typeof token !== 'string' || !/^[\w-]+$/.test(token)) return t('preview.expired')
   let res: Response
   try {
     res = await fetch(
@@ -105,7 +106,8 @@ const until = computed(
       <p v-if="locale === 'en' && typeof state === 'object' && !state.preview.enComplete">
         {{ t('preview.enIncomplete') }}
       </p>
-      <LangSwitch variant="header" />
+      <!-- Après la lecture seulement : le lien pré-rendu, sans jeton, ne serait pas corrigé à l'hydratation -->
+      <LangSwitch v-if="state" variant="header" />
     </div>
   </aside>
 </template>

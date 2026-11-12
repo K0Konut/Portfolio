@@ -56,11 +56,14 @@ describe('page d’aperçu', () => {
     expect(w.find('main').text()).toContain(message)
   })
 
-  it('sans jeton, n’appelle pas Dashility', async () => {
-    const { w, fetch } = await apercu(200, entry, '/fr/apercu')
-    expect(fetch).not.toHaveBeenCalled()
-    expect(w.find('main').text()).toContain('expiré')
-  })
+  it.each(['/fr/apercu', '/fr/apercu?dashility-preview=..'])(
+    'sans jeton valide (%s), n’appelle pas Dashility',
+    async (path) => {
+      const { w, fetch } = await apercu(200, entry, path)
+      expect(fetch).not.toHaveBeenCalled()
+      expect(w.find('main').text()).toContain('expiré')
+    },
+  )
 
   it('garde le jeton dans le lien vers l’autre langue', async () => {
     const { w } = await apercu(200, entry)
