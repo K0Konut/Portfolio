@@ -36,6 +36,8 @@ export const PAGES = [
     noindex: true,
   },
   { name: '404', paths: { fr: '/fr/404', en: '/en/404' }, noindex: true },
+  // Aperçu d'un brouillon de Dashility (architecture technique §4) : coquille pré-rendue, entrée lue dans le navigateur
+  { name: 'apercu', paths: { fr: '/fr/apercu', en: '/en/preview' }, noindex: true },
 ] as const satisfies readonly PageDef[]
 
 export type PageName = (typeof PAGES)[number]['name']

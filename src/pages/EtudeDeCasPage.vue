@@ -13,18 +13,21 @@ import { useLocale } from '../composables/useLocale'
 import { absolute } from '../composables/useSeo'
 import { caseSections, projects } from '../content/projects'
 import { SITE } from '../content/site'
+import type { Project } from '../content/types'
 import EtudeCorps from './etude-de-cas/EtudeCorps.vue'
 import EtudeEnTete from './etude-de-cas/EtudeEnTete.vue'
 
 /* Étude de cas (design system §5) : violet → nuit → rose. Le corps est construit à partir des champs du
-   projet (EtudeCorps) ; ses sections remplies alimentent le sommaire. Seuls les projets existants sont pré-rendus (vite.config.ts). */
+   projet (EtudeCorps) ; ses sections remplies alimentent le sommaire. Seuls les projets existants sont pré-rendus (vite.config.ts).
+   `preview` : le projet lu dans Dashility par la page d'aperçu, à la place du projet publié. */
+const props = defineProps<{ preview?: Project }>()
 const route = useRoute()
 const { t } = useI18n()
 const { locale, to } = useLocale()
 
 const list = computed(() => projects(locale.value))
 const index = computed(() => list.value.findIndex((p) => p.slug === route.params.slug))
-const project = computed(() => list.value[index.value])
+const project = computed(() => props.preview ?? list.value[index.value])
 const toc = computed(() =>
   project.value
     ? caseSections(project.value).map((id) => ({ id, label: t(`case.sections.${id}`) }))
@@ -49,7 +52,7 @@ useSeoMeta({
   ogImageWidth: computed(() => (project.value?.capture.device === 'phone' ? 390 : 1440)),
   ogImageHeight: computed(() => (project.value?.capture.device === 'phone' ? 844 : 900)),
   ogImageAlt: computed(() => project.value?.capture.alt),
-  robots: computed(() => (project.value ? undefined : 'noindex')),
+  robots: computed(() => (project.value && !props.preview ? undefined : 'noindex')),
 })
 </script>
 
