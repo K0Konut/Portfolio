@@ -1,6 +1,6 @@
 # Architecture technique — Portfolio personnel
 
-Version 1.6 — 10/11/2026 — **statut : validé** (v1.6 : §4 alignée sur la structure créée dans Dashility ; v1.5 : contenu lu dans Dashility au build, §4 réécrite ; v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
+Version 1.7 — 12/11/2026 — **statut : validé** (v1.7 : page d'aperçu des brouillons de Dashility, §3 et §4 ; v1.6 : §4 alignée sur la structure créée dans Dashility ; v1.5 : contenu lu dans Dashility au build, §4 réécrite ; v1.4 : analytics par Dashility, contenu annoncé dans Dashility ; v1.3 : mise en ligne automatique à chaque release, le serveur récupère l'image ; v1.1 : composants rangés par famille du catalogue et étape 2 bis, briques génériques ; v1.2 : parcours et compétences en TypeScript, vérification du contenu à la mise en ligne)
 
 S'appuie sur le PRD v0.2 (contraintes §7), l'architecture de contenu v1.1, le design system v1.1 et les maquettes validées (`docs/06-maquettes/`). Choix du propriétaire du 22/10/2026 : Vue + Vite avec pré-rendu (pas de Nuxt), pas d'analytics en V1 (remplacé le 09/11/2026 par Dashility, §9), déploiement par GitHub Actions et image Docker.
 
@@ -79,6 +79,7 @@ Règles du PRD reprises : un composant par fichier, `PascalCase`, `useXxx` pour 
 | Mentions légales | `/fr/mentions-legales` | `/en/legal-notice` |
 | Confidentialité | `/fr/confidentialite` | `/en/privacy` |
 | 404 | `/fr/404` | `/en/404` |
+| Aperçu (noindex, hors sitemap) | `/fr/apercu` | `/en/preview` |
 
 - **Une table de routes** décrit chaque page une fois, avec son chemin dans les deux langues ; `LangSwitch` et les balises `hreflang` s'en servent pour mener à la page équivalente (architecture §2).
 - **Racine `/`** : Nginx redirige (302) vers `/fr` ou `/en` selon la langue du navigateur (`Accept-Language`), `/fr` par défaut. La réponse porte `Vary: Accept-Language` et `Cache-Control: no-store`, pour qu'aucun cache (navigateur, Nginx Proxy Manager) ne renvoie un visiteur vers la langue d'un autre. Fonctionne sans JavaScript ; `hreflang="x-default"` pointe vers `/fr`. (Question laissée ouverte par l'architecture §2, tranchée ici.)
@@ -104,7 +105,7 @@ Le slug d'un projet donne son adresse (`/fr/projets/<slug>`), commun aux deux la
 
 **La copie du contenu** (`scripts/contenu.ts`, `npm run contenu`) :
 - lit chaque type dans chaque langue (`GET /api/v1/content/:type?locale=fr|en`, clé `dly_…` dans `DASHILITY_KEY`) et l'écrit tel quel dans `content/<langue>/<type>.json` ;
-- télécharge les images (variantes WebP et AVIF) dans `public/medias/<id>/` et les CV dans `public/cv/cv-<langue>.pdf`, puis remplace leurs adresses par ces chemins locaux : la CSP `img-src 'self'` ne change pas, et les adresses du CV restent celles d'aujourd'hui ;
+- télécharge les images (variantes WebP et AVIF) dans `public/medias/<id>/` et les CV dans `public/cv/cv-<langue>.pdf`, puis remplace leurs adresses par ces chemins locaux : la CSP garde `img-src 'self'` (sauf sur l'aperçu, plus bas), et les adresses du CV restent celles d'aujourd'hui ;
 - supprime les médias qui ne servent plus.
 
 La copie est **versionnée dans le dépôt** : le développement et le CI des PR la lisent, sans clé ni réseau. Elle se rafraîchit à la main (`npm run contenu`, clé dans `.env.local`, ignoré par Git) et part dans une PR comme le reste. La mise en ligne, elle, lit toujours Dashility en direct (§7).
@@ -116,6 +117,8 @@ La copie est **versionnée dans le dépôt** : le développement et le CI des PR
 - **Accueil** : les trois premiers projets marqués « À la une ».
 - **Compétences** : la mise en avant des technos utilisées par ce site reste une liste dans le code (elle décrit le code du site, pas son contenu).
 - **Anglais** : Dashility ne renvoie en anglais que les entrées dont la version anglaise est complète. Ce qui manque n'apparaît pas sur le site anglais (choix du propriétaire, 09/11/2026), sans bloquer la mise en ligne.
+
+**L'aperçu** (`ApercuPage.vue`, contrat de Dashility : architecture technique de Dashility, « V3 : prévisualisation ») : « Prévisualiser », dans Dashility, ouvre `https://www.costamask.dev/fr/apercu?dashility-preview=<jeton>` (URL d'aperçu de Réglages › Intégration). La page est pré-rendue vide, comme les autres (Nginx ne sert que des fichiers) ; dans le navigateur, elle lit l'entrée par `GET /api/preview/<jeton>?locale=fr|en` (sans clé ni cookie, CORS ouvert) et l'affiche dans la page de l'étude de cas (`EtudeDeCasPage` avec `preview`), vérifiée par le même chargeur (`parseProject`). Seul le type `projets` a un aperçu ; les autres affichent un message. Un bandeau collé en bas de l'écran (l'en-tête fixe occupe le haut) donne l'état, l'expiration du lien et le choix de la langue, qui garde le jeton. Les visites d'aperçu ne sont pas comptées (`@dashility/client` 0.2.0). La CSP n'ouvre `img-src` à Dashility que sur ces deux adresses, où les images du brouillon viennent de Dashility.
 
 **Vérification à la mise en ligne** (`check-content`) : `VITE_SITE_URL` présent, les deux CV présents, chaque type de contenu non vide en français, et aucun « à compléter » dans la copie.
 

@@ -27,6 +27,7 @@ const views: Record<PageName, () => Promise<Component>> = {
   'mentions-legales': () => import('../pages/LegalPage.vue'),
   confidentialite: () => import('../pages/LegalPage.vue'),
   '404': () => import('../pages/IntrouvablePage.vue'),
+  apercu: () => import('../pages/ApercuPage.vue'),
 }
 
 export function buildRoutes(): RouteRecordRaw[] {

@@ -19,7 +19,8 @@
     },
     "mentions-legales": { "title": "Legal notice · Costa Maskulov" },
     "confidentialite": { "title": "Privacy · Costa Maskulov" },
-    "404": { "title": "Page not found · Costa Maskulov" }
+    "404": { "title": "Page not found · Costa Maskulov" },
+    "apercu": { "title": "Preview · Costa Maskulov" }
   },
   "ui": {
     "toc": "Contents",
@@ -161,5 +162,22 @@
   "projects": {
     "intro": "Everything I have built, from the most recent to the oldest. Each project has its case study: the need, the method and the technical choices.",
     "contactIntro": "Did a project speak to you? Write to me."
+  },
+  "preview": {
+    "label": "Preview",
+    "status": {
+      "draft": "Draft, not published.",
+      "modified": "Unpublished changes.",
+      "published": "Live version, unchanged."
+    },
+    "until": "Link valid until {date}.",
+    "enIncomplete": "English version incomplete: hidden on the English site until it is complete.",
+    "loading": "Loading the preview…",
+    "unavailable": "Preview unavailable",
+    "expired": "This preview link has expired. Request a new one from Dashility.",
+    "deleted": "This entry no longer exists.",
+    "missing": "Preview impossible: the “{field}” field is empty.",
+    "type": "Preview impossible: the site does not display “{type}” entries yet.",
+    "offline": "Dashility is not responding. Reload the page in a moment."
   }
 }
