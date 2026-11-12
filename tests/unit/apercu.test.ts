@@ -4,6 +4,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import projets from '../../content/fr/projets.json'
+import LangSwitch from '../../src/components/site/LangSwitch.vue'
 import { vReveal } from '../../src/directives/reveal'
 import { createAppI18n } from '../../src/i18n'
 import ApercuPage from '../../src/pages/ApercuPage.vue'
@@ -41,7 +42,7 @@ describe('page d’aperçu', () => {
       'https://dashility.costamask.dev/api/preview/jeton?locale=fr',
     )
     expect(w.find('h1').text()).toBe(projets[0]!.fields.titre)
-    expect(w.find('.banner').text()).toContain('Brouillon, non publié.')
+    expect(w.find('.pastille').text()).toContain('Brouillon, non publié.')
   })
 
   it.each([
@@ -65,8 +66,13 @@ describe('page d’aperçu', () => {
     },
   )
 
-  it('garde le jeton dans le lien vers l’autre langue', async () => {
-    const { w } = await apercu(200, entry)
+  it('garde le jeton dans le lien de l’en-tête vers l’autre langue', async () => {
+    const router = createRouter({ history: createMemoryHistory(), routes: buildRoutes() })
+    await router.push('/fr/apercu?dashility-preview=jeton')
+    const w = mount(LangSwitch, {
+      props: { variant: 'header' },
+      global: { plugins: [router, createAppI18n()] },
+    })
     expect(w.find('a[hreflang="en"]').attributes('href')).toBe(
       '/en/preview?dashility-preview=jeton',
     )

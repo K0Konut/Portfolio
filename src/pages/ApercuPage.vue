@@ -4,7 +4,6 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import SectionWave from '../components/fonds/SectionWave.vue'
 import PageIntro from '../components/mise-en-page/PageIntro.vue'
-import LangSwitch from '../components/site/LangSwitch.vue'
 import { useLocale } from '../composables/useLocale'
 import { isObject } from '../content/check'
 import { parseProject } from '../content/projects'
@@ -87,59 +86,44 @@ const until = computed(
 <template>
   <EtudeDeCasPage v-if="typeof state === 'object'" :preview="state.project" />
   <main v-else id="contenu" tabindex="-1" :aria-busy="!state">
-    <PageIntro :title="state ? t('preview.unavailable') : t('preview.loading')">
+    <PageIntro full :title="state ? t('preview.unavailable') : t('preview.loading')">
       <template v-if="state" #default>{{ state }}</template>
     </PageIntro>
     <SectionWave :seed="7" from="violet" to="nuit" />
   </main>
-  <!-- Collé en bas de l'écran plutôt qu'en haut : l'en-tête fixe du site y est déjà. En fin de page, il
-       reprend sa place avant le pied de page sans le couvrir -->
-  <aside class="banner" :aria-label="t('preview.label')">
-    <div class="container inner">
-      <p>
-        <strong>{{ t('preview.label') }}</strong>
-        <template v-if="typeof state === 'object'">
-          {{ t(`preview.status.${state.preview.status}`) }}
-          {{ t('preview.until', { date: until }) }}
-        </template>
-      </p>
-      <p v-if="locale === 'en' && typeof state === 'object' && !state.preview.enComplete">
-        {{ t('preview.enIncomplete') }}
-      </p>
-      <!-- Après la lecture seulement : le lien pré-rendu, sans jeton, ne serait pas corrigé à l'hydratation -->
-      <LangSwitch v-if="state" variant="header" />
-    </div>
+  <!-- Pastille fixe dans le coin : jamais au milieu d'une page courte, sans toucher à l'en-tête. La langue se
+       change dans l'en-tête, qui garde le jeton (useLocale) -->
+  <aside class="pastille" :aria-label="t('preview.label')">
+    <strong>{{ t('preview.label') }}</strong>
+    <p v-if="typeof state === 'object'">
+      {{ t(`preview.status.${state.preview.status}`) }}
+      {{ t('preview.until', { date: until }) }}
+    </p>
+    <p v-if="locale === 'en' && typeof state === 'object' && !state.preview.enComplete">
+      {{ t('preview.enIncomplete') }}
+    </p>
   </aside>
 </template>
 
 <style scoped>
-/* Les couleurs de l'en-tête : le bandeau appartient à l'outil, pas au contenu prévisualisé */
-.banner {
-  --color-focus: var(--color-header-accent);
-  position: sticky;
-  bottom: 0;
+/* Les couleurs de l'en-tête : la pastille appartient à l'outil, pas au contenu prévisualisé */
+.pastille {
+  position: fixed;
+  right: var(--gutter);
+  bottom: var(--gutter);
   z-index: 20;
+  max-width: min(22rem, calc(100% - 2 * var(--gutter)));
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-thin) solid var(--color-header-accent);
+  border-radius: var(--radius-md);
   background: var(--color-header-bg);
   color: var(--color-header-text);
-  border-top: var(--border-thin) solid var(--color-header-accent);
-  padding-inline: var(--gutter);
-}
-.inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 var(--space-6);
-  padding-block: var(--space-1);
-}
-p {
-  margin: 0;
   font-size: var(--text-sm);
 }
 strong {
-  margin-right: var(--space-2);
   color: var(--color-header-accent);
 }
-.lang {
-  margin-left: auto;
+p {
+  margin: 0;
 }
 </style>
