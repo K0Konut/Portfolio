@@ -125,11 +125,30 @@ const PROJECTS = Object.fromEntries(
 /** Les projets d'une langue, du plus récent au plus ancien ; un projet sans version anglaise n'est qu'en français */
 export const projects = (locale: Locale): Project[] => PROJECTS[locale]
 
-/** Les trois projets mis en avant sur l'accueil */
-export const featuredProjects = (locale: Locale): Project[] =>
-  projects(locale)
-    .filter((p) => p.featured)
-    .slice(0, 3)
+const selections = import.meta.glob<unknown>('/content/*/mis-en-avant.json', {
+  eager: true,
+  import: 'default',
+})
+
+/** Les projets d'une sélection de Dashility (liste de slugs), dans son ordre ; un slug inconnu fait échouer le build */
+export function parseFeatured(data: unknown, all: Project[], where: string): Project[] {
+  if (!Array.isArray(data)) throw new Error(`${where} : une liste de slugs est attendue`)
+  return data.map((slug) => {
+    const project = all.find((p) => p.slug === slug)
+    if (!project) throw new Error(`${where} : aucun projet « ${String(slug)} » dans projets.json`)
+    return project
+  })
+}
+
+const FEATURED = Object.fromEntries(
+  LOCALES.map((l) => {
+    const file = `/content/${l}/mis-en-avant.json`
+    return [l, file in selections ? parseFeatured(selections[file], PROJECTS[l], file) : []]
+  }),
+) as Record<Locale, Project[]>
+
+/** Les projets mis en avant sur l'accueil (trois au plus), choisis par Dashility : mis-en-avant.json */
+export const featuredProjects = (locale: Locale): Project[] => FEATURED[locale]
 
 /** La période dans la langue de la page : « oct. 2026 – en cours », « sept. 2020 – juil. 2022 » */
 export function formatPeriod(period: Period, locale: Locale, ongoing: string): string {

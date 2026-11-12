@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import selectionEn from '../../content/en/mis-en-avant.json'
+import selectionFr from '../../content/fr/mis-en-avant.json'
 import { sitemapXml } from '../../src/router/sitemap'
 import { parseSkills, parseTimeline, skills, timeline } from '../../src/content/about'
 import {
   caseSections,
   featuredProjects,
   formatPeriod,
+  parseFeatured,
   parseProject,
   parseProjects,
   projects,
@@ -13,6 +16,7 @@ import type { Project } from '../../src/content/types'
 import { LOCALES, type Locale } from '../../src/router/pages'
 
 const FILE = '/content/fr/projets.json'
+const selection = { fr: selectionFr, en: selectionEn } as Record<Locale, string[]>
 const rich = (text: string) => ({ html: `<p>${text}</p>` })
 /** Une entrée telle que Dashility la renvoie (type `projets`) */
 const entry = (fields: Record<string, unknown> = {}, slug = 'exemple') => ({
@@ -187,6 +191,21 @@ describe('formatPeriod', () => {
   })
 })
 
+describe('parseFeatured', () => {
+  const all = ['a', 'b', 'c'].map((slug) => parseProject(entry({}, slug), FILE))
+
+  it('garde l’ordre de Dashility, pas celui des projets', () => {
+    expect(parseFeatured(['c', 'a'], all, 'mis-en-avant.json').map((p) => p.slug)).toEqual([
+      'c',
+      'a',
+    ])
+  })
+
+  it.each([[['a', 'inconnu']], [{ slug: 'a' }]])('refuse %j', (data) => {
+    expect(() => parseFeatured(data, all, 'mis-en-avant.json')).toThrow(/mis-en-avant\.json/)
+  })
+})
+
 describe('études de cas', () => {
   it('lit les projets copiés de Dashility, avec leur capture', () => {
     const portfolio = projects('fr').find((p) => p.slug === 'ce-portfolio')
@@ -194,10 +213,9 @@ describe('études de cas', () => {
     expect(portfolio && caseSections(portfolio)).toContain('resultats')
   })
 
-  it('met en avant trois projets au plus', () => {
-    const featured = featuredProjects('fr')
-    expect(featured.length).toBeLessThanOrEqual(3)
-    expect(featured.every((p) => p.featured)).toBe(true)
+  it.each(LOCALES)('met en avant les projets choisis par Dashility, dans leur ordre (%s)', (l) => {
+    expect(featuredProjects(l).map((p) => p.slug)).toEqual(selection[l])
+    expect(featuredProjects(l).length).toBeLessThanOrEqual(3)
   })
 
   it('garde dans chaque traduction les champs qui ne se traduisent pas', () => {

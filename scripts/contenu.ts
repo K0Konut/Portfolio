@@ -1,4 +1,5 @@
 /* Copie le contenu publié de Dashility dans le dépôt (architecture technique §4) : content/<langue>/<type>.json,
+   la sélection de l'accueil dans content/<langue>/mis-en-avant.json,
    images dans public/medias/<id>/, CV dans public/cv/. Lancé à la main (`npm run contenu`, clé dans .env.local)
    et à chaque mise en ligne (deploiement.yml, clé dans un secret GitHub). */
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
@@ -38,6 +39,17 @@ async function main() {
       for (const [path, url] of files) media.set(path, url)
       writeFileSync(`content/${locale}/${type}.json`, `${text}\n`)
     }
+    // Les projets de l'accueil, choisis par Dashility (« À la une », taux de CV, tirage du jour), dans l'ordre :
+    // les projets eux-mêmes sont déjà dans projets.json, seuls les slugs servent
+    const res = await fetch(`${ORIGIN}/api/v1/featured/projets?locale=${locale}`, {
+      headers: { Authorization: `Bearer ${key}` },
+    })
+    // 404 type_not_featured : la mise en avant n'est pas réglée dans Dashility
+    if (!res.ok) throw new Error(`mise en avant (${locale}) : HTTP ${res.status}`)
+    const list: unknown = await res.json()
+    if (!Array.isArray(list)) throw new Error(`mise en avant (${locale}) : une liste est attendue`)
+    const slugs = (list as { slug: string }[]).map((p) => p.slug)
+    writeFileSync(`content/${locale}/mis-en-avant.json`, `${JSON.stringify(slugs, null, 2)}\n`)
   }
 
   // Un nouveau fichier a toujours un nouvel id dans Dashility : un fichier déjà là n'a pas changé
